@@ -1,6 +1,7 @@
 # Level 0 anchor configuration trace
 
-Status: extracted before implementation; unresolved cells block preregistration.
+Status: source extraction complete; six reconstruction choices are proposed and
+await Opus Round 2. They authorize neither implementation nor preregistration.
 
 Sources:
 
@@ -9,6 +10,25 @@ Sources:
 - Repository commit: dfbd38f7d23e09aaa5e5c9bd0483b69ca533e580
 - Saved artifact inspected:
   saved_runs/wd_10-1_mod_addition_loss_curve.pth
+
+## Round 1 resolution status
+
+Opus Round 1 found the anchor sufficient for an independent paper-mainline
+reimplementation, subject to six named reconstruction choices. Their proposed
+values and rationale are versioned in `RECONSTRUCTION_CHOICES_V1.md`.
+
+| Required cell | Proposal | Review status |
+|---|---|---|
+| AdamW equation and lambda semantics | R1 | pending Round 2 |
+| Output class count and scored logits | R2 | pending Round 2 |
+| Attention scaling | R3 | pending Round 2 |
+| Initialization | R4 | pending Round 2 |
+| Split algorithm and RNG | R5 | pending Round 2 |
+| Primary and fidelity-control arms | R6 | pending Round 2 |
+
+Until Round 2 accepts or revises these cells, they are proposals rather than
+implementation defaults. Remaining observation predicates and resource rules
+are still mandatory before Kirill can create a preregistration lock.
 
 ## Confirmed cells
 
@@ -85,16 +105,17 @@ The independent implementation must have:
 - MLP input/output biases, matching checkpoint keys;
 - loss read only at the final token.
 
-## Resolution rule
+## Source resolution rule
 
 Paper text outranks artifact names for the claimed mainline configuration.
 Executable optimizer state outranks a stale config field for describing a saved
 artifact. Neither may be combined into a synthetic configuration without
 labeling the combination as an independent reconstruction.
 
-No preregistration lock is allowed until review resolves whether to:
+The proposed arm hierarchy is paper mainline at lambda=1 and 40k epochs as the
+sole decision arm, plus a separately named fixed-budget artifact-fidelity
+control at executable lambda=0.1. This hierarchy remains pending Round 2 and
+must never be serialized as a hybrid configuration.
 
-1. reproduce the paper mainline literally at lambda=1 and 40k epochs;
-2. reproduce a separately named saved-artifact arm at executable lambda=0.1;
-3. include both as positive anchors;
-4. choose a different source-complete licensed anchor.
+No preregistration lock is allowed until the Round 2 review is incorporated and
+the separate before-lock checklist is closed.
