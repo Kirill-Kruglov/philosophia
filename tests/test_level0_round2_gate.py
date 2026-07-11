@@ -30,3 +30,17 @@ def test_round2_gate_still_forbids_implementation_and_outcome():
     assert "No training loop, scout, or" in prompt
     assert not (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
+
+
+def test_round2_review_is_incorporated_without_unlocking_outcome():
+    review = (
+        ROOT / "reviews/opus_level0_choices_v1_review.md"
+    ).read_text(encoding="utf-8")
+    choices = (LEVEL0 / "RECONSTRUCTION_CHOICES_V1.md").read_text(encoding="utf-8")
+    assert "**REVISE_CHOICES**" in review
+    assert "**Eligible now.**" in review
+    assert "B failure at one" in choices
+    assert "xavier_uniform_(gain=1.0)" in choices
+    assert "PyTorch 2.9.1" in choices
+    assert not (LEVEL0 / "PREREG.lock").exists()
+    assert not (LEVEL0 / "decision.json").exists()

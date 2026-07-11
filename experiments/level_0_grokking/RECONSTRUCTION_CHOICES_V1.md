@@ -1,7 +1,8 @@
 # Level 0 reconstruction choices v1
 
-Status: proposed closure of Opus Round 1 section 2; requires Round 2 review.
-These choices authorize no outcome run and create no preregistration lock.
+Status: revised after Opus Round 2; implementation and unit tests are eligible.
+These choices authorize no outcome run and create no preregistration lock. The
+remaining lock-stage cells below stay unresolved.
 
 ## R1: AdamW equation and lambda
 
@@ -25,6 +26,10 @@ the bias-corrected Adam adaptive step. Thus the multiplicative decay factors per
 epoch are 0.999 for A and 0.9999 for B before the adaptive update. This follows
 the PyTorch AdamW algorithm rather than interpreting lambda as an L2 loss term.
 
+Uniform decay of every trainable tensor, including MLP biases, is an explicit,
+bounded reconstruction choice. The original run's bias-decay treatment is not
+established.
+
 Source: https://docs.pytorch.org/docs/stable/generated/torch.optim.adamw.AdamW_class.html
 
 ## R2: output classes
@@ -38,6 +43,10 @@ updates through its unembedding column.
 This is an explicit independent-reconstruction choice following Opus's
 recommendation to score only 113 residue classes. It is not asserted to reproduce
 the unknown original cross-entropy implementation.
+
+The logged parameter-norm diagnostic excludes unembedding column 113. That
+column receives no scored-loss gradient and its decay must not masquerade as
+progress in the diagnostic.
 
 ## R3: attention scaling
 
@@ -54,15 +63,24 @@ the inspected anchor sources do not pin it.
 
 Use a named deterministic Glorot-uniform reconstruction:
 
-- apply `torch.nn.init.xavier_uniform_` independently to every matrix,
+- apply `torch.nn.init.xavier_uniform_(gain=1.0)` independently to every matrix,
   including token embeddings, positional embeddings, Q/K/V/O, MLP weights, and
   unembedding;
 - initialize all MLP biases to zero;
 - no other trainable tensors exist.
 
+Before step zero, record a frozen init-scale observable for every independently
+initialized matrix: its shape, theoretical Xavier bound, realized standard
+deviation, minimum, maximum, and content hash. Per-head attention matrices are
+recorded separately.
+
 This is a documented deviation, not a claim about the original initialization.
 It is chosen because every matrix has an explicit fan-in/fan-out definition and
 PyTorch provides a stable named implementation.
+
+Before lock, DELAYED's delta_min margin must explicitly absorb plausible
+Xavier-driven timing shift relative to the paper's approximately 10k-epoch
+report. This note cannot be removed merely because implementation tests pass.
 
 ## R5: split algorithm, RNG, and seeds
 
@@ -84,6 +102,10 @@ Both arms use the same split and initialization for a given master seed. Domain
 separation makes split/init independent of incidental code order. This is a
 documented reconstruction choice; it does not claim the paper's original split.
 
+The serialized split hash is versioned to PyTorch 2.9.1 because `torch.randperm`
+is not promised to preserve its exact permutation across PyTorch versions. Any
+version change forces regeneration and explicit re-hashing before lock.
+
 ## R6: arm hierarchy
 
 | Arm | Role | Weight decay | Fixed budget | Seeds | Decision use |
@@ -95,6 +117,16 @@ Arm B has no early stop. Its 120,000-epoch fixed budget exceeds the inspected
 artifact's stored epoch 107,790 without inheriting its test-loss threshold.
 The resource scout may reject this proposed battery before any outcome run, but
 may not shorten B after observing a curve.
+
+Arm B has an asymmetric interpretation rule. B success is informative: it shows
+that the platform can produce delayed generalization under the fidelity-control
+parameters and makes an A failure an anchor-fidelity issue. B failure at one
+seed is uninformative and indicts neither platform nor anchor because it is
+confounded with seed variation.
+
+If the outcome-independent resource scout permits, B should expand to at least
+three preregistered master seeds. That decision and the resulting seed list must
+be locked before any outcome curve is observed.
 
 The configuration serializer must encode arm identity and reject hybrids:
 

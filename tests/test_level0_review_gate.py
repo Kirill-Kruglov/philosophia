@@ -12,10 +12,10 @@ def test_trace_records_anchor_discrepancies():
     assert "No preregistration lock is allowed" in trace
 
 
-def test_implementation_remains_blocked():
+def test_modules_are_eligible_but_outcome_remains_blocked():
     spec = (LEVEL0 / "IMPLEMENTATION_SPEC_DRAFT.md").read_text(encoding="utf-8")
-    assert "blocked on review" in spec
-    assert "no training loop is authorized" in spec
+    assert "module implementation and unit tests authorized" in spec
+    assert "training orchestration and every outcome run remain disabled" in spec
     assert not (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
 

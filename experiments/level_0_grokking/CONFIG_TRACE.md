@@ -1,7 +1,7 @@
 # Level 0 anchor configuration trace
 
-Status: source extraction complete; six reconstruction choices are proposed and
-await Opus Round 2. They authorize neither implementation nor preregistration.
+Status: source extraction complete; Opus Round 2 authorizes module implementation
+and unit tests. Full training and preregistration remain unauthorized.
 
 Sources:
 
@@ -19,16 +19,17 @@ values and rationale are versioned in `RECONSTRUCTION_CHOICES_V1.md`.
 
 | Required cell | Proposal | Review status |
 |---|---|---|
-| AdamW equation and lambda semantics | R1 | pending Round 2 |
-| Output class count and scored logits | R2 | pending Round 2 |
-| Attention scaling | R3 | pending Round 2 |
-| Initialization | R4 | pending Round 2 |
-| Split algorithm and RNG | R5 | pending Round 2 |
-| Primary and fidelity-control arms | R6 | pending Round 2 |
+| AdamW equation and lambda semantics | R1 | accepted; bias decay labeled |
+| Output class count and scored logits | R2 | accepted; diagnostic norm clarified |
+| Attention scaling | R3 | accepted |
+| Initialization | R4 | implementation-eligible; lock note retained |
+| Split algorithm and RNG | R5 | accepted; hash versioned |
+| Primary and fidelity-control arms | R6 | implementation-eligible; lock rule retained |
 
-Until Round 2 accepts or revises these cells, they are proposals rather than
-implementation defaults. Remaining observation predicates and resource rules
-are still mandatory before Kirill can create a preregistration lock.
+Round 2 accepted implementation with the bounded revisions recorded in
+RECONSTRUCTION_CHOICES_V1.md. Remaining observation predicates, B-control
+interpretation, and resource rules are mandatory before Kirill can create a
+preregistration lock.
 
 ## Confirmed cells
 
@@ -114,8 +115,9 @@ labeling the combination as an independent reconstruction.
 
 The proposed arm hierarchy is paper mainline at lambda=1 and 40k epochs as the
 sole decision arm, plus a separately named fixed-budget artifact-fidelity
-control at executable lambda=0.1. This hierarchy remains pending Round 2 and
-must never be serialized as a hybrid configuration.
+control at executable lambda=0.1. This hierarchy is implementation-eligible and must never be serialized as a
+hybrid configuration. Its final B seed count remains a lock-stage resource
+choice.
 
-No preregistration lock is allowed until the Round 2 review is incorporated and
-the separate before-lock checklist is closed.
+No preregistration lock is allowed until the separate before-lock checklist is
+closed.

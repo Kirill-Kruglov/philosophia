@@ -1,6 +1,8 @@
 # Level 0 implementation specification draft
 
-Status: design-only; blocked on review; no training loop is authorized.
+Status: module implementation and unit tests authorized by Opus Round 2; full
+training orchestration and every outcome run remain disabled until Kirill signs
+a complete preregistration lock.
 
 ## Boundary
 
@@ -14,11 +16,15 @@ and Fourier probes as separately testable units.
 - level0/config.py: typed configuration and canonical serialization.
 - level0/data.py: all ordered residue pairs, split, tokens, targets, hashes.
 - level0/model.py: minimal transformer matching CONFIG_TRACE.md.
-- level0/train.py: full-batch AdamW loop and fixed logging/checkpoint schedule.
-- level0/metrics.py: loss, accuracy, FIT/GENERALIZE predicates.
-- level0/fourier.py: basis, sparsity, restricted/excluded metrics and nulls.
+- level0/train.py: full-batch AdamW construction and one optimization step.
+- level0/metrics.py: loss, accuracy, parameter norm, and persistence primitive.
+- level0/fourier.py: real basis, projections, and frequency-energy diagnostics.
 - level0/checkpoint.py: model, optimizer, config, split and source hashes.
 - experiments/level_0_grokking/run.py: harness-only orchestration.
+
+The harness is not implementation-eligible until the remaining lock-stage
+threshold, cadence, control, resource, and quorum cells are closed. Library
+modules must expose no alternate full-run entry point.
 
 ## Fail-closed API rules
 
@@ -52,18 +58,21 @@ GPU/ROCm is exploratory until a separate equivalence gate defines tolerances.
 8. Checkpoint save/load resumes to an identical next step.
 9. Evaluation cannot be imported by the training module through a forbidden
    dependency edge.
-10. Random-label and shuffled-checkpoint null generators are deterministic.
+10. Random-label control generation and Fourier basis construction are deterministic.
 
-## Deliberately unresolved
+## Resolved reconstruction choices
 
-- Main positive arm: paper lambda=1, artifact lambda=0.1, or both.
-- Exact five-seed schedule and split algorithm.
-- 40k fixed budget versus separately labeled artifact reproduction.
-- Whether output softmax has 113 or 114 logits.
+- Arm A alone decides replication: lambda=1, 40k epochs, masters 0..4.
+- Arm B is a separately named fidelity control: lambda=0.1, 120k, initially seed 1.
+- Split and init use domain-separated, per-master CPU generators.
+- The model has 114 output columns; loss and accuracy score residues 0..112.
+- Attention scales by sqrt(32); every matrix uses Xavier uniform at gain 1.
+
+## Deliberately unresolved before lock
+
 - Checkpoint cadence and retained optimizer checkpoints.
 - Numeric decision thresholds and seed quorum.
 - Exact definitions and timing claims for Fourier progress measures.
+- Control pass/fail rules, resource wall, and final B seed count.
 
-Cursor Compose must not implement this draft. It becomes eligible only after the
-unresolved cells are closed, the specification is versioned, and Kirill
-authorizes implementation.
+No code or test may manufacture defaults for these unresolved cells.
