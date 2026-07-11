@@ -1,0 +1,47 @@
+{
+  "deterministic_replay_max_abs_loss_diff": 0.0,
+  "device": "cpu",
+  "first_run": {
+    "elapsed_seconds": 0.02498356206342578,
+    "final_state_sha256": "6eaa827a129205cceabe19557a833a0d9c476cf0cc9e055eb9aa0fa68e95673a",
+    "finite": true,
+    "initial_state_sha256": "0ff68ebd2da08db451de42373e39ca63b27593bb09654ad6c1789752370ce5cc",
+    "loss_decreased": true,
+    "losses": [
+      2.992236614227295,
+      2.621751070022583,
+      2.3578579425811768,
+      2.1442220211029053,
+      1.946425199508667,
+      1.753688097000122,
+      1.5662391185760498,
+      1.3817604780197144,
+      1.2002675533294678,
+      1.0263631343841553,
+      0.8619678020477295,
+      0.7080782055854797,
+      0.5733394026756287,
+      0.46144822239875793,
+      0.371352881193161,
+      0.294268399477005,
+      0.2271212786436081,
+      0.175325408577919,
+      0.1373092085123062,
+      0.1085401400923729
+    ],
+    "parameters_changed": true
+  },
+  "kind": "hardware_capability_smoke_not_scientific_outcome",
+  "passed": true,
+  "platform": {
+    "cpu_count": 32,
+    "device_name": null,
+    "python": "3.12.3",
+    "system": "Linux-6.17.0-1023-oem-x86_64-with-glibc2.39",
+    "torch": "2.9.1+cpu",
+    "torch_cuda_available": false,
+    "torch_hip": null
+  },
+  "seed": 20260711,
+  "steps": 20
+}
