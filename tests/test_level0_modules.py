@@ -10,6 +10,7 @@ from philosophia.level0.checkpoint import (
     build_metadata,
     load_checkpoint,
     model_state_hash,
+    optimizer_state_hash,
     save_checkpoint,
 )
 from philosophia.level0.config import (
@@ -29,9 +30,10 @@ from philosophia.level0.data import (
 from philosophia.level0.fourier import project_residue_axis, real_fourier_basis
 from philosophia.level0.metrics import (
     Observation,
-    first_persistent_step,
+    _first_persistent_step,
     scored_parameter_l2,
 )
+from philosophia.level0.interlock import ExecutionInterlock
 from philosophia.level0.model import GrokkingTransformer
 from philosophia.level0.train import (
     OutcomeRunNotAuthorized,
@@ -91,6 +93,8 @@ def test_random_label_control_is_deterministic(run_config: RunConfig) -> None:
     assert torch.equal(left.learner.targets, right.learner.targets)
     assert torch.equal(left.evaluation.targets, right.evaluation.targets)
     assert not torch.equal(left.learner.targets, bundle.learner.targets)
+    assert left.split_hash == right.split_hash
+    assert left.split_hash != bundle.split_hash
 
 
 def test_model_shapes_scoring_and_init_observables(run_config: RunConfig) -> None:
@@ -143,8 +147,8 @@ def test_persistence_predicate_has_no_default_window() -> None:
         Observation(20, 0.96),
         Observation(30, 0.97),
     ]
-    assert first_persistent_step(curve, threshold=0.95, minimum_step_span=20) == 10
-    assert first_persistent_step(curve, threshold=0.98, minimum_step_span=20) is None
+    assert _first_persistent_step(curve, threshold=0.95, minimum_step_span=20) == 10
+    assert _first_persistent_step(curve, threshold=0.98, minimum_step_span=20) is None
 
 
 def test_single_step_and_checkpoint_resume_are_identical(
@@ -160,7 +164,10 @@ def test_single_step_and_checkpoint_resume_are_identical(
 
     model = GrokkingTransformer(run_config.model, init_seed=run_config.init_seed)
     optimizer = make_optimizer(model, run_config)
-    first = optimization_step(model, optimizer, learner)
+    original_interlock = ExecutionInterlock.timing_storage_scout()
+    first = optimization_step(
+        model, optimizer, learner, interlock=original_interlock
+    )
     assert first.loss > 0
     assert first.gradient_l2 > 0
 
@@ -170,6 +177,7 @@ def test_single_step_and_checkpoint_resume_are_identical(
         repository_head="test-head",
         source_hashes={"paper": "test-source-hash"},
         model=model,
+        optimizer=optimizer,
     )
     path = tmp_path / "roundtrip.pt"
     save_checkpoint(
@@ -192,9 +200,18 @@ def test_single_step_and_checkpoint_resume_are_identical(
     )
     assert step == 1
     assert loaded_metadata.init_scales == metadata.init_scales
+    assert model_state_hash(resumed) == metadata.model_state_hash
+    assert optimizer_state_hash(resumed_optimizer) == metadata.optimizer_state_hash
 
-    expected_next = optimization_step(model, optimizer, learner)
-    resumed_next = optimization_step(resumed, resumed_optimizer, learner)
+    expected_next = optimization_step(
+        model, optimizer, learner, interlock=original_interlock
+    )
+    resumed_next = optimization_step(
+        resumed,
+        resumed_optimizer,
+        learner,
+        interlock=ExecutionInterlock.timing_storage_scout(),
+    )
     assert expected_next == resumed_next
     assert model_state_hash(model) == model_state_hash(resumed)
 
@@ -219,6 +236,11 @@ def test_training_boundary_is_fail_closed() -> None:
     model = GrokkingTransformer(config.model, init_seed=config.init_seed)
     optimizer = make_optimizer(model, config)
     with pytest.raises(TypeError, match="LearnerView only"):
-        optimization_step(model, optimizer, bundle.evaluation)
+        optimization_step(
+            model,
+            optimizer,
+            bundle.evaluation,
+            interlock=ExecutionInterlock.single_step_check(),
+        )
     with pytest.raises(OutcomeRunNotAuthorized):
         run_outcome_training()

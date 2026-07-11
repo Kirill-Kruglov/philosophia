@@ -19,7 +19,8 @@ and Fourier probes as separately testable units.
 - level0/train.py: full-batch AdamW construction and one optimization step.
 - level0/metrics.py: loss, accuracy, parameter norm, and persistence primitive.
 - level0/fourier.py: real basis, projections, and frequency-energy diagnostics.
-- level0/checkpoint.py: model, optimizer, config, split and source hashes.
+- level0/checkpoint.py: state integrity, config, split, environment, and source hashes.
+- level0/interlock.py: capability gates for steps, evaluation, and verdicts.
 - experiments/level_0_grokking/run.py: harness-only orchestration.
 
 The harness is not implementation-eligible until the remaining lock-stage
@@ -33,7 +34,10 @@ modules must expose no alternate full-run entry point.
 - Split, initialization, and data-order hashes are written before step zero.
 - Every checkpoint includes source commit, repository HEAD, Python/PyTorch
   versions, device, dtype, seed, and complete optimizer state.
-- Resume refuses any config or split hash mismatch.
+- Resume refuses schema, config, split, model-state, optimizer-state, or canonical
+  environment mismatch.
+- Raw optimizer steps, evaluation, and verdict derivation require capabilities;
+  scout capabilities cannot evaluate or derive verdicts.
 - The outcome evaluator reads frozen artifacts after training; it cannot change
   stopping behavior.
 

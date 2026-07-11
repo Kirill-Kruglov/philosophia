@@ -11,3 +11,6 @@ not evidence for the Philosophia thesis.
 Before locking, establish a canonical CPU path and evaluate any accelerated
 backend separately. Record environment, determinism limits, wall time, memory,
 checkpoint schema, and the bounded platform-repair policy.
+
+Execution capabilities and contamination guards are defined in
+`EXECUTION_INTERLOCK.md`.

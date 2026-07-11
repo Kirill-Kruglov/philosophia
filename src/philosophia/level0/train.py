@@ -2,18 +2,40 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
-from typing import NoReturn
+from typing import Any, Callable, NoReturn
 
 import torch
 from torch.nn import functional as F
 
 from .config import RunConfig
 from .data import LearnerView
+from .interlock import ExecutionInterlock, ExecutionNotAuthorized
 from .model import GrokkingTransformer
 
 
-class OutcomeRunNotAuthorized(RuntimeError):
+class OutcomeRunNotAuthorized(ExecutionNotAuthorized):
     pass
+
+
+class InterlockedAdamW(torch.optim.AdamW):
+    def step(
+        self,
+        closure: Callable[[], float] | None = None,
+        *,
+        interlock: ExecutionInterlock | None = None,
+    ) -> Any:
+        if interlock is None:
+            raise ExecutionNotAuthorized("AdamW.step requires an execution interlock")
+        if interlock.mode == "single-step-check" and getattr(
+            self, "_single_step_consumed", False
+        ):
+            raise ExecutionNotAuthorized(
+                "this optimizer already consumed its one non-scout step"
+            )
+        interlock.consume_step()
+        if interlock.mode == "single-step-check":
+            self._single_step_consumed = True
+        return super().step(closure)
 
 
 @dataclass(frozen=True)
@@ -25,8 +47,8 @@ class StepResult:
 def make_optimizer(
     model: GrokkingTransformer,
     config: RunConfig,
-) -> torch.optim.AdamW:
-    return torch.optim.AdamW(
+) -> InterlockedAdamW:
+    return InterlockedAdamW(
         model.parameters(),
         lr=config.learning_rate,
         betas=config.betas,
@@ -42,8 +64,10 @@ def make_optimizer(
 
 def optimization_step(
     model: GrokkingTransformer,
-    optimizer: torch.optim.AdamW,
+    optimizer: InterlockedAdamW,
     learner: LearnerView,
+    *,
+    interlock: ExecutionInterlock,
 ) -> StepResult:
     if not isinstance(learner, LearnerView):
         raise TypeError("optimization_step accepts LearnerView only")
@@ -59,11 +83,11 @@ def optimization_step(
         for parameter in model.parameters()
         if parameter.grad is not None
     )
-    optimizer.step()
+    optimizer.step(interlock=interlock)
     return StepResult(loss=float(loss.detach()), gradient_l2=math.sqrt(gradient_squared))
 
 
 def run_outcome_training(*_args: object, **_kwargs: object) -> NoReturn:
     raise OutcomeRunNotAuthorized(
-        "full training is disabled until a complete PREREG.lock is signed"
+        "no full-run driver exists; a complete PREREG.lock is required first"
     )

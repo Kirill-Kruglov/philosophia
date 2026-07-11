@@ -70,8 +70,8 @@ Use a named deterministic Glorot-uniform reconstruction:
 - no other trainable tensors exist.
 
 Before step zero, record a frozen init-scale observable for every independently
-initialized matrix: its shape, theoretical Xavier bound, realized standard
-deviation, minimum, maximum, and content hash. Per-head attention matrices are
+initialized matrix: its shape, theoretical Xavier bound, realized population standard
+deviation (unbiased=false), minimum, maximum, and content hash. Per-head attention matrices are
 recorded separately.
 
 This is a documented deviation, not a claim about the original initialization.

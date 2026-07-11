@@ -107,6 +107,10 @@ def random_label_control(bundle: DatasetBundle, *, seed: int) -> DatasetBundle:
             bundle.evaluation.indices.clone(),
         ),
         universe_hash=_tensor_hash(labels, prefix=control_tag),
-        split_hash=bundle.split_hash,
+        split_hash=_tensor_hash(
+            bundle.learner.indices,
+            bundle.evaluation.indices,
+            prefix=control_tag,
+        ),
         torch_version=bundle.torch_version,
     )

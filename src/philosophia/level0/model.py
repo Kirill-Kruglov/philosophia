@@ -100,11 +100,15 @@ class GrokkingTransformer(nn.Module):
     def init_scale_observables(self) -> tuple[InitScale, ...]:
         return self._initial_scales
 
-    def forward(self, tokens: torch.Tensor) -> torch.Tensor:
+    def _embed(self, tokens: torch.Tensor) -> torch.Tensor:
         if tokens.ndim != 2 or tokens.shape[1] != self.config.sequence_length:
             raise ValueError("tokens must have shape [batch, 3]")
-        residual = self.W_E[tokens] + self.W_pos.unsqueeze(0)
+        return self.W_E[tokens] + self.W_pos.unsqueeze(0)
 
+    def _attention(
+        self,
+        residual: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         query = torch.einsum("bpd,hkd->bhpk", residual, self.W_Q)
         key = torch.einsum("bpd,hkd->bhpk", residual, self.W_K)
         value = torch.einsum("bpd,hkd->bhpk", residual, self.W_V)
@@ -115,7 +119,7 @@ class GrokkingTransformer(nn.Module):
                 self.config.sequence_length,
                 self.config.sequence_length,
                 dtype=torch.bool,
-                device=tokens.device,
+                device=residual.device,
             ),
             diagonal=1,
         )
@@ -123,9 +127,18 @@ class GrokkingTransformer(nn.Module):
             causal_mask.unsqueeze(0).unsqueeze(0),
             torch.finfo(scores.dtype).min,
         )
-        attention = scores.softmax(dim=-1)
-        attended = torch.einsum("bhqp,bhpk->bhqk", attention, value)
-        attention_out = torch.einsum("bhpk,hkd->bpd", attended, self.W_O)
+        weights = scores.softmax(dim=-1)
+        attended = torch.einsum("bhqp,bhpk->bhqk", weights, value)
+        output = torch.einsum("bhpk,hkd->bpd", attended, self.W_O)
+        return output, weights
+
+    def attention_weights(self, tokens: torch.Tensor) -> torch.Tensor:
+        _, weights = self._attention(self._embed(tokens))
+        return weights
+
+    def forward(self, tokens: torch.Tensor) -> torch.Tensor:
+        residual = self._embed(tokens)
+        attention_out, _ = self._attention(residual)
         residual = residual + attention_out
 
         hidden = torch.relu(torch.einsum("bpd,md->bpm", residual, self.W_in) + self.b_in)

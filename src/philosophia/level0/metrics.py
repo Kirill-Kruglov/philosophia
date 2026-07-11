@@ -7,6 +7,7 @@ from typing import Iterable
 import torch
 from torch.nn import functional as F
 
+from .interlock import ExecutionInterlock
 from .model import GrokkingTransformer
 
 
@@ -27,7 +28,11 @@ def evaluate(
     model: GrokkingTransformer,
     inputs: torch.Tensor,
     targets: torch.Tensor,
+    *,
+    interlock: ExecutionInterlock,
 ) -> Evaluation:
+    interlock.require_evaluation()
+    # This architecture has no dropout or normalization, so eval mode is inert.
     model.eval()
     logits = model(inputs)[:, -1, : model.config.scored_classes]
     loss = F.cross_entropy(logits, targets)
@@ -46,7 +51,7 @@ def scored_parameter_l2(model: GrokkingTransformer) -> float:
     return math.sqrt(total)
 
 
-def first_persistent_step(
+def _first_persistent_step(
     observations: Iterable[Observation],
     *,
     threshold: float,
@@ -68,3 +73,18 @@ def first_persistent_step(
         else:
             start = None
     return None
+
+
+def first_persistent_step(
+    observations: Iterable[Observation],
+    *,
+    threshold: float,
+    minimum_step_span: int,
+    interlock: ExecutionInterlock,
+) -> int | None:
+    interlock.require_verdict()
+    return _first_persistent_step(
+        observations,
+        threshold=threshold,
+        minimum_step_span=minimum_step_span,
+    )
