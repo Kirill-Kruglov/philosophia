@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - name: Harness and bootstrap tests
+        run: pytest -q
+      - name: Verify verbatim extraction hashes
+        run: python scripts/verify_inheritance.py
+      - name: Verify admitted decisions
+        run: python scripts/verify_all.py

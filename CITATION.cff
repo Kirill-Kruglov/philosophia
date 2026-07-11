@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: >-
+  If you use this repository, please cite it. Philosophia is an open research
+  programme and is not a peer-reviewed publication.
+title: "Philosophia: can experience be made from derivable worlds?"
+abstract: >-
+  A preregistered research programme testing whether algebraic and geometric
+  worlds can provide primary experience to small models trained from scratch,
+  and whether the resulting structure reduces future work and transfers across
+  worlds and representations.
+authors:
+  - family-names: Kruglov
+    given-names: Kirill
+    email: mr.kirill.kruglov@gmail.com
+  - name: "Claude Fable, Anthropic - roadmap author and AI collaborator"
+  - name: "Claude Opus 4.8, Anthropic - AI collaborator"
+  - name: "Codex GPT-5.5, OpenAI - AI collaborator"
+repository-code: "https://github.com/Kirill-Kruglov/philosophia"
+url: "https://github.com/Kirill-Kruglov/philosophia"
+license: MIT
+keywords:
+  - machine learning
+  - grokking
+  - active learning
+  - continual learning
+  - transfer learning
+  - mechanistic interpretability
+  - preregistration
+date-released: 2026-07-11
+version: "0.1.0"
