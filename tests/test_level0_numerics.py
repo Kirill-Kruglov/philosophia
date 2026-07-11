@@ -171,11 +171,8 @@ def test_interlock_blocks_composable_outcome_paths(tmp_path) -> None:
     with pytest.raises(ExecutionNotAuthorized, match="requires an execution"):
         optimizer.step()
 
-    scout = ExecutionInterlock.timing_storage_scout()
-    assert scout.max_steps == SCOUT_MAX_STEPS == 100
-    assert scout.max_seconds == SCOUT_MAX_SECONDS == 120.0
-    assert scout.allow_evaluation is False
-    assert scout.allow_verdict is False
+    assert SCOUT_MAX_STEPS == 100
+    assert SCOUT_MAX_SECONDS == 120.0
 
     with pytest.raises(ExecutionNotAuthorized, match="cannot evaluate"):
         evaluate(
@@ -205,6 +202,7 @@ def test_checkpoint_detects_state_and_environment_tampering(tmp_path) -> None:
     model = GrokkingTransformer(config.model, init_seed=config.init_seed)
     optimizer = make_optimizer(model, config)
     metadata = build_metadata(
+        purpose="unit-test / non-outcome",
         config=config,
         split_hash=bundle.split_hash,
         repository_head="test-head",

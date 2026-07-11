@@ -1,3 +1,10 @@
+"""Accidental-contamination guard, not a security boundary.
+
+A determined operator can bypass this module by constructing a raw optimizer or
+calling an unbound base-class method. The contract prevents accidental outcome
+execution through committed Philosophia APIs; it does not resist hostile code.
+"""
+
 from __future__ import annotations
 
 import hashlib
@@ -21,7 +28,12 @@ class ExecutionInterlock:
         self,
         *,
         _token: object,
-        mode: Literal["single-step-check", "timing-storage-scout", "locked-outcome"],
+        mode: Literal[
+            "single-step-check",
+            "bounded-check",
+            "timing-storage-scout",
+            "locked-outcome",
+        ],
         max_steps: int,
         max_seconds: float | None,
         allow_evaluation: bool,
@@ -45,6 +57,20 @@ class ExecutionInterlock:
             _token=_INTERNAL_TOKEN,
             mode="single-step-check",
             max_steps=1,
+            max_seconds=None,
+            allow_evaluation=False,
+            allow_verdict=False,
+            lock_hash=None,
+        )
+
+    @classmethod
+    def bounded_check(cls, max_steps: int) -> "ExecutionInterlock":
+        if not 1 <= max_steps <= 10:
+            raise ValueError("bounded checks require 1..10 steps")
+        return cls(
+            _token=_INTERNAL_TOKEN,
+            mode="bounded-check",
+            max_steps=max_steps,
             max_seconds=None,
             allow_evaluation=False,
             allow_verdict=False,

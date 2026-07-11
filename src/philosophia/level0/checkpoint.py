@@ -12,7 +12,7 @@ from .config import PINNED_TORCH_VERSION, RunConfig, canonical_json, config_hash
 from .model import GrokkingTransformer
 
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 class CheckpointMismatch(RuntimeError):
@@ -21,6 +21,7 @@ class CheckpointMismatch(RuntimeError):
 
 @dataclass(frozen=True)
 class CheckpointMetadata:
+    purpose: str
     config_hash: str
     split_hash: str
     model_state_hash: str
@@ -70,6 +71,7 @@ def optimizer_state_hash(optimizer: torch.optim.Optimizer) -> str:
 
 def build_metadata(
     *,
+    purpose: str,
     config: RunConfig,
     split_hash: str,
     repository_head: str,
@@ -77,8 +79,11 @@ def build_metadata(
     model: GrokkingTransformer,
     optimizer: torch.optim.Optimizer,
 ) -> CheckpointMetadata:
+    if not purpose.strip():
+        raise ValueError("checkpoint purpose tag is required")
     first_parameter = next(model.parameters())
     return CheckpointMetadata(
+        purpose=purpose,
         config_hash=config_hash(config),
         split_hash=split_hash,
         model_state_hash=model_state_hash(model),
@@ -165,6 +170,7 @@ def load_checkpoint(
     model.load_state_dict(payload["model_state"], strict=True)
     optimizer.load_state_dict(payload["optimizer_state"])
     metadata = CheckpointMetadata(
+        purpose=raw_metadata["purpose"],
         config_hash=raw_metadata["config_hash"],
         split_hash=raw_metadata["split_hash"],
         model_state_hash=raw_metadata["model_state_hash"],

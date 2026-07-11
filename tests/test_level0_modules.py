@@ -164,7 +164,7 @@ def test_single_step_and_checkpoint_resume_are_identical(
 
     model = GrokkingTransformer(run_config.model, init_seed=run_config.init_seed)
     optimizer = make_optimizer(model, run_config)
-    original_interlock = ExecutionInterlock.timing_storage_scout()
+    original_interlock = ExecutionInterlock.bounded_check(2)
     first = optimization_step(
         model, optimizer, learner, interlock=original_interlock
     )
@@ -172,6 +172,7 @@ def test_single_step_and_checkpoint_resume_are_identical(
     assert first.gradient_l2 > 0
 
     metadata = build_metadata(
+        purpose="unit-test / non-outcome",
         config=run_config,
         split_hash=bundle.split_hash,
         repository_head="test-head",
@@ -210,7 +211,7 @@ def test_single_step_and_checkpoint_resume_are_identical(
         resumed,
         resumed_optimizer,
         learner,
-        interlock=ExecutionInterlock.timing_storage_scout(),
+        interlock=ExecutionInterlock.bounded_check(2),
     )
     assert expected_next == resumed_next
     assert model_state_hash(model) == model_state_hash(resumed)

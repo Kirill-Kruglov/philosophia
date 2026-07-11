@@ -19,12 +19,14 @@ and Fourier probes as separately testable units.
 - level0/train.py: full-batch AdamW construction and one optimization step.
 - level0/metrics.py: loss, accuracy, parameter norm, and persistence primitive.
 - level0/fourier.py: real basis, projections, and frequency-energy diagnostics.
-- level0/checkpoint.py: state integrity, config, split, environment, and source hashes.
+- level0/checkpoint.py: state integrity, config, split, environment, and source
+  hashes.
 - level0/interlock.py: capability gates for steps, evaluation, and verdicts.
+- level0/scout.py: reviewed-cap timing/storage orchestration, not yet executed.
 - experiments/level_0_grokking/run.py: harness-only orchestration.
 
-The harness is not implementation-eligible until the remaining lock-stage
-threshold, cadence, control, resource, and quorum cells are closed. Library
+The scientific outcome harness is not implementation-eligible until the remaining
+lock-stage threshold, cadence, control, resource, and quorum cells are closed. Library
 modules must expose no alternate full-run entry point.
 
 ## Fail-closed API rules

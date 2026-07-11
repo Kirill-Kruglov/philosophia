@@ -35,3 +35,14 @@ def test_hardening_does_not_create_scientific_authorization() -> None:
     assert "contamination boundary" in contract
     assert not (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
+
+
+def test_hardening_acceptance_allows_driver_not_execution() -> None:
+    review = (
+        ROOT / "reviews/opus_level0_hardening_review.md"
+    ).read_text(encoding="utf-8")
+    assert review.startswith("# Opus 4.8")
+    assert "**HARDENING_ACCEPTED**" in review
+    assert "**Eligible.**" in review
+    assert "**Not yet — implement the driver" in review
+    assert not list(ROOT.glob("**/timing-storage-scout_non-outcome.json"))
