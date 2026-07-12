@@ -1,7 +1,9 @@
 # Level 0 scientific preregistration draft
 
-Status: **DRAFT FOR SOL/OPUS/KIRILL REVIEW. NOT LOCKED. NO OUTCOME RUN
-AUTHORIZED.** The machine-readable governing draft is `SCIENTIFIC_SPEC.json`.
+Status: **ACCEPTED BY KIRILL BEFORE OUTCOME. PENDING CANONICAL LOCK COMMIT.
+NO OUTCOME RUN AUTHORIZED YET.** The machine-readable governing specification is
+`SCIENTIFIC_SPEC.json`. Kirill supplied the exact authorization statement
+`I_ACCEPT_LEVEL0_SCIENTIFIC_SPEC` after the Sol and Opus reviews were closed.
 
 ## Question and scope
 
@@ -95,7 +97,8 @@ the transition.
 
 ## Remaining gate
 
-This draft and the unexecuted driver require adversarial Sol and Opus review.
-Kirill must accept every cell and explicitly authorize creation of the canonical
-`PREREG.lock`. Until that signature, no lock file, outcome directory, or
-scientific decision is permitted.
+The adversarial Sol and Opus findings are closed and Kirill has accepted every
+cell before outcome. The canonical lock script must now bind this committed
+specification and the reviewed source hashes; `PREREG.lock` must then be
+committed unchanged. Until that lock commit, no outcome directory or scientific
+decision is permitted.

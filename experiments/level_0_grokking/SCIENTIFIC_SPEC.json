@@ -116,7 +116,7 @@
     "paper_pdf":"93dcdafc2ecf75d31ab2e32e74cdc11e2e488fec42edfef58ad3d4b6515bcd5f",
     "v2_prefix_report":"af435965b259f1640c86b50c4ca4e279580349e209be3c34960f852a8d381352"
   },
-  "status": "draft-before-review-and-signature",
+  "status": "accepted-by-kirill-before-outcome",
   "stopping": {
     "early_failure": "forbidden except platform integrity failure or resource wall",
     "early_success": "forbidden",

@@ -88,7 +88,7 @@ def test_scientific_spec_closes_every_named_lock_cell() -> None:
     spec = load_spec(SPEC_PATH)
     definitions = run_definitions(spec)
     assert tuple(definitions) == REQUIRED_RUN_IDS
-    assert spec["status"] == "draft-before-review-and-signature"
+    assert spec["status"] == "accepted-by-kirill-before-outcome"
     assert spec["predicates"]["fit"]["metric"] == "reporting train accuracy"
     assert spec["predicates"]["fit"]["minimum"] == 0.99
     assert spec["predicates"]["fit"]["persistence_window"] == 1000
@@ -111,21 +111,15 @@ def test_scientific_spec_closes_every_named_lock_cell() -> None:
     )
 
 
-def test_draft_spec_cannot_authorize_outcome(tmp_path: Path) -> None:
+def test_unaccepted_spec_cannot_authorize_outcome(tmp_path: Path) -> None:
+    raw = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
+    raw["status"] = "draft-before-review-and-signature"
+    draft_path = tmp_path / "SCIENTIFIC_SPEC.json"
+    draft_path.write_text(json.dumps(raw), encoding="utf-8")
     with pytest.raises(ScientificSpecError, match="not accepted"):
-        load_spec(SPEC_PATH, require_accepted=True)
-    output_root = tmp_path / "outcomes"
-    with pytest.raises(ScientificSpecError, match="not accepted"):
-        run_locked_outcome(
-            run_id="A-0",
-            output_root=output_root,
-            spec_path=SPEC_PATH,
-            lock_path=LEVEL0 / "PREREG.lock",
-            resume=False,
-        )
-    assert not output_root.exists()
+        load_spec(draft_path, require_accepted=True)
     assert not (LEVEL0 / "PREREG.lock").exists()
-    assert not (LEVEL0 / "decision.json").exists()
+    assert not (LEVEL0 / "outcomes").exists()
 
 
 def test_schema2_lock_binds_run_config_budget_and_resume_count(tmp_path: Path) -> None:

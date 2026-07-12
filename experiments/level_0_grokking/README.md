@@ -2,10 +2,10 @@
 
 Status: companion-fidelity v2 is implemented, accepted by Opus, and certified by a
 matching bounded determinism-prefix report. Reconstruction fidelity is closed;
-a draft scientific preregistration, schema-2 lock machinery, outcome driver,
-and independent decision verifier are implemented but not yet accepted. The
-design is not locked, and full training and scientific outcome runs remain
-forbidden pending adversarial review and Kirill's signature.
+the scientific preregistration has passed Sol/Opus review and was accepted by
+Kirill before outcome. Schema-2 lock machinery, the outcome driver, and the
+independent verifier are implemented. Full outcome runs remain forbidden until
+the canonical lock is created and committed unchanged.
 
 The only scientific task at this level is to reproduce published modular-addition
 grokking with checkpoints, representation probes, and seeded replications. It is
