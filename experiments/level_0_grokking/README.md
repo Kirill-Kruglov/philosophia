@@ -21,3 +21,6 @@ RESOURCE_SCOUT.md.
 
 Lock drafting is currently paused at the official companion-source
 reconciliation gate documented in COMPANION_SOURCE_AUDIT.md.
+
+Opus selected REVISE_TO_COMPANION. The binding pre-implementation specification
+is COMPANION_CONFIG_TRACE.md; v1 choices are historical.

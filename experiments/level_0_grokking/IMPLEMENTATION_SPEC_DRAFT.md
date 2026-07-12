@@ -1,8 +1,7 @@
 # Level 0 implementation specification draft
 
-Status: module implementation and unit tests authorized by Opus Round 2; full
-training orchestration and every outcome run remain disabled until Kirill signs
-a complete preregistration lock.
+Status: v1 modules are hardened; companion-fidelity v2 is traced but not yet
+implemented. Full training and every outcome run remain disabled.
 
 ## Boundary
 

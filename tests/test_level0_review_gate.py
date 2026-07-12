@@ -12,10 +12,11 @@ def test_trace_records_anchor_discrepancies():
     assert "No preregistration lock is allowed" in trace
 
 
-def test_modules_are_eligible_but_outcome_remains_blocked():
+def test_v1_is_hardened_v2_is_pending_and_outcome_remains_blocked():
     spec = (LEVEL0 / "IMPLEMENTATION_SPEC_DRAFT.md").read_text(encoding="utf-8")
-    assert "module implementation and unit tests authorized" in spec
-    assert "training orchestration and every outcome run remain disabled" in spec
+    assert "v1 modules are hardened" in spec
+    assert "v2 is traced but not yet" in spec
+    assert "Full training and every outcome run remain disabled" in spec
     assert not (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
 

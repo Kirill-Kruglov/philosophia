@@ -1,8 +1,8 @@
 # Level 0 reconstruction choices v1
 
-Status: revised after Opus Round 2; implementation and unit tests are eligible.
-These choices authorize no outcome run and create no preregistration lock. The
-remaining lock-stage cells below stay unresolved.
+Status: historical v1, superseded for lock by RECONSTRUCTION_CHOICES_V2.md.
+The current code remains v1 until the separately committed v2 implementation;
+no outcome run or preregistration lock is authorized.
 
 ## R1: AdamW equation and lambda
 
