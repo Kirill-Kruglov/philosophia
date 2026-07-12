@@ -190,6 +190,8 @@ def test_interlock_blocks_composable_outcome_paths(tmp_path) -> None:
     with pytest.raises(ExecutionNotAuthorized, match="real PREREG.lock"):
         ExecutionInterlock.from_preregistration(
             tmp_path / "PREREG.lock",
+            spec_path=tmp_path / "SCIENTIFIC_SPEC.json",
+            run_id="A-0",
             expected_config_hash=config_hash(config),
             expected_fixed_steps=config.arm.fixed_epochs,
         )

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify every decision currently admitted by the bootstrap repository."""
+"""Verify every decision currently admitted by the Philosophia repository."""
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from gate_harness.verify_decision import verify_decision  # noqa: E402
+from philosophia.level0.decision_verifier import verify_level0_decision  # noqa: E402
 
 
 def main() -> int:
@@ -21,10 +22,26 @@ def main() -> int:
     if not ok:
         return 1
 
-    active_decisions = sorted((ROOT / "experiments").glob("level_*/decision.json"))
-    if active_decisions:
-        print("FAIL: active decisions exist but have not yet been admitted here")
-        for path in active_decisions:
+    level0 = ROOT / "experiments/level_0_grokking"
+    active = level0 / "outcomes/decision.json"
+    if active.exists():
+        ok, reasons = verify_level0_decision(
+            decision_path=active,
+            spec_path=level0 / "SCIENTIFIC_SPEC.json",
+            lock_path=level0 / "PREREG.lock",
+        )
+        print(f"{'VALID' if ok else 'INVALID'}  {active.relative_to(ROOT)}")
+        for reason in reasons:
+            print(f"  - {reason}")
+        if not ok:
+            return 1
+        print("OK: inherited primary and Philosophia Level 0 decisions are valid.")
+        return 0
+
+    unexpected = sorted((ROOT / "experiments").glob("**/decision.json"))
+    if unexpected:
+        print("FAIL: unadmitted Philosophia decisions exist")
+        for path in unexpected:
             print(f"  - {path.relative_to(ROOT)}")
         return 1
 

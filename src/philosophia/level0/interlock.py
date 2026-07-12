@@ -7,11 +7,11 @@ execution through committed Philosophia APIs; it does not resist hostile code.
 
 from __future__ import annotations
 
-import hashlib
-import json
 from pathlib import Path
 import time
-from typing import Literal
+from typing import Literal, Mapping
+
+from .scientific_spec import ScientificSpecError, load_lock
 
 
 SCOUT_MAX_STEPS = 100
@@ -39,17 +39,23 @@ class ExecutionInterlock:
         allow_evaluation: bool,
         allow_verdict: bool,
         lock_hash: str | None,
+        initial_steps: int = 0,
+        initial_elapsed_seconds: float = 0.0,
     ) -> None:
         if _token is not _INTERNAL_TOKEN:
             raise ExecutionNotAuthorized("execution capabilities must use a factory")
+        if initial_elapsed_seconds < 0:
+            raise ExecutionNotAuthorized("initial elapsed time must be non-negative")
+        if not 0 <= initial_steps <= max_steps:
+            raise ExecutionNotAuthorized("initial step count exceeds capability budget")
         self.mode = mode
         self.max_steps = max_steps
         self.max_seconds = max_seconds
         self.allow_evaluation = allow_evaluation
         self.allow_verdict = allow_verdict
         self.lock_hash = lock_hash
-        self._started = time.monotonic()
-        self._steps = 0
+        self._started = time.monotonic() - initial_elapsed_seconds
+        self._steps = initial_steps
 
     @classmethod
     def single_step_check(cls) -> "ExecutionInterlock":
@@ -94,64 +100,76 @@ class ExecutionInterlock:
         cls,
         lock_path: Path,
         *,
+        spec_path: Path,
+        run_id: str,
         expected_config_hash: str,
         expected_fixed_steps: int,
+        consumed_steps: int = 0,
+        consumed_seconds: float = 0.0,
     ) -> "ExecutionInterlock":
-        if lock_path.name != "PREREG.lock" or not lock_path.is_file():
-            raise ExecutionNotAuthorized("a real PREREG.lock file is required")
-        raw = lock_path.read_bytes()
         try:
-            payload = json.loads(raw)
-        except (UnicodeDecodeError, json.JSONDecodeError) as error:
-            raise ExecutionNotAuthorized("PREREG.lock must be canonical JSON") from error
-        canonical = json.dumps(
-            payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True
-        ).encode("ascii")
-        if raw not in (canonical, canonical + b"\n"):
-            raise ExecutionNotAuthorized("PREREG.lock must be canonical JSON")
+            lock = load_lock(
+                lock_path,
+                spec_path=spec_path,
+            )
+        except ScientificSpecError as error:
+            raise ExecutionNotAuthorized(str(error)) from error
+        raw_runs = lock["runs"]
+        if not isinstance(raw_runs, Mapping) or run_id not in raw_runs:
+            raise ExecutionNotAuthorized(f"run {run_id!r} is not authorized")
+        raw_run = raw_runs[run_id]
+        if not isinstance(raw_run, Mapping):
+            raise ExecutionNotAuthorized("lock run entry is malformed")
         required = {
-            "schema_version": 1,
-            "kind": "philosophia-level0-preregistration",
-            "status": "locked",
-            "authorized_by": "Kirill",
-            "before_lock_complete": True,
             "config_hash": expected_config_hash,
-            "fixed_steps": expected_fixed_steps,
+            "fixed_updates": expected_fixed_steps,
         }
         for key, expected in required.items():
-            if payload.get(key) != expected:
-                raise ExecutionNotAuthorized(f"PREREG.lock field {key!r} is invalid")
+            if raw_run.get(key) != expected:
+                raise ExecutionNotAuthorized(f"run lock field {key!r} mismatch")
+        max_seconds = raw_run.get("max_seconds")
+        if not isinstance(max_seconds, (int, float)) or max_seconds <= 0:
+            raise ExecutionNotAuthorized("run wall-clock cap is missing")
+        from .scientific_spec import sha256_file
+
         return cls(
             _token=_INTERNAL_TOKEN,
             mode="locked-outcome",
             max_steps=expected_fixed_steps,
-            max_seconds=None,
+            max_seconds=float(max_seconds),
             allow_evaluation=True,
             allow_verdict=True,
-            lock_hash=hashlib.sha256(raw).hexdigest(),
+            lock_hash=sha256_file(lock_path),
+            initial_steps=consumed_steps,
+            initial_elapsed_seconds=consumed_seconds,
         )
 
     @property
     def steps_used(self) -> int:
         return self._steps
 
+    @property
+    def elapsed_seconds(self) -> float:
+        return time.monotonic() - self._started
+
     def consume_step(self) -> None:
+        self.require_within_wall()
         if self._steps >= self.max_steps:
             raise ExecutionNotAuthorized(
                 f"{self.mode} is capped at {self.max_steps} optimization steps"
             )
-        if (
-            self.max_seconds is not None
-            and time.monotonic() - self._started >= self.max_seconds
-        ):
+        self._steps += 1
+
+    def require_within_wall(self) -> None:
+        if self.max_seconds is not None and self.elapsed_seconds >= self.max_seconds:
             raise ExecutionNotAuthorized(
                 f"{self.mode} exceeded its {self.max_seconds:g}s wall-clock cap"
             )
-        self._steps += 1
 
     def require_evaluation(self) -> None:
         if not self.allow_evaluation:
             raise ExecutionNotAuthorized(f"{self.mode} cannot evaluate outcomes")
+        self.require_within_wall()
 
     def require_verdict(self) -> None:
         if not self.allow_verdict:

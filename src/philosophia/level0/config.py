@@ -7,7 +7,7 @@ from typing import Any, Literal
 
 
 PINNED_TORCH_VERSION = "2.9.1"
-PINNED_PYTHON_MINOR = (3, 12)
+PINNED_PYTHON_VERSION = (3, 12, 3)
 RECONSTRUCTION_ID = "level0-companion-v2"
 MASTER_SEEDS = (0, 1, 2, 3, 4)
 

@@ -2,9 +2,10 @@
 
 Status: companion-fidelity v2 is implemented, accepted by Opus, and certified by a
 matching bounded determinism-prefix report. Reconstruction fidelity is closed;
-the remaining gates are scientific preregistration choices and Kirill's signature.
-The design is not locked, and full training and scientific outcome runs remain
-forbidden.
+a draft scientific preregistration, schema-2 lock machinery, outcome driver,
+and independent decision verifier are implemented but not yet accepted. The
+design is not locked, and full training and scientific outcome runs remain
+forbidden pending adversarial review and Kirill's signature.
 
 The only scientific task at this level is to reproduce published modular-addition
 grokking with checkpoints, representation probes, and seeded replications. It is
@@ -24,5 +25,6 @@ its v1 deterministic prefix is superseded.
 
 Opus selected `REVISE_TO_COMPANION`. The binding implementation specification is
 `COMPANION_CONFIG_TRACE.md`, the adopted choices are in
-`RECONSTRUCTION_CHOICES_V2.md`, and v1 choices are historical. No `PREREG.lock`
-or Philosophia `decision.json` exists.
+`RECONSTRUCTION_CHOICES_V2.md`, and v1 choices are historical. The proposed
+scientific cells are in `PREREGISTRATION_DRAFT.md` and `SCIENTIFIC_SPEC.json`.
+No `PREREG.lock`, outcome directory, or Philosophia `decision.json` exists.

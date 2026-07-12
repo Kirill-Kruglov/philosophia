@@ -1,0 +1,119 @@
+{
+  "arm_b_interpretation": {
+    "failure": "zero of three B runs reproducing is not evidence against platform validity and does not rescue or worsen the Arm A verdict",
+    "success": "at least one of three B runs satisfies FIT, GENERALIZE, and DELAYED; this annotates an Arm A failure as anchor-fidelity-sensitive but never counts toward the primary quorum"
+  },
+  "claims_forbidden": [
+    "evidence for the Philosophia programme claim",
+    "progress measures predict or explain grokking",
+    "weight decay causes grokking",
+    "a new Fourier basis appears at grokking",
+    "cross-world or cross-representation transfer",
+    "p-values, effect sizes, or generalization beyond the locked task",
+    "Arm B as an independent success target",
+    "ROCm results entering the decision"
+  ],
+  "controls": {
+    "all_real_label_runs_must_fit": true,
+    "deterministic_prefix_report": "experiments/level_0_grokking/prefix/companion-v2-determinism-prefix_non-outcome.json",
+    "random_label": {
+      "evaluation_rule": "must not satisfy GENERALIZE persistence",
+      "label_seed": 20000,
+      "master_seed": 0,
+      "training_rule": "must satisfy FIT persistence",
+      "violations": "either violation is PLATFORM_INVALID"
+    },
+    "shuffled_checkpoint_order": "deferred to Level 3",
+    "weight_decay_necessity": "deferred to Level 3"
+  },
+  "decision": {
+    "arm_a_quorum": 4,
+    "arm_a_total": 5,
+    "demonstration_only": true,
+    "execution_aborts_without_decision_if": [
+      "non-finite loss or metric",
+      "checkpoint integrity or canonical-environment failure",
+      "split/config/source/lock hash mismatch",
+      "forbidden learner access or determinism failure",
+      "resource wall reached before the fixed budget"
+    ],
+    "platform_invalid_if": [
+      "any completed real-label run fails FIT",
+      "completed random-label run fails FIT",
+      "completed random-label run satisfies GENERALIZE"
+    ],
+    "primary_reproduced_if": "at least four of five Arm A runs satisfy FIT, GENERALIZE, and DELAYED after every platform control passes",
+    "primary_not_reproduced_if": "at most three of five Arm A runs satisfy all three predicates after every platform control passes",
+    "unit_of_replication": "one complete seeded run"
+  },
+  "environment": {
+    "backend": "cpu",
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms": true,
+    "python": "3.12.3",
+    "torch": "2.9.1+cpu"
+  },
+  "kind": "philosophia-level0-scientific-spec",
+  "output_root": "experiments/level_0_grokking/outcomes",
+  "observations": {
+    "full_checkpoint_cadence": 1000,
+    "metric_cadence": 100,
+    "model_snapshot_cadence": 100,
+    "record": [
+      "reporting train loss and accuracy",
+      "reporting held-out loss and accuracy",
+      "scored and full parameter L2 norms",
+      "embedding and unembedding Fourier frequency-energy vectors",
+      "learning rate, elapsed time, config/split/source/lock hashes"
+    ],
+    "step_zero_and_final": true
+  },
+  "predicates": {
+    "delayed": {
+      "definition": "GENERALIZE_start - FIT_start >= delta_min",
+      "delta_min": 2000,
+      "source": "ANCHOR_CLAIMS.md"
+    },
+    "fit": {
+      "metric": "reporting train accuracy",
+      "minimum": 0.99,
+      "persistence_window": 1000
+    },
+    "generalize": {
+      "metric": "reporting held-out accuracy",
+      "minimum": 0.95,
+      "persistence_window": 1000
+    }
+  },
+  "resource_wall": {
+    "arm_a_max_seconds_per_run": 21600,
+    "arm_b_max_seconds_per_run": 64800,
+    "max_total_artifact_bytes": 26843545600,
+    "random_label_max_seconds": 21600,
+    "rule": "outcome-independent; crossing a wall yields RESOURCE_STOP and no scientific verdict"
+  },
+  "runs": [
+    {"config_hash":"3285cb04797a4bd19f4a3cc04669e531fc43b49645a459f08e31c2221740a63c","control":"real-label","fixed_updates":40000,"master_seed":0,"run_id":"A-0","split_hash":"b864b16accf8202e5dbe9de566f3e53a0750c07009293fd1eb8763657386177f"},
+    {"config_hash":"6dc883734271b42930fd70b244012121b6dfebcabc7356f21a5fe71d2dff1b22","control":"real-label","fixed_updates":40000,"master_seed":1,"run_id":"A-1","split_hash":"c8a754ffcfb699c74d608a2705ffcc0e8efe6d7db3f7fbeba76c7182210946a0"},
+    {"config_hash":"76ba3e9c996b2964fb2c1fa280069437a4a343099f1274a3d75398223e34e7a9","control":"real-label","fixed_updates":40000,"master_seed":2,"run_id":"A-2","split_hash":"5005094466718a839f9a18e4fad59395b50fb520a6f96e5c3a2117d5e9f9c932"},
+    {"config_hash":"7ea9a87e2fd0a67e9641b5c662c042bd3383246ac43de2b014c1b03a3bbd7679","control":"real-label","fixed_updates":40000,"master_seed":3,"run_id":"A-3","split_hash":"e42cd37232de703cd05db5627403951467c6d6fea269e100b327d18505d35660"},
+    {"config_hash":"cbcb33f0963cbc485766d660f4870d00f9e0c7fe3a1d38b84a72757549f1f3cd","control":"real-label","fixed_updates":40000,"master_seed":4,"run_id":"A-4","split_hash":"c4865e9e799434e3711963a356374d50c744df9c05069ca8827139e118d2b0bd"},
+    {"config_hash":"208080cc461c3f3d244d91efc8d9a58f6b9c3b919cde09c5917924f05c48c6a4","control":"real-label","fixed_updates":120000,"master_seed":1,"run_id":"B-1","split_hash":"c8a754ffcfb699c74d608a2705ffcc0e8efe6d7db3f7fbeba76c7182210946a0"},
+    {"config_hash":"061f2c7eb5020e75e0eaac9bb84f9f134a04f230661ae84ba166154e0f028d7e","control":"real-label","fixed_updates":120000,"master_seed":2,"run_id":"B-2","split_hash":"5005094466718a839f9a18e4fad59395b50fb520a6f96e5c3a2117d5e9f9c932"},
+    {"config_hash":"c41ff1c23c601a9f932b071ffa8042a2b456c50a426f11ee95de3912b735b55f","control":"real-label","fixed_updates":120000,"master_seed":3,"run_id":"B-3","split_hash":"e42cd37232de703cd05db5627403951467c6d6fea269e100b327d18505d35660"},
+    {"config_hash":"3285cb04797a4bd19f4a3cc04669e531fc43b49645a459f08e31c2221740a63c","control":"random-label","fixed_updates":40000,"label_hash":"a924f7b82a5bad37056f9d832d39715e43769214b0f9ada175c7c280dac5413c","master_seed":0,"run_id":"R-0","split_hash":"996fd9846d6e31c398dca8b07d99cd4c60640e48f13f51aea23e756f6c95fe19"}
+  ],
+  "schema_version": 1,
+  "source_hashes": {
+    "companion_notebook":"76e5888a9afc44ca44cb380266993ba1b174b6dab4def20afeba99355b3872e4",
+    "companion_transformers":"de946fddb1ec509d662829c6bb1e5b456120a1c5bfb31548cdc66b7650cef6ad",
+    "paper_pdf":"93dcdafc2ecf75d31ab2e32e74cdc11e2e488fec42edfef58ad3d4b6515bcd5f",
+    "v2_prefix_report":"af435965b259f1640c86b50c4ca4e279580349e209be3c34960f852a8d381352"
+  },
+  "status": "draft-before-review-and-signature",
+  "stopping": {
+    "early_failure": "forbidden except platform integrity failure or resource wall",
+    "early_success": "forbidden",
+    "resume": "allowed only from a schema-valid full checkpoint with identical spec, lock, config, split, source, and metric-prefix hashes"
+  }
+}

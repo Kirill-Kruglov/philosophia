@@ -1,6 +1,7 @@
 # Level 0 execution interlock
 
-Status: implemented; the scout executed exactly once; no preregistration lock
+Status: schema-2 scientific interlock and outcome driver implemented but under
+review; the scout executed exactly once; no preregistration lock
 or outcome authorization exists.
 
 Every optimizer step requires an `ExecutionInterlock`. Evaluation and persistence
@@ -29,21 +30,22 @@ inter-phase I/O is checked before the next step.
 
 ## Lock envelope
 
-`locked-outcome` can be constructed only from a file named `PREREG.lock`.
-The loader requires canonical JSON with this authorization envelope:
+`locked-outcome` can be constructed only from a committed, unchanged file named
+`PREREG.lock`. Schema 2 binds Kirill's exact authorization statement to the
+accepted scientific-spec hash, the reviewed source commit and per-file hashes,
+all nine named runs, their config/split/control/budget fields, their wall and
+artifact ceilings, and the battery-wide artifact ceiling.
 
-- `schema_version=1`;
-- `kind=philosophia-level0-preregistration`;
-- `status=locked`;
-- `authorized_by=Kirill`;
-- `before_lock_complete=true`;
-- the exact canonical `config_hash`;
-- the arm's exact `fixed_steps`.
+The source commit may be an ancestor of the execution commit because creation
+and commitment of `PREREG.lock` necessarily follow the reviewed source commit.
+Every locked source file must retain its recorded hash. The training driver
+records metrics but contains no persistence/verdict call; the separate evaluator
+cannot optimize or instantiate a model and runs only after all nine completion
+reports exist.
 
-These fields authorize execution only. The eventual lock must also contain or
-hash the complete scientific specification; its verifier is a separate
-before-lock deliverable. Merely creating the envelope is forbidden until Kirill
-accepts every open scientific cell.
+The current `SCIENTIFIC_SPEC.json` remains a draft. Lock creation fails closed
+until its status records Kirill's pre-outcome acceptance. Merely creating the
+lock remains forbidden until the external reviews and that acceptance land.
 
 ## Scout contamination boundary
 

@@ -8,7 +8,7 @@ import sys
 import torch
 
 from .config import (
-    PINNED_PYTHON_MINOR,
+    PINNED_PYTHON_VERSION,
     PINNED_TORCH_VERSION,
     ModelConfig,
     RunConfig,
@@ -65,14 +65,14 @@ def build_dataset(
     require_pinned_environment: bool = True,
 ) -> DatasetBundle:
     torch_version = torch.__version__.split("+", maxsplit=1)[0]
-    python_minor = sys.version_info[:2]
+    python_version_info = sys.version_info[:3]
     if require_pinned_environment and torch_version != PINNED_TORCH_VERSION:
         raise RuntimeError(
             f"dataset requires torch {PINNED_TORCH_VERSION}, found {torch.__version__}"
         )
-    if require_pinned_environment and python_minor != PINNED_PYTHON_MINOR:
+    if require_pinned_environment and python_version_info != PINNED_PYTHON_VERSION:
         raise RuntimeError(
-            f"split requires CPython {PINNED_PYTHON_MINOR}, found {python_minor}"
+            f"split requires CPython {PINNED_PYTHON_VERSION}, found {python_version_info}"
         )
 
     inputs, targets = ordered_modular_addition(config.model)
