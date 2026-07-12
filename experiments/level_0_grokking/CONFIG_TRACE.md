@@ -1,13 +1,16 @@
 # Level 0 anchor configuration trace
 
-Status: source extraction complete; Opus Round 2 authorizes module implementation
-and unit tests. Full training and preregistration remain unauthorized.
+Status: reopened before lock by official companion training source. Existing
+modules remain testable, but full training and preregistration are unauthorized
+until source reconciliation.
 
 Sources:
 
 - Paper: Nanda et al., https://arxiv.org/abs/2301.05217
 - Linked repository: https://github.com/neelnanda-io/Grokking
 - Repository commit: dfbd38f7d23e09aaa5e5c9bd0483b69ca533e580
+- Official companion training repository: mechanistic-interpretability-grokking/progress-measures-paper
+- Companion commit: 23d2c64dd1f8a5ca65efaf27e15c2b2cd47dedf1
 - Saved artifact inspected:
   saved_runs/wd_10-1_mod_addition_loss_curve.pth
 
@@ -121,3 +124,15 @@ choice.
 
 No preregistration lock is allowed until the separate before-lock checklist is
 closed.
+
+## Companion-source reconciliation gate
+
+COMPANION_SOURCE_AUDIT.md records pre-paper executable evidence that reopens
+four trajectory-sensitive v1 choices: initialization distribution, split
+algorithm, ten-step learning-rate warmup, and 114-class training CE. Storage
+orientations for W_E and W_O are also source-resolved.
+
+The prior Round 2 acceptance was correct under the evidence then presented, but
+cannot serve as final lock approval after this source correction. No outcome
+driver or PREREG.lock is eligible until a new review resolves the hierarchy
+between paper prose, companion executable source, and the saved artifact.

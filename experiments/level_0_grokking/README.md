@@ -18,3 +18,6 @@ Execution capabilities and contamination guards are defined in
 The single authorized non-outcome CPU resource scout is recorded in
 scout/timing-storage-scout_non-outcome.json; planning-only derivations are in
 RESOURCE_SCOUT.md.
+
+Lock drafting is currently paused at the official companion-source
+reconciliation gate documented in COMPANION_SOURCE_AUDIT.md.

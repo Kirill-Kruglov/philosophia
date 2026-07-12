@@ -1,6 +1,7 @@
 # Level 0 anchor source audit
 
-Inspected 2026-07-11 before any outcome implementation or run.
+Initial pass 2026-07-11; materially updated 2026-07-12 before any outcome run.
+See COMPANION_SOURCE_AUDIT.md. Lock is blocked on source reconciliation.
 
 ## Paper
 
@@ -38,3 +39,21 @@ Before lock:
 
 If traceability remains insufficient, switch to a published anchor with complete
 licensed code and record that change before preregistration.
+
+## 2026-07-12 companion-source correction
+
+The paper's official companion repository,
+mechanistic-interpretability-grokking/progress-measures-paper, was subsequently
+identified. Its README explicitly names transformers.py as training code, and
+its training source predates arXiv v1. This corrects the earlier operational
+premise that no complete anchor training loop was available.
+
+The companion repository has no detected license, so its implementation is not
+vendored. Its executable facts are nevertheless primary provenance evidence.
+They reopen initialization, split, learning-rate warmup, and training-class
+semantics. Full hashes and the discrepancy matrix are in
+COMPANION_SOURCE_AUDIT.md.
+
+The previous independent choices remain useful as a reviewed v1 reconstruction,
+but they cannot be locked as the closest source-fidelity arm until the new
+evidence is reconciled.
