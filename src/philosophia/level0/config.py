@@ -5,11 +5,33 @@ import hashlib
 import json
 from typing import Any, Literal
 
+import torch
+
 
 PINNED_TORCH_VERSION = "2.9.1"
 PINNED_PYTHON_VERSION = (3, 12, 3)
+PINNED_TORCH_NUM_THREADS = 16
+PINNED_TORCH_NUM_INTEROP_THREADS = 32
 RECONSTRUCTION_ID = "level0-companion-v2"
 MASTER_SEEDS = (0, 1, 2, 3, 4)
+
+
+def configure_canonical_torch_runtime() -> None:
+    """Set and verify the CPU thread contract before model construction."""
+    if torch.get_num_threads() != PINNED_TORCH_NUM_THREADS:
+        torch.set_num_threads(PINNED_TORCH_NUM_THREADS)
+    if torch.get_num_interop_threads() != PINNED_TORCH_NUM_INTEROP_THREADS:
+        try:
+            torch.set_num_interop_threads(PINNED_TORCH_NUM_INTEROP_THREADS)
+        except RuntimeError as error:
+            raise RuntimeError(
+                "cannot establish the pinned PyTorch inter-op thread count"
+            ) from error
+    if (
+        torch.get_num_threads() != PINNED_TORCH_NUM_THREADS
+        or torch.get_num_interop_threads() != PINNED_TORCH_NUM_INTEROP_THREADS
+    ):
+        raise RuntimeError("canonical PyTorch thread contract is not active")
 
 
 @dataclass(frozen=True)

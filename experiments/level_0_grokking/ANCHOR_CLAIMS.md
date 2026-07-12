@@ -43,7 +43,9 @@ Level 0 locks:
 - `persistence_window = 1,000 epochs`;
 - metric cadence = 100 epochs.
 
-The 2,000-epoch delay leaves 1,600 epochs of margin for the independently
+The 0.99/0.95 accuracy values are pre-outcome operational thresholds rather
+than recovered paper thresholds. The 2,000-epoch delay leaves 1,600 epochs of
+margin for the independently
 seeded companion-distribution initialization, threshold mismatch (paper prose
 uses near-perfect behavior, while our predicates use 0.99/0.95 accuracy), and
 timing variance across seeds. It is fixed before any outcome trajectory.

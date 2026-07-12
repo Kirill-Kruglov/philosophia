@@ -33,10 +33,12 @@ inter-phase I/O is checked before the next step.
 `locked-outcome` can be constructed only from a committed, unchanged file named
 `PREREG.lock`. Schema 2 binds Kirill's exact authorization statement to the
 accepted scientific-spec hash, the reviewed source commit and per-file hashes,
-all nine named runs, their config/split/control/budget fields, their wall and
-artifact ceilings, and the battery-wide artifact ceiling.
+all nine named runs, their config/split/control/budget fields, the canonical
+16/32 PyTorch thread contract, their wall and artifact ceilings, and the
+battery-wide artifact ceiling.
 
-The source commit may be an ancestor of the execution commit because creation
+Outcome checkpoints use schema 5 and bind model, optimizer/scheduler, source
+prefixes, and both PyTorch thread counts. The source commit may be an ancestor of the execution commit because creation
 and commitment of `PREREG.lock` necessarily follow the reviewed source commit.
 Every locked source file must retain its recorded hash. The training driver
 records metrics but contains no persistence/verdict call; the separate evaluator

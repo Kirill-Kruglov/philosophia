@@ -19,7 +19,7 @@ from .checkpoint import (
     optimizer_state_hash,
     save_checkpoint,
 )
-from .config import config_hash
+from .config import configure_canonical_torch_runtime, config_hash
 from .data import DatasetBundle, build_dataset, random_label_control
 from .fourier import frequency_energy, project_residue_axis
 from .interlock import ExecutionInterlock, ExecutionNotAuthorized
@@ -312,6 +312,7 @@ def _save_resume_checkpoint(
     optimizer: torch.optim.Optimizer,
     repository_head: str,
     static_hashes: Mapping[str, str],
+    full_checkpoint_cadence: int,
 ) -> None:
     sources = _checkpoint_sources(
         static_hashes,
@@ -337,7 +338,7 @@ def _save_resume_checkpoint(
         metadata=metadata,
     )
     os.replace(temporary, output_dir / RESUME_NAME)
-    if step % 1000 == 0 or step == definition.fixed_updates:
+    if step % full_checkpoint_cadence == 0 or step == definition.fixed_updates:
         archive = output_dir / "checkpoints" / f"checkpoint_{step:08d}.pt"
         archive.parent.mkdir(exist_ok=True)
         if archive.exists():
@@ -374,6 +375,8 @@ def _new_manifest(
         "scientific_spec_sha256": sha256_file(spec_path),
         "prereg_lock_sha256": sha256_file(lock_path),
         "repository_head": repository_head,
+        "torch_num_threads": torch.get_num_threads(),
+        "torch_num_interop_threads": torch.get_num_interop_threads(),
         "source_hashes": dict(static_hashes),
         "scientific_outcome": True,
         "verdict_derived": False,
@@ -388,6 +391,7 @@ def run_locked_outcome(
     lock_path: Path,
     resume: bool,
 ) -> Path:
+    configure_canonical_torch_runtime()
     root = Path(__file__).resolve().parents[3]
     repository_head = _repository_head(root)
     canonical_spec = root / "experiments/level_0_grokking/SCIENTIFIC_SPEC.json"
@@ -558,6 +562,9 @@ def run_locked_outcome(
             optimizer=optimizer,
             repository_head=repository_head,
             static_hashes=static_hashes,
+            full_checkpoint_cadence=int(
+                spec["observations"]["full_checkpoint_cadence"]
+            ),
         )
         if _directory_bytes(output_dir) > max_artifact_bytes:
             raise ResourceStop("run exceeded its locked artifact-byte ceiling")
@@ -617,6 +624,8 @@ def run_locked_outcome(
         "final_model_state_hash": model_state_hash(model),
         "final_optimizer_state_hash": optimizer_state_hash(optimizer),
         "prereg_lock_sha256": sha256_file(lock_path),
+        "torch_num_threads": torch.get_num_threads(),
+        "torch_num_interop_threads": torch.get_num_interop_threads(),
         "scientific_verdict": None,
     }
     _atomic_json(complete_path, report)

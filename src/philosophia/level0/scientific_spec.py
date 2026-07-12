@@ -135,6 +135,8 @@ def validate_spec(raw: Mapping[str, Any], *, require_accepted: bool) -> None:
         "deterministic_algorithms": True,
         "python": "3.12.3",
         "torch": "2.9.1+cpu",
+        "torch_num_threads": 16,
+        "torch_num_interop_threads": 32,
     }:
         raise ScientificSpecError("canonical environment contract drift")
     resources = raw.get("resource_wall")
@@ -168,6 +170,11 @@ def validate_spec(raw: Mapping[str, Any], *, require_accepted: bool) -> None:
         raise ScientificSpecError("missing predicate or observation contract")
     if not isinstance(decision, Mapping):
         raise ScientificSpecError("missing decision contract")
+    observed_definition = (
+        "first recorded observation such that every recorded observation through "
+        "at least start+1000 inclusive is at or above the threshold; no claim is "
+        "made about unobserved sub-cadence values"
+    )
     expected = {
         "fit": (0.99, 1000),
         "generalize": (0.95, 1000),
@@ -180,6 +187,8 @@ def validate_spec(raw: Mapping[str, Any], *, require_accepted: bool) -> None:
             raise ScientificSpecError(f"{name} threshold drift")
         if raw_predicate.get("persistence_window") != window:
             raise ScientificSpecError(f"{name} persistence drift")
+        if raw_predicate.get("definition") != observed_definition:
+            raise ScientificSpecError(f"{name} observed-persistence definition drift")
     if predicates.get("delayed", {}).get("delta_min") != 2000:
         raise ScientificSpecError("delay threshold drift")
     if observations.get("metric_cadence") != 100:
@@ -190,6 +199,12 @@ def validate_spec(raw: Mapping[str, Any], *, require_accepted: bool) -> None:
         raise ScientificSpecError("checkpoint cadence drift")
     if decision.get("arm_a_quorum") != 4 or decision.get("arm_a_total") != 5:
         raise ScientificSpecError("primary quorum drift")
+    if (
+        decision.get("arm_b_annotation_diagnostic")
+        != "ANCHOR_FIDELITY_SENSITIVE_DIAGNOSTIC"
+        or decision.get("arm_b_annotation_otherwise") != "NO_PRIMARY_INFERENCE"
+    ):
+        raise ScientificSpecError("Arm B annotation contract drift")
     if raw.get("output_root") != "experiments/level_0_grokking/outcomes":
         raise ScientificSpecError("canonical outcome root drift")
     _parse_runs(raw.get("runs"))

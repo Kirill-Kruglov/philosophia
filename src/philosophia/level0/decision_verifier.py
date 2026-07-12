@@ -18,6 +18,46 @@ from .scientific_spec import (
 )
 
 
+def _independent_decision_summary(
+    runs: dict[str, dict[str, object]],
+    *,
+    arm_a_quorum: int,
+) -> dict[str, object]:
+    violations: list[str] = []
+    for run_id in ("A-0", "A-1", "A-2", "A-3", "A-4", "B-1", "B-2", "B-3"):
+        if runs[run_id]["FIT"] is not True:
+            violations.append(f"{run_id} failed memorization reachability")
+    if runs["R-0"]["FIT"] is not True:
+        violations.append("R-0 failed to memorize random labels")
+    if runs["R-0"]["GENERALIZE"] is True:
+        violations.append("R-0 generalized random held-out labels")
+    a_count = sum(
+        runs[run_id]["replicates_delayed_generalization"] is True
+        for run_id in ("A-0", "A-1", "A-2", "A-3", "A-4")
+    )
+    b_count = sum(
+        runs[run_id]["replicates_delayed_generalization"] is True
+        for run_id in ("B-1", "B-2", "B-3")
+    )
+    verdict = (
+        "PLATFORM_INVALID"
+        if violations
+        else ("REPRODUCED" if a_count >= arm_a_quorum else "NOT_REPRODUCED")
+    )
+    return {
+        "decision": verdict,
+        "arm_a_successes": a_count,
+        "arm_a_quorum": arm_a_quorum,
+        "arm_b_successes": b_count,
+        "arm_b_annotation": (
+            "ANCHOR_FIDELITY_SENSITIVE_DIAGNOSTIC"
+            if verdict == "NOT_REPRODUCED" and b_count >= 1
+            else "NO_PRIMARY_INFERENCE"
+        ),
+        "platform_violations": violations,
+    }
+
+
 def verify_level0_decision(
     *,
     decision_path: Path,
@@ -63,6 +103,11 @@ def verify_level0_decision(
                 output_root=output_root,
                 run_id=run_id,
                 fixed_updates=definition.fixed_updates,
+                metric_cadence=int(spec["observations"]["metric_cadence"]),
+                torch_num_threads=int(spec["environment"]["torch_num_threads"]),
+                torch_num_interop_threads=int(
+                    spec["environment"]["torch_num_interop_threads"]
+                ),
             )
             if report.get("config_hash") != definition.config_hash:
                 raise ScientificSpecError(f"run config drift: {run_id}")
@@ -89,44 +134,11 @@ def verify_level0_decision(
         if decision.get("complete_report_hashes") != report_hashes:
             raise ScientificSpecError("decision report hashes mismatch")
 
-        platform_violations: list[str] = []
-        for run_id in REQUIRED_RUN_IDS[:-1]:
-            if not recomputed[run_id]["FIT"]:
-                platform_violations.append(
-                    f"{run_id} failed memorization reachability"
-                )
-        if not recomputed["R-0"]["FIT"]:
-            platform_violations.append("R-0 failed to memorize random labels")
-        if recomputed["R-0"]["GENERALIZE"]:
-            platform_violations.append("R-0 generalized random held-out labels")
-        arm_a = sum(
-            bool(recomputed[f"A-{seed}"]["replicates_delayed_generalization"])
-            for seed in range(5)
+        checks = _independent_decision_summary(
+            recomputed,
+            arm_a_quorum=int(spec["decision"]["arm_a_quorum"]),
         )
-        arm_b = sum(
-            bool(recomputed[f"B-{seed}"]["replicates_delayed_generalization"])
-            for seed in (1, 2, 3)
-        )
-        expected_decision = (
-            "PLATFORM_INVALID"
-            if platform_violations
-            else (
-                "REPRODUCED"
-                if arm_a >= int(spec["decision"]["arm_a_quorum"])
-                else "NOT_REPRODUCED"
-            )
-        )
-        checks = {
-            "decision": expected_decision,
-            "arm_a_successes": arm_a,
-            "arm_a_quorum": int(spec["decision"]["arm_a_quorum"]),
-            "arm_b_successes": arm_b,
-            "arm_b_annotation": (
-                "ALTERNATE_ANCHOR_GROKS" if arm_b >= 1 else "NO_INFERENCE"
-            ),
-            "platform_violations": platform_violations,
-            "claims_forbidden": spec["claims_forbidden"],
-        }
+        checks["claims_forbidden"] = spec["claims_forbidden"]
         for key, expected in checks.items():
             if decision.get(key) != expected:
                 raise ScientificSpecError(f"decision field {key!r} mismatch")

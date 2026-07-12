@@ -103,6 +103,9 @@ def _load_complete_run(
     output_root: Path,
     run_id: str,
     fixed_updates: int,
+    metric_cadence: int,
+    torch_num_threads: int,
+    torch_num_interop_threads: int,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     run_dir = output_root / run_id
     complete_path = run_dir / COMPLETE_NAME
@@ -115,6 +118,11 @@ def _load_complete_run(
         raise ScientificSpecError(f"run report id mismatch: {run_id}")
     if report.get("steps_used") != fixed_updates:
         raise ScientificSpecError(f"run budget mismatch: {run_id}")
+    if (
+        report.get("torch_num_threads") != torch_num_threads
+        or report.get("torch_num_interop_threads") != torch_num_interop_threads
+    ):
+        raise ScientificSpecError(f"run thread contract mismatch: {run_id}")
     metrics_path = run_dir / METRICS_NAME
     if report.get("metrics_sha256") != sha256_file(metrics_path):
         raise ScientificSpecError(f"metrics integrity failure: {run_id}")
@@ -123,7 +131,7 @@ def _load_complete_run(
         raise ScientificSpecError(f"run has no step-zero metric: {run_id}")
     if int(metrics[-1]["step"]) != fixed_updates:
         raise ScientificSpecError(f"run has no final metric: {run_id}")
-    expected_steps = list(range(0, fixed_updates + 1, 100))
+    expected_steps = list(range(0, fixed_updates + 1, metric_cadence))
     if [int(item["step"]) for item in metrics] != expected_steps:
         raise ScientificSpecError(f"metric cadence drift: {run_id}")
     manifest_path = run_dir / MANIFEST_NAME
@@ -132,6 +140,11 @@ def _load_complete_run(
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("run_id") != run_id or manifest.get("fixed_updates") != fixed_updates:
         raise ScientificSpecError(f"manifest identity failure: {run_id}")
+    if (
+        manifest.get("torch_num_threads") != torch_num_threads
+        or manifest.get("torch_num_interop_threads") != torch_num_interop_threads
+    ):
+        raise ScientificSpecError(f"manifest thread contract mismatch: {run_id}")
     if report.get("prereg_lock_sha256") != manifest.get("prereg_lock_sha256"):
         raise ScientificSpecError(f"manifest/report lock mismatch: {run_id}")
     checkpoint = torch.load(run_dir / RESUME_NAME, map_location="cpu", weights_only=True)
@@ -142,6 +155,11 @@ def _load_complete_run(
     metadata = checkpoint.get("metadata")
     if not isinstance(metadata, Mapping):
         raise ScientificSpecError(f"final checkpoint metadata failure: {run_id}")
+    if (
+        metadata.get("torch_num_threads") != torch_num_threads
+        or metadata.get("torch_num_interop_threads") != torch_num_interop_threads
+    ):
+        raise ScientificSpecError(f"checkpoint thread contract mismatch: {run_id}")
     model_hash = state_tree_hash(checkpoint.get("model_state"))
     optimizer_hash = state_tree_hash(checkpoint.get("optimizer_state"))
     if metadata.get("model_state_hash") != model_hash:
@@ -160,6 +178,51 @@ def _load_complete_run(
     if source_hashes.get("run_manifest") != sha256_file(manifest_path):
         raise ScientificSpecError(f"checkpoint manifest-prefix failure: {run_id}")
     return report, metrics
+
+
+def _assemble_decision(
+    results: Mapping[str, Mapping[str, object]],
+    *,
+    arm_a_quorum: int,
+) -> dict[str, object]:
+    if tuple(results) != REQUIRED_RUN_IDS:
+        raise ScientificSpecError("decision run membership or order mismatch")
+    platform_violations: list[str] = []
+    for run_id in REQUIRED_RUN_IDS[:-1]:
+        if not bool(results[run_id]["FIT"]):
+            platform_violations.append(f"{run_id} failed memorization reachability")
+    if not bool(results["R-0"]["FIT"]):
+        platform_violations.append("R-0 failed to memorize random labels")
+    if bool(results["R-0"]["GENERALIZE"]):
+        platform_violations.append("R-0 generalized random held-out labels")
+
+    arm_a_successes = sum(
+        bool(results[f"A-{seed}"]["replicates_delayed_generalization"])
+        for seed in range(5)
+    )
+    arm_b_successes = sum(
+        bool(results[f"B-{seed}"]["replicates_delayed_generalization"])
+        for seed in (1, 2, 3)
+    )
+    if platform_violations:
+        decision = "PLATFORM_INVALID"
+    elif arm_a_successes >= arm_a_quorum:
+        decision = "REPRODUCED"
+    else:
+        decision = "NOT_REPRODUCED"
+    annotation = (
+        "ANCHOR_FIDELITY_SENSITIVE_DIAGNOSTIC"
+        if decision == "NOT_REPRODUCED" and arm_b_successes >= 1
+        else "NO_PRIMARY_INFERENCE"
+    )
+    return {
+        "decision": decision,
+        "arm_a_successes": arm_a_successes,
+        "arm_a_quorum": arm_a_quorum,
+        "arm_b_successes": arm_b_successes,
+        "arm_b_annotation": annotation,
+        "platform_violations": platform_violations,
+    }
 
 
 def evaluate_locked_battery(
@@ -193,6 +256,11 @@ def evaluate_locked_battery(
             output_root=output_root,
             run_id=run_id,
             fixed_updates=definition.fixed_updates,
+            metric_cadence=int(spec["observations"]["metric_cadence"]),
+            torch_num_threads=int(spec["environment"]["torch_num_threads"]),
+            torch_num_interop_threads=int(
+                spec["environment"]["torch_num_interop_threads"]
+            ),
         )
         if report.get("config_hash") != definition.config_hash:
             raise ScientificSpecError(f"run config drift: {run_id}")
@@ -215,42 +283,15 @@ def evaluate_locked_battery(
             output_root / run_id / COMPLETE_NAME
         )
 
-    platform_violations: list[str] = []
-    for run_id in REQUIRED_RUN_IDS[:-1]:
-        if not results[run_id]["FIT"]:
-            platform_violations.append(f"{run_id} failed memorization reachability")
-    if not results["R-0"]["FIT"]:
-        platform_violations.append("R-0 failed to memorize random labels")
-    if results["R-0"]["GENERALIZE"]:
-        platform_violations.append("R-0 generalized random held-out labels")
-
-    arm_a_successes = sum(
-        bool(results[f"A-{seed}"]["replicates_delayed_generalization"])
-        for seed in range(5)
+    assembly = _assemble_decision(
+        results,
+        arm_a_quorum=int(spec["decision"]["arm_a_quorum"]),
     )
-    arm_b_successes = sum(
-        bool(results[f"B-{seed}"]["replicates_delayed_generalization"])
-        for seed in (1, 2, 3)
-    )
-    if platform_violations:
-        decision = "PLATFORM_INVALID"
-    elif arm_a_successes >= int(spec["decision"]["arm_a_quorum"]):
-        decision = "REPRODUCED"
-    else:
-        decision = "NOT_REPRODUCED"
-
     payload = {
         "schema_version": 1,
         "kind": "philosophia-level0-decision",
-        "decision": decision,
         "scientific_scope": "five-seed Level 0 replication demonstration only",
-        "arm_a_successes": arm_a_successes,
-        "arm_a_quorum": int(spec["decision"]["arm_a_quorum"]),
-        "arm_b_successes": arm_b_successes,
-        "arm_b_annotation": (
-            "ALTERNATE_ANCHOR_GROKS" if arm_b_successes >= 1 else "NO_INFERENCE"
-        ),
-        "platform_violations": platform_violations,
+        **assembly,
         "runs": results,
         "complete_report_hashes": complete_hashes,
         "scientific_spec_sha256": sha256_file(spec_path),

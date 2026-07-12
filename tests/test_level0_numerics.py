@@ -258,6 +258,8 @@ def test_checkpoint_detects_state_and_environment_tampering(tmp_path) -> None:
     for field, value, message in (
         ("torch_version", "9.9.9", "pinned PyTorch"),
         ("python_version", "9.9.9", "pinned CPython"),
+        ("torch_num_threads", 15, "pinned PyTorch thread counts"),
+        ("torch_num_interop_threads", 31, "pinned PyTorch thread counts"),
         ("device", "cuda:0", "requires CPU"),
         ("dtype", "torch.float64", "requires float32"),
     ):

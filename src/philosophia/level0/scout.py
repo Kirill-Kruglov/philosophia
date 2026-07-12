@@ -18,7 +18,12 @@ from .checkpoint import (
     optimizer_state_hash,
     save_checkpoint,
 )
-from .config import RunConfig, config_hash, paper_mainline_arm
+from .config import (
+    RunConfig,
+    configure_canonical_torch_runtime,
+    config_hash,
+    paper_mainline_arm,
+)
 from .data import LearnerView, build_dataset
 from .interlock import (
     SCOUT_MAX_SECONDS,
@@ -102,6 +107,7 @@ def _step_prefix(
 
 
 def run_timing_storage_scout(*, output_dir: Path) -> Path:
+    configure_canonical_torch_runtime()
     if PRIMARY_STEPS + REPLAY_STEPS > SCOUT_MAX_STEPS:
         raise RuntimeError("scout source exceeds the interlock step cap")
 
@@ -203,6 +209,8 @@ def run_timing_storage_scout(*, output_dir: Path) -> Path:
         "device": "cpu",
         "dtype": "torch.float32",
         "torch_version": str(torch.__version__),
+        "torch_num_threads": torch.get_num_threads(),
+        "torch_num_interop_threads": torch.get_num_interop_threads(),
         "config_hash": config_hash(config),
         "split_hash": dataset.split_hash,
         "steps": {

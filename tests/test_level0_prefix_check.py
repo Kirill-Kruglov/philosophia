@@ -21,6 +21,10 @@ def test_v2_prefix_scope_and_artifact_are_non_outcome() -> None:
     assert "non-outcome" in PREFIX_KIND
     assert "non-outcome" in REPORT_NAME
     assert callable(run_companion_v2_prefix_check)
+    source = inspect.getsource(
+        __import__("philosophia.level0.prefix_check", fromlist=["prefix_check"])
+    )
+    assert "configure_canonical_torch_runtime()" in source
     reports = list(ROOT.glob("**/companion-v2-determinism-prefix_non-outcome.json"))
     assert len(reports) <= 1
     if reports:

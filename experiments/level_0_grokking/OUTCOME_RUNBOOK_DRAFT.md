@@ -7,7 +7,9 @@ script, committed, and the repository verifiers pass at that commit.
 ## Preconditions
 
 Run from the repository root on the canonical CPU environment. Do not change
-thread counts, affinity, dtype, backend, source files, spec, or lock. Do not run
+the pinned 16 intra-op / 32 inter-op thread counts, affinity, dtype, backend,
+source files, spec, or lock. The driver sets and records both thread counts and
+fails closed if the inter-op runtime was already initialized incompatibly. Do not run
 two processes for the same run id. Parallel processes for distinct run ids are
 allowed by the preregistration, but their wall clocks include contention.
 

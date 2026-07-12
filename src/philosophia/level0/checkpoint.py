@@ -8,11 +8,19 @@ from typing import Any, Mapping
 
 import torch
 
-from .config import PINNED_PYTHON_VERSION, PINNED_TORCH_VERSION, RunConfig, canonical_json, config_hash
+from .config import (
+    PINNED_PYTHON_VERSION,
+    PINNED_TORCH_NUM_INTEROP_THREADS,
+    PINNED_TORCH_NUM_THREADS,
+    PINNED_TORCH_VERSION,
+    RunConfig,
+    canonical_json,
+    config_hash,
+)
 from .model import GrokkingTransformer
 
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 
 
 class CheckpointMismatch(RuntimeError):
@@ -30,6 +38,8 @@ class CheckpointMetadata:
     source_hashes: dict[str, str]
     python_version: str
     torch_version: str
+    torch_num_threads: int
+    torch_num_interop_threads: int
     device: str
     dtype: str
     init_scales: tuple[dict[str, object], ...]
@@ -92,6 +102,8 @@ def build_metadata(
         source_hashes=dict(sorted(source_hashes.items())),
         python_version=platform.python_version(),
         torch_version=str(torch.__version__),
+        torch_num_threads=torch.get_num_threads(),
+        torch_num_interop_threads=torch.get_num_interop_threads(),
         device=str(first_parameter.device),
         dtype=str(first_parameter.dtype),
         init_scales=tuple(asdict(record) for record in model.init_scale_observables()),
@@ -139,6 +151,14 @@ def _enforce_canonical_environment(
     )
     if current_python != PINNED_PYTHON_VERSION or recorded_python != PINNED_PYTHON_VERSION:
         raise CheckpointMismatch("checkpoint requires pinned CPython 3.12.3")
+    if (
+        raw_metadata["torch_num_threads"] != PINNED_TORCH_NUM_THREADS
+        or torch.get_num_threads() != PINNED_TORCH_NUM_THREADS
+        or raw_metadata["torch_num_interop_threads"]
+        != PINNED_TORCH_NUM_INTEROP_THREADS
+        or torch.get_num_interop_threads() != PINNED_TORCH_NUM_INTEROP_THREADS
+    ):
+        raise CheckpointMismatch("checkpoint requires pinned PyTorch thread counts")
     parameter = next(model.parameters())
     if raw_metadata["device"] != "cpu" or parameter.device.type != "cpu":
         raise CheckpointMismatch("canonical checkpoint load requires CPU")
@@ -185,6 +205,8 @@ def load_checkpoint(
         source_hashes=raw_metadata["source_hashes"],
         python_version=raw_metadata["python_version"],
         torch_version=raw_metadata["torch_version"],
+        torch_num_threads=raw_metadata["torch_num_threads"],
+        torch_num_interop_threads=raw_metadata["torch_num_interop_threads"],
         device=raw_metadata["device"],
         dtype=raw_metadata["dtype"],
         init_scales=tuple(raw_metadata["init_scales"]),

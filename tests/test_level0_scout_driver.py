@@ -32,6 +32,10 @@ def test_scout_scope_is_fixed_below_reviewed_caps() -> None:
     assert PRIMARY_STEPS + REPLAY_STEPS == 50 <= SCOUT_MAX_STEPS == 100
     assert SCOUT_MAX_SECONDS == 120.0
     assert SCOUT_KIND == "timing-storage-scout / non-outcome"
+    source = inspect.getsource(
+        __import__("philosophia.level0.scout", fromlist=["scout"])
+    )
+    assert "configure_canonical_torch_runtime()" in source
     assert "non-outcome" in REPORT_NAME
     assert "non-outcome" in CHECKPOINT_NAME
 

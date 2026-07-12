@@ -8,7 +8,13 @@ import struct
 import torch
 
 from .checkpoint import model_state_hash, optimizer_state_hash
-from .config import RECONSTRUCTION_ID, RunConfig, config_hash, paper_mainline_arm
+from .config import (
+    RECONSTRUCTION_ID,
+    RunConfig,
+    configure_canonical_torch_runtime,
+    config_hash,
+    paper_mainline_arm,
+)
 from .data import build_dataset
 from .interlock import ExecutionInterlock
 from .model import GrokkingTransformer
@@ -64,6 +70,7 @@ def run_companion_v2_prefix_check(*, output_dir: Path) -> Path:
     report_path = output_dir / REPORT_NAME
     if report_path.exists():
         raise FileExistsError("v2 prefix report already exists; refusing a second run")
+    configure_canonical_torch_runtime()
     if torch.get_default_dtype() != torch.float32:
         raise RuntimeError("v2 prefix check requires default float32")
     torch.use_deterministic_algorithms(True)
@@ -84,6 +91,8 @@ def run_companion_v2_prefix_check(*, output_dir: Path) -> Path:
         "device": "cpu",
         "dtype": "torch.float32",
         "torch_version": str(torch.__version__),
+        "torch_num_threads": torch.get_num_threads(),
+        "torch_num_interop_threads": torch.get_num_interop_threads(),
         "config_hash": config_hash(config),
         "steps": {
             "per_replay": PREFIX_STEPS,

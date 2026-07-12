@@ -1,7 +1,7 @@
 {
   "arm_b_interpretation": {
     "failure": "zero of three B runs reproducing is not evidence against platform validity and does not rescue or worsen the Arm A verdict",
-    "success": "at least one of three B runs satisfies FIT, GENERALIZE, and DELAYED; this annotates an Arm A failure as anchor-fidelity-sensitive but never counts toward the primary quorum"
+    "success": "only when the valid primary decision is NOT_REPRODUCED and at least one of three B runs satisfies FIT, GENERALIZE, and DELAYED, emit ANCHOR_FIDELITY_SENSITIVE_DIAGNOSTIC; otherwise emit NO_PRIMARY_INFERENCE; B never counts toward the primary quorum"
   },
   "claims_forbidden": [
     "evidence for the Philosophia programme claim",
@@ -29,6 +29,8 @@
   "decision": {
     "arm_a_quorum": 4,
     "arm_a_total": 5,
+    "arm_b_annotation_diagnostic": "ANCHOR_FIDELITY_SENSITIVE_DIAGNOSTIC",
+    "arm_b_annotation_otherwise": "NO_PRIMARY_INFERENCE",
     "demonstration_only": true,
     "execution_aborts_without_decision_if": [
       "non-finite loss or metric",
@@ -51,7 +53,9 @@
     "default_dtype": "torch.float32",
     "deterministic_algorithms": true,
     "python": "3.12.3",
-    "torch": "2.9.1+cpu"
+    "torch": "2.9.1+cpu",
+    "torch_num_threads": 16,
+    "torch_num_interop_threads": 32
   },
   "kind": "philosophia-level0-scientific-spec",
   "output_root": "experiments/level_0_grokking/outcomes",
@@ -75,11 +79,13 @@
       "source": "ANCHOR_CLAIMS.md"
     },
     "fit": {
+      "definition": "first recorded observation such that every recorded observation through at least start+1000 inclusive is at or above the threshold; no claim is made about unobserved sub-cadence values",
       "metric": "reporting train accuracy",
       "minimum": 0.99,
       "persistence_window": 1000
     },
     "generalize": {
+      "definition": "first recorded observation such that every recorded observation through at least start+1000 inclusive is at or above the threshold; no claim is made about unobserved sub-cadence values",
       "metric": "reporting held-out accuracy",
       "minimum": 0.95,
       "persistence_window": 1000

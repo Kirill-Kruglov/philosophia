@@ -44,9 +44,11 @@ A linear compute-only projection from the measured mean gives:
 | Arm A five seeds + Arm B five seeds | 800,000 | 12.46 h |
 
 These are planning projections, not runtime guarantees. They exclude evaluation,
-Fourier probes, checkpoint I/O, orchestration, and scheduling overhead. The scout
-did not record the PyTorch thread count, so portability to a changed process or
-host configuration is not established.
+Fourier probes, checkpoint I/O, orchestration, and scheduling overhead. The scout did not record PyTorch thread counts contemporaneously. Before lock,
+the canonical contract was explicitly pinned to the unchanged platform defaults
+observed for the accepted prefix path: 16 intra-op and 32 inter-op threads. The
+scout remains resource evidence only and is not rerun or reinterpreted as an
+outcome.
 
 ## Storage projection
 

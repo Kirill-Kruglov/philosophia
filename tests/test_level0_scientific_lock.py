@@ -1,20 +1,29 @@
 from __future__ import annotations
 
 import ast
+import copy
 import inspect
 import json
 from pathlib import Path
 
 import pytest
 
-from philosophia.level0.config import PINNED_PYTHON_VERSION
+from philosophia.level0.config import (
+    PINNED_PYTHON_VERSION,
+    PINNED_TORCH_NUM_INTEROP_THREADS,
+    PINNED_TORCH_NUM_THREADS,
+    configure_canonical_torch_runtime,
+)
 from philosophia.level0.interlock import ExecutionInterlock, ExecutionNotAuthorized
+from philosophia.level0.decision_verifier import _independent_decision_summary
 from philosophia.level0.metrics import Observation, first_persistent_step
 from philosophia.level0.outcome import (
     RECOVERY_LOG_NAME,
+    _dataset_for_run,
     _recover_uncommitted_metric_tail,
     run_locked_outcome,
 )
+from philosophia.level0.outcome_evaluator import _assemble_decision, _run_predicates
 from philosophia.level0.scientific_spec import (
     REQUIRED_RUN_IDS,
     ScientificSpecError,
@@ -80,11 +89,11 @@ def test_scientific_spec_closes_every_named_lock_cell() -> None:
     definitions = run_definitions(spec)
     assert tuple(definitions) == REQUIRED_RUN_IDS
     assert spec["status"] == "draft-before-review-and-signature"
-    assert spec["predicates"]["fit"] == {
-        "metric": "reporting train accuracy",
-        "minimum": 0.99,
-        "persistence_window": 1000,
-    }
+    assert spec["predicates"]["fit"]["metric"] == "reporting train accuracy"
+    assert spec["predicates"]["fit"]["minimum"] == 0.99
+    assert spec["predicates"]["fit"]["persistence_window"] == 1000
+    assert "every recorded observation" in spec["predicates"]["fit"]["definition"]
+    assert "unobserved sub-cadence" in spec["predicates"]["fit"]["definition"]
     assert spec["predicates"]["generalize"]["minimum"] == 0.95
     assert spec["predicates"]["delayed"]["delta_min"] == 2000
     assert spec["decision"]["arm_a_quorum"] == 4
@@ -94,6 +103,12 @@ def test_scientific_spec_closes_every_named_lock_cell() -> None:
     assert [definitions[f"B-{seed}"].master_seed for seed in (1, 2, 3)] == [1, 2, 3]
     assert definitions["R-0"].label_hash is not None
     assert PINNED_PYTHON_VERSION == (3, 12, 3)
+    assert spec["environment"]["torch_num_threads"] == PINNED_TORCH_NUM_THREADS == 16
+    assert (
+        spec["environment"]["torch_num_interop_threads"]
+        == PINNED_TORCH_NUM_INTEROP_THREADS
+        == 32
+    )
 
 
 def test_draft_spec_cannot_authorize_outcome(tmp_path: Path) -> None:
@@ -251,3 +266,150 @@ def test_resume_recovers_one_uncommitted_metric_tail(tmp_path: Path) -> None:
     audit = (tmp_path / RECOVERY_LOG_NAME).read_text(encoding="utf-8")
     assert "discarded_tail_step" in audit
     assert "elapsed_seconds" not in audit
+
+
+
+def _metric_curve(*, train_start: int, held_start: int, final_step: int = 5000) -> list[dict[str, object]]:
+    return [
+        {
+            "step": step,
+            "train": {"accuracy": 0.99 if step >= train_start else 0.5},
+            "held_out": {"accuracy": 0.95 if step >= held_start else 0.1},
+        }
+        for step in range(0, final_step + 1, 100)
+    ]
+
+
+def _decision_runs(*, arm_a_successes: int, arm_b_successes: int = 0) -> dict[str, dict[str, object]]:
+    runs: dict[str, dict[str, object]] = {}
+    for seed in range(5):
+        success = seed < arm_a_successes
+        runs[f"A-{seed}"] = {
+            "FIT": True,
+            "GENERALIZE": success,
+            "replicates_delayed_generalization": success,
+        }
+    for index, seed in enumerate((1, 2, 3)):
+        success = index < arm_b_successes
+        runs[f"B-{seed}"] = {
+            "FIT": True,
+            "GENERALIZE": success,
+            "replicates_delayed_generalization": success,
+        }
+    runs["R-0"] = {
+        "FIT": True,
+        "GENERALIZE": False,
+        "replicates_delayed_generalization": False,
+    }
+    assert tuple(runs) == REQUIRED_RUN_IDS
+    return runs
+
+
+def test_observed_persistence_boundaries_reset_and_threshold_equality(tmp_path: Path) -> None:
+    spec_path, spec = _accepted_spec(tmp_path)
+    lock_path = _fake_lock(tmp_path, spec_path=spec_path, spec=spec)
+    definition = run_definitions(spec)["A-0"]
+    permit = ExecutionInterlock.from_preregistration(
+        lock_path,
+        spec_path=spec_path,
+        run_id="A-0",
+        expected_config_hash=definition.config_hash,
+        expected_fixed_steps=definition.fixed_updates,
+    )
+    exact = [Observation(step, 0.99) for step in range(0, 1001, 100)]
+    short = exact[:-1]
+    reset = [
+        Observation(step, 0.98 if step == 500 else 0.99)
+        for step in range(0, 1601, 100)
+    ]
+    assert first_persistent_step(
+        exact, threshold=0.99, minimum_step_span=1000, interlock=permit
+    ) == 0
+    assert first_persistent_step(
+        short, threshold=0.99, minimum_step_span=1000, interlock=permit
+    ) is None
+    assert first_persistent_step(
+        reset, threshold=0.99, minimum_step_span=1000, interlock=permit
+    ) == 600
+
+
+def test_run_predicates_pin_section_mapping_and_delay_boundary(tmp_path: Path) -> None:
+    spec_path, spec = _accepted_spec(tmp_path)
+    lock_path = _fake_lock(tmp_path, spec_path=spec_path, spec=spec)
+    definition = run_definitions(spec)["A-0"]
+    permit = ExecutionInterlock.from_preregistration(
+        lock_path,
+        spec_path=spec_path,
+        run_id="A-0",
+        expected_config_hash=definition.config_hash,
+        expected_fixed_steps=definition.fixed_updates,
+    )
+    exact = _run_predicates(
+        _metric_curve(train_start=1000, held_start=3000),
+        spec=spec,
+        interlock=permit,
+    )
+    below = _run_predicates(
+        _metric_curve(train_start=1000, held_start=2900),
+        spec=spec,
+        interlock=permit,
+    )
+    assert exact["fit_start"] == 1000
+    assert exact["generalize_start"] == 3000
+    assert exact["delay"] == 2000
+    assert exact["DELAYED"] is True
+    assert below["delay"] == 1900
+    assert below["DELAYED"] is False
+
+
+def test_synthetic_battery_pins_quorum_controls_and_b_diagnostic() -> None:
+    cases: list[tuple[dict[str, dict[str, object]], str, str]] = []
+    reproduced = _decision_runs(arm_a_successes=4, arm_b_successes=1)
+    cases.append((reproduced, "REPRODUCED", "NO_PRIMARY_INFERENCE"))
+    not_reproduced = _decision_runs(arm_a_successes=3)
+    cases.append((not_reproduced, "NOT_REPRODUCED", "NO_PRIMARY_INFERENCE"))
+    diagnostic = _decision_runs(arm_a_successes=3, arm_b_successes=1)
+    cases.append(
+        (diagnostic, "NOT_REPRODUCED", "ANCHOR_FIDELITY_SENSITIVE_DIAGNOSTIC")
+    )
+    primary_fit_failure = copy.deepcopy(reproduced)
+    primary_fit_failure["A-4"]["FIT"] = False
+    cases.append((primary_fit_failure, "PLATFORM_INVALID", "NO_PRIMARY_INFERENCE"))
+    fidelity_fit_failure = copy.deepcopy(reproduced)
+    fidelity_fit_failure["B-2"]["FIT"] = False
+    cases.append((fidelity_fit_failure, "PLATFORM_INVALID", "NO_PRIMARY_INFERENCE"))
+    random_fit_failure = copy.deepcopy(reproduced)
+    random_fit_failure["R-0"]["FIT"] = False
+    cases.append((random_fit_failure, "PLATFORM_INVALID", "NO_PRIMARY_INFERENCE"))
+    random_generalizes = copy.deepcopy(reproduced)
+    random_generalizes["R-0"]["GENERALIZE"] = True
+    cases.append((random_generalizes, "PLATFORM_INVALID", "NO_PRIMARY_INFERENCE"))
+
+    for runs, expected_decision, expected_annotation in cases:
+        evaluator = _assemble_decision(runs, arm_a_quorum=4)
+        verifier = _independent_decision_summary(runs, arm_a_quorum=4)
+        assert evaluator == verifier
+        assert evaluator["decision"] == expected_decision
+        assert evaluator["arm_b_annotation"] == expected_annotation
+    assert _assemble_decision(reproduced, arm_a_quorum=4)["arm_a_successes"] == 4
+    assert _assemble_decision(diagnostic, arm_a_quorum=4)["arm_a_successes"] == 3
+
+
+def test_canonical_torch_thread_contract_is_active() -> None:
+    configure_canonical_torch_runtime()
+    import torch
+
+    assert torch.get_num_threads() == PINNED_TORCH_NUM_THREADS
+    assert torch.get_num_interop_threads() == PINNED_TORCH_NUM_INTEROP_THREADS
+
+
+
+def test_dataset_for_run_recomputes_real_and_random_label_identities() -> None:
+    spec = load_spec(SPEC_PATH)
+    definitions = run_definitions(spec)
+    real = _dataset_for_run(definitions["A-0"], label_seed=20000)
+    random_control = _dataset_for_run(definitions["R-0"], label_seed=20000)
+    assert real.split_hash == definitions["A-0"].split_hash
+    assert random_control.split_hash == definitions["R-0"].split_hash
+    assert random_control.universe_hash == definitions["R-0"].label_hash
+    assert real.universe_hash != random_control.universe_hash
