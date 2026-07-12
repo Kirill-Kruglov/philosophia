@@ -1,8 +1,8 @@
 # Level 0 reconstruction choices v2
 
-Status: source-reconciled specification implemented and unit-tested; bounded
-determinism-prefix execution and final companion-fidelity acceptance remain
-pending. No outcome run or preregistration lock is authorized.
+Status: source-reconciled implementation accepted; the bounded
+determinism-prefix report matches on init, split, loss-sequence, and final-state
+hashes. No outcome run or preregistration lock is authorized.
 
 V2 supersedes only the trajectory-sensitive v1 cells reopened by the official
 companion training source:
@@ -21,5 +21,11 @@ imported; initialization distributions and draw order match the trace.
 
 The existing resource scout remains resource evidence only. Its v1 deterministic
 prefix is superseded and cannot certify v2. The separate ten-step repeated v2
-prefix driver is committed but must not execute until its bounded orchestration
-and the companion-fidelity implementation receive final review.
+prefix report is recorded in
+prefix/companion-v2-determinism-prefix_non-outcome.json; its matching hashes
+certify determinism only.
+
+Before lock, resolve the CPython micro-vs-minor split-hash granularity. Arm A
+budget accounting must also record one LR-0 moment-priming step and 39,999
+effective weight updates. The accepted orchestration and implementation are
+documented in the final Opus fidelity review.

@@ -1,7 +1,8 @@
 # Level 0 implementation specification draft
 
-Status: companion-fidelity v2 modules are implemented and unit-tested; its bounded
-determinism-prefix driver is implemented but unexecuted. Full training and every outcome run remain disabled.
+Status: companion-fidelity v2 is implemented, unit-tested, Opus-accepted, and
+has a matching bounded determinism-prefix report. Full training and every outcome
+run remain disabled.
 
 ## Boundary
 
@@ -22,7 +23,7 @@ and Fourier probes as separately testable units.
   hashes.
 - level0/interlock.py: capability gates for steps, evaluation, and verdicts.
 - level0/scout.py: historical one-shot timing/storage orchestration, already executed.
-- level0/prefix_check.py: unexecuted bounded v2 determinism re-certification.
+- level0/prefix_check.py: completed bounded v2 determinism re-certification.
 - No scientific outcome harness exists before lock-stage closure.
 
 The scientific outcome harness is not implementation-eligible until the remaining

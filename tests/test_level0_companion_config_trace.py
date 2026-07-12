@@ -20,7 +20,7 @@ def test_companion_trace_pins_every_reopened_cell() -> None:
 
 def test_v2_addendum_supersedes_only_source_reopened_cells() -> None:
     choices = (LEVEL0 / "RECONSTRUCTION_CHOICES_V2.md").read_text(encoding="utf-8")
-    assert "implemented and unit-tested" in choices
+    assert "implementation accepted" in choices
     for label in ("R1-v2", "R2-v2", "R4-v2", "R5-v2"):
         assert label in choices
     assert "R3 attention scaling and R6 arm hierarchy are unchanged" in choices

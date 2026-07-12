@@ -1,0 +1,41 @@
+{
+  "arm": "A",
+  "config_hash": "3285cb04797a4bd19f4a3cc04669e531fc43b49645a459f08e31c2221740a63c",
+  "contamination_guards": {
+    "checkpoint_created": false,
+    "decision_created": false,
+    "held_out_evaluated": false,
+    "loss_values_persisted": false,
+    "preregistration_created": false,
+    "verdict_derived": false
+  },
+  "deterministic_prefix": {
+    "match": true,
+    "primary": {
+      "final_state_hash": "704ce386a163adec9bd70f18e6b406a4b49d4d68e3f7c34e65a9998e103eb140",
+      "init_hash": "75a3224f493649cf870e2d409ebaebde5572e69341b353d84cf518dddb2f17fa",
+      "loss_sequence_hash": "6b8c6e4999baca2ff259a38d68ca16fb450dc92afb2defa9363426d408016acc",
+      "split_hash": "b864b16accf8202e5dbe9de566f3e53a0750c07009293fd1eb8763657386177f",
+      "steps": 10
+    },
+    "replay": {
+      "final_state_hash": "704ce386a163adec9bd70f18e6b406a4b49d4d68e3f7c34e65a9998e103eb140",
+      "init_hash": "75a3224f493649cf870e2d409ebaebde5572e69341b353d84cf518dddb2f17fa",
+      "loss_sequence_hash": "6b8c6e4999baca2ff259a38d68ca16fb450dc92afb2defa9363426d408016acc",
+      "split_hash": "b864b16accf8202e5dbe9de566f3e53a0750c07009293fd1eb8763657386177f",
+      "steps": 10
+    }
+  },
+  "device": "cpu",
+  "dtype": "torch.float32",
+  "kind": "companion-v2-determinism-prefix / non-outcome",
+  "master_seed": 0,
+  "reconstruction_id": "level0-companion-v2",
+  "scientific_outcome": false,
+  "steps": {
+    "bounded_check_cap": 16,
+    "per_replay": 10,
+    "total": 20
+  },
+  "torch_version": "2.9.1+cpu"
+}

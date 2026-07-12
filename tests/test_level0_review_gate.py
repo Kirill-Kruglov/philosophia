@@ -12,11 +12,13 @@ def test_trace_records_anchor_discrepancies():
     assert "No preregistration lock is allowed" in trace
 
 
-def test_v2_is_implemented_prefix_is_pending_and_outcome_remains_blocked():
+def test_v2_prefix_matches_and_outcome_remains_blocked():
     spec = (LEVEL0 / "IMPLEMENTATION_SPEC_DRAFT.md").read_text(encoding="utf-8")
-    assert "companion-fidelity v2 modules are implemented" in spec
-    assert "determinism-prefix driver is implemented but unexecuted" in spec
-    assert "Full training and every outcome run remain disabled" in spec
+    assert "companion-fidelity v2 is implemented" in spec
+    assert "matching bounded" in spec
+    assert "determinism-prefix report" in spec
+    assert "Full training and every outcome" in spec
+    assert "run remain disabled" in spec
     assert not (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
 

@@ -1,8 +1,8 @@
 # Level 0: platform replication
 
-Status: companion-fidelity v2 modules and their unit tests are implemented. The
-bounded v2 determinism-prefix driver is implemented but has not been executed;
-it awaits final companion-fidelity review and explicit execution authorization.
+Status: companion-fidelity v2 is implemented, accepted by Opus, and certified by a
+matching bounded determinism-prefix report. Reconstruction fidelity is closed;
+the remaining gates are scientific preregistration choices and Kirill's signature.
 The design is not locked, and full training and scientific outcome runs remain
 forbidden.
 

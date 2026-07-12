@@ -16,6 +16,10 @@ The interlock is a contamination boundary, not a substitute for preregistration.
 | `timing-storage-scout` | 100 | 120 seconds | forbidden | forbidden |
 | `locked-outcome` | fixed locked budget | locked separately | allowed | allowed |
 
+The bounded-check ceiling of 16 leaves four steps above the 12-step
+warmup-sequence test. This fixed headroom supports short numerical checks without
+admitting evaluation, verdicts, or a learning curve.
+
 A raw `InterlockedAdamW.step()` without a capability fails closed. Reissuing a
 single-step capability cannot advance the same optimizer twice. The scout cap is
 checked in code before every step. A step, checkpoint operation, or subprocess
