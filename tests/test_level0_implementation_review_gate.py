@@ -31,13 +31,14 @@ def test_scout_prerequisites_are_interlocked() -> None:
 
 def test_hardening_does_not_create_scientific_authorization() -> None:
     contract = (LEVEL0 / "EXECUTION_INTERLOCK.md").read_text(encoding="utf-8")
-    assert "no preregistration lock or outcome" in contract
+    assert "no preregistration lock" in contract
+    assert "or outcome authorization exists" in contract
     assert "contamination boundary" in contract
     assert not (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
 
 
-def test_hardening_acceptance_allows_driver_not_execution() -> None:
+def test_hardening_acceptance_required_driver_review_before_execution() -> None:
     review = (
         ROOT / "reviews/opus_level0_hardening_review.md"
     ).read_text(encoding="utf-8")
@@ -45,4 +46,8 @@ def test_hardening_acceptance_allows_driver_not_execution() -> None:
     assert "**HARDENING_ACCEPTED**" in review
     assert "**Eligible.**" in review
     assert "**Not yet — implement the driver" in review
-    assert not list(ROOT.glob("**/timing-storage-scout_non-outcome.json"))
+    driver_review = (
+        ROOT / "reviews/opus_level0_scout_driver_review.md"
+    ).read_text(encoding="utf-8")
+    assert "**SCOUT_DRIVER_ACCEPTED**" in driver_review
+    assert len(list(ROOT.glob("**/timing-storage-scout_non-outcome.json"))) == 1

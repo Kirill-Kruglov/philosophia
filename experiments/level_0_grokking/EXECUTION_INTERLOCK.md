@@ -1,7 +1,7 @@
 # Level 0 execution interlock
 
-Status: implemented before any scout; no preregistration lock or outcome
-authorization exists.
+Status: implemented; the scout executed exactly once; no preregistration lock
+or outcome authorization exists.
 
 Every optimizer step requires an `ExecutionInterlock`. Evaluation and persistence
 verdicts require capabilities that the unit-check and scout modes do not possess.
@@ -18,9 +18,10 @@ The interlock is a contamination boundary, not a substitute for preregistration.
 
 A raw `InterlockedAdamW.step()` without a capability fails closed. Reissuing a
 single-step capability cannot advance the same optimizer twice. The scout cap is
-checked in code before every step. A step that itself crosses the wall limit
-cannot be interrupted, so the scout driver also checks elapsed time
-around each call and record that limitation.
+checked in code before every step. A step, checkpoint operation, or subprocess
+that itself crosses the wall limit
+cannot be interrupted. The scout driver checks elapsed time around each step;
+inter-phase I/O is checked before the next step.
 
 ## Lock envelope
 
@@ -43,10 +44,9 @@ accepts every open scientific cell.
 ## Scout contamination boundary
 
 The timing/storage scout capability cannot call held-out evaluation or derive a
-persistence verdict. A scout driver is implemented but unexecuted. Before its one permitted
-run, review must confirm that it persists no per-step loss series or held-out metric,
-creates no `PREREG.lock` or `decision.json`, and tags its single report
-`timing-storage-scout / non-outcome`.
+persistence verdict. The driver was reviewed and executed exactly once. It
+persisted no per-step loss series or held-out metric, created no lock or decision
+artifact, and tagged its report timing-storage-scout / non-outcome.
 
 ## Threat model
 

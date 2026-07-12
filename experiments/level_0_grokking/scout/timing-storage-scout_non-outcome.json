@@ -1,0 +1,46 @@
+{
+  "arm": "A",
+  "checkpoint": {
+    "bytes": 2740993,
+    "name": "timing-storage-scout_non-outcome.pt",
+    "purpose": "timing-storage-scout / non-outcome",
+    "sha256": "0e74d6da3decb775fc746c8420eded9cb07aa37c05346b3e6d1ee916c845ef1d"
+  },
+  "config_hash": "8a8873c0bce0ff9752848d0549aed5c0e5e62cb91e361fe0ade2973d8a3e3f1c",
+  "contamination_guards": {
+    "decision_created": false,
+    "held_out_evaluated": false,
+    "loss_series_persisted": false,
+    "preregistration_created": false,
+    "verdict_derived": false
+  },
+  "deterministic_prefix": {
+    "match": true,
+    "primary_hash": "b2e204407c54ef81896476fd27ce70873517bf670750bf3545d9e623ed925af3",
+    "replay_hash": "b2e204407c54ef81896476fd27ce70873517bf670750bf3545d9e623ed925af3"
+  },
+  "device": "cpu",
+  "dtype": "torch.float32",
+  "kind": "timing-storage-scout / non-outcome",
+  "master_seed": 0,
+  "peak_rss_delta_kib": 268120,
+  "peak_rss_kib": 482628,
+  "primary_step_latency": {
+    "count": 25,
+    "max_ms": 63.60837630927563,
+    "mean_ms": 56.06524437665939,
+    "median_ms": 56.697424966841936,
+    "min_ms": 46.83303600177169
+  },
+  "scientific_outcome": false,
+  "split_hash": "d69d52446a1e6acee4325cd8c8d276b24fb82e1bdc56c1621709b4848c3386f7",
+  "steps": {
+    "hard_cap": 100,
+    "primary": 25,
+    "replay": 25,
+    "total": 50
+  },
+  "torch_version": "2.9.1+cpu",
+  "wall_hard_cap_seconds": 120.0,
+  "wall_seconds": 2.840350640937686
+}

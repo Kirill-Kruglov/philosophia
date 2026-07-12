@@ -89,8 +89,9 @@ def test_bounded_check_is_distinct_from_scout_mode() -> None:
         permit.require_evaluation()
 
 
-def test_driver_is_importable_but_not_executed() -> None:
+def test_driver_executed_once_without_scientific_authorization() -> None:
     assert callable(run_timing_storage_scout)
     assert not (ROOT / "experiments/level_0_grokking/PREREG.lock").exists()
     assert not (ROOT / "experiments/level_0_grokking/decision.json").exists()
-    assert not list(ROOT.glob("**/timing-storage-scout_non-outcome.json"))
+    reports = list(ROOT.glob("**/timing-storage-scout_non-outcome.json"))
+    assert len(reports) == 1

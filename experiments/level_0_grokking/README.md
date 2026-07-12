@@ -14,3 +14,7 @@ checkpoint schema, and the bounded platform-repair policy.
 
 Execution capabilities and contamination guards are defined in
 `EXECUTION_INTERLOCK.md`.
+
+The single authorized non-outcome CPU resource scout is recorded in
+scout/timing-storage-scout_non-outcome.json; planning-only derivations are in
+RESOURCE_SCOUT.md.
