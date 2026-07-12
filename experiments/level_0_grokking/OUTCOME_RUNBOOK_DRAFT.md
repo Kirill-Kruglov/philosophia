@@ -1,15 +1,16 @@
 # Level 0 outcome runbook draft
 
-Status: **NOT AUTHORIZED.** These commands become valid only after the reviewed
-scientific spec is accepted by Kirill, `PREREG.lock` is created by the canonical
-script, committed, and the repository verifiers pass at that commit.
+Status: **AUTHORIZED BY COMMITTED `PREREG.lock`; NOT YET EXECUTED.** The
+scientific spec was accepted by Kirill before outcome, lock commit `e4a0fee`
+binds source commit `4dbd3b1`, and repository verifiers pass.
 
 ## Preconditions
 
 Run from the repository root on the canonical CPU environment. Do not change
 the pinned 16 intra-op / 32 inter-op thread counts, affinity, dtype, backend,
 source files, spec, or lock. The driver sets and records both thread counts and
-fails closed if the inter-op runtime was already initialized incompatibly. Do not run
+fails closed if the inter-op runtime was already initialized incompatibly. Do
+not run
 two processes for the same run id. Parallel processes for distinct run ids are
 allowed by the preregistration, but their wall clocks include contention.
 

@@ -1,8 +1,8 @@
 # Level 0 execution interlock
 
 Status: schema-2 scientific interlock and outcome driver reviewed; the
-scientific spec is accepted by Kirill before outcome; the scout executed exactly
-once; no preregistration lock or outcome authorization exists yet.
+scientific spec is accepted by Kirill before outcome; canonical `PREREG.lock` is
+committed unchanged; outcome execution is now authorized but has not run.
 
 Every optimizer step requires an `ExecutionInterlock`. Evaluation and persistence
 verdicts require capabilities that the unit-check and scout modes do not possess.
@@ -45,10 +45,10 @@ records metrics but contains no persistence/verdict call; the separate evaluator
 cannot optimize or instantiate a model and runs only after all nine completion
 reports exist.
 
-`SCIENTIFIC_SPEC.json` now records Kirill's pre-outcome acceptance after the
-external review findings were closed. Execution remains forbidden until the
-canonical lock script binds the committed source/spec hashes and that
-`PREREG.lock` is itself committed unchanged.
+`SCIENTIFIC_SPEC.json` records Kirill's pre-outcome acceptance after the
+external review findings were closed. Lock commit `e4a0fee` now binds the
+accepted spec and reviewed source hashes. Runtime still fails closed on any
+source, spec, lock, run identity, environment, or artifact drift.
 
 ## Scout contamination boundary
 

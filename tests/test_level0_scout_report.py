@@ -51,5 +51,5 @@ def test_scout_did_not_authorize_scientific_execution() -> None:
     resource_doc = (LEVEL0 / "RESOURCE_SCOUT.md").read_text(encoding="utf-8")
     assert "planning projections, not runtime guarantees" in resource_doc
     assert "does not inform grokking" in resource_doc
-    assert not (LEVEL0 / "PREREG.lock").exists()
+    assert (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()

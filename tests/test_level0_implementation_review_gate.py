@@ -31,10 +31,10 @@ def test_scout_prerequisites_are_interlocked() -> None:
 
 def test_hardening_does_not_create_scientific_authorization() -> None:
     contract = (LEVEL0 / "EXECUTION_INTERLOCK.md").read_text(encoding="utf-8")
-    assert "no preregistration lock" in contract
-    assert "or outcome authorization exists" in contract
+    assert "committed unchanged" in contract
+    assert "outcome execution is now authorized" in contract
     assert "contamination boundary" in contract
-    assert not (LEVEL0 / "PREREG.lock").exists()
+    assert (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
 
 

@@ -1,7 +1,7 @@
 # Level 0 scientific preregistration draft
 
-Status: **ACCEPTED BY KIRILL BEFORE OUTCOME. PENDING CANONICAL LOCK COMMIT.
-NO OUTCOME RUN AUTHORIZED YET.** The machine-readable governing specification is
+Status: **ACCEPTED BY KIRILL BEFORE OUTCOME AND BOUND BY COMMITTED
+`PREREG.lock`. OUTCOME EXECUTION IS AUTHORIZED; NO OUTCOME HAS RUN YET.** The machine-readable governing specification is
 `SCIENTIFIC_SPEC.json`. Kirill supplied the exact authorization statement
 `I_ACCEPT_LEVEL0_SCIENTIFIC_SPEC` after the Sol and Opus reviews were closed.
 
@@ -95,10 +95,9 @@ and weight-decay necessity are Level 3 tests. Fourier energies are recorded as
 claim-neutral diagnostics; Level 0 does not say they predict, explain, or cause
 the transition.
 
-## Remaining gate
+## Locked execution state
 
-The adversarial Sol and Opus findings are closed and Kirill has accepted every
-cell before outcome. The canonical lock script must now bind this committed
-specification and the reviewed source hashes; `PREREG.lock` must then be
-committed unchanged. Until that lock commit, no outcome directory or scientific
-decision is permitted.
+The adversarial Sol and Opus findings are closed, Kirill accepted every cell
+before outcome, and canonical lock commit `e4a0fee` binds source commit
+`4dbd3b1`, the accepted specification, all nine runs, and the reviewed source
+hashes. No outcome directory or scientific decision existed at lock time.

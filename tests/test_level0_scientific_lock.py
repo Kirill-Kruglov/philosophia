@@ -21,6 +21,8 @@ from philosophia.level0.outcome import (
     RECOVERY_LOG_NAME,
     _dataset_for_run,
     _recover_uncommitted_metric_tail,
+    _verify_locked_sources,
+    _verify_repository_binding,
     run_locked_outcome,
 )
 from philosophia.level0.outcome_evaluator import _assemble_decision, _run_predicates
@@ -118,7 +120,7 @@ def test_unaccepted_spec_cannot_authorize_outcome(tmp_path: Path) -> None:
     draft_path.write_text(json.dumps(raw), encoding="utf-8")
     with pytest.raises(ScientificSpecError, match="not accepted"):
         load_spec(draft_path, require_accepted=True)
-    assert not (LEVEL0 / "PREREG.lock").exists()
+    assert (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "outcomes").exists()
 
 
@@ -407,3 +409,14 @@ def test_dataset_for_run_recomputes_real_and_random_label_identities() -> None:
     assert random_control.split_hash == definitions["R-0"].split_hash
     assert random_control.universe_hash == definitions["R-0"].label_hash
     assert real.universe_hash != random_control.universe_hash
+
+
+
+def test_canonical_lock_is_committed_unchanged_and_binds_sources() -> None:
+    lock_path = LEVEL0 / "PREREG.lock"
+    lock = load_lock(lock_path, spec_path=SPEC_PATH)
+    assert lock["source_commit"] == "4dbd3b1a7720cdfb271c2a76146b50f7c3796d38"
+    assert len(lock["source_hashes"]) == 19
+    _verify_locked_sources(lock, root=ROOT)
+    _verify_repository_binding(root=ROOT, lock_path=lock_path, lock=lock)
+    assert not (LEVEL0 / "outcomes").exists()

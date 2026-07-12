@@ -36,5 +36,5 @@ def test_reconciliation_prompt_forbids_lock_and_outcome() -> None:
     assert "Do not run a" in prompt
     assert "training trajectory" in prompt
     assert "Do not predict grokking" in prompt
-    assert not (LEVEL0 / "PREREG.lock").exists()
+    assert (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()

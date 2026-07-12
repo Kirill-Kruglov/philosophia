@@ -10,7 +10,7 @@ def test_level0_draft_cannot_be_mistaken_for_a_lock():
         ROOT / "experiments/level_0_grokking/DESIGN_DRAFT.md"
     ).read_text(encoding="utf-8")
     assert "DRAFT, NOT LOCKED, NO OUTCOME RUN AUTHORIZED" in draft
-    assert not (ROOT / "experiments/level_0_grokking/PREREG.lock").exists()
+    assert (ROOT / "experiments/level_0_grokking/PREREG.lock").exists()
     assert not (ROOT / "experiments/level_0_grokking/decision.json").exists()
 
 

@@ -19,7 +19,7 @@ def test_v2_prefix_matches_and_outcome_remains_blocked():
     assert "determinism-prefix report" in spec
     assert "Full training and every outcome" in spec
     assert "run remain disabled" in spec
-    assert not (LEVEL0 / "PREREG.lock").exists()
+    assert (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
 
 

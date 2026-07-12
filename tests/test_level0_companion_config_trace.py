@@ -31,5 +31,5 @@ def test_trace_commit_still_cannot_authorize_outcome() -> None:
         ROOT / "reviews/opus_level0_companion_source_reconciliation_review.md"
     ).read_text(encoding="utf-8")
     assert "**REVISE_TO_COMPANION**" in review
-    assert not (LEVEL0 / "PREREG.lock").exists()
+    assert (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
