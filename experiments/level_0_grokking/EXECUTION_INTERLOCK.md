@@ -12,7 +12,7 @@ The interlock is a contamination boundary, not a substitute for preregistration.
 | Mode | Step cap | Wall cap | Evaluation | Verdict |
 |---|---:|---:|---|---|
 | `single-step-check` | 1 per optimizer | none | forbidden | forbidden |
-| `bounded-check` | 1..10 | none | forbidden | forbidden |
+| `bounded-check` | 1..16 | none | forbidden | forbidden |
 | `timing-storage-scout` | 100 | 120 seconds | forbidden | forbidden |
 | `locked-outcome` | fixed locked budget | locked separately | allowed | allowed |
 

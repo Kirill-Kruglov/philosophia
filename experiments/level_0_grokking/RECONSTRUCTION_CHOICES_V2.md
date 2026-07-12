@@ -1,7 +1,8 @@
 # Level 0 reconstruction choices v2
 
-Status: source-reconciled specification, not yet implemented at this commit.
-No outcome run or preregistration lock is authorized.
+Status: source-reconciled specification implemented and unit-tested; bounded
+determinism-prefix execution and final companion-fidelity acceptance remain
+pending. No outcome run or preregistration lock is authorized.
 
 V2 supersedes only the trajectory-sensitive v1 cells reopened by the official
 companion training source:
@@ -15,8 +16,10 @@ companion training source:
 - R5-v2: CPython 3.12.3 Random(seed).shuffle replaces torch.randperm.
 
 R3 attention scaling and R6 arm hierarchy are unchanged. Storage orientations
-may remain mathematically equivalent to the source because no source checkpoint
-is imported; initialization distributions and draw order must match the trace.
+remain mathematically equivalent to the source because no source checkpoint is
+imported; initialization distributions and draw order match the trace.
 
 The existing resource scout remains resource evidence only. Its v1 deterministic
-prefix is superseded and cannot certify v2.
+prefix is superseded and cannot certify v2. The separate ten-step repeated v2
+prefix driver is committed but must not execute until its bounded orchestration
+and the companion-fidelity implementation receive final review.

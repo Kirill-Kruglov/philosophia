@@ -1,7 +1,7 @@
 # Level 0 implementation specification draft
 
-Status: v1 modules are hardened; companion-fidelity v2 is traced but not yet
-implemented. Full training and every outcome run remain disabled.
+Status: companion-fidelity v2 modules are implemented and unit-tested; its bounded
+determinism-prefix driver is implemented but unexecuted. Full training and every outcome run remain disabled.
 
 ## Boundary
 
@@ -14,15 +14,16 @@ and Fourier probes as separately testable units.
 
 - level0/config.py: typed configuration and canonical serialization.
 - level0/data.py: all ordered residue pairs, split, tokens, targets, hashes.
-- level0/model.py: minimal transformer matching CONFIG_TRACE.md.
+- level0/model.py: minimal transformer matching COMPANION_CONFIG_TRACE.md.
 - level0/train.py: full-batch AdamW construction and one optimization step.
 - level0/metrics.py: loss, accuracy, parameter norm, and persistence primitive.
 - level0/fourier.py: real basis, projections, and frequency-energy diagnostics.
 - level0/checkpoint.py: state integrity, config, split, environment, and source
   hashes.
 - level0/interlock.py: capability gates for steps, evaluation, and verdicts.
-- level0/scout.py: reviewed-cap timing/storage orchestration, not yet executed.
-- experiments/level_0_grokking/run.py: harness-only orchestration.
+- level0/scout.py: historical one-shot timing/storage orchestration, already executed.
+- level0/prefix_check.py: unexecuted bounded v2 determinism re-certification.
+- No scientific outcome harness exists before lock-stage closure.
 
 The scientific outcome harness is not implementation-eligible until the remaining
 lock-stage threshold, cadence, control, resource, and quorum cells are closed. Library
@@ -45,7 +46,7 @@ modules must expose no alternate full-run entry point.
 ## Determinism contract
 
 Canonical confirmation uses CPU float32 and deterministic PyTorch algorithms.
-The seed schedule controls Python, NumPy, and PyTorch RNGs. A repeated prefix
+The split and initialization use separately seeded Python and PyTorch RNGs. A repeated prefix
 must produce identical initial-state, split, loss-sequence, and final-state
 hashes.
 
@@ -69,9 +70,9 @@ GPU/ROCm is exploratory until a separate equivalence gate defines tolerances.
 
 - Arm A alone decides replication: lambda=1, 40k epochs, masters 0..4.
 - Arm B is a separately named fidelity control: lambda=0.1, 120k, initially seed 1.
-- Split and init use domain-separated, per-master CPU generators.
-- The model has 114 output columns; loss and accuracy score residues 0..112.
-- Attention scales by sqrt(32); every matrix uses Xavier uniform at gain 1.
+- Split uses pinned CPython Random(seed).shuffle; initialization uses a domain-separated PyTorch seed.
+- The model trains with 114 output columns; reporting accuracy and loss score residues 0..112.
+- Attention scales by sqrt(32); matrices use the companion normal distribution and pinned divisors.
 
 ## Deliberately unresolved before lock
 

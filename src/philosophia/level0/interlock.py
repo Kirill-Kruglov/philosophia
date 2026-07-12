@@ -65,8 +65,8 @@ class ExecutionInterlock:
 
     @classmethod
     def bounded_check(cls, max_steps: int) -> "ExecutionInterlock":
-        if not 1 <= max_steps <= 10:
-            raise ValueError("bounded checks require 1..10 steps")
+        if not 1 <= max_steps <= 16:
+            raise ValueError("bounded checks require 1..16 steps")
         return cls(
             _token=_INTERNAL_TOKEN,
             mode="bounded-check",

@@ -1,7 +1,9 @@
 # Level 0: platform replication
 
-Status: reconstruction modules are implementation-eligible after Opus Round 2.
-The design is not locked; full training and scientific outcome runs remain
+Status: companion-fidelity v2 modules and their unit tests are implemented. The
+bounded v2 determinism-prefix driver is implemented but has not been executed;
+it awaits final companion-fidelity review and explicit execution authorization.
+The design is not locked, and full training and scientific outcome runs remain
 forbidden.
 
 The only scientific task at this level is to reproduce published modular-addition
@@ -16,11 +18,11 @@ Execution capabilities and contamination guards are defined in
 `EXECUTION_INTERLOCK.md`.
 
 The single authorized non-outcome CPU resource scout is recorded in
-scout/timing-storage-scout_non-outcome.json; planning-only derivations are in
-RESOURCE_SCOUT.md.
+`scout/timing-storage-scout_non-outcome.json`; planning-only derivations are in
+`RESOURCE_SCOUT.md`. Its resource measurements remain applicable to v2, while
+its v1 deterministic prefix is superseded.
 
-Lock drafting is currently paused at the official companion-source
-reconciliation gate documented in COMPANION_SOURCE_AUDIT.md.
-
-Opus selected REVISE_TO_COMPANION. The binding pre-implementation specification
-is COMPANION_CONFIG_TRACE.md; v1 choices are historical.
+Opus selected `REVISE_TO_COMPANION`. The binding implementation specification is
+`COMPANION_CONFIG_TRACE.md`, the adopted choices are in
+`RECONSTRUCTION_CHOICES_V2.md`, and v1 choices are historical. No `PREREG.lock`
+or Philosophia `decision.json` exists.

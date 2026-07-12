@@ -34,7 +34,7 @@ def evaluate(
     interlock.require_evaluation()
     # This architecture has no dropout or normalization, so eval mode is inert.
     model.eval()
-    logits = model(inputs)[:, -1, : model.config.scored_classes]
+    logits = model(inputs)[:, -1, : model.config.reporting_classes]
     loss = F.cross_entropy(logits, targets)
     accuracy = (logits.argmax(dim=-1) == targets).float().mean()
     return Evaluation(loss=float(loss), accuracy=float(accuracy))
@@ -42,13 +42,21 @@ def evaluate(
 
 @torch.no_grad()
 def scored_parameter_l2(model: GrokkingTransformer) -> float:
+    """Residue-reporting norm; the trained equals column is excluded by convention."""
     total = 0.0
     for name, parameter in model.named_parameters():
         value = parameter
         if name == "W_U":
-            value = value[:, : model.config.scored_classes]
+            value = value[:, : model.config.reporting_classes]
         total += float(value.detach().square().sum())
     return math.sqrt(total)
+
+
+@torch.no_grad()
+def full_parameter_l2(model: GrokkingTransformer) -> float:
+    return math.sqrt(
+        sum(float(parameter.detach().square().sum()) for parameter in model.parameters())
+    )
 
 
 def _first_persistent_step(

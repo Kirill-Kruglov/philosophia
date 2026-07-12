@@ -2,10 +2,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import hashlib
+import random
+import sys
 
 import torch
 
-from .config import ModelConfig, PINNED_TORCH_VERSION, RunConfig
+from .config import (
+    PINNED_PYTHON_MINOR,
+    PINNED_TORCH_VERSION,
+    ModelConfig,
+    RunConfig,
+)
 
 
 @dataclass(frozen=True)
@@ -29,6 +36,7 @@ class DatasetBundle:
     universe_hash: str
     split_hash: str
     torch_version: str
+    python_version: str
 
 
 def _tensor_hash(*tensors: torch.Tensor, prefix: str = "") -> str:
@@ -51,21 +59,33 @@ def ordered_modular_addition(model: ModelConfig) -> tuple[torch.Tensor, torch.Te
     return inputs, targets
 
 
-def build_dataset(config: RunConfig, *, require_pinned_torch: bool = True) -> DatasetBundle:
+def build_dataset(
+    config: RunConfig,
+    *,
+    require_pinned_environment: bool = True,
+) -> DatasetBundle:
     torch_version = torch.__version__.split("+", maxsplit=1)[0]
-    if require_pinned_torch and torch_version != PINNED_TORCH_VERSION:
+    python_minor = sys.version_info[:2]
+    if require_pinned_environment and torch_version != PINNED_TORCH_VERSION:
         raise RuntimeError(
-            f"split requires torch {PINNED_TORCH_VERSION}, found {torch.__version__}"
+            f"dataset requires torch {PINNED_TORCH_VERSION}, found {torch.__version__}"
+        )
+    if require_pinned_environment and python_minor != PINNED_PYTHON_MINOR:
+        raise RuntimeError(
+            f"split requires CPython {PINNED_PYTHON_MINOR}, found {python_minor}"
         )
 
     inputs, targets = ordered_modular_addition(config.model)
-    generator = torch.Generator(device="cpu").manual_seed(config.split_seed)
-    permutation = torch.randperm(inputs.shape[0], generator=generator)
+    permutation = list(range(inputs.shape[0]))
+    split_random = random.Random(config.split_seed)
+    split_random.shuffle(permutation)
+    permutation_tensor = torch.tensor(permutation, dtype=torch.long)
     train_count = int(0.30 * inputs.shape[0])
-    train_indices = permutation[:train_count]
-    evaluation_indices = permutation[train_count:]
+    train_indices = permutation_tensor[:train_count]
+    evaluation_indices = permutation_tensor[train_count:]
 
-    version_tag = f"torch-randperm:{torch_version}:seed:{config.split_seed}"
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    version_tag = f"cpython-random-shuffle:{python_version}:seed:{config.split_seed}"
     return DatasetBundle(
         learner=LearnerView(
             inputs=inputs[train_indices].clone(),
@@ -84,6 +104,7 @@ def build_dataset(config: RunConfig, *, require_pinned_torch: bool = True) -> Da
             prefix=version_tag,
         ),
         torch_version=torch_version,
+        python_version=python_version,
     )
 
 
@@ -113,4 +134,5 @@ def random_label_control(bundle: DatasetBundle, *, seed: int) -> DatasetBundle:
             prefix=control_tag,
         ),
         torch_version=bundle.torch_version,
+        python_version=bundle.python_version,
     )

@@ -18,6 +18,16 @@ class OutcomeRunNotAuthorized(ExecutionNotAuthorized):
 
 
 class InterlockedAdamW(torch.optim.AdamW):
+    def __init__(self, *args: object, warmup_updates: int, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)
+        if warmup_updates != 10:
+            raise ValueError("companion warmup is frozen at ten updates")
+        self.warmup_updates = warmup_updates
+        self._scheduler = torch.optim.lr_scheduler.LambdaLR(
+            self,
+            lr_lambda=lambda step: min(step / self.warmup_updates, 1.0),
+        )
+
     def step(
         self,
         closure: Callable[[], float] | None = None,
@@ -35,13 +45,30 @@ class InterlockedAdamW(torch.optim.AdamW):
         interlock.consume_step()
         if interlock.mode == "single-step-check":
             self._single_step_consumed = True
-        return super().step(closure)
+        result = super().step(closure)
+        self._scheduler.step()
+        return result
+
+    def state_dict(self) -> dict[str, object]:
+        return {
+            "optimizer": super().state_dict(),
+            "scheduler": self._scheduler.state_dict(),
+            "warmup_updates": self.warmup_updates,
+        }
+
+    def load_state_dict(self, state_dict: dict[str, object]) -> None:
+        if state_dict.get("warmup_updates") != self.warmup_updates:
+            raise ValueError("optimizer checkpoint warmup mismatch")
+        super().load_state_dict(state_dict["optimizer"])
+        self._scheduler.load_state_dict(state_dict["scheduler"])
 
 
 @dataclass(frozen=True)
 class StepResult:
     loss: float
     gradient_l2: float
+    learning_rate_used: float
+    learning_rate_after: float
 
 
 def make_optimizer(
@@ -59,6 +86,7 @@ def make_optimizer(
         fused=False,
         capturable=False,
         differentiable=False,
+        warmup_updates=config.warmup_updates,
     )
 
 
@@ -73,7 +101,7 @@ def optimization_step(
         raise TypeError("optimization_step accepts LearnerView only")
     model.train()
     optimizer.zero_grad(set_to_none=True)
-    logits = model(learner.inputs)[:, -1, : model.config.scored_classes]
+    logits = model(learner.inputs)[:, -1, : model.config.training_classes]
     loss = F.cross_entropy(logits, learner.targets)
     if not torch.isfinite(loss):
         raise FloatingPointError("non-finite training loss")
@@ -83,8 +111,15 @@ def optimization_step(
         for parameter in model.parameters()
         if parameter.grad is not None
     )
+    learning_rate_used = float(optimizer.param_groups[0]["lr"])
     optimizer.step(interlock=interlock)
-    return StepResult(loss=float(loss.detach()), gradient_l2=math.sqrt(gradient_squared))
+    optimizer.zero_grad(set_to_none=True)
+    return StepResult(
+        loss=float(loss.detach()),
+        gradient_l2=math.sqrt(gradient_squared),
+        learning_rate_used=learning_rate_used,
+        learning_rate_after=float(optimizer.param_groups[0]["lr"]),
+    )
 
 
 def run_outcome_training(*_args: object, **_kwargs: object) -> NoReturn:

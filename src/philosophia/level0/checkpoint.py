@@ -8,11 +8,11 @@ from typing import Any, Mapping
 
 import torch
 
-from .config import PINNED_TORCH_VERSION, RunConfig, canonical_json, config_hash
+from .config import PINNED_PYTHON_MINOR, PINNED_TORCH_VERSION, RunConfig, canonical_json, config_hash
 from .model import GrokkingTransformer
 
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 
 class CheckpointMismatch(RuntimeError):
@@ -133,6 +133,12 @@ def _enforce_canonical_environment(
     recorded_base = recorded_torch.split("+", maxsplit=1)[0]
     if current_base != PINNED_TORCH_VERSION or recorded_base != PINNED_TORCH_VERSION:
         raise CheckpointMismatch("checkpoint requires pinned PyTorch 2.9.1")
+    current_python = tuple(int(part) for part in platform.python_version_tuple()[:2])
+    recorded_python = tuple(
+        int(part) for part in str(raw_metadata["python_version"]).split(".")[:2]
+    )
+    if current_python != PINNED_PYTHON_MINOR or recorded_python != PINNED_PYTHON_MINOR:
+        raise CheckpointMismatch("checkpoint requires pinned CPython 3.12")
     parameter = next(model.parameters())
     if raw_metadata["device"] != "cpu" or parameter.device.type != "cpu":
         raise CheckpointMismatch("canonical checkpoint load requires CPU")

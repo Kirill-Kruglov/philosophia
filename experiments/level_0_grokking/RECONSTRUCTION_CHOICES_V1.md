@@ -1,7 +1,7 @@
 # Level 0 reconstruction choices v1
 
 Status: historical v1, superseded for lock by RECONSTRUCTION_CHOICES_V2.md.
-The current code remains v1 until the separately committed v2 implementation;
+The v1 code path has been replaced by the separately committed v2 implementation;
 no outcome run or preregistration lock is authorized.
 
 ## R1: AdamW equation and lambda

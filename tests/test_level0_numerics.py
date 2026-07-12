@@ -112,10 +112,10 @@ def test_final_readout_depends_on_both_operands() -> None:
 @pytest.mark.parametrize(
     ("config", "expected_factor"),
     [
-        (RunConfig(arm=paper_mainline_arm(), master_seed=0), 0.999),
+        (RunConfig(arm=paper_mainline_arm(), master_seed=0), 1.0),
         (
             RunConfig(arm=artifact_fidelity_arm((1,)), master_seed=1),
-            0.9999,
+            1.0,
         ),
     ],
 )
@@ -137,7 +137,6 @@ def test_adamw_uniform_decay_and_optimizer_coverage(
         id(parameter) for parameter in parameters
     }
     assert optimizer.param_groups[0]["weight_decay"] == config.arm.weight_decay
-    assert "scheduler" not in inspect.getsource(make_optimizer).lower()
 
     before = [parameter.detach().clone() for parameter in parameters]
     for parameter in parameters:
@@ -241,7 +240,7 @@ def test_checkpoint_detects_state_and_environment_tampering(tmp_path) -> None:
         )
 
     optimizer_corrupt = copy.deepcopy(payload)
-    optimizer_corrupt["optimizer_state"]["param_groups"][0]["lr"] = 0.25
+    optimizer_corrupt["optimizer_state"]["optimizer"]["param_groups"][0]["lr"] = 0.25
     optimizer_path = tmp_path / "optimizer-corrupt.pt"
     torch.save(optimizer_corrupt, optimizer_path)
     target = GrokkingTransformer(config.model, init_seed=config.init_seed)
@@ -256,6 +255,7 @@ def test_checkpoint_detects_state_and_environment_tampering(tmp_path) -> None:
 
     for field, value, message in (
         ("torch_version", "9.9.9", "pinned PyTorch"),
+        ("python_version", "9.9.9", "pinned CPython"),
         ("device", "cuda:0", "requires CPU"),
         ("dtype", "torch.float64", "requires float32"),
     ):

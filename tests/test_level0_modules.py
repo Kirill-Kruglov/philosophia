@@ -114,9 +114,9 @@ def test_model_shapes_scoring_and_init_observables(run_config: RunConfig) -> Non
     assert logits[:, -1, :113].shape == (2, 113)
 
     records = model.init_scale_observables()
-    assert len(records) == 21
-    assert {record.name for record in records} >= {"W_E", "W_U", "W_Q.0", "W_O.3"}
-    assert all(record.xavier_bound > 0 and len(record.sha256) == 64 for record in records)
+    assert len(records) == 9
+    assert {record.name for record in records} >= {"W_E", "W_U", "W_Q", "W_O"}
+    assert all(record.configured_divisor > 0 and record.expected_std > 0 and len(record.sha256) == 64 for record in records)
 
     replay = GrokkingTransformer(run_config.model, init_seed=run_config.init_seed)
     assert model_state_hash(model) == model_state_hash(replay)

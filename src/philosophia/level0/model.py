@@ -14,7 +14,8 @@ from .config import ModelConfig
 class InitScale:
     name: str
     shape: tuple[int, ...]
-    xavier_bound: float
+    configured_divisor: float
+    expected_std: float
     realized_std: float
     minimum: float
     maximum: float
@@ -30,16 +31,15 @@ def _hash_tensor(tensor: torch.Tensor) -> str:
     return digest.hexdigest()
 
 
-def _scale_record(name: str, tensor: torch.Tensor) -> InitScale:
-    if tensor.ndim != 2:
-        raise ValueError("Xavier scale records require a matrix")
-    fan_out, fan_in = tensor.shape
-    bound = math.sqrt(6.0 / float(fan_in + fan_out))
+def _scale_record(name: str, tensor: torch.Tensor, *, divisor: float) -> InitScale:
+    if tensor.ndim < 2:
+        raise ValueError("normal-init scale records require a matrix or tensor bank")
     value = tensor.detach()
     return InitScale(
         name=name,
         shape=tuple(value.shape),
-        xavier_bound=bound,
+        configured_divisor=divisor,
+        expected_std=1.0 / divisor,
         realized_std=float(value.std(unbiased=False)),
         minimum=float(value.min()),
         maximum=float(value.max()),
@@ -73,28 +73,44 @@ class GrokkingTransformer(nn.Module):
     def _reset_parameters(self, init_seed: int) -> None:
         with torch.random.fork_rng(devices=[]):
             torch.manual_seed(init_seed)
-            for matrix in (self.W_E, self.W_pos, self.W_in, self.W_out, self.W_U):
-                nn.init.xavier_uniform_(matrix, gain=1.0)
-            for tensor in (self.W_Q, self.W_K, self.W_V, self.W_O):
-                for head in tensor:
-                    nn.init.xavier_uniform_(head, gain=1.0)
+            d_model_scale = math.sqrt(self.config.residual_width)
+            output_scale = math.sqrt(self.config.vocabulary_size)
+            # Draw order is frozen to the companion trace, independent of storage orientation.
+            for tensor, divisor in (
+                (self.W_E, d_model_scale),
+                (self.W_pos, d_model_scale),
+                (self.W_K, d_model_scale),
+                (self.W_Q, d_model_scale),
+                (self.W_V, d_model_scale),
+                (self.W_O, d_model_scale),
+                (self.W_in, d_model_scale),
+            ):
+                tensor.data.copy_(torch.randn_like(tensor) / divisor)
             nn.init.zeros_(self.b_in)
+            self.W_out.data.copy_(torch.randn_like(self.W_out) / d_model_scale)
             nn.init.zeros_(self.b_out)
+            self.W_U.data.copy_(torch.randn_like(self.W_U) / output_scale)
 
     def _capture_init_scales(self) -> tuple[InitScale, ...]:
+        d_model_scale = math.sqrt(self.config.residual_width)
         records = [
-            _scale_record("W_E", self.W_E),
-            _scale_record("W_pos", self.W_pos),
-            _scale_record("W_in", self.W_in),
-            _scale_record("W_out", self.W_out),
-            _scale_record("W_U", self.W_U),
-        ]
-        for name in ("W_Q", "W_K", "W_V", "W_O"):
-            tensor = getattr(self, name)
-            records.extend(
-                _scale_record(f"{name}.{head_index}", head)
-                for head_index, head in enumerate(tensor)
+            _scale_record(name, getattr(self, name), divisor=d_model_scale)
+            for name in (
+                "W_E",
+                "W_pos",
+                "W_K",
+                "W_Q",
+                "W_V",
+                "W_O",
+                "W_in",
+                "W_out",
             )
+        ]
+        records.append(
+            _scale_record(
+                "W_U", self.W_U, divisor=math.sqrt(self.config.vocabulary_size)
+            )
+        )
         return tuple(records)
 
     def init_scale_observables(self) -> tuple[InitScale, ...]:
