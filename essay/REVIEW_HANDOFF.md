@@ -5,8 +5,9 @@ Review target:
 
 Status: post-Level-0 editorial draft. Line 12 evidence is inherited and earned;
 Level 0 is earned as a platform-only replication; Levels 1–3 remain programme
-slots. Reviewers must not use Level 0 to choose one of the three endings or
-convert the platform result into evidence for the programme claim.
+slots. The two-layer Proof semantics and C6 amendment are signed before Level 1
+comparative data. Reviewers must not use Level 0 or the signed design to choose
+an ending or convert a decision rule into evidence.
 
 ## Read first
 
@@ -15,6 +16,7 @@ convert the platform result into evidence for the programme claim.
 3. `canonical/CLAIM_LEDGER.md`
 4. `canonical/KILL_MATRIX.md`
 5. `ROADMAP.md`
+6. `reviews/LEVELS1_3_CLAIM_GRAPH_SIGNATURES.md`
 
 ## Voice and philosophical route
 
@@ -56,8 +58,8 @@ Attack the essay as a formal and statistical reviewer:
    unique causal identification or a certificate of independence.
 4. Recompute every Line 12 number used in prose and tables from the JSON/locked
    documents, especially 24/12/0, 0/1200, 320 seeds, and H1-H5.
-5. Attack pseudoreplication, unit-of-variance language, the active/static
-   information match, and the five-arm memory decomposition.
+5. Attack pseudoreplication, donor-block variance, the ACTIVE/YOKED estimand,
+   and the five-arm memory decomposition.
 6. Mark every missing contradictory citation or renamed precedent.
 7. Return findings ordered Critical/Major/Minor with exact essay line references
    and minimal replacement text. Do not rewrite the essay wholesale.

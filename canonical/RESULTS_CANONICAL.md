@@ -21,7 +21,11 @@ active-contact advantage, transfer, path credit, or cross-world compression.
 ## Programme decision
 
 **OPEN.** Levels 1–3 have not yet issued decisions capable of proving,
-falsifying, or locating the boundary of the programme claim.
+falsifying, or locating the boundary of the programme claim. The signed
+pre-outcome claim graph distinguishes `PROOF_CORE` (C2+C3+C4) from
+`PROOF_STRONG` (core+C1+C5), makes C6 a mandatory annotation rather than a
+verdict conjunct, and routes unresolved comparisons to `INSUFFICIENT`. These are
+decision semantics, not results.
 
 ## Inherited boundary
 

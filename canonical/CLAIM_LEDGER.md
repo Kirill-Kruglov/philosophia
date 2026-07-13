@@ -8,6 +8,21 @@ intervention robustness, forward work reduction, and transfer.
 
 This is the question being tested, not a finding.
 
+## Signed decision semantics (not results)
+
+| Rule | Signed meaning |
+|---|---|
+| `PROOF_CORE` | C2 forward shortening AND C3 presentation transfer AND C4 truthful-ledger traceability |
+| `PROOF_STRONG` | `PROOF_CORE` AND C1 chosen-contact advantage AND C5 path-credit advantage |
+| C1 negative | `BOUNDARY_CONTACT_CHOICE`; it does not falsify first-hand contact or the programme core |
+| C5 negative | `BOUNDARY_P_AXIS_REDUNDANT`; strong Proof unavailable, core may remain |
+| C6 | mandatory reported annotation only; never grants, vetoes, or rescues a verdict |
+| Arm D | inherited-ledger control; useful text is not evidence that its receiving learner earned first-hand experience |
+| Unresolved required comparison | `INSUFFICIENT`; never success or boundary |
+
+These rules were signed before any Level 1 comparative scout or outcome. They
+do not move any programme claim from OPEN.
+
 ## Inherited findings
 
 | Claim | Status | Scope |

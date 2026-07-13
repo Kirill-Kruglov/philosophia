@@ -11,10 +11,10 @@ scratch, and whether that experience is real in an operational sense: traceable 
 contact, work-reducing, intervention-robust, and transferable across worlds and
 representations.
 
-> **Status: bootstrap complete; no Philosophia result yet.** The route and its
-> failure conditions are fixed in [`ROADMAP.md`](ROADMAP.md). Line 12's validated
-> instrument is inherited with its holdout failure intact. Level 0 has not yet
-> been preregistered or run.
+> **Status: Level 0 earned; programme result still open.** The platform
+> replication is `VALID — REPRODUCED, PLATFORM ONLY`. The Levels 1–3 claim graph
+> and its failure conditions are signed before comparative data; no result yet
+> supports manufactured experience.
 
 ## The question
 
@@ -31,8 +31,8 @@ reason to silently redesign the question.
 
 1. **Level -1: literature map.** Mark every premise as known, partial, or open.
 2. **Level 0: platform replication.** Reproduce grokking on modular addition.
-3. **Level 1: contact.** Compare active equality queries with an
-   information-matched static corpus.
+3. **Level 1: contact.** Compare active equality queries with independently
+   donated active geometry and a random-static design under one fixed budget.
 4. **Level 2: experience.** Separate weights, a truthful ledger, a false ledger,
    and fresh starts across a fixed curriculum of worlds.
 5. **Level 2.5: path credit.** Compare answer-only credit with credit for
@@ -61,7 +61,8 @@ for the only claims this repository presently permits.
 
 ## Verification
 
-Python 3.11+ is required.
+The canonical verification environment requires CPython 3.12.3 and PyTorch
+2.9.1; CI pins both rather than floating across patch releases.
 
 ```bash
 pip install -e ".[dev]"

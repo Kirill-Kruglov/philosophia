@@ -471,14 +471,20 @@ cross-world transfer, path credit, or manufactured experience.
 
 ### 2. Contact must beat a corpus honestly
 
-Level 1 compares a learner that chooses equality queries with a learner receiving
-a static corpus. Equal query counts are not enough: an active learner can win
-trivially by selecting answers with greater entropy. The comparison must match
-both oracle budget and realized answer information.
+Level 1 compares three ways of touching the same kind of hidden world. ACTIVE
+chooses equality queries from its own uncertainty. YOKED receives the complete
+query geometry produced by an active learner on a different, precisely matched
+world, but every answer still comes from its own oracle. RANDOM-STATIC draws
+from the same candidate pool without an active donor. All three receive one
+fixed budget and none stops early.
 
-**Registered kill:** if active contact is no better than the
-information-matched static corpus, then choosing where to touch the world has not
-added the proposed experience advantage.
+Realized answer entropy is not matched away. It is part of what contact may
+change, so it is recorded as a mediator while success is judged on the same
+independent, balanced panel for every arm.
+
+**Registered boundary:** if ACTIVE does not beat YOKED, then choosing where to
+touch the world has not added the proposed advantage. First-hand contact may
+still matter; the programme does not die at this node.
 
 ### 3. Experience must shorten the next work
 
@@ -538,28 +544,31 @@ Philosophia can end in three ways.
 
 ### Proof
 
-Active contact beats an honestly matched corpus. Retained experience shortens
+Active contact beats honestly yoked contact. Retained experience shortens
 work on new world families and survives a change of representation. A real
 ledger helps while a false ledger does not. Path credit adds transferable
-structure beyond destination credit. Compression and progress measures survive
-their nulls.
+structure beyond destination credit.
 
 Only then may the essay say that primary experience was manufactured in this
-bounded world.
+bounded world. Compression and progress measures must still report whether they
+survived their nulls, but they stand beside that verdict as an annotation: they
+cannot grant it, veto it, or rescue it.
 
 ### Falsification
 
-The claim may die earlier. Active selection may add nothing once information is
-matched. History may fail to beat scratch. Transfer may vanish when algebra is
-redrawn as geometry. A fake ledger may work as well as a true one. Path credit
-may be redundant.
+The core claim may die when history fails to beat scratch, or when an otherwise
+unexplained benefit is reproduced by ledger form rather than truthful content.
+Those are not disappointing versions of Proof. They are the places where the
+proposed experience stopped doing work. A failed transfer draws a boundary;
+an invalid or unresolved comparison earns no ending at all.
 
 Then the result will be the coordinate where a beautiful account of experience
 stopped predicting.
 
 ### Boundary
 
-The most familiar ending is mixed. Contact helps inside one family but not
+The most familiar ending is mixed. Active choice adds nothing, but first-hand
+contact still does. Contact helps inside one family but not
 across interfaces. Weights transfer while ledgers do not. Path credit changes
 calibration but not speed. A compression event exists but cannot be predicted
 early. The workshop manufactures something real and smaller than experience as
@@ -772,12 +781,12 @@ The permanent Level 0 statement is:
 | Modular-addition grokking is reproduced here | **EARNED, platform only** | VALID locked decision; Arm A 5/5, quorum 4/5 |
 | Random-label leakage control behaves correctly | **EARNED, control only** | R-0 FIT at 200 and does not GENERALIZE |
 | Artifact-fidelity arm changes the primary inference | **REJECTED BY DESIGN** | B 3/3; `NO_PRIMARY_INFERENCE` because Arm A reproduced |
-| Active contact beats a matched static corpus | **SLOT** | kill: active no better under matched oracle count and answer entropy |
+| Chosen contact beats independently donated active geometry | **SLOT** | boundary: ACTIVE no better than YOKED under common fixed budget |
 | Experience shortens work on new families | **SLOT** | kill: history no better than scratch, or false ledger carries effect |
 | Experience survives algebra-to-geometry representation change | **SLOT** | kill: transfer disappears under semantics-preserving change |
 | Path credit adds transferable structure | **SLOT** | kill: indistinguishable from matched answer credit |
-| A cross-world compression event marks earned experience | **SLOT** | kill: event appears on random-label null or existed throughout |
-| Hidden progress predicts transition before ordinary loss | **SLOT** | kill: no predictive advantage over random-label and shuffled-order controls |
+| A cross-world compression event marks earned experience | **DIAGNOSTIC SLOT** | annotation dies if event appears on random-label null or existed throughout |
+| Hidden progress predicts transition before ordinary loss | **DIAGNOSTIC SLOT** | annotation dies without advantage over random-label and shuffled-order controls |
 
 ## What this does not show
 
