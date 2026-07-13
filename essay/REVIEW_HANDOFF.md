@@ -3,11 +3,13 @@
 Review target:
 `essay/climbing-the-wall-of-experience.md`
 
-Status: post-Level-0 editorial draft. Line 12 evidence is inherited and earned;
-Level 0 is earned as a platform-only replication; Levels 1–3 remain programme
-slots. The two-layer Proof semantics and C6 amendment are signed before Level 1
-comparative data. Reviewers must not use Level 0 or the signed design to choose
-an ending or convert a decision rule into evidence.
+Status: post-Level-0, pre-Level-1-outcome editorial draft. Line 12 evidence is
+inherited and earned; Level 0 is earned as a platform-only replication. The
+Level 1 contract, implementation, and public allocation root exist before
+comparative data, but no Level 1 trajectory or decision exists; Levels 1–3
+remain programme slots. The two-layer Proof semantics and C6 amendment are
+signed. Reviewers must not use Level 0 or any signed design/process artifact to
+choose an ending or convert a decision rule into evidence.
 
 ## Read first
 

@@ -11,10 +11,11 @@ scratch, and whether that experience is real in an operational sense: traceable 
 contact, work-reducing, intervention-robust, and transferable across worlds and
 representations.
 
-> **Status: Level 0 earned; programme result still open.** The platform
-> replication is `VALID — REPRODUCED, PLATFORM ONLY`. The Levels 1–3 claim graph
-> and its failure conditions are signed before comparative data; no result yet
-> supports manufactured experience.
+> **Status: Level 0 earned; Level 1 root fixed; programme result still open.**
+> The platform replication is `VALID — REPRODUCED, PLATFORM ONLY`. The Level 1
+> scientific contract, implementation, and one-shot public allocation root were
+> committed before comparative data. No Level 1 trajectory or decision exists,
+> and no result yet supports manufactured experience.
 
 ## The question
 

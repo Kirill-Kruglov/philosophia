@@ -300,11 +300,14 @@ def test_post_draw_failure_routes_durable_root_to_commit_pending(tmp_path: Path)
     assert not (lost_repo / driver.COMMIT_PENDING_RELATIVE).exists()
 
 
-def test_real_one_shot_artifacts_do_not_exist_during_unit_tests() -> None:
+def test_real_one_shot_artifacts_are_committed_without_failure_markers() -> None:
     allocation = REPO / "experiments/level_1_contact/allocation"
     for name in (
         "PUBLIC_ROOT_DRAW_CLAIM.json",
         "PUBLIC_ROOT_TRANSCRIPT.json",
+    ):
+        assert (allocation / name).is_file()
+    for name in (
         "PUBLIC_ROOT_COMMIT_PENDING.json",
         "PUBLIC_ROOT_INVALIDITY_REQUIRED.json",
     ):

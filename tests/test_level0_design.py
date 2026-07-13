@@ -25,7 +25,7 @@ def test_level0_draft_names_nulls_and_unit():
 
 def test_literature_map_marks_open_cells():
     literature = (ROOT / "references/LITERATURE_MAP.md").read_text(encoding="utf-8")
-    assert "equal realized answer entropy" in literature
+    assert "realized answer entropy as a mediator, not a matching target" in literature
     assert "cross-world and algebra-to-geometry transfer remain open" in literature
 
 

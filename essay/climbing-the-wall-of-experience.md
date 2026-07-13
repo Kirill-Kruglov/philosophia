@@ -2,13 +2,15 @@
 
 ### Can a mind earn a world from contact it manufactures itself?
 
-> **Level 0 result note, July 2026.** This essay was drafted before the first
+> **Programme status note, July 2026.** This essay was drafted before the first
 > Philosophia outcome. Level 0 has since reproduced delayed generalization on
 > the canonical CPU platform in five of five paper-mainline seeds. That result is
 > real, locked, and deliberately narrower than the programme claim: it validates
-> the workshop, not manufactured experience. Where the essay reaches active
-> contact, cross-world transfer, or path credit, it retains the registered way
-> each claim can die.
+> the workshop, not manufactured experience. The Level 1 contract,
+> implementation, and one-shot public allocation root now exist before
+> comparative data; no Level 1 trajectory or decision exists. Where the essay
+> reaches active contact, cross-world transfer, or path credit, it retains the
+> registered way each claim can die.
 > Readers who prefer evidence before the climb can go directly to
 > [**What the Instrument Has Shown -- and What the Small Mind Has Not**](#what-the-instrument-has-shown----and-what-the-small-mind-has-not).
 
@@ -27,11 +29,13 @@ is that world.*
 *Two things here are done, and I can show you both: a world that answers back
 with no human inside it, and an instrument that tells real contact from a mind
 merely agreeing with itself -- working, and blind in one place I will point to.
-One thing is not done, and I will not pretend otherwise. The small mind that
-earns experience from that world -- that chooses where to touch it, remembers,
-and carries what it learned into a world it has not seen -- I have not built.
-Everything about* that *mind in these pages is a question with its death-condition
-written beside it, never a result.*
+One thing is not done, and I will not pretend otherwise. The small mind and its
+apparatus now exist in code, but they have not been allowed to answer the
+programme question. The public allocation root is fixed; no comparative
+trajectory, escrowed-panel outcome, or Level 1 decision exists. Everything
+about what* that *mind has earned -- whether it chooses well, remembers, or
+carries a shorter road into a world it has not seen -- remains a question with
+its death-condition written beside it, never a result.*
 
 ---
 
@@ -471,20 +475,28 @@ cross-world transfer, path credit, or manufactured experience.
 
 ### 2. Contact must beat a corpus honestly
 
-Level 1 compares three ways of touching the same kind of hidden world. ACTIVE
+Level 1 compares three ways of touching adjacent hidden cyclic worlds. ACTIVE
 chooses equality queries from its own uncertainty. YOKED receives the complete
 query geometry produced by an active learner on a different, precisely matched
-world, but every answer still comes from its own oracle. RANDOM-STATIC draws
-from the same candidate pool without an active donor. All three receive one
-fixed budget and none stops early.
+distance-1 world, but every answer still comes from its own oracle.
+RANDOM-STATIC draws from the same candidate pool without an active donor. All
+three receive one fixed budget and none stops early.
 
 Realized answer entropy is not matched away. It is part of what contact may
 change, so it is recorded as a mediator while success is judged on the same
-independent, balanced panel for every arm.
+arm-independent escrowed panel with fixed per-stratum criteria for every arm.
 
-**Registered boundary:** if ACTIVE does not beat YOKED, then choosing where to
-touch the world has not added the proposed advantage. First-hand contact may
-still matter; the programme does not die at this node.
+The scientific contract, implementation, and one-shot public allocation root
+were committed before any comparative trajectory. The root fixes development
+pairs and target/donor roles; it contains no evaluator panel and licenses no
+scientific inference. Feasibility, scout, N3, lock, real-panel escrow, and
+outcome remain ahead.
+
+**Registered boundary:** if ACTIVE does not beat YOKED, the exact result is
+`BOUNDARY_CONTACT_CHOICE_AT_DISTANCE_1`: chosen contact has not added the
+proposed advantage under this narrow adjacent-world test of online
+responsiveness. First-hand contact may still matter; the programme does not die
+at this node.
 
 ### 3. Experience must shorten the next work
 
@@ -544,15 +556,19 @@ Philosophia can end in three ways.
 
 ### Proof
 
-Active contact beats honestly yoked contact. Retained experience shortens
-work on new world families and survives a change of representation. A real
-ledger helps while a false ledger does not. Path credit adds transferable
-structure beyond destination credit.
+The signed rules distinguish two layers before any comparative data.
+`PROOF_CORE` requires retained history to shorten work on unseen families, the
+reduction to survive a semantics-preserving presentation change, and a truthful
+ledger to contribute content that neither weights alone nor a false ledger
+reproduces. `PROOF_STRONG` additionally requires ACTIVE to beat honestly yoked
+contact and path credit to add transferable structure beyond destination
+credit.
 
-Only then may the essay say that primary experience was manufactured in this
-bounded world. Compression and progress measures must still report whether they
-survived their nulls, but they stand beside that verdict as an annotation: they
-cannot grant it, veto it, or rescue it.
+Only `PROOF_STRONG` permits the unqualified word *Proof* and the claim that
+primary experience was manufactured in this bounded world. Compression and
+progress measures must still report whether they survived their nulls, but they
+stand beside that verdict as an annotation: they cannot grant it, veto it, or
+rescue it.
 
 ### Falsification
 
@@ -653,9 +669,10 @@ enough to answer and names what would make the hope die.
 # What the Instrument Has Shown -- and What the Small Mind Has Not
 
 *This section is the evidence ledger behind the story. Every inherited number
-links to a committed artifact. Level 0 changes exactly one line: platform
-replication moved from slot to earned. It cannot move the programme claims about
-contact, transfer, path credit, or cross-world compression.*
+links to a committed artifact. Level 0 moves platform replication from slot to
+earned. Level 1 moves design, implementation, and public allocation through
+completed process gates. Neither moves the programme claims about contact,
+transfer, path credit, or cross-world compression.*
 
 ## The inherited instrument
 
@@ -756,6 +773,8 @@ It has established infrastructure and provenance, not the programme claim.
   traced trajectory-sensitive cell: initialization, split, warmup, and the
   114-class training / 113-class reporting boundary.
 - At outcome commit `2daec9b`, **89 tests** and both repository verifiers passed.
+- At public-root commit `6008757`, **133 tests** and both repository verifiers
+  passed. This is engineering status, not programme evidence.
 - The authorized v2 determinism prefix produced matching initialization, split,
   loss-sequence, and final-state hashes across two ten-step replays.
 - The scientific specification was accepted and committed before the canonical
@@ -764,6 +783,11 @@ It has established infrastructure and provenance, not the programme claim.
   [`outcomes/decision.json`](../experiments/level_0_grokking/outcomes/decision.json).
 - Arm A reproduced in 5/5 seeds; R-0 passed both control obligations; no platform
   violation occurred.
+- The Level 1 scientific contract and panel amendment were signed before
+  comparative data, and their implementation passed bounded external review.
+- The one-shot Level 1 public-root transcript at commit `6008757` records one
+  CSPRNG call, fixes six development pairs and 24 target/donor role assignments,
+  defers `R_h`, and declares `scientific_outcome:false`.
 
 The permanent Level 0 statement is:
 **REPRODUCED, PLATFORM ONLY -- NO PROGRAMME INFERENCE.**
@@ -781,7 +805,8 @@ The permanent Level 0 statement is:
 | Modular-addition grokking is reproduced here | **EARNED, platform only** | VALID locked decision; Arm A 5/5, quorum 4/5 |
 | Random-label leakage control behaves correctly | **EARNED, control only** | R-0 FIT at 200 and does not GENERALIZE |
 | Artifact-fidelity arm changes the primary inference | **REJECTED BY DESIGN** | B 3/3; `NO_PRIMARY_INFERENCE` because Arm A reproduced |
-| Chosen contact beats independently donated active geometry | **SLOT** | boundary: ACTIVE no better than YOKED under common fixed budget |
+| Level 1 design, implementation, and allocation root are fixed | **PROCESS EARNED, NO PROGRAMME INFERENCE** | signed specs + reviewed code + public-root transcript |
+| Chosen contact beats independently donated active geometry | **SLOT** | boundary: `BOUNDARY_CONTACT_CHOICE_AT_DISTANCE_1` under the signed adjacent-world scope |
 | Experience shortens work on new families | **SLOT** | kill: history no better than scratch, or false ledger carries effect |
 | Experience survives algebra-to-geometry representation change | **SLOT** | kill: transfer disappears under semantics-preserving change |
 | Path credit adds transferable structure | **SLOT** | kill: indistinguishable from matched answer credit |
@@ -801,6 +826,10 @@ unique common cause.
 It does not show that Fourier structure is a universal signature of
 understanding. Within modular arithmetic it is a known mechanism and a
 replication anchor. Across worlds, compression remains a registered question.
+
+The Level 1 public root does not show that ACTIVE, YOKED, or RANDOM-STATIC
+learns anything. It allocates future comparisons and contains no real panel or
+outcome.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and

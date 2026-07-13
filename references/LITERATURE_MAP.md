@@ -14,7 +14,7 @@ source in this pass settles the operational claim.
 | Modular-addition mechanism | [Nanda et al. 2023](https://arxiv.org/abs/2301.05217), [Gromov 2023](https://arxiv.org/abs/2301.02679) | Grokked modular arithmetic admits Fourier-structured descriptions; Nanda et al. separate memorization, circuit formation, and cleanup. | known within studied worlds and architectures |
 | Hidden progress | [Nanda et al. 2023](https://arxiv.org/abs/2301.05217), [Gu et al. 2025](https://arxiv.org/abs/2504.03162) | Mechanism-derived measures can precede the abrupt test transition; weight-decay-only explanations are disputed. | partial; measures need random-label and checkpoint-order nulls |
 | Transfer after grokking | [Park et al. 2024](https://arxiv.org/abs/2405.16658), [Implicit Reasoners](https://arxiv.org/abs/2405.15071) | Selected arithmetic transfers accelerate grokking; extended training can still fail OOD. | partial; cross-world and algebra-to-geometry transfer remain open |
-| Active contact | [Settles 2009](https://minds.wisconsin.edu/handle/1793/60660) | Query choice can reduce label complexity under assumptions. | open under equal oracle count and equal realized answer entropy |
+| Active contact | [Settles 2009](https://minds.wisconsin.edu/handle/1793/60660) | Query choice can reduce label complexity under assumptions. | open under equal oracle count; the signed Level 1 design treats realized answer entropy as a mediator, not a matching target |
 | Error consistency | [Geirhos et al. 2020](https://arxiv.org/abs/2006.16736) | Trial-level co-error is informative beyond accuracy and necessary for similar strategies. | partial; seed-versus-architecture effective-k remains open |
 | Consolidation | [Kirkpatrick et al. 2017](https://arxiv.org/abs/1612.00796) | EWC can protect earlier tasks by slowing important parameters. | known method, not evidence of experience |
 | Replay | [Rolnick et al. 2018](https://arxiv.org/abs/1811.11682), [Buzzega et al. 2020](https://arxiv.org/abs/2010.05595) | Replay can reduce catastrophic forgetting. | known baseline; exact old-world reproduction remains our obligation |
@@ -45,9 +45,9 @@ source in this pass settles the operational claim.
 3. Implement EWC and replay as named baselines, not inventions.
 4. Include a semantics-preserving renaming/OOD negative anchor.
 
-## Gaps before Level 1 lock
+## Open literature debts carried into Level 1
 
-- Active versus passive learning under equal query count and realized entropy.
+- Active versus static learning under equal query count, with realized answer entropy reported as a mediator.
 - Transfer into a genuinely different interface, not another arithmetic head.
 - Seed-versus-architecture co-error decomposition on algorithmic tasks.
 - Causal progress measures across multiple worlds.
