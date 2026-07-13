@@ -18,12 +18,14 @@ from philosophia.level1.public_root import (
     build_transcript,
     canonical_json,
     derive_public_allocations,
+    load_durable_transcript,
     sha256_file,
 )
 
 
 TRANSCRIPT_RELATIVE = Path("experiments/level_1_contact/allocation/PUBLIC_ROOT_TRANSCRIPT.json")
 CLAIM_RELATIVE = Path("experiments/level_1_contact/allocation/PUBLIC_ROOT_DRAW_CLAIM.json")
+COMMIT_PENDING_RELATIVE = Path("experiments/level_1_contact/allocation/PUBLIC_ROOT_COMMIT_PENDING.json")
 INVALIDITY_RELATIVE = Path("experiments/level_1_contact/allocation/PUBLIC_ROOT_INVALIDITY_REQUIRED.json")
 REQUIRED_SPECS = (
     Path("experiments/level_1_contact/SCIENTIFIC_SPEC_V3_DRAFT.md"),
@@ -39,6 +41,13 @@ GOVERNING_LINEAGE = (
     Path("experiments/level_1_contact/SCIENTIFIC_SPEC_SIGNATURES.md"),
     Path("experiments/level_1_contact/PANEL_CONTRACT_SIGNATURE.md"),
 )
+REVIEWED_SOURCE_PATHS = (
+    "scripts/level1_draw_public_root.py",
+    "src/philosophia/level1/public_root.py",
+    "src/philosophia/level1/allocation.py",
+    "src/philosophia/level1/serialization.py",
+    "src/philosophia/level1/model.py",
+)
 
 
 def _run_git(repo: Path, *arguments: str, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -51,20 +60,37 @@ def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
-def _preflight(repo: Path, expected_head: str) -> str:
-    if not re.fullmatch(r"[0-9a-f]{40}", expected_head):
-        raise ValueError("--expected-head must be a full lowercase commit hash")
+def _validate_head(value: str, name: str) -> None:
+    if not re.fullmatch(r"[0-9a-f]{40}", value):
+        raise ValueError(f"{name} must be a full lowercase commit hash")
+
+
+def _preflight(repo: Path, expected_head: str, reviewed_code_head: str) -> str:
+    _validate_head(expected_head, "--expected-head")
+    _validate_head(reviewed_code_head, "--reviewed-code-head")
     actual_root = Path(_run_git(repo, "rev-parse", "--show-toplevel").stdout.strip()).resolve()
     if actual_root != repo.resolve():
         raise RuntimeError("script path is not inside the expected repository root")
     actual_head = _run_git(repo, "rev-parse", "HEAD").stdout.strip()
     if actual_head != expected_head:
         raise RuntimeError(f"reviewed HEAD mismatch: expected {expected_head}, found {actual_head}")
+    if _run_git(repo, "cat-file", "-e", f"{reviewed_code_head}^{{commit}}", check=False).returncode:
+        raise RuntimeError("reviewed code HEAD is not a local commit")
+    if _run_git(
+        repo, "diff", "--quiet", reviewed_code_head, actual_head, "--", *REVIEWED_SOURCE_PATHS,
+        check=False,
+    ).returncode:
+        raise RuntimeError("execution source bytes differ from the reviewed code HEAD")
     if _run_git(repo, "diff", "--quiet", check=False).returncode != 0:
         raise RuntimeError("tracked working tree must be clean before the draw")
     if _run_git(repo, "diff", "--cached", "--quiet", check=False).returncode != 0:
         raise RuntimeError("git index must be empty before the draw")
-    for relative in (TRANSCRIPT_RELATIVE, CLAIM_RELATIVE, INVALIDITY_RELATIVE):
+    for relative in (
+        TRANSCRIPT_RELATIVE,
+        CLAIM_RELATIVE,
+        COMMIT_PENDING_RELATIVE,
+        INVALIDITY_RELATIVE,
+    ):
         final = repo / relative
         temporary = final.with_name(f".{final.name}.tmp")
         if final.exists() or temporary.exists():
@@ -106,9 +132,45 @@ def _record_invalidity(repo: Path, expected_head: str, error: BaseException) -> 
     atomic_create(path, canonical_json(payload))
 
 
+def _record_commit_pending(repo: Path, expected_head: str, error: BaseException) -> None:
+    path = repo / COMMIT_PENDING_RELATIVE
+    if path.exists():
+        return
+    transcript = repo / TRANSCRIPT_RELATIVE
+    payload = {
+        "schema": "philosophia.level1.public-root-commit-pending.v1",
+        "scientific_outcome": False,
+        "expected_head": expected_head,
+        "recorded_utc": _utc_now(),
+        "transcript_sha256": sha256_file(transcript),
+        "error_type": type(error).__name__,
+        "error": str(error),
+        "required_action": "root durable; complete a reviewed git commit; never redraw",
+    }
+    atomic_create(path, canonical_json(payload))
+
+
+def _route_post_draw_failure(repo: Path, expected_head: str, error: BaseException) -> str:
+    try:
+        load_durable_transcript(repo / TRANSCRIPT_RELATIVE, expected_head=expected_head)
+    except (FileNotFoundError, OSError, ValueError, json.JSONDecodeError):
+        _record_invalidity(repo, expected_head, error)
+        return "root not durably recoverable; signed invalidity required; never redraw"
+    _record_commit_pending(repo, expected_head, error)
+    return "root is durable; commit pending; complete a reviewed recovery commit; never redraw"
+
+
 def _commit_transcript(repo: Path) -> None:
     paths = (CLAIM_RELATIVE.as_posix(), TRANSCRIPT_RELATIVE.as_posix())
+    if _run_git(repo, "diff", "--cached", "--quiet", check=False).returncode != 0:
+        raise RuntimeError("git index changed after preflight")
     _run_git(repo, "add", "--", *paths)
+    staged = tuple(
+        line for line in _run_git(repo, "diff", "--cached", "--name-only").stdout.splitlines()
+        if line
+    )
+    if staged != paths:
+        raise RuntimeError(f"unexpected staged paths: {staged!r}")
     message = [
         "Draw the one-shot Level 1 public root",
         "Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>",
@@ -125,11 +187,11 @@ def _commit_transcript(repo: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--expected-head", required=True)
+    parser.add_argument("--reviewed-code-head", required=True)
     arguments = parser.parse_args()
     repo = Path(__file__).resolve().parents[1]
-    expected_head = arguments.expected_head
 
-    actual_head = _preflight(repo, expected_head)
+    actual_head = _preflight(repo, arguments.expected_head, arguments.reviewed_code_head)
     configure_canonical_runtime()
     environment = _environment()
     required_spec_hashes = {
@@ -140,6 +202,7 @@ def main() -> None:
     }
     claim = build_claim(
         expected_head=actual_head,
+        reviewed_code_head=arguments.reviewed_code_head,
         created_utc=_utc_now(),
         transcript_path=TRANSCRIPT_RELATIVE.as_posix(),
     )
@@ -159,6 +222,7 @@ def main() -> None:
         transcript = build_transcript(
             root=root,
             git_head=actual_head,
+            reviewed_code_head=arguments.reviewed_code_head,
             timestamp_utc=_utc_now(),
             environment=environment,
             required_spec_hashes=required_spec_hashes,
@@ -168,10 +232,8 @@ def main() -> None:
         atomic_create(repo / TRANSCRIPT_RELATIVE, canonical_json(transcript))
         _commit_transcript(repo)
     except BaseException as error:
-        _record_invalidity(repo, actual_head, error)
-        raise RuntimeError(
-            "public-root attempt is permanently spent; do not rerun; obtain a signed invalidity decision"
-        ) from error
+        route = _route_post_draw_failure(repo, actual_head, error)
+        raise RuntimeError(route) from error
 
     committed_head = _run_git(repo, "rev-parse", "HEAD").stdout.strip()
     print(json.dumps({

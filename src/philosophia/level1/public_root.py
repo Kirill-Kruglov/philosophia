@@ -34,15 +34,21 @@ def environment_fingerprint(environment: Mapping[str, object]) -> str:
 
 
 def build_claim(
-    *, expected_head: str, created_utc: str, transcript_path: str
+    *,
+    expected_head: str,
+    reviewed_code_head: str,
+    created_utc: str,
+    transcript_path: str,
 ) -> dict[str, object]:
     return {
         "schema": CLAIM_SCHEMA,
         "status": "armed-before-entropy",
         "expected_head": expected_head,
+        "reviewed_code_head": reviewed_code_head,
         "created_utc": created_utc,
         "transcript_path": transcript_path,
         "no_redraw": True,
+        "operator_rule": "claim presence forbids rerun or deletion",
     }
 
 
@@ -50,6 +56,7 @@ def build_transcript(
     *,
     root: bytes,
     git_head: str,
+    reviewed_code_head: str,
     timestamp_utc: str,
     environment: Mapping[str, object],
     required_spec_hashes: Mapping[str, str],
@@ -64,6 +71,7 @@ def build_transcript(
         "scientific_outcome": False,
         "root_hex": root.hex(),
         "git_head_before_draw": git_head,
+        "reviewed_code_head": reviewed_code_head,
         "timestamp_utc": timestamp_utc,
         "environment": dict(environment),
         "environment_fingerprint": environment_fingerprint(environment),
@@ -122,6 +130,25 @@ def derive_public_allocations(root: bytes) -> dict[str, object]:
         "outcome_role_assignments": roles,
         "outcome_sample": "deferred-until-N3",
     }
+
+
+def load_durable_transcript(path: Path, *, expected_head: str) -> dict[str, object]:
+    raw = path.read_bytes()
+    value = json.loads(raw)
+    if not isinstance(value, dict) or canonical_json(value) != raw:
+        raise ValueError("public-root transcript is not canonical JSON")
+    if value.get("schema") != TRANSCRIPT_SCHEMA:
+        raise ValueError("public-root transcript schema mismatch")
+    if value.get("git_head_before_draw") != expected_head:
+        raise ValueError("public-root transcript HEAD mismatch")
+    root_hex = value.get("root_hex")
+    if not isinstance(root_hex, str) or len(root_hex) != 64:
+        raise ValueError("public-root transcript root is not 32 bytes")
+    try:
+        bytes.fromhex(root_hex)
+    except ValueError as error:
+        raise ValueError("public-root transcript root is not hexadecimal") from error
+    return value
 
 
 def atomic_create(path: Path, payload: bytes, *, mode: int = 0o600) -> None:
