@@ -12,10 +12,15 @@ def test_inherited_primary_decision_is_harness_valid():
     assert ok, reasons
 
 
-def test_no_active_philosophia_decision_exists_at_bootstrap():
+def test_no_stray_root_decision_bypasses_the_admitted_level0_path():
     assert not list((ROOT / "experiments").glob("level_*/decision.json"))
+    assert (
+        ROOT / "experiments/level_0_grokking/outcomes/decision.json"
+    ).is_file()
 
 
-def test_canonical_results_state_no_result():
+def test_canonical_results_records_level0_without_programme_inference():
     text = (ROOT / "canonical/RESULTS_CANONICAL.md").read_text(encoding="utf-8")
-    assert "NO PHILOSOPHIA RESULT YET" in text
+    assert "VALID — REPRODUCED, PLATFORM ONLY" in text
+    assert "## Programme decision" in text
+    assert "**OPEN.**" in text

@@ -3,9 +3,10 @@
 Review target:
 `essay/climbing-the-wall-of-experience.md`
 
-Status: pre-result draft. Line 12 evidence is inherited and earned; all
-Philosophia outcomes are slots. Reviewers must not fill a slot, choose one of the
-three endings, or convert a platform check into evidence for the programme claim.
+Status: post-Level-0 editorial draft. Line 12 evidence is inherited and earned;
+Level 0 is earned as a platform-only replication; Levels 1–3 remain programme
+slots. Reviewers must not use Level 0 to choose one of the three endings or
+convert the platform result into evidence for the programme claim.
 
 ## Read first
 
@@ -83,9 +84,11 @@ Attack the essay as a philosophical and structural partner:
 
 ## Shared prohibitions
 
-- Do not predict the Level 0-3 outcomes.
-- Do not select W, Delta_min, quorum, controls, cadence, or Arm B seed count.
-- Do not call the matching ten-step prefix a learning result.
+- Do not predict the Level 1–3 outcomes.
+- Do not alter the locked Level 0 thresholds, quorum, controls, cadence, or Arm B
+  interpretation after outcome.
+- Do not call the matching ten-step prefix a learning result or Level 0 evidence
+  for the programme claim.
 - Do not upgrade harness-valid to scientifically true.
 - Do not describe the combined token+journal blade as holdout-portable.
 - Do not remove uncomfortable limits for rhetorical flow.

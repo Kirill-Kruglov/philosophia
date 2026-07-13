@@ -20,4 +20,9 @@ This is the question being tested, not a finding.
 
 ## Philosophia findings
 
-None. Level 0 has not been preregistered or run.
+| Claim | Status | Scope |
+|---|---|---|
+| Canonical modular-addition grokking is reproducible on this platform | earned | locked Level 0 Arm A, 5/5 seeds, quorum 4/5 |
+| Random-label control memorizes without held-out generalization | earned control | locked R-0 only |
+| Artifact-fidelity Arm B independently supports the programme | not admitted | diagnostic only; `NO_PRIMARY_INFERENCE` |
+| The Level 0 result supports manufactured experience | rejected inference | platform replication is upstream of the programme claim |

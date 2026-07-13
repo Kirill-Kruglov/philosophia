@@ -1,12 +1,27 @@
 # Canonical results
 
-## Current decision
+## Level 0 decision
 
-**NO PHILOSOPHIA RESULT YET.**
+**VALID — REPRODUCED, PLATFORM ONLY.**
 
-The repository currently establishes provenance, a fail-closed instrument, and a
-route with named failure conditions. It has not reproduced grokking, compared
-active and static contact, measured transfer, or tested path credit.
+The locked canonical CPU reconstruction reproduced delayed generalization in
+five of five paper-mainline seeds against a preregistered quorum of four. Every
+primary seed reached persistent FIT at step 200; persistent GENERALIZE began at
+steps 5,200–7,700, producing delays of 5,000–7,500. The random-label control
+reached FIT and did not GENERALIZE. No platform violation occurred.
+
+The governing artifacts are
+[`OUTCOME_RESULT.md`](../experiments/level_0_grokking/OUTCOME_RESULT.md),
+[`decision.json`](../experiments/level_0_grokking/outcomes/decision.json), and
+committed [`PREREG.lock`](../experiments/level_0_grokking/PREREG.lock).
+
+This is a replication anchor. It is not evidence for manufactured experience,
+active-contact advantage, transfer, path credit, or cross-world compression.
+
+## Programme decision
+
+**OPEN.** Levels 1–3 have not yet issued decisions capable of proving,
+falsifying, or locating the boundary of the programme claim.
 
 ## Inherited boundary
 
@@ -20,6 +35,6 @@ programme's experience claim holds.
 
 ## Admission rule
 
-This file may be changed only after a signed, harness-verified decision is
-committed. Essays, README summaries, demos, and site copy are subordinate to this
-file.
+This file may be changed only after a committed, harness-verified decision is
+available. Essays, README summaries, demos, and site copy are subordinate to
+this file.

@@ -2,11 +2,13 @@
 
 ### Can a mind earn a world from contact it manufactures itself?
 
-> **Pre-result draft, July 2026.** The instrument and its measured limits are
-> real. The small mind's result is not. Philosophia has not yet run its Level 0
-> outcome experiment, compared active contact with a static corpus, measured
-> cross-world transfer, or tested path credit. Where this essay reaches those
-> questions, it changes tense and gives the registered way the claim can die.
+> **Level 0 result note, July 2026.** This essay was drafted before the first
+> Philosophia outcome. Level 0 has since reproduced delayed generalization on
+> the canonical CPU platform in five of five paper-mainline seeds. That result is
+> real, locked, and deliberately narrower than the programme claim: it validates
+> the workshop, not manufactured experience. Where the essay reaches active
+> contact, cross-world transfer, or path credit, it retains the registered way
+> each claim can die.
 > Readers who prefer evidence before the climb can go directly to
 > [**What the Instrument Has Shown -- and What the Small Mind Has Not**](#what-the-instrument-has-shown----and-what-the-small-mind-has-not).
 
@@ -116,16 +118,16 @@ This is the first discipline of the climb:
 > A regularity does not live in the data alone. It lives in the relation between
 > data and a language that makes the data short.
 
-Write the data as (x), the language as (L), and the shortest description of
-(x) available in that language as (K_L(x)). Then the candidate experience is
-not (x), and it is not (L). It is the change in description length when the
-two meet:
+Write the data as $x$, the language as $L$, and the shortest description of
+$x$ available in that language as $K_L(x)$. Then the candidate experience is
+not $x$, and it is not $L$. It is the change in description length when the two
+meet:
 
 \[
 R_L(x) = |x| - K_L(x).
 \]
 
-Large (R_L(x)) means the language found a short account of what otherwise had
+Large $R_L(x)$ means the language found a short account of what otherwise had
 to be stored raw. It is tempting to call that knowledge. It is not enough.
 
 Kolmogorov complexity is uncomputable in general, and the invariance theorem
@@ -266,7 +268,7 @@ has left a fingerprint.
 
 Not proof. A fingerprint.
 
-Let (e_i^{(a)}) be the error token left by path (a) on instance (i), with
+Let $e_i^{(a)}$ be the error token left by path $a$ on instance $i$, with
 zero meaning no relevant failure. A same-wall instrument looks for excess
 coincidence of nonzero tokens,
 
@@ -442,22 +444,30 @@ oracle that answers narrow equality questions about hidden finite structures.
 The oracle is not a teacher and does not expose the generating formula. It is a
 wall that answers when pushed.
 
-The programme has four experimental steps. None has produced a Philosophia
-outcome yet.
+The programme has four experimental steps. Level 0 answers whether the
+platform can breathe. Levels 1 through 3 ask the programme question and cannot
+inherit Level 0's answer.
 
 ### 1. The platform must breathe
 
-A small transformer must first reproduce published modular-addition grokking.
-This is Level 0: a replication anchor, not evidence for the thesis. Nanda and
+A small transformer first had to reproduce published modular-addition grokking.
+This was Level 0: a replication anchor, not evidence for the thesis. Nanda and
 colleagues showed that such models can form Fourier-structured circuits and that
 mechanistic progress measures can precede the abrupt generalization transition.
-Our implementation has been reconciled against the official companion source,
-unit-tested, independently reviewed, and certified deterministic on two matching
-ten-step prefixes. The scientific run remains unstarted until its thresholds,
-controls, cadence, and seed quorum are locked.
 
-**Registered kill:** if the faithful setup does not grok after the bounded
-platform-repair policy, fix the platform. Do not reinterpret the theory.
+The reconstruction was reconciled against the official companion source, then
+reviewed, preregistered, and locked before outcome. The primary paper-mainline
+arm reproduced delayed generalization in **five of five seeds**, above the
+registered quorum of four. Every seed reached persistent FIT at step **200**;
+persistent GENERALIZE began between steps **5,200 and 7,700**, leaving locked
+delays of **5,000 to 7,500** steps. The random-label control reached FIT and did
+not GENERALIZE. There were no platform violations. The alternate-fidelity arm
+also generalized in three of three seeds, but the lock assigns it
+`NO_PRIMARY_INFERENCE` because the primary arm already reproduced.
+
+**Registered kill, resolved:** the kill did not fire. The platform breathes.
+This licenses the replication statement and nothing about active contact,
+cross-world transfer, path credit, or manufactured experience.
 
 ### 2. Contact must beat a corpus honestly
 
@@ -557,11 +567,12 @@ we defined it.
 
 Then the essay will be a map of that boundary.
 
-I will not choose among these endings in prose. The repository currently says,
-in capital letters, **NO PHILOSOPHIA RESULT YET**. This draft says the same.
+Level 0 does not choose among these endings. It was designed not to. Its
+`REPRODUCED` decision says that the platform can exhibit the phenomenon on which
+the later instruments depend; it says nothing about which ending the programme
+earns.
 
-> The architecture of the answer can be written before the outcome; the answer
-> cannot.
+> Level 0 opened the workshop. It did not answer what can be manufactured there.
 
 ---
 
@@ -633,10 +644,9 @@ enough to answer and names what would make the hope die.
 # What the Instrument Has Shown -- and What the Small Mind Has Not
 
 *This section is the evidence ledger behind the story. Every inherited number
-links to a committed artifact. Every Philosophia claim remains a slot until a
-new signed decision changes the canonical results file. In plain terms:
-everything inherited from the same-wall instrument is earned and bounded;
-everything about the small mind is still an open slot.*
+links to a committed artifact. Level 0 changes exactly one line: platform
+replication moved from slot to earned. It cannot move the programme claims about
+contact, transfer, path credit, or cross-world compression.*
 
 ## The inherited instrument
 
@@ -736,14 +746,18 @@ It has established infrastructure and provenance, not the programme claim.
 - The Level 0 implementation matches the companion training source at every
   traced trajectory-sensitive cell: initialization, split, warmup, and the
   114-class training / 113-class reporting boundary.
-- **75 unit tests** and two repository verifiers pass.
-- The one authorized v2 determinism prefix produced matching initialization,
-  split, loss-sequence, and final-state hashes across two ten-step replays.
-- No `PREREG.lock`, Level 0 outcome report, or Philosophia `decision.json`
-  exists.
+- At outcome commit `2daec9b`, **89 tests** and both repository verifiers passed.
+- The authorized v2 determinism prefix produced matching initialization, split,
+  loss-sequence, and final-state hashes across two ten-step replays.
+- The scientific specification was accepted and committed before the canonical
+  lock; all nine fixed-budget runs then completed. The independent verifier
+  reports `VALID` for
+  [`outcomes/decision.json`](../experiments/level_0_grokking/outcomes/decision.json).
+- Arm A reproduced in 5/5 seeds; R-0 passed both control obligations; no platform
+  violation occurred.
 
-The canonical statement remains:
-**NO PHILOSOPHIA RESULT YET.**
+The permanent Level 0 statement is:
+**REPRODUCED, PLATFORM ONLY -- NO PROGRAMME INFERENCE.**
 
 ## Status ledger
 
@@ -755,7 +769,9 @@ The canonical statement remains:
 | The full token+journal blade transfers across worlds | **FALSIFIED** | H4 journal false positive; confirmation withheld |
 | The certified instrument flags the informal 24/24 common-prior pair as shared | **NOT REPRODUCED in the locked run** | `C_C8` read CLEAN: token 0.034 below margin, journal 0.565 below field floor 0.672 on the quorum edge |
 | Companion-faithful Level 0 code is deterministic on the tested prefix | **EARNED, platform only** | matching v2 prefix report |
-| Modular-addition grokking is reproduced here | **SLOT** | kill: no grok after faithful run and bounded platform repair |
+| Modular-addition grokking is reproduced here | **EARNED, platform only** | VALID locked decision; Arm A 5/5, quorum 4/5 |
+| Random-label leakage control behaves correctly | **EARNED, control only** | R-0 FIT at 200 and does not GENERALIZE |
+| Artifact-fidelity arm changes the primary inference | **REJECTED BY DESIGN** | B 3/3; `NO_PRIMARY_INFERENCE` because Arm A reproduced |
 | Active contact beats a matched static corpus | **SLOT** | kill: active no better under matched oracle count and answer entropy |
 | Experience shortens work on new families | **SLOT** | kill: history no better than scratch, or false ledger carries effect |
 | Experience survives algebra-to-geometry representation change | **SLOT** | kill: transfer disappears under semantics-preserving change |
