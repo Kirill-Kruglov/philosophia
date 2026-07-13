@@ -12,6 +12,27 @@
 
 ---
 
+*Before the apparatus, the whole essay in plain words.*
+
+*A machine can read everything people have ever written and still never have
+touched the world. It inherits our* report *of contact -- measurements retold,
+arguments already settled, errors already smoothed -- not the contact itself. I
+wanted to know whether contact can be* manufactured*: not simulated, not
+narrated, but earned first-hand, in a world small enough that truth can answer a
+question exactly and nothing human is smuggled in. Finite algebra and geometry
+is that world.*
+
+*Two things here are done, and I can show you both: a world that answers back
+with no human inside it, and an instrument that tells real contact from a mind
+merely agreeing with itself -- working, and blind in one place I will point to.
+One thing is not done, and I will not pretend otherwise. The small mind that
+earns experience from that world -- that chooses where to touch it, remembers,
+and carries what it learned into a world it has not seen -- I have not built.
+Everything about* that *mind in these pages is a question with its death-condition
+written beside it, never a result.*
+
+---
+
 ## Introduction
 
 We are entering what David Silver and Richard Sutton call an
@@ -124,8 +145,8 @@ free: it predicts held-out contact, survives a declared intervention, and
 shortens work in a world or representation not used to name it. Otherwise it is
 a regularity, perhaps a beautiful one, but not yet contact.
 
-**Conclusion:** experience is not a substance stored inside a learner. It is a
-relation that must pay rent outside the description in which it was found.
+So experience is not a substance stored inside a learner. It is a relation that
+must pay rent outside the description in which it was found.
 
 ---
 
@@ -189,9 +210,9 @@ make insight possible and auditable: preserve the sparse trace, provide genuinel
 different routes, and test whether a new description explains old failures and
 shortens new work.
 
-**Conclusion:** experience leaves a trace before it has a language, but it earns
-its name only when a later language compresses the trace and changes what the
-learner can do next.
+Experience leaves a trace before it has a language, but it earns its name only
+when a later language compresses the trace and changes what the learner can do
+next.
 
 ---
 
@@ -267,9 +288,10 @@ they leave no errors to compare. If the task is mostly noise, their traces
 decohere. Absence of co-failure can mean independence, perfect validation, or no
 signal. The instrument must be allowed to say `INADMISSIBLE` and `NO_TEST`.
 
-**Conclusion:** robustness requires varied roads, but variety cannot be inferred
-from labels or origins. Independence is a property of measured failure, not a
-biography of the path.
+Robustness requires varied roads, but variety cannot be inferred from labels or
+origins.
+
+> Independence is a property of measured failure, not a biography of the path.
 
 ---
 
@@ -295,11 +317,11 @@ their own answers. The path at zero was not independent because it came from a
 magically independent family. It had removed the visible trace by validating
 where the others guessed.
 
-The calibration study found the harder version of the same fact. A
-robust-validator base class was truly derived from its source, yet the detector
-saw the derivation **0 times in 1,200 trials across all candidate windows**.
-Discipline had not changed the ancestry. It had erased the symptom by which a
-black-box instrument could observe it.
+The calibration study found the harder version of the same fact. A disciplined
+validator -- one that double-checks itself before answering -- was genuinely
+derived from its source, yet the detector saw the derivation **0 times in 1,200
+trials across all candidate windows**. Discipline had not changed the ancestry.
+It had erased the symptom by which a black-box instrument could observe it.
 
 This result changes the sentence "use independent models" into an operational
 obligation. Different seeds are not independence. Different vendors are not
@@ -322,71 +344,89 @@ their agreement may be a choir of one voice.
 The ledger I want to grow in Philosophia cannot count paths. It has to earn a
 reason to treat them as different.
 
-**Conclusion:** self-consistency is not experience. It becomes evidence only to
-the extent that the learner's roads are known to expose different ways of being
-wrong.
+Self-consistency is not experience. It becomes evidence only to the extent that
+the learner's roads are known to expose different ways of being wrong.
 
 ---
 
 ## V. The Knife Misses
 
-The primary same-wall experiment produced a harness-valid result inside its
-locked development family. The token channel separated a registered derived
-pair from a registered clean-room pair while preserving destination agreement.
-The full run used 320 seeds. The rules, calibration bundle, null-world gate, and
-pair assignments were frozen before the primary outcome.
+The first same-wall run did what it was built to do. Inside its locked family the
+instrument told a derived pair apart from an independently built one -- flagging
+the road that shared an origin, clearing the road that did not, while both still
+agreed on every core destination. The rules, the calibration, the null-world
+gate, and the pair assignments were all frozen before the run produced a number.
+Three hundred and twenty seeds. It held.
 
-That was validation, not confirmation.
+That was validation, not confirmation. And before I say what the held-out test
+did to it, I owe a smaller admission, because it stung first and it is the kind
+of thing this whole project exists to make me say out loud.
 
-The confirmation set had been commissioned from a fresh clean-room agent under
-a hash-fixed prompt, encrypted on receipt, and committed before the primary run.
-The author could not inspect the plaintext until after the primary outcome was
-published. The generator was allowed one attempt; an invalid generation would
-have ended the holdout rather than invited a better one.
+The same locked run carried one more pair -- the two roads behind the loud number
+from earlier, the ones that had agreed on the same wrong value twenty-four times
+out of twenty-four when I first put them in contact by hand. I registered that
+pair as a control I expected the certified instrument to catch: a textbook case
+of a shared prior producing shared blindness. It was not caught. Under the frozen
+thresholds its shared-mistake signal fell just under the bar, and its schedule
+signal sat below the floor the design required. The one number loud enough to
+build a story on, before the instrument was locked, did not clear the instrument
+once the instrument was locked.
 
-On that holdout, the token channel held.
+I did not want to write that sentence. Twenty-four out of twenty-four is the
+better story, and it is a true number -- I did not invent it. But it was a number
+from before the discipline, and the discipline discounts exactly the kind of
+agreement a world can force for free. When the field-relative instrument refused
+to credit that pair as shared ancestry, it may have been right to refuse, or it
+may have been under-powered on that one pair. The honest report does not get to
+choose which. The run is the run, and it is published as it fell -- one control
+of eight reading the opposite of what I expected, and the whole run labelled by
+that one disagreement.
 
-The forward-derived pair and its reverse reconstruction were `DEPENDENT`. A
-same-prior pair with different visible mechanisms was `CLEAN`. The independent
-replication was `DEPENDENT`. Most importantly, the registered cross-prior
-clean-room pair was `CLEAN` on the token channel, with measured token excess
-numerically zero.
+Then came the part I could not tune. The confirmation set had been commissioned
+from a fresh clean-room agent under a hash-fixed prompt, encrypted the moment it
+arrived, and committed before the primary run. I could not read the plaintext
+until after the primary outcome was already public. The generator was allowed
+exactly one attempt; a malformed one would have ended the holdout, not invited a
+better one.
 
-The journal channel failed.
+On that holdout, the shared-mistake test held. The forward-derived pair and its
+reverse reconstruction were caught. A pair that shared only a prior, with
+genuinely different machinery, read clean. An independent replication of the
+derived construction was caught. And the strictest case -- the cross-prior clean
+room the whole holdout was built around -- read clean on the shared-mistake test,
+with its excess numerically at zero.
 
-On that same cross-prior pair, it reported `DEPENDENT`, with a Jaccard statistic
-of **0.857**. The combined blade therefore reported dependence where the
-registered holdout expected cleanliness. Confirmation of a world-portable
-combined blade was withheld exactly as the preregistration required.
+The other blade failed. On that same cross-prior pair, the schedule test reported
+dependence where the registered holdout expected none. The two tests together
+therefore called a clean pair coupled, and confirmation of a world-portable
+combined instrument was withheld exactly as the preregistration required.
 
-This was not the instrument discovering secret ancestry. On fresh failure
-classes, several adaptive scanners had converged on the world's one useful door.
-Their failure journals aligned because the task funneled competent paths through
-the same places. The journal could not distinguish shared derivation from shared
-adaptation to a world with one door.
+This was not the instrument uncovering a secret ancestry it had been too polite
+to name. On fresh failure classes, several competent adaptive roads had simply
+found the world's one useful door. Their failure-schedules lined up because the
+task funnelled every competent path through the same few places -- shared
+adaptation to a world with one exit, wearing the costume of shared origin. The
+blade that had learned to tell a common road from a common wall met a new wall:
+sometimes the world itself manufactures the correlation.
 
-The miss matters because it is the same ambiguity the instrument was built to
-resolve. The blade that distinguished a common road from a common wall in its
-development family encountered a new wall: sometimes the world itself creates
-correlated failures.
+One limit underneath all of this cannot be repaired by any instrument that sees
+only outputs. Two roads can share an implementation and still express it through
+*opposite* symptoms -- one falls silent where the other guesses wrong -- and
+leave no common trace on the surface at all. I have a measured example of exactly
+that: two paths sharing their helpers, reading clean, because their visible
+errors diverged. No detector reading only what a mind produces can infer a
+kinship that produces nothing in common to read.
 
-One more limit is impossible to repair with any black-box channel. Two paths can
-share an implementation and express its effects through anti-correlated
-symptoms. A measured example, `gptA-main` and `gptA-ref1`, shared helpers but
-read clean because their visible errors diverged. No detector that sees only
-outputs can infer dependence that leaves no common output trace.
-
-This does not make the token channel useless. It makes its domain explicit. It
-detects a registered class of shared failure when the failure is visible,
-admissible, and not forced by the world's one door. It cannot certify
-independence. No finite failure detector can.
+So the instrument's domain is not a boast; it is a fence. It detects one
+registered class of shared failure, when that failure is visible, admissible, and
+not forced by the world's one door. It cannot certify independence. No finite
+failure-detector can -- and twice now, once inside the run and once on the
+holdout, it showed me the edge of what it can do rather than let me pretend the
+edge was further out.
 
 > The knife can find a shared cut. It cannot prove that two uncut surfaces came
-> from different blades.
-
-**Conclusion:** the instrument is real because the holdout changed its claim.
-The transferable result is the token core and its named domain; the combined
-world-portable blade is falsified.
+> from different blades -- and the run that taught me that is the one I trust,
+> precisely because it cost me the number I liked best.
 
 ---
 
@@ -470,8 +510,8 @@ measure that cannot beat its controls predicts nothing.
 problems. It is being asked to prove that yesterday's contact changed the cost
 of understanding tomorrow's world.*
 
-**Conclusion:** manufactured contact is a testable proposal only when contact,
-memory, transfer, and the path itself are separated into arms that can kill it.
+Manufactured contact is a testable proposal only when contact, memory, transfer,
+and the path itself are separated into arms that can kill it.
 
 ---
 
@@ -520,8 +560,8 @@ Then the essay will be a map of that boundary.
 I will not choose among these endings in prose. The repository currently says,
 in capital letters, **NO PHILOSOPHIA RESULT YET**. This draft says the same.
 
-**Conclusion:** the architecture of the answer can be written before the
-outcome; the answer cannot.
+> The architecture of the answer can be written before the outcome; the answer
+> cannot.
 
 ---
 
@@ -559,8 +599,8 @@ that independence follows practice more than pedigree.
 
 Then the holdout cut the blade. On a fresh world, competent adaptive roads found
 one door and failed together because of the world, not a common origin. The
-token core survived. The journal did not. The instrument became smaller and
-more real at the same time.
+shared-mistake core survived; the schedule test did not. The instrument became
+smaller and more real at the same time.
 
 That is the height from which Philosophia begins.
 
@@ -594,7 +634,9 @@ enough to answer and names what would make the hope die.
 
 *This section is the evidence ledger behind the story. Every inherited number
 links to a committed artifact. Every Philosophia claim remains a slot until a
-new signed decision changes the canonical results file.*
+new signed decision changes the canonical results file. In plain terms:
+everything inherited from the same-wall instrument is earned and bounded;
+everything about the small mind is still an open slot.*
 
 ## The inherited instrument
 
@@ -610,6 +652,15 @@ The scope is narrower than "the detector identifies ancestry." It supports a
 token channel based on correlated wrong-value failures in the admitted stress
 window. It rejects co-success as ancestry evidence and permits `INADMISSIBLE`,
 `UNKNOWN_FIELD`, and `NO_TEST` rather than manufacturing a verdict.
+
+The same locked run also carried a common-prior control (`C_C8`) -- the pair
+behind the 24/24 wrong-value agreement below -- registered with the expectation
+that the certified instrument would flag it as coupled. It did not. Its token
+excess (**0.034**) fell below the margin and its journal statistic (**0.565**)
+sat below the field floor (**0.672**) on a three-pair quorum edge, so the pair
+read `CLEAN` and the whole run was labelled `EXPA-NOT-CLEAN`. The loud
+pre-lock number did not clear the instrument once the instrument was locked; the
+control is published as it fell, not reinterpreted.
 
 ## The 24/12/0 gradient
 
@@ -702,6 +753,7 @@ The canonical statement remains:
 | Co-success identifies shared ancestry | **REJECTED** | correct agreement is the world's credit; Amendment 1 |
 | Random seed, provider, or clean room guarantees independence | **REJECTED** | 24/12/0 and 0/1200 visibility boundary |
 | The full token+journal blade transfers across worlds | **FALSIFIED** | H4 journal false positive; confirmation withheld |
+| The certified instrument flags the informal 24/24 common-prior pair as shared | **NOT REPRODUCED in the locked run** | `C_C8` read CLEAN: token 0.034 below margin, journal 0.565 below field floor 0.672 on the quorum edge |
 | Companion-faithful Level 0 code is deterministic on the tested prefix | **EARNED, platform only** | matching v2 prefix report |
 | Modular-addition grokking is reproduced here | **SLOT** | kill: no grok after faithful run and bounded platform repair |
 | Active contact beats a matched static corpus | **SLOT** | kill: active no better under matched oracle count and answer entropy |
