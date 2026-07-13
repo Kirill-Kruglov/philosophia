@@ -3,7 +3,7 @@ name = "philosophia"
 version = "0.1.0"
 description = "Can primary experience be made from derivable algebraic and geometric worlds?"
 requires-python = ">=3.11"
-dependencies = ["numpy"]
+dependencies = ["numpy", "scipy"]
 
 [project.optional-dependencies]
 dev = ["pytest"]
@@ -15,7 +15,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = {philosophia = "src/philosophia", gate_harness = "gate_harness", "gate_harness.tests" = "gate_harness/tests"}
-packages = ["philosophia", "philosophia.level0", "gate_harness", "gate_harness.tests"]
+packages = ["philosophia", "philosophia.level0", "philosophia.level1", "gate_harness", "gate_harness.tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["gate_harness/tests", "tests"]
