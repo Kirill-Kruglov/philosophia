@@ -1,0 +1,14 @@
+Written to `reviews/opus_level1_spec_v3_final_review.md`.
+
+## Verdict: `REVISE_LEVEL1_V3_CONTRACT`
+
+v3 closes every prior finding at the design level and the three-zone arithmetic is now correct (I verified: `A_word=126` → `2·A_word=252≥251`; `d_acq=125<131`; `251` realizable via `(126,−125)`; `24,003` cells). But under the bit-level standard it's not signable — one scientific defect and two implementability blockers, each needing a **v3.1 addendum**:
+
+**Critical**
+- **C-1 (certificate) — the sole anti-lookup stratum is defeated by a trivial feature.** I traced the S4 corner construction at both edges: YES items (`d=2n`) are **symmetric** (`|a|=|b|=n`, even parity); NO items (`d=2n±1`) are **asymmetric** (magnitudes differ by 1, odd parity). A learner keying on displacement-magnitude-equality or parity — both far easier than period recovery — passes S4 with no representation of `n`, and the accuracy/confident-lie caps don't catch it (the feature-classifier is correct and confident). Fix (verified): replace `2n±1` with **symmetric even near-misses `2n±2`** (`a=n±1, b=−(n±1)`), still `≢0 mod n`, realizable and uncontactable at both edges.
+- **C-2 (generators) — not bit-reproducible.** The SHA-256→integer/permutation/sample algorithm is never given ("rejection-free Fisher–Yates" is either modulo-biased or under-specified), nor per-class 30% rounding, cell index order, raw-realization token construction, or reserved-cell consumption order. Two implementers get different pools/panels/inputs.
+- **C-3 (model) — not bit-reproducible.** Attention direction (causal/bidirectional), biases/scale, all-masked-row NaN handling, final LayerNorm+epsilon, weight-init draw order, dtype/device/determinism, gradient clipping, loss reduction, and exact seed-key strings are all unfixed.
+
+**Major**: "hashes byte-identical across worlds" is contradictory (content digests must differ — separate the three surfaces); solve-then-non-finite is doubly classified (§6 vs §7.1); global Brier is incoherent (passes at 0.021 even with S4 at chance-calibration — I verified); the two leakage gates are thresholds without protocols; RANDOM-STATIC feasibility never exercises the dominant `B·S·E` scorer; missing-checkpoint routing can mask outcome-related divergence; S2/S5 novelty columns are inaccurate at `n≥124`.
+
+The review lists the accepted v3 closures **not** to reopen (zone arithmetic, design-based population frame, determinacy guard, Bonferroni-primary, failure cause-routing, salted escrow, N3 no-clamp rule), answers X1–X6, gives the exact v3.1 edits, and authorizes only gate-1 neutral substrate for Codex — **with the caveat that even the allocation bookkeeping needs the keyed-stream algorithm pinned first.** All Level 1 execution remains forbidden; every signed negative destination is preserved. Files remain uncommitted per the pre-lock discipline.
