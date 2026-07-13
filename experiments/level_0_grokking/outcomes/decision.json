@@ -1,0 +1,118 @@
+{
+  "arm_a_quorum": 4,
+  "arm_a_successes": 5,
+  "arm_b_annotation": "NO_PRIMARY_INFERENCE",
+  "arm_b_successes": 3,
+  "claims_forbidden": [
+    "evidence for the Philosophia programme claim",
+    "progress measures predict or explain grokking",
+    "weight decay causes grokking",
+    "a new Fourier basis appears at grokking",
+    "cross-world or cross-representation transfer",
+    "p-values, effect sizes, or generalization beyond the locked task",
+    "Arm B as an independent success target",
+    "ROCm results entering the decision"
+  ],
+  "complete_report_hashes": {
+    "A-0": "9df59ab53d2201843a6fd2f6868eb9e986886aa6b8f82980425451a8ba25f1bb",
+    "A-1": "565a1c7773d1389981bc3d03ad9c7d2eb000b0bfbf6389f0c2750c54a8e03270",
+    "A-2": "0cc7e315ae56111672c62ccd59f0de32229042ffaa7492448082d20cb40049dd",
+    "A-3": "3db0b942071bed2ab8e78928aba00626adcac68ea81685d4dfd53afe714548d4",
+    "A-4": "0c131507b00a724314575a889254e5603481ff38a1eea1b8038a08d793817c36",
+    "B-1": "3d396896041dd14d5c6a18fd835ca48f3ba709dbe0d259a886bab58819039a04",
+    "B-2": "771606d5857260aa9398e38e3c66113074a0fec275bdef8d593d31c7f9d5392a",
+    "B-3": "322f927bb1ce5c7c254e9ab6e0abf12b8c8a43ca4e56ea6a78361aeb692e792d",
+    "R-0": "682037b7b1b85d199a1d91ab9ae02b5287a2d4d29d09619c7bebe3cabb8d69b1"
+  },
+  "decision": "REPRODUCED",
+  "kind": "philosophia-level0-decision",
+  "platform_violations": [],
+  "prereg_lock_sha256": "ae8b53c89c80a30a6861e235788336e52eb60ed00cced00da07478f0d03e8ebb",
+  "repository_head": "956690bb6ee53e89fc780c6e7a4657eadd9658b8",
+  "runs": {
+    "A-0": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 6500,
+      "fit_start": 200,
+      "generalize_start": 6700,
+      "replicates_delayed_generalization": true
+    },
+    "A-1": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 5000,
+      "fit_start": 200,
+      "generalize_start": 5200,
+      "replicates_delayed_generalization": true
+    },
+    "A-2": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 6400,
+      "fit_start": 200,
+      "generalize_start": 6600,
+      "replicates_delayed_generalization": true
+    },
+    "A-3": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 7500,
+      "fit_start": 200,
+      "generalize_start": 7700,
+      "replicates_delayed_generalization": true
+    },
+    "A-4": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 6500,
+      "fit_start": 200,
+      "generalize_start": 6700,
+      "replicates_delayed_generalization": true
+    },
+    "B-1": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 40200,
+      "fit_start": 200,
+      "generalize_start": 40400,
+      "replicates_delayed_generalization": true
+    },
+    "B-2": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 61000,
+      "fit_start": 200,
+      "generalize_start": 61200,
+      "replicates_delayed_generalization": true
+    },
+    "B-3": {
+      "DELAYED": true,
+      "FIT": true,
+      "GENERALIZE": true,
+      "delay": 51100,
+      "fit_start": 200,
+      "generalize_start": 51300,
+      "replicates_delayed_generalization": true
+    },
+    "R-0": {
+      "DELAYED": false,
+      "FIT": true,
+      "GENERALIZE": false,
+      "delay": null,
+      "fit_start": 200,
+      "generalize_start": null,
+      "replicates_delayed_generalization": false
+    }
+  },
+  "schema_version": 1,
+  "scientific_scope": "five-seed Level 0 replication demonstration only",
+  "scientific_spec_sha256": "52a1c21fc38d04c3733f75139b68aca5b43c3b2770eb732f079620ca7847cfda"
+}

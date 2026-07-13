@@ -121,7 +121,7 @@ def test_unaccepted_spec_cannot_authorize_outcome(tmp_path: Path) -> None:
     with pytest.raises(ScientificSpecError, match="not accepted"):
         load_spec(draft_path, require_accepted=True)
     assert (LEVEL0 / "PREREG.lock").exists()
-    assert not (LEVEL0 / "outcomes").exists()
+    assert not (tmp_path / "outcomes").exists()
 
 
 def test_schema2_lock_binds_run_config_budget_and_resume_count(tmp_path: Path) -> None:
@@ -419,4 +419,4 @@ def test_canonical_lock_is_committed_unchanged_and_binds_sources() -> None:
     assert len(lock["source_hashes"]) == 19
     _verify_locked_sources(lock, root=ROOT)
     _verify_repository_binding(root=ROOT, lock_path=lock_path, lock=lock)
-    assert not (LEVEL0 / "outcomes").exists()
+    assert (LEVEL0 / "outcomes/decision.json").is_file()

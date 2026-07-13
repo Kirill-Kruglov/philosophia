@@ -1,8 +1,8 @@
 # Level 0 outcome runbook draft
 
-Status: **AUTHORIZED BY COMMITTED `PREREG.lock`; NOT YET EXECUTED.** The
-scientific spec was accepted by Kirill before outcome, lock commit `e4a0fee`
-binds source commit `4dbd3b1`, and repository verifiers pass.
+Status: **EXECUTED TO COMPLETION.** The scientific spec was accepted by Kirill
+before outcome, lock commit `e4a0fee` binds source commit `4dbd3b1`, all nine
+runs completed, and the independently verified decision is `REPRODUCED`.
 
 ## Preconditions
 

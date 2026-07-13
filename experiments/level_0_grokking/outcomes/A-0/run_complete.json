@@ -1,0 +1,18 @@
+{
+  "config_hash": "3285cb04797a4bd19f4a3cc04669e531fc43b49645a459f08e31c2221740a63c",
+  "control": "real-label",
+  "elapsed_seconds": 3696.485512471758,
+  "final_model_state_hash": "cf8ed3cbbe85db6a5864f34b797805d74b75c10e612e7683def4b19f0d6e2794",
+  "final_optimizer_state_hash": "f6df0499d44ca39dce4627aebae48f51f9a2c6799aa8df7a69b8441389f3fc99",
+  "fixed_updates": 40000,
+  "kind": "philosophia-level0-complete-run",
+  "manifest_sha256": "92bb030b335a716690f879d2c694fde6aa41ad71c308cba7b611fa0f4c3ec2ff",
+  "metrics_sha256": "62c98f983460247adf56a05bd90ed94afc4eb8298d9dec75d39aa75b00ca906b",
+  "prereg_lock_sha256": "ae8b53c89c80a30a6861e235788336e52eb60ed00cced00da07478f0d03e8ebb",
+  "run_id": "A-0",
+  "scientific_verdict": null,
+  "split_hash": "b864b16accf8202e5dbe9de566f3e53a0750c07009293fd1eb8763657386177f",
+  "steps_used": 40000,
+  "torch_num_interop_threads": 32,
+  "torch_num_threads": 16
+}

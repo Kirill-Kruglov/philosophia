@@ -4,8 +4,9 @@ Status: companion-fidelity v2 is implemented, accepted by Opus, and certified by
 matching bounded determinism-prefix report. Reconstruction fidelity is closed;
 the scientific preregistration has passed Sol/Opus review and was accepted by
 Kirill before outcome. Schema-2 lock machinery, the outcome driver, and the
-independent verifier are implemented. Canonical `PREREG.lock` is committed and
-unchanged; fixed-budget outcome execution is now authorized.
+independent verifier are implemented. Canonical `PREREG.lock` was committed
+unchanged before execution. The full nine-run battery is complete and the
+independently verified Level 0 decision is `REPRODUCED` (Arm A 5/5).
 
 The only scientific task at this level is to reproduce published modular-addition
 grokking with checkpoints, representation probes, and seeded replications. It is

@@ -1,7 +1,7 @@
 # Level 0 scientific preregistration draft
 
-Status: **ACCEPTED BY KIRILL BEFORE OUTCOME AND BOUND BY COMMITTED
-`PREREG.lock`. OUTCOME EXECUTION IS AUTHORIZED; NO OUTCOME HAS RUN YET.** The machine-readable governing specification is
+Status: **ACCEPTED AND LOCKED BEFORE OUTCOME; FULL BATTERY COMPLETED;
+`decision.json` IS VALID AND REPORTS `REPRODUCED`.** The machine-readable governing specification is
 `SCIENTIFIC_SPEC.json`. Kirill supplied the exact authorization statement
 `I_ACCEPT_LEVEL0_SCIENTIFIC_SPEC` after the Sol and Opus reviews were closed.
 

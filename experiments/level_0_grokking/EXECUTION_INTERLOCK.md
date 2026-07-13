@@ -2,7 +2,8 @@
 
 Status: schema-2 scientific interlock and outcome driver reviewed; the
 scientific spec is accepted by Kirill before outcome; canonical `PREREG.lock` is
-committed unchanged; outcome execution is now authorized but has not run.
+committed unchanged; the full battery has run and its decision verifies as
+`VALID`.
 
 Every optimizer step requires an `ExecutionInterlock`. Evaluation and persistence
 verdicts require capabilities that the unit-check and scout modes do not possess.

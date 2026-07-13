@@ -1,0 +1,26 @@
+{
+  "config_hash": "c41ff1c23c601a9f932b071ffa8042a2b456c50a426f11ee95de3912b735b55f",
+  "control": "real-label",
+  "fixed_updates": 120000,
+  "kind": "philosophia-level0-run-manifest",
+  "master_seed": 3,
+  "prereg_lock_sha256": "ae8b53c89c80a30a6861e235788336e52eb60ed00cced00da07478f0d03e8ebb",
+  "repository_head": "956690bb6ee53e89fc780c6e7a4657eadd9658b8",
+  "run_id": "B-3",
+  "scientific_outcome": true,
+  "scientific_spec_sha256": "52a1c21fc38d04c3733f75139b68aca5b43c3b2770eb732f079620ca7847cfda",
+  "source_hashes": {
+    "config_source": "fbda820b5f919f47b0bb63a51285bb582a0434368e0bf411b79618cf799f3e4f",
+    "data_source": "1e0a64bddb932d71c47f5c056bf0a7976d5e407a08fb26dbb8c939061b67b715",
+    "model_source": "b42a8f9f5c4081a112a6f3c032f9e3433966a22c2e1e2e50e72ddf07381d7b05",
+    "outcome_source": "7140e06c0230085abdcceaf85647afe3e105a4301c810ef88764df34127a8974",
+    "prereg_lock": "ae8b53c89c80a30a6861e235788336e52eb60ed00cced00da07478f0d03e8ebb",
+    "scientific_spec": "52a1c21fc38d04c3733f75139b68aca5b43c3b2770eb732f079620ca7847cfda",
+    "train_source": "363c689025e8a5dfac7e8188e9a60fc260552787bd73c1df8fb1975dbdcfa2f1"
+  },
+  "split_hash": "e42cd37232de703cd05db5627403951467c6d6fea269e100b327d18505d35660",
+  "torch_num_interop_threads": 32,
+  "torch_num_threads": 16,
+  "universe_hash": "697ab6029d5fe3af7b640bc6f2616ff62c944ba8fc39e568de146ece14a5d813",
+  "verdict_derived": false
+}

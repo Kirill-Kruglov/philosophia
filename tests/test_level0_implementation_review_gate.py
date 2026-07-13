@@ -29,10 +29,10 @@ def test_scout_prerequisites_are_interlocked() -> None:
     assert "weights_only=True" in checkpoint
 
 
-def test_hardening_does_not_create_scientific_authorization() -> None:
+def test_interlock_records_completed_locked_execution() -> None:
     contract = (LEVEL0 / "EXECUTION_INTERLOCK.md").read_text(encoding="utf-8")
     assert "committed unchanged" in contract
-    assert "outcome execution is now authorized" in contract
+    assert "full battery has run" in contract
     assert "contamination boundary" in contract
     assert (LEVEL0 / "PREREG.lock").exists()
     assert not (LEVEL0 / "decision.json").exists()
