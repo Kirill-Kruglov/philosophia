@@ -10,7 +10,8 @@ Philosophia scaffolding is not represented as inherited evidence.
 
 | Source | Target | Status |
 |---|---|---|
-| `ontology/lines/13-philosophia.md` | `ROADMAP.md` | programme route; not a result |
+| `ontology/lines/13-philosophia.md` | `inheritance/line13_philosophia_map.md` | frozen programme route; not a result |
+| `ontology/lines/13-philosophia.md` | `ROADMAP.md` | locally maintained execution roadmap derived from the frozen route; not inherited evidence |
 | `ontology/lines/12-the-same-wall.md` | `inheritance/line12_same_wall/LINE12_MAP.md` | inherited research record |
 | `experiments/12_same_wall/experiment_A/` | `inheritance/line12_same_wall/experiment_A/` | primary harness-valid; holdout boundary preserved |
 | `experiments/12_same_wall/scouts/` | `inheritance/line12_same_wall/non_citable/scouts/` | exploratory, explicitly non-citable |

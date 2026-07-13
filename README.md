@@ -46,8 +46,10 @@ for the only claims this repository presently permits.
 
 ## Repository map
 
-- [`ROADMAP.md`](ROADMAP.md) - Fable's route to the fourth essay, copied verbatim
-  from Ascesis.
+- [`ROADMAP.md`](ROADMAP.md) - the locally maintained execution roadmap derived
+  from Fable's route to the fourth essay.
+- [`inheritance/line13_philosophia_map.md`](inheritance/line13_philosophia_map.md)
+  - Fable's original route, copied verbatim from Ascesis and hash-checked in CI.
 - [`MANIFEST.md`](MANIFEST.md) - extraction provenance and citability classes.
 - [`inheritance/line12_same_wall/`](inheritance/line12_same_wall/) - the certified
   detector lineage, including the primary decision and the adverse holdout.
