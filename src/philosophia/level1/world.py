@@ -60,6 +60,30 @@ def acquisition_cells(*, a_word: int = A_WORD) -> Iterator[Cell]:
         yield from cells_for_difference(difference, a_word=a_word)
 
 
+def global_cell_rank(cell: Cell, *, a_word: int = A_WORD) -> int:
+    if not 0 <= cell.difference <= D_ACQ:
+        raise ValueError("only acquisition-support cells have global ranks")
+    offset = cell.b + a_word
+    class_size = 2 * a_word + 1 - cell.difference
+    if not 0 <= offset < class_size:
+        raise ValueError("cell endpoints are outside the frozen geometry")
+    prefix = cell.difference * (2 * a_word + 1) - (
+        cell.difference * (cell.difference - 1)
+    ) // 2
+    return prefix + offset
+
+
+def cell_from_global_rank(rank: int, *, a_word: int = A_WORD) -> Cell:
+    if rank < 0:
+        raise ValueError("cell rank must be non-negative")
+    for difference in range(D_ACQ + 1):
+        cells = cells_for_difference(difference, a_word=a_word)
+        if rank < len(cells):
+            return cells[rank]
+        rank -= len(cells)
+    raise ValueError("cell rank exceeds acquisition support")
+
+
 def admissible_paddings(
     net_displacement: int,
     *,

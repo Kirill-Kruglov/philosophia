@@ -21,9 +21,11 @@ from philosophia.level1.serialization import (
 )
 from philosophia.level1.world import (
     acquisition_cells,
+    cell_from_global_rank,
     cells_for_difference,
     displacement,
     fold,
+    global_cell_rank,
     oracle_eq,
     rank_word,
     unrank_word,
@@ -36,6 +38,13 @@ def test_signed_geometry_and_cell_counts() -> None:
     assert len(tuple(acquisition_cells())) == 24_507
     assert len(cells_for_difference(0)) == 257
     assert len(cells_for_difference(125)) == 132
+
+
+def test_global_cell_rank_round_trip() -> None:
+    cells = tuple(acquisition_cells())
+    for rank in (0, 1, 256, 257, 12_000, 24_506):
+        assert global_cell_rank(cells[rank]) == rank
+        assert cell_from_global_rank(rank) == cells[rank]
 
 
 def test_z_n_oracle_and_word_rank_round_trip() -> None:
