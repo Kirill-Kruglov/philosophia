@@ -67,8 +67,8 @@ def estimate_contrast(
     for block in blocks:
         by_stratum[block.stratum].append(block.arm(y).cost - block.arm(x).cost)
     sizes = {len(values) for values in by_stratum.values()}
-    if len(sizes) != 1 or not sizes or next(iter(sizes)) not in range(2, 9):
-        raise ValueError("contrast requires equal 2..8 block counts per stratum")
+    if len(sizes) != 1 or not sizes or next(iter(sizes)) not in range(4, 9):
+        raise ValueError("outcome contrast requires equal 4..8 block counts per stratum")
     n_h = next(iter(sizes))
     estimate = sum(float(np.mean(values)) / 3.0 for values in by_stratum.values())
     components = []

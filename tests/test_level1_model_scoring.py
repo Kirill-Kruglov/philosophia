@@ -9,7 +9,13 @@ import torch
 
 from philosophia.level1.config import BUDGET, PANEL_STRATUM_COUNTS
 from philosophia.level1.interlock import ExecutionNotAuthorized, run_level1_trajectory, unit_step_capability
-from philosophia.level1.model import ContactTransformer, build_optimizer, encode_pair, state_hash
+from philosophia.level1.model import (
+    ContactTransformer,
+    build_optimizer,
+    committee_equal_probability,
+    encode_pair,
+    state_hash,
+)
 from philosophia.level1.scoring import MissingCheckpoint, PanelObservation, checkpoint_qualifies, first_persistent_step, score_stratum
 from philosophia.level1.serialization import dummy_key
 from philosophia.level1.train import unit_training_step
@@ -32,6 +38,18 @@ def test_model_shapes_determinism_and_bidirectional_padding() -> None:
     assert torch.isfinite(logits_a).all()
 
 
+def test_committee_probability_is_exact_four_member_mean() -> None:
+    models = [_model(member) for member in range(4)]
+    tokens = torch.stack((encode_pair(b"R", b"R"), encode_pair(b"R", b"L")))
+    expected = torch.stack(
+        [model.equal_probability(tokens) for model in models], dim=0
+    ).mean(dim=0)
+    observed = committee_equal_probability(models, tokens)
+    assert torch.equal(observed, expected)
+    assert not observed.requires_grad
+    with pytest.raises(ValueError, match="exactly 4"):
+        committee_equal_probability(models[:3], tokens)
+
 
 def test_canonical_runtime_in_fresh_process() -> None:
     code = (
@@ -42,6 +60,7 @@ def test_canonical_runtime_in_fresh_process() -> None:
     )
     completed = subprocess.run([sys.executable, "-c", code], check=False, capture_output=True, text=True)
     assert completed.returncode == 0, completed.stderr
+
 
 def test_init_scales_and_optimizer_groups() -> None:
     model = _model()
@@ -56,6 +75,26 @@ def test_init_scales_and_optimizer_groups() -> None:
     assert len(optimizer.param_groups) == 2
     assert [group["weight_decay"] for group in optimizer.param_groups] == [0.01, 0.0]
     assert sum(len(group["params"]) for group in optimizer.param_groups) == len(list(model.parameters()))
+    names_by_id = {id(parameter): name for name, parameter in model.named_parameters()}
+    assert [
+        [names_by_id[id(parameter)] for parameter in group["params"]]
+        for group in optimizer.param_groups
+    ] == [
+        [
+            "layers.0.W_Q", "layers.0.W_K", "layers.0.W_V", "layers.0.W_O",
+            "layers.0.W_in", "layers.0.W_out", "layers.1.W_Q", "layers.1.W_K",
+            "layers.1.W_V", "layers.1.W_O", "layers.1.W_in", "layers.1.W_out",
+            "head_W",
+        ],
+        [
+            "token_embedding", "position_embedding", "layers.0.ln1.weight",
+            "layers.0.ln1.bias", "layers.0.ln2.weight", "layers.0.ln2.bias",
+            "layers.1.ln1.weight", "layers.1.ln1.bias", "layers.1.ln2.weight",
+            "layers.1.ln2.bias", "final_ln.weight", "final_ln.bias",
+            "layers.0.b_in", "layers.0.b_out", "layers.1.b_in",
+            "layers.1.b_out", "head_b",
+        ],
+    ]
 
 
 def test_unit_step_is_single_use_and_trajectory_fails_closed() -> None:

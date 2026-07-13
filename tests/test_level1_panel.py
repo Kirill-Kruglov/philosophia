@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import replace
+import hashlib
+
 import pytest
 
 from philosophia.level1.panel import (
@@ -71,6 +74,61 @@ def test_schema_surface_and_s4_exemptions_are_frozen() -> None:
         for reconstruction in exemptions.values()
         for difference in reconstruction.values()
     )
+
+
+def test_reserved_cell_identities_are_golden_at_center_and_edges() -> None:
+    builder = DummyPanelBuilder(*_keys())
+    expected = {
+        66: {
+            0: (259,), 124: (14822,), 136: (15010,),
+            140: (1,), 172: (19,), 180: (15201,),
+        },
+        124: {
+            0: (259,), 124: (24242,), 136: (24376,),
+            140: (1,), 172: (19,), 180: (63, -63),
+        },
+        125: {
+            0: (259,), 124: (24376,), 136: (63, -63),
+            140: (1,), 172: (19,), 180: (64, -63),
+        },
+    }
+    for modulus, identities in expected.items():
+        panel = builder.build(modulus, world_slot=modulus - 66)
+        assert {
+            global_id: panel.items[global_id].cell_identity
+            for global_id in identities
+        } == identities
+
+
+def test_full_dummy_panel_word_bytes_have_golden_digest() -> None:
+    panel = DummyPanelBuilder(*_keys()).build(66, world_slot=0)
+    digest = hashlib.sha256()
+    for item in panel.items:
+        digest.update(item.global_id.to_bytes(2, "big"))
+        digest.update(len(item.left).to_bytes(2, "big"))
+        digest.update(item.left)
+        digest.update(len(item.right).to_bytes(2, "big"))
+        digest.update(item.right)
+    assert digest.hexdigest() == (
+        "93674833af7d3f98bc19079de449acd8bf3e68d5f0acc53f9eefb8084909d9c2"
+    )
+
+
+def test_feature_null_verifier_rejects_non_d_label_separator() -> None:
+    panel = DummyPanelBuilder(*_keys()).build(66, world_slot=0)
+    items = tuple(
+        replace(
+            item,
+            padding_u=0 if item.truth else 1,
+            padding_v=0 if item.truth else 1,
+        )
+        if item.stratum == "S4"
+        else item
+        for item in panel.items
+    )
+    bad_panel = replace(panel, items=items)
+    with pytest.raises(ValueError, match="non-d nuisance combination"):
+        verify_s4_feature_null((bad_panel,))
 
 
 def test_s5_fixed_eligibility_and_s3_distinctness() -> None:

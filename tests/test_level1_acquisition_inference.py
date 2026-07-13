@@ -72,6 +72,38 @@ def test_determinacy_guard_and_zero_variance_label() -> None:
     assert predicate(one, "NONSUP")
 
 
+@pytest.mark.parametrize("n_h", (2, 3))
+def test_outcome_estimator_rejects_unregistered_sample_sizes(n_h: int) -> None:
+    with pytest.raises(ValueError, match="equal 4..8"):
+        estimate_contrast(_blocks(n_h, 1000.0, 1100.0), "active", "yoked")
+
+
+def test_non_census_interval_pins_fpc_satterthwaite_and_bonferroni() -> None:
+    differences = {
+        1: (10.0, 20.0, 30.0, 40.0),
+        2: (0.0, 20.0, 40.0, 60.0),
+        3: (-10.0, 0.0, 10.0, 20.0),
+    }
+    blocks = [
+        BlockOutcome(
+            stratum,
+            ArmOutcome(1000.0, 2),
+            ArmOutcome(1000.0 + difference, 2),
+            ArmOutcome(1500.0, 2),
+        )
+        for stratum, values in differences.items()
+        for difference in values
+    ]
+    interval = estimate_contrast(blocks, "active", "yoked")
+
+    assert interval.estimate == pytest.approx(20.0)
+    assert interval.variance == pytest.approx(13.88888888888889)
+    assert interval.degrees_of_freedom == pytest.approx(6.0)
+    assert interval.lower == pytest.approx(20.0 - 12.2516220070524)
+    assert interval.upper == pytest.approx(20.0 + 12.2516220070524)
+    assert interval.variance_label == "estimated finite-population sampling variance"
+
+
 def test_n3_projection_uses_census_fallback() -> None:
     conservative = {name: {1: 0.0, 2: float("nan"), 3: 0.0} for name in ("A-Y", "Y-R", "A-R")}
     assert choose_n3(conservative) == 24

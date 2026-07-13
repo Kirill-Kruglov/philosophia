@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import hashlib
 import math
 import platform
+from typing import Sequence
 
 import torch
 from torch import Tensor, nn
@@ -170,6 +171,19 @@ class ContactTransformer(nn.Module):
 
     def equal_probability(self, tokens: Tensor) -> Tensor:
         return torch.softmax(self(tokens), dim=-1)[:, 1]
+
+
+def committee_equal_probability(
+    models: Sequence[ContactTransformer], tokens: Tensor
+) -> Tensor:
+    if len(models) != COMMITTEE_SIZE:
+        raise ValueError(f"committee must contain exactly {COMMITTEE_SIZE} members")
+    with torch.no_grad():
+        probabilities = tuple(model.equal_probability(tokens) for model in models)
+    shapes = {tuple(value.shape) for value in probabilities}
+    if len(shapes) != 1:
+        raise ValueError("committee members returned incompatible probability shapes")
+    return torch.stack(probabilities, dim=0).mean(dim=0)
 
 
 def encode_pair(left: bytes, right: bytes) -> Tensor:
