@@ -47,8 +47,8 @@ class DummyPanel:
 
 class DummyPanelBuilder:
     def __init__(self, public_key: DeterministicKey, panel_key: DeterministicKey) -> None:
-        if not public_key.test_only or public_key.purpose != "public-root":
-            raise PermissionError("dummy builder requires a test-only public root")
+        if public_key.purpose != "public-root":
+            raise PermissionError("dummy builder requires the named public-root key")
         if not panel_key.test_only or panel_key.purpose != "panel":
             raise PermissionError("dummy builder requires a test-only panel key")
         if public_key.material == panel_key.material:
