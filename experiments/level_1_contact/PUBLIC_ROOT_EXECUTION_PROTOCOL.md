@@ -24,7 +24,7 @@ State routing:
 Before execution, the final authorization must name both the final docs-only
 `EXPECTED_HEAD` and the reviewed code commit `REVIEWED_CODE_HEAD`. The driver
 mechanically verifies byte identity for itself plus `public_root.py`,
-`allocation.py`, `serialization.py`, and `model.py` between those commits. It
+`allocation.py`, `serialization.py`, `model.py`, and `config.py` between those commits. It
 also rechecks an empty index immediately before staging and verifies that only
 the claim and transcript are staged.
 

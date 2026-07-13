@@ -47,6 +47,7 @@ REVIEWED_SOURCE_PATHS = (
     "src/philosophia/level1/allocation.py",
     "src/philosophia/level1/serialization.py",
     "src/philosophia/level1/model.py",
+    "src/philosophia/level1/config.py",
 )
 
 
@@ -169,7 +170,7 @@ def _commit_transcript(repo: Path) -> None:
         line for line in _run_git(repo, "diff", "--cached", "--name-only").stdout.splitlines()
         if line
     )
-    if staged != paths:
+    if len(staged) != len(paths) or set(staged) != set(paths):
         raise RuntimeError(f"unexpected staged paths: {staged!r}")
     message = [
         "Draw the one-shot Level 1 public root",

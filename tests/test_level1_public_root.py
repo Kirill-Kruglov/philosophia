@@ -9,6 +9,8 @@ import subprocess
 
 import pytest
 
+import philosophia.level1.allocation as allocation_module
+
 from philosophia.level1.public_root import (
     CLAIM_SCHEMA,
     TRANSCRIPT_SCHEMA,
@@ -30,6 +32,7 @@ REACHABLE_SOURCES = (
     REPO / "src/philosophia/level1/allocation.py",
     REPO / "src/philosophia/level1/serialization.py",
     REPO / "src/philosophia/level1/model.py",
+    REPO / "src/philosophia/level1/config.py",
 )
 
 
@@ -101,6 +104,15 @@ def test_public_allocations_materialize_d_and_roles_but_not_r_h() -> None:
     ]
     assert all(abs(item["target"] - item["donor"]) == 1 for item in roles)
     assert allocations["outcome_sample"] == "deferred-until-N3"
+
+
+def test_runtime_cardinality_guard_rejects_config_drift(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(allocation_module, "DEVELOPMENT_PAIRS_PER_STRATUM", 1)
+    monkeypatch.setattr(allocation_module, "OUTCOME_PAIRS_PER_STRATUM", 9)
+    with pytest.raises(RuntimeError, match="development allocation cardinality"):
+        derive_public_allocations(bytes(range(32)))
 
 
 def test_transcript_rejects_non_32_byte_root() -> None:
@@ -216,6 +228,16 @@ def test_preflight_refuses_head_source_tree_index_and_artifact_states(tmp_path: 
     with pytest.raises(RuntimeError, match="source bytes differ"):
         driver._preflight(repo, changed, reviewed)
 
+    repo, head = _fresh_repo(tmp_path / "config", driver)
+    reviewed = head
+    config = repo / "src/philosophia/level1/config.py"
+    config.write_text("changed allocation constants\n", encoding="utf-8")
+    _git(repo, "add", "--", config.relative_to(repo).as_posix())
+    _git(repo, "commit", "-q", "-m", "config drift")
+    changed = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    with pytest.raises(RuntimeError, match="source bytes differ"):
+        driver._preflight(repo, changed, reviewed)
+
     repo, head = _fresh_repo(tmp_path / "dirty", driver)
     (repo / driver.REVIEWED_SOURCE_PATHS[0]).write_text("dirty\n", encoding="utf-8")
     with pytest.raises(RuntimeError, match="working tree"):
@@ -244,7 +266,7 @@ def test_commit_stages_only_claim_and_transcript(monkeypatch: pytest.MonkeyPatch
         calls.append(arguments)
         if arguments == ("diff", "--cached", "--name-only"):
             output = "\n".join(
-                (driver.CLAIM_RELATIVE.as_posix(), driver.TRANSCRIPT_RELATIVE.as_posix())
+                (driver.TRANSCRIPT_RELATIVE.as_posix(), driver.CLAIM_RELATIVE.as_posix())
             ) + "\n"
         else:
             output = ""

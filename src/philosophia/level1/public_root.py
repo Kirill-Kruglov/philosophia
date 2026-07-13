@@ -113,6 +113,11 @@ def derive_public_allocations(root: bytes) -> dict[str, object]:
         }
         for pair in development_pairs(key)
     ]
+    if len(development) != 6 or [
+        sum(item["stratum"] == stratum for item in development)
+        for stratum in (1, 2, 3)
+    ] != [2, 2, 2]:
+        raise RuntimeError("signed development allocation cardinality changed")
     roles = [
         {
             "slot": item.pair.slot,
@@ -125,6 +130,11 @@ def derive_public_allocations(root: bytes) -> dict[str, object]:
         }
         for item in assign_roles(key)
     ]
+    if len(roles) != 24 or [
+        sum(item["stratum"] == stratum for item in roles)
+        for stratum in (1, 2, 3)
+    ] != [8, 8, 8]:
+        raise RuntimeError("signed outcome role cardinality changed")
     return {
         "development_pairs": development,
         "outcome_role_assignments": roles,
