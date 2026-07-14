@@ -47,6 +47,7 @@ REVIEWED_SOURCE_PATHS = (
     "src/philosophia/level1/serialization.py",
     "src/philosophia/level1/scoring.py",
     "src/philosophia/level1/world.py",
+    "src/philosophia/level1/public_root.py",
 )
 
 
@@ -237,6 +238,8 @@ def main() -> int:
         },
         "measurements": report_payload(run),
         "peak_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+        # Declarative attestation of structurally enforced import, capability,
+        # report-surface, and later-artifact guards checked above.
         "contamination_guards": {
             "second_arm": False,
             "arm_contrast": False,

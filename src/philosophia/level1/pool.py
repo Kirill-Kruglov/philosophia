@@ -13,6 +13,9 @@ from .world import (
 )
 
 
+_REALIZATION_ATTEMPT_CAP = 10_000
+
+
 @dataclass(frozen=True)
 class PoolPartition:
     reserved: tuple[Cell, ...]
@@ -60,7 +63,11 @@ def realize_cell(key: DeterministicKey, cell: Cell) -> tuple[tuple[bytes, bytes]
     """Materialize the four signed raw-pair slots for one acquisition cell."""
     stream = CounterStream(key, ("L1", "pool", "realize", cell.a, cell.b))
     accepted: list[tuple[bytes, bytes]] = []
+    attempts = 0
     while len(accepted) < POOL_MULTIPLICITY:
+        attempts += 1
+        if attempts > _REALIZATION_ATTEMPT_CAP:
+            raise RuntimeError("raw-pool realization exhaustion is design invalidity")
         left_paddings = admissible_paddings(cell.a)
         padding_left = left_paddings[stream.uniform(len(left_paddings))]
         left = unrank_word(

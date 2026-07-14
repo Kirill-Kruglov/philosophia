@@ -113,8 +113,8 @@ def feasibility_capability() -> FeasibilityCapability:
 def bounded_feasibility_check(
     *, trajectory_steps: int = 1, scorer_steps: int = 1
 ) -> FeasibilityCapability:
-    if trajectory_steps > 2 or scorer_steps > 2:
-        raise ValueError("unit feasibility checks are capped at two steps")
+    if trajectory_steps > 5 or scorer_steps > 5:
+        raise ValueError("unit feasibility checks are capped at five steps")
     return FeasibilityCapability(
         _TOKEN,
         trajectory_cap=trajectory_steps,

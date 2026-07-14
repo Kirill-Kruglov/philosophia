@@ -211,15 +211,17 @@ def run_noncomparative_feasibility(
             labels,
             capability,
         )
-        step_latencies.append(time.monotonic() - started)
         capability.check_wall()
         if not result.finite:
             all_finite = False
+            step_latencies.append(time.monotonic() - started)
             break
         if step % CHECKPOINT_CADENCE == 0:
             recent_qualifying.append(_panel_qualifies(models, panel))
             if len(recent_qualifying) >= 5 and all(recent_qualifying[-5:]):
                 first_complete_window = True
+        step_latencies.append(time.monotonic() - started)
+        capability.check_wall()
 
     trajectory_latency = latency_aggregate(step_latencies)
     trajectory = TrajectoryFeasibility(
@@ -246,6 +248,7 @@ def run_noncomparative_feasibility(
     )
     answered = frozenset(schedule[: capability.trajectory_steps])
     for step in range(capability.scorer_cap):
+        started = time.monotonic()
         capability.check_wall()
         indices = shortlist(
             key,
@@ -262,7 +265,6 @@ def run_noncomparative_feasibility(
             raw_pair = realize_pool_index(partition, key, index)
             candidates[index] = encode_pair(raw_pair.left, raw_pair.right)
         capability.spend_scorer_step()
-        started = time.monotonic()
         choice = select_by_disagreement(models, optimizers, candidates)
         scorer_latencies.append(time.monotonic() - started)
         capability.check_wall()
@@ -299,6 +301,16 @@ def report_payload(run: FeasibilityRun) -> dict[str, object]:
             "combined": (
                 run.projected_random_static_seconds
                 + run.projected_active_scorer_seconds
+            ),
+        },
+        "projection_scope": {
+            "random_static": (
+                "mean full oracle-step including scheduled checkpoint evaluation "
+                "times B; excludes one-time initialization and step-0 evaluation"
+            ),
+            "active_scorer_only": (
+                "mean shortlist realization, encoding, and E-by-S scoring times B; "
+                "excludes ACTIVE training and all other Level 1 arms"
             ),
         },
     }
