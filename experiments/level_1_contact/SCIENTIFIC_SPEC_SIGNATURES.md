@@ -62,3 +62,67 @@ cfc08591bb778e67cc71cc4bca4e573ca26fc5144e4f101fc7957999e3209ab9  sol_level1_v3_
 Paths are relative to `experiments/level_1_contact/` for scientific specs and
 to `reviews/` for review documents. Saved chat responses are provenance aids;
 the formal documents and hashes above govern.
+
+## Feasibility-floor amendment signature
+
+Signed by Kirill Kruglov on 2026-07-15, after the immutable v1
+non-comparative feasibility record and before any v2 implementation, resource
+probe, v2 authorization, v2 trajectory, comparative scout, N3 selection,
+preregistration lock, real-panel escrow, or Level 1 outcome.
+
+Governing X-line verdict:
+`LEVEL1_FEASIBILITY_FLOOR_AMENDMENT_V2_2_XLINE_CONFIRMED_FOR_AUTHOR_SIGNATURE`.
+
+Governing Y-line verdict:
+`LEVEL1_FEASIBILITY_FLOOR_AMENDMENT_V2_2_YLINE_CONFIRMED_FOR_AUTHOR_SIGNATURE`.
+
+### Accepted amendment
+
+```text
+I_ACCEPT_LEVEL1_FEASIBILITY_FLOOR_AMENDMENT
+```
+
+This token accepts `FEASIBILITY_FLOOR_AMENDMENT_V2_DRAFT.md` together with the
+normative v2.1 and v2.2 corrections. It accepts, in particular:
+
+- replacing stochastic minibatch-32 replay with one full-history, mean-CE,
+  one-update-per-answer learner policy for every target and donor learner;
+- conditioning all Level 1 potential outcomes and contrasts on that amended
+  learner class while preserving the high-level ACTIVE-versus-YOKED question
+  and estimator form;
+- the explicit temporal weighting of retained contact, unchanged 2,000-update
+  count, and the distinction between example-evaluation compute and learning
+  capacity;
+- the bit-exact v2 one-shot artifact contract, validity-first terminal routes,
+  and the rule that only a valid completed v2 record may set `censored_at_b`;
+- durable atomic claim creation before learner step 1 without a generated-claim
+  Git commit, with process failure leaving the binary unset and authorizing no
+  automatic rerun.
+
+This signature authorizes implementation and tests of the amended learner and
+v2 gate only. It does not authorize a resource probe, a v2 authorization
+candidate, v2 execution, a comparative scout, N3 selection, a preregistration
+lock, real-panel escrow, or outcome execution. The one-shot v2 run requires the
+separate explicit token
+`I_AUTHORIZE_LEVEL1_NONCOMPARATIVE_FEASIBILITY_V2` after implementation and
+bounded review.
+
+### Governing amendment source commit
+
+```text
+dbf7a977e92cd1a3eb2be766c6bd081deb0a460b
+```
+
+### Governing amendment hashes
+
+```text
+51d9833c79127c9a06b7e625b0f2af3c41cd0bdf54e5f63a950463ffc5c65fc8  FEASIBILITY_FLOOR_AMENDMENT_V2_DRAFT.md
+d9ed5b562cbebef3e3b0a9c72d2d9dda35c834a044faf593d52b96b20c89ca14  FEASIBILITY_FLOOR_AMENDMENT_V2_1_CORRECTION.md
+5b413bc36e3468cb57c78b8832c471c51013bf160d71dc216c095907b2556c9b  FEASIBILITY_FLOOR_AMENDMENT_V2_2_CORRECTION.md
+4b7f4b93ae0e9426329415b43b8cc87ca0005a939eb96e251393c5ff685b57c6  opus_level1_feasibility_floor_amendment_v2_2_signature_confirmation.md
+5e0dea5d3b6a047ab2e652cfc493c4f79d352dc6bb8f5c59eceee8400381e594  sol_level1_feasibility_floor_amendment_v2_2_signature_confirmation.md
+```
+
+Paths are relative to `experiments/level_1_contact/` for amendment documents
+and to `reviews/` for confirmations. The immutable v1 feasibility evidence
+remains non-outcome and may never be interpreted as a v1/v2 contrast.
