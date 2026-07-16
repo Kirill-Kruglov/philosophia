@@ -16,6 +16,16 @@ class UnitStepResult:
     finite: bool
 
 
+@dataclass(frozen=True)
+class FullHistoryStepResult:
+    losses_finite: bool
+    parameters_finite: bool
+
+    @property
+    def finite(self) -> bool:
+        return self.losses_finite and self.parameters_finite
+
+
 def unit_training_step(
     model: ContactTransformer,
     optimizer: torch.optim.AdamW,
@@ -64,10 +74,25 @@ def full_history_committee_step(
     history_tokens: Sequence[Tensor],
     history_labels: Sequence[int],
     capability: FeasibilityCapability,
-) -> UnitStepResult:
-    """Take one shared mean-CE update over canonical contact-order history."""
+) -> FullHistoryStepResult:
+    """Take one shared mean-CE update and scan the resulting learner state."""
     if not history_tokens or len(history_tokens) != len(history_labels):
         raise ValueError("full-history tokens and labels must be non-empty and aligned")
     tokens = torch.stack(tuple(history_tokens))
     labels = torch.tensor(tuple(history_labels), dtype=torch.long, device=tokens.device)
-    return feasibility_committee_step(models, optimizers, tokens, labels, capability)
+    loss_result = feasibility_committee_step(
+        models,
+        optimizers,
+        tokens,
+        labels,
+        capability,
+    )
+    parameters_finite = all(
+        bool(torch.isfinite(parameter).all())
+        for model in models
+        for parameter in model.parameters()
+    )
+    return FullHistoryStepResult(
+        losses_finite=loss_result.finite,
+        parameters_finite=parameters_finite,
+    )

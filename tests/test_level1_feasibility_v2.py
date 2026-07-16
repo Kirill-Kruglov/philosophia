@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 from types import ModuleType, SimpleNamespace
 
 import pytest
@@ -15,7 +17,7 @@ import philosophia.level1.feasibility as feasibility_module
 from philosophia.level1.feasibility import (
     FeasibilityV2Run,
     LatencyAggregate,
-    TrajectoryFeasibility,
+    TrajectoryFeasibilityV2,
     report_payload_v2,
 )
 from philosophia.level1.interlock import (
@@ -25,7 +27,10 @@ from philosophia.level1.interlock import (
 )
 from philosophia.level1.public_root import atomic_create_no_replace, canonical_json
 from philosophia.level1.serialization import dummy_key
-from philosophia.level1.train import UnitStepResult, full_history_committee_step
+from philosophia.level1.train import (
+    FullHistoryStepResult,
+    full_history_committee_step,
+)
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -92,6 +97,35 @@ def test_full_history_step_uses_canonical_growing_shared_batch() -> None:
 
     with pytest.raises(ValueError, match="non-empty and aligned"):
         full_history_committee_step(models, optimizers, [], [], capability)
+
+
+def test_full_history_step_detects_optimizer_created_nonfinite_parameter() -> None:
+    torch.manual_seed(1)
+    models = [_RecordingMember() for _ in range(4)]
+    optimizers = [torch.optim.AdamW(model.parameters(), lr=0.01) for model in models]
+    original_step = optimizers[0].step
+
+    def poisoning_step(*args, **kwargs):
+        value = original_step(*args, **kwargs)
+        with torch.no_grad():
+            next(models[0].parameters()).fill_(float("inf"))
+        return value
+
+    optimizers[0].step = poisoning_step
+    capability = bounded_feasibility_check(trajectory_steps=1, scorer_steps=0)
+    capability.claim_development_world(0)
+    result = full_history_committee_step(
+        models,
+        optimizers,
+        [torch.tensor([1.0, 0.0])],
+        [0],
+        capability,
+    )
+
+    assert result.losses_finite is True
+    assert result.parameters_finite is False
+    assert result.finite is False
+    assert capability.trajectory_steps == 1
 
 
 def test_v2_capability_is_b2000_scorer_zero_and_36_hours() -> None:
@@ -184,7 +218,10 @@ def _install_v2_bounded_wiring(monkeypatch: pytest.MonkeyPatch) -> list[int]:
         assert history_labels == [1] * len(history_tokens)
         seen_history_lengths.append(len(history_tokens))
         capability.spend_trajectory_step()
-        return UnitStepResult(True)
+        return FullHistoryStepResult(
+            losses_finite=True,
+            parameters_finite=True,
+        )
 
     monkeypatch.setattr(
         feasibility_module, "full_history_committee_step", full_history_step
@@ -226,14 +263,114 @@ def test_v2_bounded_wiring_uses_full_history_and_no_scorer(
         )
 
 
+def _run_nonfinite_wiring(
+    monkeypatch: pytest.MonkeyPatch,
+    results: list[FullHistoryStepResult],
+    *,
+    panel_qualifies: bool,
+) -> tuple[FeasibilityV2Run, int]:
+    partition = SimpleNamespace(flat_pool_size=100)
+    models = [object() for _ in range(4)]
+    optimizers = [object() for _ in range(4)]
+    panel_calls = 0
+    remaining = list(results)
+
+    monkeypatch.setattr(feasibility_module, "CHECKPOINT_CADENCE", 1)
+    monkeypatch.setattr(feasibility_module, "partition_cells", lambda key: partition)
+    monkeypatch.setattr(feasibility_module, "verify_partition", lambda value: None)
+    monkeypatch.setattr(
+        feasibility_module,
+        "random_static_schedule",
+        lambda key, value: tuple(range(len(results))),
+    )
+    monkeypatch.setattr(
+        feasibility_module, "_committee", lambda key, block: (models, optimizers)
+    )
+    monkeypatch.setattr(feasibility_module, "_dummy_panel", lambda *args, **kwargs: object())
+    monkeypatch.setattr(
+        feasibility_module,
+        "realize_pool_index",
+        lambda partition, key, index: SimpleNamespace(left=b"R", right=b"L"),
+    )
+    monkeypatch.setattr(
+        feasibility_module,
+        "encode_pair",
+        lambda left, right: torch.tensor([len(left), len(right)]),
+    )
+    monkeypatch.setattr(feasibility_module, "oracle_eq", lambda *args: True)
+    monkeypatch.setattr(feasibility_module, "_checkpoint_size", lambda *args, **kwargs: 1)
+
+    def evaluate(*args):
+        nonlocal panel_calls
+        panel_calls += 1
+        return panel_qualifies
+
+    def step(*args):
+        capability = args[-1]
+        capability.spend_trajectory_step()
+        return remaining.pop(0)
+
+    monkeypatch.setattr(feasibility_module, "_panel_qualifies", evaluate)
+    monkeypatch.setattr(feasibility_module, "full_history_committee_step", step)
+    capability = bounded_feasibility_check(
+        trajectory_steps=len(results),
+        scorer_steps=0,
+    )
+    run = feasibility_module.run_noncomparative_feasibility_v2(
+        dummy_key("v2-nonfinite"),
+        pair_slot=0,
+        modulus=66,
+        capability=capability,
+    )
+    return run, panel_calls
+
+
+def test_post_step_nonfinite_skips_checkpoint_panel_and_censors(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    finite = FullHistoryStepResult(True, True)
+    nonfinite = FullHistoryStepResult(True, False)
+    run, panel_calls = _run_nonfinite_wiring(
+        monkeypatch,
+        [finite, nonfinite],
+        panel_qualifies=False,
+    )
+
+    assert run.trajectory.steps_completed == 2
+    assert run.trajectory.all_losses_finite is True
+    assert run.trajectory.all_parameters_finite is False
+    assert run.trajectory.censored_at_b is True
+    assert panel_calls == 2  # step 0 and step 1; never the bad step-2 checkpoint
+
+
+def test_post_step_nonfinite_at_b_preserves_completed_window(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    finite = FullHistoryStepResult(True, True)
+    nonfinite = FullHistoryStepResult(True, False)
+    run, panel_calls = _run_nonfinite_wiring(
+        monkeypatch,
+        [finite, finite, finite, finite, nonfinite],
+        panel_qualifies=True,
+    )
+
+    assert run.trajectory.steps_completed == 5
+    assert run.trajectory.all_losses_finite is True
+    assert run.trajectory.all_parameters_finite is False
+    assert run.trajectory.censored_at_b is False
+    assert panel_calls == 5  # step 0 plus steps 1..4; no evaluation after bad step 5
+
+
 def test_v2_report_surface_is_trajectory_only() -> None:
     latency = LatencyAggregate(2, 1.5, 1.5, 1.0, 2.0)
     run = FeasibilityV2Run(
-        TrajectoryFeasibility(latency, 2, True, True, True, 1234)
+        TrajectoryFeasibilityV2(latency, 2, True, False, True, True, 1234)
     )
     payload = report_payload_v2(run)
     assert set(payload) == {"trajectory", "projection_scope"}
     assert payload["trajectory"]["censored_at_b"] is True
+    assert payload["trajectory"]["all_losses_finite"] is True
+    assert payload["trajectory"]["all_parameters_finite"] is False
     assert "scorer" not in repr(payload).lower()
 
 
@@ -271,6 +408,93 @@ def test_v2_driver_surface_is_authorization_gated_and_claim_first() -> None:
     assert "censored_at_b_status" in source
     assert '"v1_v2_contrast": False' in source
     assert "current environment differs from the public-root fingerprint" in source
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        RuntimeError("simulated process failure"),
+        ExecutionNotAuthorized("simulated resource wall"),
+    ],
+)
+def test_driver_failure_after_claim_leaves_binary_unset_and_no_report(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    failure: BaseException,
+) -> None:
+    driver = _load_driver()
+    output = tmp_path / "feasibility_v2"
+    authorization = {
+        "schema": driver.AUTHORIZATION_SCHEMA,
+        "token": driver.AUTHORIZATION_TOKEN,
+        "reviewed_code_head": "a" * 40,
+        "development_world": {"pair_slot": 0, "modulus": 66},
+    }
+    transcript = {"root_hex": "00" * 32}
+    monkeypatch.setattr(
+        driver,
+        "_preflight",
+        lambda repo, expected_head, output_dir: (authorization, transcript),
+    )
+    monkeypatch.setattr(driver, "configure_canonical_runtime", lambda: None)
+    monkeypatch.setattr(driver, "_verify_current_environment", lambda value: None)
+    monkeypatch.setattr(driver, "_development_world", lambda value: (0, 66))
+    monkeypatch.setattr(driver, "sha256_file", lambda path: "b" * 64)
+    monkeypatch.setattr(driver, "feasibility_v2_capability", lambda: object())
+
+    def fail(*args, **kwargs):
+        raise failure
+
+    monkeypatch.setattr(driver, "run_noncomparative_feasibility_v2", fail)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "level1_run_feasibility_v2.py",
+            "--expected-head",
+            "a" * 40,
+            "--output-dir",
+            str(output),
+        ],
+    )
+
+    with pytest.raises(type(failure), match=str(failure)):
+        driver.main()
+
+    claim = json.loads((output / driver.CLAIM_NAME).read_text())
+    assert "censored_at_b" not in claim
+    assert claim["censored_at_b_status"] == "unset-until-valid-terminal-report"
+    assert not (output / driver.REPORT_NAME).exists()
+
+
+def test_driver_preflight_failure_creates_no_claim_or_report(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    driver = _load_driver()
+    output = tmp_path / "feasibility_v2"
+
+    def fail_preflight(*args, **kwargs):
+        raise PermissionError("simulated hash or seal failure")
+
+    monkeypatch.setattr(driver, "_preflight", fail_preflight)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "level1_run_feasibility_v2.py",
+            "--expected-head",
+            "a" * 40,
+            "--output-dir",
+            str(output),
+        ],
+    )
+
+    with pytest.raises(PermissionError, match="hash or seal"):
+        driver.main()
+
+    assert not (output / driver.CLAIM_NAME).exists()
+    assert not (output / driver.REPORT_NAME).exists()
 
 
 def _prepare_temp_preflight_repo(tmp_path: Path) -> tuple[ModuleType, Path, str, str]:

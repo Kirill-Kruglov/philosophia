@@ -73,8 +73,19 @@ class FeasibilityRun:
 
 
 @dataclass(frozen=True)
+class TrajectoryFeasibilityV2:
+    latency: LatencyAggregate
+    steps_completed: int
+    all_losses_finite: bool
+    all_parameters_finite: bool
+    panel_computable: bool
+    censored_at_b: bool
+    checkpoint_artifact_bytes: int
+
+
+@dataclass(frozen=True)
 class FeasibilityV2Run:
-    trajectory: TrajectoryFeasibility
+    trajectory: TrajectoryFeasibilityV2
 
 
 def latency_aggregate(values: Sequence[float]) -> LatencyAggregate:
@@ -343,7 +354,8 @@ def run_noncomparative_feasibility_v2(
     history_tokens: list[torch.Tensor] = []
     history_labels: list[int] = []
     step_latencies: list[float] = []
-    all_finite = True
+    all_losses_finite = True
+    all_parameters_finite = True
     first_complete_window = False
     recent_qualifying: list[bool] = [_panel_qualifies(models, panel)]
 
@@ -361,8 +373,11 @@ def run_noncomparative_feasibility_v2(
             capability,
         )
         capability.check_wall()
+        all_losses_finite = all_losses_finite and result.losses_finite
+        all_parameters_finite = (
+            all_parameters_finite and result.parameters_finite
+        )
         if not result.finite:
-            all_finite = False
             step_latencies.append(time.monotonic() - started)
             break
         if step % CHECKPOINT_CADENCE == 0:
@@ -373,10 +388,11 @@ def run_noncomparative_feasibility_v2(
         capability.check_wall()
 
     completed = capability.trajectory_steps
-    trajectory = TrajectoryFeasibility(
+    trajectory = TrajectoryFeasibilityV2(
         latency=latency_aggregate(step_latencies),
         steps_completed=completed,
-        all_losses_finite=all_finite,
+        all_losses_finite=all_losses_finite,
+        all_parameters_finite=all_parameters_finite,
         panel_computable=True,
         censored_at_b=not first_complete_window,
         checkpoint_artifact_bytes=_checkpoint_size(
