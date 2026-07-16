@@ -184,3 +184,34 @@ def atomic_create(path: Path, payload: bytes, *, mode: int = 0o600) -> None:
         except OSError:
             pass
         raise
+
+
+def atomic_create_no_replace(path: Path, payload: bytes, *, mode: int = 0o600) -> None:
+    """Durably install a one-shot artifact without a replace race."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    if path.exists() or temporary.exists():
+        raise FileExistsError(f"refusing to replace one-shot artifact: {path}")
+    descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
+    try:
+        with os.fdopen(descriptor, "wb", closefd=True) as target:
+            target.write(payload)
+            target.flush()
+            os.fsync(target.fileno())
+        os.link(temporary, path)
+        os.unlink(temporary)
+        directory = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    except BaseException:
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
+        raise

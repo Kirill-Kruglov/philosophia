@@ -56,3 +56,18 @@ def feasibility_committee_step(
             optimizer.step()
             optimizer.zero_grad()
     return UnitStepResult(finite=finite)
+
+
+def full_history_committee_step(
+    models: Sequence[ContactTransformer],
+    optimizers: Sequence[torch.optim.AdamW],
+    history_tokens: Sequence[Tensor],
+    history_labels: Sequence[int],
+    capability: FeasibilityCapability,
+) -> UnitStepResult:
+    """Take one shared mean-CE update over canonical contact-order history."""
+    if not history_tokens or len(history_tokens) != len(history_labels):
+        raise ValueError("full-history tokens and labels must be non-empty and aligned")
+    tokens = torch.stack(tuple(history_tokens))
+    labels = torch.tensor(tuple(history_labels), dtype=torch.long, device=tokens.device)
+    return feasibility_committee_step(models, optimizers, tokens, labels, capability)

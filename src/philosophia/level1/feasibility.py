@@ -33,7 +33,7 @@ from .serialization import (
     dummy_key,
     sample_without_replacement,
 )
-from .train import feasibility_committee_step
+from .train import feasibility_committee_step, full_history_committee_step
 from .world import oracle_eq
 
 
@@ -70,6 +70,11 @@ class FeasibilityRun:
     scorer: ScorerFeasibility
     projected_random_static_seconds: float
     projected_active_scorer_seconds: float
+
+
+@dataclass(frozen=True)
+class FeasibilityV2Run:
+    trajectory: TrajectoryFeasibility
 
 
 def latency_aggregate(values: Sequence[float]) -> LatencyAggregate:
@@ -144,6 +149,8 @@ def _checkpoint_size(
     history_labels: Sequence[int],
     answered_indices: Sequence[int],
     step: int,
+    *,
+    purpose: str = "level1-feasibility-size-only-not-persisted",
 ) -> int:
     buffer = BytesIO()
     torch.save(
@@ -155,7 +162,7 @@ def _checkpoint_size(
             "answered_indices": list(answered_indices),
             "step": step,
             "deterministic_streams": "domain-and-step-derived-from-public-root",
-            "purpose": "level1-feasibility-size-only-not-persisted",
+            "purpose": purpose,
         },
         buffer,
     )
@@ -312,5 +319,86 @@ def report_payload(run: FeasibilityRun) -> dict[str, object]:
                 "mean shortlist realization, encoding, and E-by-S scoring times B; "
                 "excludes ACTIVE training and all other Level 1 arms"
             ),
+        },
+    }
+
+
+def run_noncomparative_feasibility_v2(
+    key: DeterministicKey,
+    *,
+    pair_slot: int,
+    modulus: int,
+    capability: FeasibilityCapability,
+) -> FeasibilityV2Run:
+    """Run the amended full-history fixture without scorer or arm contrast."""
+    if capability.scorer_cap != 0:
+        raise ValueError("v2 feasibility forbids scorer execution")
+    capability.claim_development_world(pair_slot)
+    partition = partition_cells(key)
+    verify_partition(partition)
+    schedule = random_static_schedule(key, partition)
+    models, optimizers = _committee(key, block=pair_slot)
+    panel = _dummy_panel(key, modulus=modulus, world_slot=pair_slot)
+
+    history_tokens: list[torch.Tensor] = []
+    history_labels: list[int] = []
+    step_latencies: list[float] = []
+    all_finite = True
+    first_complete_window = False
+    recent_qualifying: list[bool] = [_panel_qualifies(models, panel)]
+
+    for step, pool_index in enumerate(schedule, start=1):
+        started = time.monotonic()
+        capability.check_wall()
+        raw_pair = realize_pool_index(partition, key, pool_index)
+        history_tokens.append(encode_pair(raw_pair.left, raw_pair.right))
+        history_labels.append(int(oracle_eq(raw_pair.left, raw_pair.right, modulus)))
+        result = full_history_committee_step(
+            models,
+            optimizers,
+            history_tokens,
+            history_labels,
+            capability,
+        )
+        capability.check_wall()
+        if not result.finite:
+            all_finite = False
+            step_latencies.append(time.monotonic() - started)
+            break
+        if step % CHECKPOINT_CADENCE == 0:
+            recent_qualifying.append(_panel_qualifies(models, panel))
+            if len(recent_qualifying) >= 5 and all(recent_qualifying[-5:]):
+                first_complete_window = True
+        step_latencies.append(time.monotonic() - started)
+        capability.check_wall()
+
+    completed = capability.trajectory_steps
+    trajectory = TrajectoryFeasibility(
+        latency=latency_aggregate(step_latencies),
+        steps_completed=completed,
+        all_losses_finite=all_finite,
+        panel_computable=True,
+        censored_at_b=not first_complete_window,
+        checkpoint_artifact_bytes=_checkpoint_size(
+            models,
+            optimizers,
+            history_tokens,
+            history_labels,
+            schedule[:completed],
+            completed,
+            purpose="level1-feasibility-v2-size-only-not-persisted",
+        ),
+    )
+    return FeasibilityV2Run(trajectory=trajectory)
+
+
+def report_payload_v2(run: FeasibilityV2Run) -> dict[str, object]:
+    return {
+        "trajectory": asdict(run.trajectory),
+        "projection_scope": {
+            "trajectory": (
+                "measured full-history oracle-step latency including scheduled "
+                "dummy-panel evaluation; no arm or v1/v2 contrast"
+            )
         },
     }

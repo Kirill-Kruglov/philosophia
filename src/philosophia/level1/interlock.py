@@ -1,9 +1,10 @@
 """Accidental-execution guards for reviewed Level 1 gates.
 
 This is a procedural boundary, not a security seal. Unit tests receive one-step
-or explicitly bounded capabilities. The production feasibility capability is
-limited to one development world, one B-step RANDOM-STATIC trajectory, 200
-scorer-only steps, and one shared 12-hour wall. No outcome capability exists.
+or explicitly bounded capabilities. The v1 production capability admits one
+B-step RANDOM-STATIC trajectory, 200 scorer-only steps, and a 12-hour wall.
+The signed v2 factory admits the same one-world trajectory with no scorer and
+a 36-hour wall. No comparative or outcome capability exists.
 """
 
 from __future__ import annotations
@@ -16,6 +17,7 @@ from .config import BUDGET
 _TOKEN = object()
 _FEASIBILITY_SCORER_CAP = 200
 _FEASIBILITY_WALL_SECONDS = 12 * 60 * 60
+_FEASIBILITY_V2_WALL_SECONDS = 36 * 60 * 60
 
 
 class ExecutionNotAuthorized(RuntimeError):
@@ -50,8 +52,8 @@ class FeasibilityCapability:
             raise ValueError("feasibility trajectory cap exceeds B")
         if not 0 <= scorer_cap <= _FEASIBILITY_SCORER_CAP:
             raise ValueError("feasibility scorer cap exceeds 200")
-        if not 0 < wall_seconds <= _FEASIBILITY_WALL_SECONDS:
-            raise ValueError("feasibility wall exceeds 12 hours")
+        if not 0 < wall_seconds <= _FEASIBILITY_V2_WALL_SECONDS:
+            raise ValueError("feasibility wall exceeds 36 hours")
         self.trajectory_cap = trajectory_cap
         self.scorer_cap = scorer_cap
         self.wall_seconds = wall_seconds
@@ -107,6 +109,16 @@ def feasibility_capability() -> FeasibilityCapability:
         scorer_cap=_FEASIBILITY_SCORER_CAP,
         wall_seconds=_FEASIBILITY_WALL_SECONDS,
         purpose="level1-noncomparative-feasibility",
+    )
+
+
+def feasibility_v2_capability() -> FeasibilityCapability:
+    return FeasibilityCapability(
+        _TOKEN,
+        trajectory_cap=BUDGET,
+        scorer_cap=0,
+        wall_seconds=_FEASIBILITY_V2_WALL_SECONDS,
+        purpose="level1-noncomparative-feasibility-v2-full-history",
     )
 
 
