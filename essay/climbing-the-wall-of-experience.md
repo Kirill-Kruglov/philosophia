@@ -6,11 +6,13 @@
 > Philosophia outcome. Level 0 has since reproduced delayed generalization on
 > the canonical CPU platform in five of five paper-mainline seeds. That result is
 > real, locked, and deliberately narrower than the programme claim: it validates
-> the workshop, not manufactured experience. The Level 1 contract,
-> implementation, and one-shot public allocation root now exist before
-> comparative data; no Level 1 trajectory or decision exists. Where the essay
-> reaches active contact, cross-world transfer, or path credit, it retains the
-> registered way each claim can die.
+> the workshop, not manufactured experience. One authorized, non-comparative
+> Level 1 feasibility trajectory then completed validly and was censored at its
+> signed floor. The comparative detector never ran: C1 is untested, no contact
+> mode was selected, Level 2 is blocked, and the programme claim remains open.
+> Where the essay reaches active contact, cross-world transfer, or path credit,
+> it now describes an unrun design and retains the registered way each claim
+> could die.
 > Readers who prefer evidence before the climb can go directly to
 > [**What the Instrument Has Shown -- and What the Small Mind Has Not**](#what-the-instrument-has-shown----and-what-the-small-mind-has-not).
 
@@ -29,13 +31,15 @@ is that world.*
 *Two things here are done, and I can show you both: a world that answers back
 with no human inside it, and an instrument that tells real contact from a mind
 merely agreeing with itself -- working, and blind in one place I will point to.
-One thing is not done, and I will not pretend otherwise. The small mind and its
-apparatus now exist in code, but they have not been allowed to answer the
-programme question. The public allocation root is fixed; no comparative
-trajectory, escrowed-panel outcome, or Level 1 decision exists. Everything
-about what* that *mind has earned -- whether it chooses well, remembers, or
-carries a shorter road into a world it has not seen -- remains a question with
-its death-condition written beside it, never a result.*
+The small mind and its apparatus also reached a narrower fact. In one frozen
+development world, under the one allowed training amendment, it completed its
+budget without producing the qualifying window required to spend the
+comparative experiment. That is a feasibility boundary, not an answer about
+contact. ACTIVE never met YOKED; no contact mode was chosen; the next level is
+blocked. Everything about what* that *mind has earned -- whether it chooses
+well, remembers, or carries a shorter road into a world it has not seen --
+remains a question, now with the place where this route stopped written beside
+it.*
 
 ---
 
@@ -487,23 +491,36 @@ change, so it is recorded as a mediator while success is judged on the same
 arm-independent escrowed panel with fixed per-stratum criteria for every arm.
 
 The scientific contract, implementation, and one-shot public allocation root
-were committed before any comparative trajectory. The root fixes development
-pairs and target/donor roles; it contains no evaluator panel and licenses no
-scientific inference. Feasibility, scout, N3, lock, real-panel escrow, and
-outcome remain ahead.
+were committed before any comparative trajectory. Before spending that
+comparison, the signed gate required one frozen RANDOM-STATIC development
+fixture to produce a complete qualifying window. The signed floor amendment
+fixed a full-history, mean-CE update after every answer. That amended one-shot
+fixture completed all **2,000** steps with finite losses and parameters and a
+computable dummy panel, but produced no complete qualifying window.
 
-**Registered boundary:** if ACTIVE does not beat YOKED, the exact result is
+The route had been written before those numbers existed. It now reads
+`BLOCKED_LEVEL1_FEASIBILITY`. This does not show that the learner lacked the
+modulus, that RANDOM-STATIC was inferior, or that chosen contact failed. The
+ACTIVE/YOKED comparison, scout, N3, lock, real-panel escrow, and outcome were
+never run. There is no third learner-policy intervention under the signed route.
+
+**Unreached registered boundary:** if ACTIVE had failed to beat YOKED in the
+unrun comparison, the exact result would have been
 `BOUNDARY_CONTACT_CHOICE_AT_DISTANCE_1`: chosen contact has not added the
 proposed advantage under this narrow adjacent-world test of online
 responsiveness. First-hand contact may still matter; the programme does not die
-at this node.
+at this node. That boundary was not observed.
 
 ### 3. Experience must shorten the next work
 
-Level 2 separates three things usually blended under "memory": weights, an
+Level 2 would separate three things usually blended under "memory": weights, an
 explicit ledger, and replay. Five arms move through a fixed curriculum of world
 families: fresh; inherited weights; inherited weights plus ledger; fresh weights
 plus ledger; inherited weights plus a false ledger.
+
+It was not run. The total contact-mode selector has no resolved Level 1
+comparison, so it returns `INSUFFICIENT` and blocks Level 2 upstream. This is not
+a negative Level 2 result.
 
 The test is not whether an old task remains easy. It is whether history reduces
 budget-to-truth, confident lies, or time-to-honest-abstention on a new family --
@@ -517,16 +534,17 @@ carries the effect, the claim that experience shortened future work fails.
 
 The verifiable-reward wave gives credit for arriving at a checked answer. The
 core hypothesis here is narrower and stranger: experience lives partly in the
-bundle of roads. Level 2.5 compares destination credit with credit assigned only
-to ledger entries that survive resampled paths.
+bundle of roads. The unrun Level 2.5 design compares destination credit with
+credit assigned only to ledger entries that survive resampled paths.
 
 **Registered kill:** if matched path credit and answer credit produce
 indistinguishable transfer, the path axis is redundant. That would be a useful
 negative result, not a failed publication.
 
-Finally, Level 3 asks whether the balcony can be detected rather than
-programmed: does the ledger undergo a cross-world compression event, and do
-mechanistic progress measures predict the transition before ordinary loss does?
+Finally, the unrun Level 3 design asks whether the balcony can be detected
+rather than programmed: does the ledger undergo a cross-world compression
+event, and do mechanistic progress measures predict the transition before
+ordinary loss does?
 Random labels and shuffled checkpoints must receive their own null arms before
 any progress measure is trusted.
 
@@ -550,7 +568,9 @@ It would be easy to write the rest of this essay now.
 The metaphor is ready. A mind climbs, falls, records landmarks, finds a balcony,
 and carries a shorter road into a new world. The story has the shape of a result.
 
-That is why the result must not be placed inside it yet.
+That is why the result must not be placed inside it yet. The current programme
+stopped before it could earn any of these endings: a valid feasibility censor is
+not a fourth ending and cannot be narrated as one.
 
 Philosophia can end in three ways.
 
@@ -592,12 +612,15 @@ we defined it.
 
 Then the essay will be a map of that boundary.
 
-Level 0 does not choose among these endings. It was designed not to. Its
+Level 0 does not choose among these endings. Neither does the Level 1
+feasibility terminal. Level 0 was designed not to. Its
 `REPRODUCED` decision says that the platform can exhibit the phenomenon on which
 the later instruments depend; it says nothing about which ending the programme
 earns.
 
-> Level 0 opened the workshop. It did not answer what can be manufactured there.
+> Level 0 opened the workshop. Level 1 found that this route could not yet bring
+> its smallest learner to the comparison. Neither answered what can be
+> manufactured there.
 
 ---
 
@@ -647,13 +670,17 @@ measured rather than declared; a sparse ledger of surprise; and tests that ask
 whether the resulting structure predicts, survives intervention, shortens the
 next work, and crosses into another representation.
 
-If those tests hold, experience will not have appeared from nothing. It will
-have been manufactured from the minimum honest something: contact plus a way to
-distinguish the world's resistance from the learner's repeated blindness.
+If a future, separately signed programme reaches those tests and they hold,
+experience will not have appeared from nothing. It will have been manufactured
+from the minimum honest something: contact plus a way to distinguish the
+world's resistance from the learner's repeated blindness.
 
-If they fail, the failure will not make the climb empty. It will tell us which
-piece we had mistaken for experience -- active choice, retained weights, the
-ledger, the bundle of paths, or the balcony itself.
+If those tests fail, the failure can still locate the piece we had mistaken for
+experience -- active choice, retained weights, the ledger, the bundle of paths,
+or the balcony itself. This run stopped earlier. It located a different wall:
+the amended frozen fixture did not clear the declared feasibility floor, so the
+experiment refused to ask the larger question with an instrument that had not
+yet shown it could register an answer.
 
 The distant hope is a mind that earns a world before inheriting our words for
 it, and can keep those layers explicitly apart. This project does not establish
@@ -662,7 +689,8 @@ enough to answer and names what would make the hope die.
 
 > Knowledge is not a property of the learner. It is an invariance the learner
 > earns across its own genuinely different roads -- and whether that can be
-> built is now an experiment, not a metaphor.
+> built has been made an experiment precise enough to refuse to run when its
+> frozen feasibility fixture does not clear the floor.
 
 --- ---
 
@@ -670,9 +698,10 @@ enough to answer and names what would make the hope die.
 
 *This section is the evidence ledger behind the story. Every inherited number
 links to a committed artifact. Level 0 moves platform replication from slot to
-earned. Level 1 moves design, implementation, and public allocation through
-completed process gates. Neither moves the programme claims about contact,
-transfer, path credit, or cross-world compression.*
+earned. Level 1 moves design, implementation, allocation, and one valid
+non-comparative feasibility terminal through completed process gates. It does
+not move the programme claims about contact, transfer, path credit, or
+cross-world compression.*
 
 ## The inherited instrument
 
@@ -788,6 +817,10 @@ It has established infrastructure and provenance, not the programme claim.
 - The one-shot Level 1 public-root transcript at commit `6008757` records one
   CSPRNG call, fixes six development pairs and 24 target/donor role assignments,
   defers `R_h`, and declares `scientific_outcome:false`.
+- The authorized Level 1 feasibility-v2 fixture completed `B = 2,000` with
+  finite losses and parameters but no complete qualifying window. Its pre-signed
+  terminal is `BLOCKED_LEVEL1_FEASIBILITY`; C1 remains unrun and untested, and
+  no programme inference is admitted.
 
 The permanent Level 0 statement is:
 **REPRODUCED, PLATFORM ONLY -- NO PROGRAMME INFERENCE.**
@@ -806,12 +839,13 @@ The permanent Level 0 statement is:
 | Random-label leakage control behaves correctly | **EARNED, control only** | R-0 FIT at 200 and does not GENERALIZE |
 | Artifact-fidelity arm changes the primary inference | **REJECTED BY DESIGN** | B 3/3; `NO_PRIMARY_INFERENCE` because Arm A reproduced |
 | Level 1 design, implementation, and allocation root are fixed | **PROCESS EARNED, NO PROGRAMME INFERENCE** | signed specs + reviewed code + public-root transcript |
-| Chosen contact beats independently donated active geometry | **SLOT** | boundary: `BOUNDARY_CONTACT_CHOICE_AT_DISTANCE_1` under the signed adjacent-world scope |
-| Experience shortens work on new families | **SLOT** | kill: history no better than scratch, or false ledger carries effect |
-| Experience survives algebra-to-geometry representation change | **SLOT** | kill: transfer disappears under semantics-preserving change |
-| Path credit adds transferable structure | **SLOT** | kill: indistinguishable from matched answer credit |
-| A cross-world compression event marks earned experience | **DIAGNOSTIC SLOT** | annotation dies if event appears on random-label null or existed throughout |
-| Hidden progress predicts transition before ordinary loss | **DIAGNOSTIC SLOT** | annotation dies without advantage over random-label and shuffled-order controls |
+| Level 1 feasibility floor | **BLOCKED_LEVEL1_FEASIBILITY, PROCESS ONLY** | valid v2 censor at B; C1 untested; no comparative scout |
+| Chosen contact beats independently donated active geometry | **UNRUN / UNTESTED** | registered boundary not evaluated; no arm comparison exists |
+| Experience shortens work on new families | **BLOCKED UPSTREAM / UNRUN** | contact-mode selection `INSUFFICIENT`; no Level 2 result |
+| Experience survives algebra-to-geometry representation change | **BLOCKED UPSTREAM / UNRUN** | no Level 2 result |
+| Path credit adds transferable structure | **BLOCKED UPSTREAM / UNRUN** | no Level 2.5 result |
+| A cross-world compression event marks earned experience | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
+| Hidden progress predicts transition before ordinary loss | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
 
 ## What this does not show
 
@@ -827,17 +861,20 @@ It does not show that Fourier structure is a universal signature of
 understanding. Within modular arithmetic it is a known mechanism and a
 replication anchor. Across worlds, compression remains a registered question.
 
-The Level 1 public root does not show that ACTIVE, YOKED, or RANDOM-STATIC
-learns anything. It allocates future comparisons and contains no real panel or
-outcome.
+The Level 1 feasibility terminal does not show that ACTIVE, YOKED, or
+RANDOM-STATIC wins or loses, that the learner lacked `n`, or that full-history
+training is ineffective. It shows only that the amended frozen development
+fixture completed validly without clearing its signed floor. No comparative
+panel or outcome exists.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and
 interpretation can still share one author's blind spot.
 
-And it does not show that the final sentence of the story is right. That sentence
-is now attached to experiments capable of killing it. Until they run, it is a
-hypothesis written in the author's voice, not a result written by the world.
+And it does not show that the final sentence of the story is right. The signed
+route stopped before the experiments capable of choosing an ending. The sentence
+remains a hypothesis written in the author's voice, not a result written by the
+world.
 
 ---
 

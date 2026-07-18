@@ -11,11 +11,14 @@ scratch, and whether that experience is real in an operational sense: traceable 
 contact, work-reducing, intervention-robust, and transferable across worlds and
 representations.
 
-> **Status: Level 0 earned; Level 1 root fixed; programme result still open.**
-> The platform replication is `VALID — REPRODUCED, PLATFORM ONLY`. The Level 1
-> scientific contract, implementation, and one-shot public allocation root were
-> committed before comparative data. No Level 1 trajectory or decision exists,
-> and no result yet supports manufactured experience.
+> **Status: Level 0 earned; Level 1 feasibility blocked; C1 untested;
+> programme claim open.** The platform replication is
+> `VALID — REPRODUCED, PLATFORM ONLY`. One authorized, non-comparative Level 1
+> feasibility-v2 trajectory completed validly on the frozen RANDOM-STATIC
+> development fixture and was censored at `B`. Its pre-signed route is
+> `BLOCKED_LEVEL1_FEASIBILITY`: no comparative Level 1 result exists, C1 is
+> unrun and untested, and this is no programme evidence. The unresolved contact
+> mode leaves Level 2 `INSUFFICIENT` and blocked under the current signed route.
 
 ## The question
 
@@ -32,14 +35,14 @@ reason to silently redesign the question.
 
 1. **Level -1: literature map.** Mark every premise as known, partial, or open.
 2. **Level 0: platform replication.** Reproduce grokking on modular addition.
-3. **Level 1: contact.** Compare active equality queries with independently
-   donated active geometry and a random-static design under one fixed budget.
-4. **Level 2: experience.** Separate weights, a truthful ledger, a false ledger,
-   and fresh starts across a fixed curriculum of worlds.
-5. **Level 2.5: path credit.** Compare answer-only credit with credit for
-   invariants that survive the model's own resampled paths.
-6. **Level 3: balcony.** Test cross-world compression and hidden-progress
-   measures, then write the essay from the signed decisions.
+3. **Level 1: contact — feasibility-blocked.** The registered ACTIVE,
+   YOKED-GEOMETRY, and RANDOM-STATIC comparison was not run.
+4. **Level 2: experience — blocked upstream.** The planned test separates
+   weights, a truthful ledger, a false ledger, and fresh starts across worlds.
+5. **Level 2.5: path credit — blocked upstream.** The planned contrast separates
+   answer-only credit from invariants that survive resampled paths.
+6. **Level 3: balcony — blocked upstream.** Cross-world compression and
+   hidden-progress measures remain diagnostic programme slots.
 
 See [`canonical/KILL_MATRIX.md`](canonical/KILL_MATRIX.md) for the current
 decision surface and [`canonical/RESULTS_CANONICAL.md`](canonical/RESULTS_CANONICAL.md)
@@ -78,9 +81,9 @@ it does not promote scouts or the holdout result into new citable decisions.
 
 ## Publication
 
-The essay, browser demo, and GitHub Pages site will be built from canonical
-artifacts after the corresponding levels exist. Until then the absence of a
-finished public story is deliberate.
+The essay, browser demo, and GitHub Pages site are subordinate to the canonical
+record. The present story must carry the Level 1 feasibility block without
+turning it into a C1 result or a programme falsification.
 
 ## License
 

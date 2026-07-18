@@ -3,13 +3,14 @@
 Review target:
 `essay/climbing-the-wall-of-experience.md`
 
-Status: post-Level-0, pre-Level-1-outcome editorial draft. Line 12 evidence is
-inherited and earned; Level 0 is earned as a platform-only replication. The
-Level 1 contract, implementation, and public allocation root exist before
-comparative data, but no Level 1 trajectory or decision exists; Levels 1–3
-remain programme slots. The two-layer Proof semantics and C6 amendment are
-signed. Reviewers must not use Level 0 or any signed design/process artifact to
-choose an ending or convert a decision rule into evidence.
+Status: post-Level-1-feasibility editorial draft. Line 12 evidence is inherited
+and earned; Level 0 is earned as a platform-only replication. One authorized,
+non-comparative Level 1 feasibility-v2 trajectory completed validly and was
+censored at its signed floor, forcing `BLOCKED_LEVEL1_FEASIBILITY`. The
+comparative detector never ran: C1 is untested, no contact mode was selected,
+Level 2 is blocked, and the programme thesis remains open. Reviewers must not
+turn this process boundary, Level 0, or any design artifact into a scientific
+ending.
 
 ## Read first
 
@@ -19,6 +20,9 @@ choose an ending or convert a decision rule into evidence.
 4. `canonical/KILL_MATRIX.md`
 5. `ROADMAP.md`
 6. `reviews/LEVELS1_3_CLAIM_GRAPH_SIGNATURES.md`
+7. `experiments/level_1_contact/FEASIBILITY_V2_GATE_DECISION_DRAFT.md`
+8. `reviews/opus_level1_feasibility_v2_terminal_review.md`
+9. `reviews/sol_level1_feasibility_v2_terminal_review.md`
 
 ## Voice and philosophical route
 
@@ -40,7 +44,7 @@ choose an ending or convert a decision rule into evidence.
 - `inheritance/line12_same_wall/experiment_A/integration_first_contact.md`
 - `inheritance/line12_same_wall/experiment_A/REVIEW_ROUND3_RESOLUTION.md`
 
-## Current Philosophia / Level 0 status
+## Current Philosophia / Level 0 and Level 1 status
 
 - `experiments/level_0_grokking/README.md`
 - `experiments/level_0_grokking/COMPANION_CONFIG_TRACE.md`
@@ -48,6 +52,8 @@ choose an ending or convert a decision rule into evidence.
 - `experiments/level_0_grokking/prefix/companion-v2-determinism-prefix_non-outcome.json`
 - `reviews/opus_level0_companion_v2_fidelity_review.md`
 - `references/LITERATURE_MAP.md`
+- `experiments/level_1_contact/feasibility_v2/LEVEL1_NONCOMPARATIVE_FEASIBILITY_V2.json`
+- `experiments/level_1_contact/FEASIBILITY_FLOOR_AMENDMENT_V2_DRAFT.md`
 
 ## GPT-5.6 Sol review line
 
@@ -88,7 +94,11 @@ Attack the essay as a philosophical and structural partner:
 
 ## Shared prohibitions
 
-- Do not predict the Level 1–3 outcomes.
+- Do not describe Level 1 feasibility censoring as a C1 result, arm ordering,
+  learner-capacity claim, or programme falsification.
+- Do not predict the unrun Level 1 comparison or Level 2–3 outcomes.
+- Do not propose a retry or third learner/training-policy feasibility
+  intervention under the current route.
 - Do not alter the locked Level 0 thresholds, quorum, controls, cadence, or Arm B
   interpretation after outcome.
 - Do not call the matching ten-step prefix a learning result or Level 0 evidence

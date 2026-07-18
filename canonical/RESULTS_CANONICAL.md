@@ -18,14 +18,40 @@ committed [`PREREG.lock`](../experiments/level_0_grokking/PREREG.lock).
 This is a replication anchor. It is not evidence for manufactured experience,
 active-contact advantage, transfer, path credit, or cross-world compression.
 
+## Level 1 feasibility gate
+
+**VALID NON-COMPARATIVE TERMINAL — `BLOCKED_LEVEL1_FEASIBILITY`.**
+
+The frozen amended RANDOM-STATIC development fixture completed `B = 2,000`
+with finite losses and parameters and a computable dummy panel, but no complete
+qualifying window. The canonical report records `censored_at_b:true` and every
+contamination guard as false. The evidence is committed at `756648a`; its claim
+and report hashes are respectively
+`366029b7f3fd8217feef9919764c5cbffb87d04695f3a258b64d4944f6121222`
+and
+`9d9942c8fb46112784ec1b619addf01a26fd4480ef93918f0fbe1e80b8ee34f6`.
+
+This is a feasibility/process boundary, not a Level 1 comparative outcome. C1
+was not run; no arm ordering or programme inference is admitted. The v1 and v2
+feasibility records may not be interpreted as an efficacy contrast.
+
+The governing artifacts are the committed
+[`claim`](../experiments/level_1_contact/feasibility_v2/LEVEL1_NONCOMPARATIVE_FEASIBILITY_V2_CLAIM.json),
+[`report`](../experiments/level_1_contact/feasibility_v2/LEVEL1_NONCOMPARATIVE_FEASIBILITY_V2.json),
+reviewed [`terminal route`](../experiments/level_1_contact/FEASIBILITY_V2_GATE_DECISION_DRAFT.md),
+and independent [Opus X-line](../reviews/opus_level1_feasibility_v2_terminal_review.md)
+and [Sol Y-line](../reviews/sol_level1_feasibility_v2_terminal_review.md)
+confirmations.
+
 ## Programme decision
 
-**OPEN.** Levels 1–3 have not yet issued decisions capable of proving,
-falsifying, or locating the boundary of the programme claim. The signed
-pre-outcome claim graph distinguishes `PROOF_CORE` (C2+C3+C4) from
-`PROOF_STRONG` (core+C1+C5), makes C6 a mandatory annotation rather than a
-verdict conjunct, and routes unresolved comparisons to `INSUFFICIENT`. These are
-decision semantics, not results.
+**OPEN.** No Level 1 comparative result exists. The pre-signed total contact-mode
+rule therefore leaves selection `INSUFFICIENT` and blocks Level 2. This
+feasibility/process boundary neither proves nor falsifies the programme claim.
+The signed pre-outcome claim graph still distinguishes `PROOF_CORE`
+(C2+C3+C4) from `PROOF_STRONG` (core+C1+C5), makes C6 a mandatory annotation
+rather than a verdict conjunct, and routes unresolved comparisons to
+`INSUFFICIENT`. No later programme level was run.
 
 ## Inherited boundary
 
@@ -39,6 +65,8 @@ programme's experience claim holds.
 
 ## Admission rule
 
-This file may be changed only after a committed, harness-verified decision is
-available. Essays, README summaries, demos, and site copy are subordinate to
-this file.
+Scientific outcomes may enter this file only through their committed governing
+decision and verifier. A non-outcome gate may enter only from committed,
+hash-verified terminal evidence plus independent confirmation that a pre-signed
+route was applied mechanically. Essays, README summaries, demos, and site copy
+are subordinate to this file.
