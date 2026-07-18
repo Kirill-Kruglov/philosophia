@@ -85,6 +85,11 @@ The essay, browser demo, and GitHub Pages site are subordinate to the canonical
 record. The present story must carry the Level 1 feasibility block without
 turning it into a C1 result or a programme falsification.
 
+The first [Workshop evidence atlas](docs/index.html) visualizes the inherited
+instrument, Level 0 event times, the Level 1 fail-closed route, and the current
+claim state directly from committed artifacts. It draws no synthetic learning
+curve and pins every source link to its input commit.
+
 ## License
 
 MIT - see [`LICENSE`](LICENSE).
