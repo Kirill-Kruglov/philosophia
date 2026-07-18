@@ -19,6 +19,9 @@ representations.
 > `BLOCKED_LEVEL1_FEASIBILITY`: no comparative Level 1 result exists, C1 is
 > unrun and untested, and this is no programme evidence. The unresolved contact
 > mode leaves Level 2 `INSUFFICIENT` and blocked under the current signed route.
+> The author has selected Route B: publish this stopped-open record and place
+> any further science in a separately chartered successor line. That governance
+> decision does not change the `OPEN` scientific status.
 
 ## The question
 
@@ -43,6 +46,13 @@ reason to silently redesign the question.
    answer-only credit from invariants that survive resampled paths.
 6. **Level 3: balcony — blocked upstream.** Cross-world compression and
    hidden-progress measures remain diagnostic programme slots.
+
+The current route ends here. The signed
+[`Route B author decision`](canonical/AUTHOR_ROUTE_DECISION.md) permits only
+drafting and reviewing a separate successor charter. That successor must
+demonstrate competence in permanently non-citable development before its
+confirmatory lock, retain C1 as a first-class question, and freeze any device
+change by signature before the lock.
 
 See [`canonical/KILL_MATRIX.md`](canonical/KILL_MATRIX.md) for the current
 decision surface and [`canonical/RESULTS_CANONICAL.md`](canonical/RESULTS_CANONICAL.md)
@@ -84,6 +94,9 @@ it does not promote scouts or the holdout result into new citable decisions.
 The essay, browser demo, and GitHub Pages site are subordinate to the canonical
 record. The present story must carry the Level 1 feasibility block without
 turning it into a C1 result or a programme falsification.
+
+Route B makes this stopped-open record the publication unit. It does not turn
+publication into a scientific ending or imply that a successor has begun.
 
 The first [Workshop evidence atlas](docs/index.html) visualizes the inherited
 instrument, Level 0 event times, the Level 1 fail-closed route, and the current

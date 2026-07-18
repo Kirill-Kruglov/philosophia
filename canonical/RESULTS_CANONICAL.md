@@ -53,6 +53,20 @@ The signed pre-outcome claim graph still distinguishes `PROOF_CORE`
 rather than a verdict conjunct, and routes unresolved comparisons to
 `INSUFFICIENT`. No later programme level was run.
 
+## Author route decision
+
+**ROUTE B SELECTED — GOVERNANCE ONLY.** The author selected the present
+stopped-open record for publication and requires any further science to begin as
+a separately chartered successor line. The successor must demonstrate learner
+competence in a permanently non-citable development phase before a confirmatory
+lock; it keeps C1 first-class and may make a signed device choice before that
+lock. The current Level 1 route remains closed to a third feasibility
+intervention.
+
+This decision does not change the `OPEN` programme status or admit new evidence.
+The verbatim signatures and negative authorization surface are recorded in
+[`AUTHOR_ROUTE_DECISION.md`](AUTHOR_ROUTE_DECISION.md).
+
 ## Inherited boundary
 
 Line 12's primary `decision.json` is mechanically `VALID` against the inherited

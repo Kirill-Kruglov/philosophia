@@ -14,6 +14,13 @@
 > поэтому Level 2 и последующие уровни заблокированы текущим подписанным
 > маршрутом. Programme claim остаётся `OPEN`.
 
+> **Авторское решение 18 Jul 2026 — Route B:** текущая stopped-open запись
+> становится публикационной единицей. Любое продолжение — отдельная successor
+> line с нецитируемым development до confirmatory lock; C1 остаётся
+> first-class; device stack выбирается отдельной подписью до lock. Это решение
+> не является результатом и не авторизует новый запуск. Полная запись:
+> [`canonical/AUTHOR_ROUTE_DECISION.md`](canonical/AUTHOR_ROUTE_DECISION.md).
+
 ## 0. Вопрос линии (неизменный)
 
 **Proof или фальсификация:** выводимый мир алгебры и геометрии способен
@@ -202,9 +209,16 @@ feasibility не пропустил comparative detector, поэтому Level 2
 авторизованы. Это не Proof, не Falsification и не наблюдавшийся Boundary;
 это `OPEN` programme claim с названной процессуальной границей.
 
+Автор выбрал **Route B**: опубликовать эту stopped-open запись и вынести
+следующую попытку в отдельную successor line. Successor сначала должен
+продемонстрировать learner competence в открытом, навсегда нецитируемом
+development; confirmatory contract появляется только после этого. Это не
+третья поправка к текущему Level 1 и не эмпирическое предпочтение learner или
+device.
+
 Ниже остаются три условных финала исходной программы. Достичь их можно
-только через новый явный author-signed redesign с отдельным bounded review,
-не через третью learner/training-policy feasibility поправку:
+только через новую author-signed successor line с отдельным bounded review,
+не через третью learner/training-policy feasibility поправку к этой линии:
 
 - **Proof**: опыт из выводимого мира переносится и сокращает; путевой
   кредит растит структуру. Эссе — о рождении знания из контакта.

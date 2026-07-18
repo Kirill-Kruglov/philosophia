@@ -10,6 +10,10 @@
 > Level 1 feasibility trajectory then completed validly and was censored at its
 > signed floor. The comparative detector never ran: C1 is untested, no contact
 > mode was selected, Level 2 is blocked, and the programme claim remains open.
+> I have selected Route B: publish this stopped-open record and make any further
+> science a separately signed successor line, with permanently non-citable
+> development before its confirmatory lock. This is a governance decision, not
+> a result and not a third intervention in the censored Level 1 route.
 > Where the essay reaches active contact, cross-world transfer, or path credit,
 > it now describes an unrun design and retains the registered way each claim
 > could die.
@@ -677,10 +681,16 @@ world's resistance from the learner's repeated blindness.
 
 If those tests fail, the failure can still locate the piece we had mistaken for
 experience -- active choice, retained weights, the ledger, the bundle of paths,
-or the balcony itself. This run stopped earlier. It located a different wall:
+or the balcony itself. This run stopped earlier. It reached a different gate:
 the amended frozen fixture did not clear the declared feasibility floor, so the
 experiment refused to ask the larger question with an instrument that had not
 yet shown it could register an answer.
+
+I chose to publish that refusal rather than tune through it. Any next attempt
+will be a successor, not a repair disguised as continuity: it must earn learner
+competence in non-citable development before it locks a new scientific test.
+Chosen contact remains part of that test. The hardware may change, but only by
+a reviewed and signed choice made before the confirmatory lock.
 
 The distant hope is a mind that earns a world before inheriting our words for
 it, and can keep those layers explicitly apart. This project does not establish
@@ -846,6 +856,7 @@ The permanent Level 0 statement is:
 | Path credit adds transferable structure | **BLOCKED UPSTREAM / UNRUN** | no Level 2.5 result |
 | A cross-world compression event marks earned experience | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
 | Hidden progress predicts transition before ordinary loss | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
+| Continuation route | **ROUTE B, GOVERNANCE ONLY** | current record selected for stopped-open publication; successor not yet chartered |
 
 ## What this does not show
 
@@ -922,4 +933,6 @@ Primary reading and exact links are collected in the repository's
 claim boundary is maintained in
 [`canonical/RESULTS_CANONICAL.md`](../canonical/RESULTS_CANONICAL.md),
 [`canonical/CLAIM_LEDGER.md`](../canonical/CLAIM_LEDGER.md), and
-[`canonical/KILL_MATRIX.md`](../canonical/KILL_MATRIX.md).
+[`canonical/KILL_MATRIX.md`](../canonical/KILL_MATRIX.md). The authorial
+continuation boundary is recorded separately in
+[`canonical/AUTHOR_ROUTE_DECISION.md`](../canonical/AUTHOR_ROUTE_DECISION.md).

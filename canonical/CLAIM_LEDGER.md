@@ -23,6 +23,15 @@ This is the question being tested, not a finding.
 These rules were signed before any Level 1 comparative scout or outcome. They
 do not move any programme claim from OPEN.
 
+## Author route decision (not a result)
+
+Route B selects this stopped-open record for publication and separates any
+future work into a new successor line. Development-before-lock, C1 remaining
+first-class, and signed pre-lock device selection are governance constraints for
+that successor. They do not move any claim below, authorize a run, or provide
+evidence for C1-C6. See
+[`AUTHOR_ROUTE_DECISION.md`](AUTHOR_ROUTE_DECISION.md).
+
 ## Inherited findings
 
 | Claim | Status | Scope |
