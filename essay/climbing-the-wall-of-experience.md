@@ -469,9 +469,9 @@ arm reproduced delayed generalization in **five of five seeds**, above the
 registered quorum of four. Every seed reached persistent FIT at step **200**;
 persistent GENERALIZE began between steps **5,200 and 7,700**, leaving locked
 delays of **5,000 to 7,500** steps. The random-label control reached FIT and did
-not GENERALIZE. There were no platform violations. The alternate-fidelity arm
-also generalized in three of three seeds, but the lock assigns it
-`NO_PRIMARY_INFERENCE` because the primary arm already reproduced.
+not GENERALIZE. There were no platform violations. Recorded as diagnostic-only
+with `NO_PRIMARY_INFERENCE` because the primary arm already reproduced, the
+alternate-fidelity arm also generalized in three of three seeds.
 
 **Registered kill, resolved:** the kill did not fire. The platform breathes.
 This licenses the replication statement and nothing about active contact,
