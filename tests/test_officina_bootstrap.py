@@ -307,6 +307,43 @@ def test_entropy_scan_resolves_import_aliases_and_dynamic_imports(tmp_path: Path
     assert any("system random device" in failure for failure in failures)
 
 
+def test_entropy_scan_propagates_local_aliases_and_static_paths(tmp_path: Path) -> None:
+    entropy_alias = tmp_path / "entropy_alias.py"
+    entropy_alias.write_text(
+        "import os\ndraw = os.urandom\nvalue = draw(32)\n",
+        encoding="utf-8",
+    )
+    reflective_alias = tmp_path / "reflective_alias.py"
+    reflective_alias.write_text(
+        "import os\ng = getattr\ndraw = g(os, 'urandom')\nvalue = draw(32)\n",
+        encoding="utf-8",
+    )
+    constructed_path = tmp_path / "constructed_path.py"
+    constructed_path.write_text(
+        "prefix = '/dev/'\npath = prefix + f\"{'urandom'}\"\nvalue = open(path, 'rb')\n",
+        encoding="utf-8",
+    )
+    star_import = tmp_path / "star_import.py"
+    star_import.write_text("from os import *\nvalue = urandom(32)\n", encoding="utf-8")
+    dynamic_alias = tmp_path / "dynamic_alias.py"
+    dynamic_alias.write_text("runner = eval\nvalue = runner('1 + 1')\n", encoding="utf-8")
+
+    failures = verify_source_quarantine(
+        (
+            entropy_alias,
+            reflective_alias,
+            constructed_path,
+            star_import,
+            dynamic_alias,
+        )
+    )
+    assert any("entropy reference os.urandom" in item for item in failures)
+    assert any("reflective or dynamic reference getattr" in item for item in failures)
+    assert any("system random device /dev/urandom" in item for item in failures)
+    assert any("star import is forbidden" in item for item in failures)
+    assert any("reflective or dynamic reference eval" in item for item in failures)
+
+
 def test_bootstrap_verifier_requires_exact_ledger_and_head_genesis(tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     shutil.copytree(REPO / "successor", repo / "successor")

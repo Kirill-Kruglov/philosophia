@@ -38,13 +38,77 @@ ALLOWED_RELATIVE_IMPORTS = {
 }
 
 
-def _dotted_name(node: ast.AST) -> str | None:
+def _resolved_symbol(
+    node: ast.AST, aliases: dict[str, str], local_symbols: dict[str, str]
+) -> str | None:
     if isinstance(node, ast.Name):
-        return node.id
+        return local_symbols.get(node.id, aliases.get(node.id, node.id))
     if isinstance(node, ast.Attribute):
-        prefix = _dotted_name(node.value)
+        prefix = _resolved_symbol(node.value, aliases, local_symbols)
         return f"{prefix}.{node.attr}" if prefix else None
     return None
+
+
+def _assignment_pairs(tree: ast.AST) -> list[tuple[str, ast.AST]]:
+    pairs: list[tuple[str, ast.AST]] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    pairs.append((target.id, node.value))
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            if node.value is not None:
+                pairs.append((node.target.id, node.value))
+    return pairs
+
+
+def _local_symbol_table(
+    tree: ast.AST, aliases: dict[str, str]
+) -> dict[str, str]:
+    result: dict[str, str] = {}
+    assignments = _assignment_pairs(tree)
+    for _ in range(len(assignments) + 1):
+        changed = False
+        for target, value in assignments:
+            resolved = _resolved_symbol(value, aliases, result)
+            if resolved is not None and result.get(target) != resolved:
+                result[target] = resolved
+                changed = True
+        if not changed:
+            break
+    return result
+
+
+def _static_string(node: ast.AST, values: dict[str, str]) -> str | None:
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    if isinstance(node, ast.Name):
+        return values.get(node.id)
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+        left = _static_string(node.left, values)
+        right = _static_string(node.right, values)
+        return left + right if left is not None and right is not None else None
+    if isinstance(node, ast.FormattedValue):
+        return _static_string(node.value, values)
+    if isinstance(node, ast.JoinedStr):
+        parts = [_static_string(value, values) for value in node.values]
+        return "".join(parts) if all(part is not None for part in parts) else None
+    return None
+
+
+def _static_string_table(tree: ast.AST) -> dict[str, str]:
+    result: dict[str, str] = {}
+    assignments = _assignment_pairs(tree)
+    for _ in range(len(assignments) + 1):
+        changed = False
+        for target, value in assignments:
+            resolved = _static_string(value, result)
+            if resolved is not None and result.get(target) != resolved:
+                result[target] = resolved
+                changed = True
+        if not changed:
+            break
+    return result
 
 
 def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
@@ -59,7 +123,12 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""
                 for alias in node.names:
-                    aliases[alias.asname or alias.name] = f"{module}.{alias.name}".strip(".")
+                    if alias.name != "*":
+                        aliases[alias.asname or alias.name] = (
+                            f"{module}.{alias.name}".strip(".")
+                        )
+        local_symbols = _local_symbol_table(tree, aliases)
+        static_strings = _static_string_table(tree)
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 names = [alias.name for alias in node.names]
@@ -79,18 +148,32 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
                 )
                 if not allowed:
                     failures.append(f"unreviewed import {name} in {path}")
+            if isinstance(node, ast.ImportFrom) and any(
+                alias.name == "*" for alias in node.names
+            ):
+                failures.append(f"star import is forbidden in {path}")
+            is_loaded_symbol = (
+                isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)
+            ) or (
+                isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Load)
+            )
+            if is_loaded_symbol:
+                name = _resolved_symbol(node, aliases, local_symbols)
+                if name in ENTROPY_CALLS:
+                    failures.append(f"entropy reference {name} in {path}")
+                if name in DYNAMIC_IMPORT_CALLS:
+                    failures.append(
+                        f"reflective or dynamic reference {name} in {path}"
+                    )
             if isinstance(node, ast.Call):
-                name = _dotted_name(node.func)
-                if name:
-                    first, separator, rest = name.partition(".")
-                    if first in aliases:
-                        name = aliases[first] + (separator + rest if separator else "")
+                name = _resolved_symbol(node.func, aliases, local_symbols)
                 if name in ENTROPY_CALLS:
                     failures.append(f"entropy call {name} in {path}")
                 if name in DYNAMIC_IMPORT_CALLS:
                     failures.append(f"reflective or dynamic call {name} in {path}")
-            if isinstance(node, ast.Constant) and node.value in RANDOM_DEVICE_PATHS:
-                failures.append(f"system random device {node.value} in {path}")
+            static_value = _static_string(node, static_strings)
+            if static_value in RANDOM_DEVICE_PATHS:
+                failures.append(f"system random device {static_value} in {path}")
     return failures
 
 
