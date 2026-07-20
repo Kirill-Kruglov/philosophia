@@ -1,8 +1,9 @@
-"""Fail-closed execution boundary for WP-1/WP-2.
+"""Fail-closed execution boundary through the signed WP-3/WP-4 build phase.
 
 This is an accidental-execution guard, not a security sandbox. The authorized
 surface is pure implementation plus dummy/test-only fixtures. No factory for a
-real-world, entropy, training, Q, or C capability exists.
+real-world, entropy, training, Q, or C capability exists; WP-3 alone does not
+activate T.
 """
 
 from __future__ import annotations
@@ -40,7 +41,9 @@ def require_test_only(capability: TestOnlyCapability) -> None:
 
 def generate_real_world(*args: object, **kwargs: object) -> None:
     del args, kwargs
-    raise ExecutionNotAuthorized("real worlds require a signed WP-3 contract")
+    raise ExecutionNotAuthorized(
+        "real worlds require a separately reviewed T-activation capability"
+    )
 
 
 def run_real_t(*args: object, **kwargs: object) -> None:
