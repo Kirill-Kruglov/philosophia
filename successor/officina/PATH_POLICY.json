@@ -1,0 +1,1 @@
+{"allowed_runtime_root":"successor/officina","declared_engineering_fixtures":[],"default":"deny","fixture_rule":"read-only-t-context-non-promotable","forbidden_runtime_roots":["experiments/level_0_grokking","experiments/level_1_contact","inheritance/line12_same_wall"],"realpath_before_decision":true,"schema":"philosophia.officina.path-policy.v1","scientific_outcome":false}

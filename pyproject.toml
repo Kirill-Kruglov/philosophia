@@ -15,7 +15,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = {philosophia = "src/philosophia", gate_harness = "gate_harness", "gate_harness.tests" = "gate_harness/tests"}
-packages = ["philosophia", "philosophia.level0", "philosophia.level1", "gate_harness", "gate_harness.tests"]
+packages = ["philosophia", "philosophia.level0", "philosophia.level1", "philosophia.officina", "gate_harness", "gate_harness.tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["gate_harness/tests", "tests"]

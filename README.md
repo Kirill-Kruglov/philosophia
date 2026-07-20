@@ -23,6 +23,11 @@ representations.
 > any further science in a separately chartered successor line. That governance
 > decision does not change the `OPEN` scientific status.
 
+> **Successor engineering status:** the `officina` successor charter and author
+> cells are signed. Only WP-1/WP-2 lineage/bootstrap and governance-library code
+> with dummy tests are authorized. No successor world, entropy, learner,
+> candidate, T/Q/C run, scientific lock, or claim exists.
+
 ## The question
 
 Can a learner acquire structure from active contact with a world that is itself a
@@ -48,11 +53,11 @@ reason to silently redesign the question.
    hidden-progress measures remain diagnostic programme slots.
 
 The current route ends here. The signed
-[`Route B author decision`](canonical/AUTHOR_ROUTE_DECISION.md) permits only
-drafting and reviewing a separate successor charter. That successor must
-demonstrate competence in permanently non-citable development before its
-confirmatory lock, retain C1 as a first-class question, and freeze any device
-change by signature before the lock.
+[`Route B author decision`](canonical/AUTHOR_ROUTE_DECISION.md) led to the
+separately governed [`Officina successor`](successor/officina/README.md). Its
+charter is signed, but its current authorization stops at WP-1/WP-2 engineering
+and dummy tests. Before any real development world exists, WP-3 must separately
+freeze and pass review on the finite-frame population/construct contract.
 
 See [`canonical/KILL_MATRIX.md`](canonical/KILL_MATRIX.md) for the current
 decision surface and [`canonical/RESULTS_CANONICAL.md`](canonical/RESULTS_CANONICAL.md)
@@ -72,6 +77,8 @@ for the only claims this repository presently permits.
 - [`canonical/`](canonical/) - claim ledger, kills, and citable results.
 - [`experiments/`](experiments/) - one independently locked directory per level.
 - [`references/`](references/) - literature map and clean-room protocol.
+- [`successor/officina/`](successor/officina/) - signed successor namespace,
+  inactive T ledger, quarantine policy, and WP-1/WP-2 implementation record.
 
 ## Verification
 
@@ -83,6 +90,7 @@ pip install -e ".[dev]"
 pytest -q
 python scripts/verify_inheritance.py
 python scripts/verify_all.py
+python scripts/verify_officina_wp12.py
 ```
 
 The inherited primary decision must verify `VALID` against the exact vendored

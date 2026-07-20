@@ -24,3 +24,5 @@ jobs:
         run: python scripts/verify_inheritance.py
       - name: Verify admitted decisions
         run: python scripts/verify_all.py
+      - name: Verify Officina WP-1/WP-2 quarantine
+        run: python scripts/verify_officina_wp12.py
