@@ -6,8 +6,9 @@ Authorization: `successor/AUTHOR_SELECTIONS_V1_SIGNATURE.md`, commit
 ## Implemented surface
 
 - `philosophia.officina.quarantine`, `provenance`: realpath-first,
-  deny-by-default data access; content/path/parent-bound durable provenance;
-  T-only hash-pinned engineering fixtures and non-promotable taint propagation.
+  deny-by-default data access; content/path/parent-bound durable provenance
+  checked recursively against an externally headed append-only registry;
+  T-only hash-pinned engineering fixtures and structural non-promotability.
 - `manifest`: conservative behavioral identity with mandatory from-scratch
   initialization, a load-bearing source digest, and a closed inert-metadata list.
 - `canonical`, `prf`, `escrow`: canonical ASCII JSON, durable file primitives,
@@ -18,7 +19,8 @@ Authorization: `successor/AUTHOR_SELECTIONS_V1_SIGNATURE.md`, commit
   disposition; every draw-armed or launched closure is charged.
 - `ledger`, `accounting`, `checkpoint`: append-only hash-chain bound to an
   external head, exact non-coercive E1/E2/E3 state, artifact-recomputing durable
-  pause, and an overdue-review gate that blocks resumed work.
+  pause, and a serialized pending-review state that rejects work until the
+  overdue-review gate writes a monotone ledger completion.
 - `verification`: canonical bootstrap, governing hashes, inactive T state,
   forbidden runtime imports, and zero entropy calls.
 

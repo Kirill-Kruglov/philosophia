@@ -1,64 +1,137 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import json
 from pathlib import Path
-from typing import Iterable
+from typing import Mapping
 
 from .canonical import (
     atomic_create,
+    atomic_replace,
     canonical_json,
     load_canonical_json,
     sha256_bytes,
-    sha256_file,
 )
 from .interlock import TestOnlyCapability, require_test_only
 from .quarantine import ArtifactLabel, PathPolicy, QuarantineViolation, Surface
 
 
-_TAG_TOKEN = object()
-SCHEMA = "philosophia.officina.artifact-provenance.v1"
+SCHEMA = "philosophia.officina.artifact-provenance.v2"
+REGISTRY_HEAD_SCHEMA = "philosophia.officina.provenance-registry-head.v1"
+GENESIS = "0" * 64
 
 
 @dataclass(frozen=True)
-class TaggedArtifact:
+class ArtifactView:
+    """Read-only observation; it conveys no write or promotion authority."""
+
     path: Path
     payload: bytes = field(repr=False)
     label: ArtifactLabel
     provenance_sha256: str
-    _token: object = field(repr=False, compare=False)
 
-    def __post_init__(self) -> None:
-        if self._token is not _TAG_TOKEN:
-            raise QuarantineViolation("artifact tags must come from ArtifactStore")
+
+def _registry_head(events: list[dict[str, object]]) -> bytes:
+    return canonical_json(
+        {
+            "entry_count": len(events),
+            "head_sha256": str(events[-1]["event_sha256"]) if events else GENESIS,
+            "schema": REGISTRY_HEAD_SCHEMA,
+            "scientific_outcome": False,
+        }
+    )
+
+
+class ProvenanceRegistry:
+    """Externally headed append-only commitment to exact provenance records."""
+
+    def __init__(self, directory: Path) -> None:
+        self.directory = directory
+        self.head_path = directory / "HEAD.json"
+
+    def initialize(self) -> None:
+        self.directory.mkdir(parents=True, exist_ok=True)
+        atomic_create(self.head_path, _registry_head([]))
+
+    def entries(self) -> list[dict[str, object]]:
+        if not self.head_path.exists():
+            raise QuarantineViolation("provenance registry is not initialized")
+        events: list[dict[str, object]] = []
+        event_paths = sorted(
+            self.directory.glob("[0-9][0-9][0-9][0-9][0-9][0-9].json")
+        )
+        expected_names = {"HEAD.json", *(path.name for path in event_paths)}
+        actual_names = {
+            path.name for path in self.directory.iterdir() if path.is_file()
+        }
+        if actual_names != expected_names:
+            raise QuarantineViolation("provenance registry files differ")
+        for index, path in enumerate(event_paths):
+            value = load_canonical_json(path)
+            expected = {
+                "event_sha256", "previous_sha256", "record", "sequence"
+            }
+            if not isinstance(value, dict) or set(value) != expected:
+                raise QuarantineViolation("provenance registry event fields differ")
+            if type(value["sequence"]) is not int or value["sequence"] != index:
+                raise QuarantineViolation("provenance registry sequence mismatch")
+            previous = GENESIS if not events else str(events[-1]["event_sha256"])
+            if value["previous_sha256"] != previous:
+                raise QuarantineViolation("provenance registry chain mismatch")
+            core = {key: item for key, item in value.items() if key != "event_sha256"}
+            if value["event_sha256"] != sha256_bytes(canonical_json(core)):
+                raise QuarantineViolation("provenance registry event hash mismatch")
+            if not isinstance(value["record"], dict):
+                raise QuarantineViolation("provenance registry record must be an object")
+            events.append(value)
+        if canonical_json(load_canonical_json(self.head_path)) != canonical_json(
+            json.loads(_registry_head(events))
+        ):
+            raise QuarantineViolation("provenance registry head mismatch")
+        return events
+
+    def _append(self, record: Mapping[str, object]) -> None:
+        events = self.entries()
+        path_value = record.get("path")
+        if any(event["record"].get("path") == path_value for event in events):
+            raise QuarantineViolation("artifact path already has provenance")
+        sequence = len(events)
+        core = {
+            "previous_sha256": GENESIS if not events else events[-1]["event_sha256"],
+            "record": dict(record),
+            "sequence": sequence,
+        }
+        event = {**core, "event_sha256": sha256_bytes(canonical_json(core))}
+        atomic_create(self.directory / f"{sequence:06d}.json", canonical_json(event))
+        atomic_replace(self.head_path, _registry_head([*events, event]))
+
+    def require_exact(self, record: Mapping[str, object]) -> None:
+        matches = [
+            event["record"]
+            for event in self.entries()
+            if event["record"].get("path") == record.get("path")
+        ]
+        if len(matches) != 1 or canonical_json(matches[0]) != canonical_json(dict(record)):
+            raise QuarantineViolation("artifact provenance differs from registry")
 
 
 class ArtifactStore:
-    """Mediates artifact bytes and durable, content-bound provenance records."""
+    """Mediates bytes and verifies exact recursive ancestry against a registry."""
 
-    def __init__(self, policy: PathPolicy) -> None:
+    def __init__(self, policy: PathPolicy, registry: ProvenanceRegistry) -> None:
         self.policy = policy
+        self.registry = registry
 
     @staticmethod
     def metadata_path(path: Path) -> Path:
         return path.with_name(f"{path.name}.provenance.json")
 
-    def _tag(
-        self,
-        *,
-        path: Path,
-        payload: bytes,
-        label: ArtifactLabel,
-        provenance_sha256: str,
-    ) -> TaggedArtifact:
-        return TaggedArtifact(
-            path=path,
-            payload=payload,
-            label=label,
-            provenance_sha256=provenance_sha256,
-            _token=_TAG_TOKEN,
-        )
+    def read(self, path: Path, *, surface: Surface) -> ArtifactView:
+        return self._read(path, surface=surface, visited=frozenset())
 
-    def read(self, path: Path, *, surface: Surface) -> TaggedArtifact:
+    def _read(
+        self, path: Path, *, surface: Surface, visited: frozenset[str]
+    ) -> ArtifactView:
         resolved, storage_label = self.policy.authorize(path, surface=surface)
         payload = resolved.read_bytes()
         if storage_label.certified:
@@ -69,20 +142,19 @@ class ArtifactStore:
                     "sources": list(storage_label.sources),
                 }
             )
-            return self._tag(
+            return ArtifactView(
                 path=resolved,
                 payload=payload,
                 label=storage_label,
                 provenance_sha256=sha256_bytes(descriptor),
             )
 
-        metadata_path = self.metadata_path(resolved)
         try:
-            record = load_canonical_json(metadata_path)
+            record = load_canonical_json(self.metadata_path(resolved))
         except FileNotFoundError as error:
             raise QuarantineViolation("native artifact provenance is missing") from error
         expected = {
-            "content_sha256", "parent_provenance_sha256", "path", "promotable",
+            "content_sha256", "parents", "path", "promotable",
             "provenance_sha256", "purpose", "schema", "sources",
         }
         if not isinstance(record, dict) or set(record) != expected:
@@ -97,38 +169,54 @@ class ArtifactStore:
         if record["provenance_sha256"] != sha256_bytes(canonical_json(core)):
             raise QuarantineViolation("native artifact provenance hash mismatch")
         sources = record["sources"]
-        parents = record["parent_provenance_sha256"]
+        parents = record["parents"]
         if (
             not isinstance(sources, list)
             or not sources
             or not all(isinstance(item, str) and item for item in sources)
             or not isinstance(parents, list)
-            or not all(isinstance(item, str) and len(item) == 64 for item in parents)
             or type(record["promotable"]) is not bool
             or not isinstance(record["purpose"], str)
             or not record["purpose"]
         ):
             raise QuarantineViolation("native artifact provenance values are malformed")
         if record["promotable"] is not False:
-            raise QuarantineViolation(
-                "WP-1/WP-2 expose no promotable provenance authority"
+            raise QuarantineViolation("WP-1/WP-2 have no promotion authority")
+        provenance_hash = str(record["provenance_sha256"])
+        if provenance_hash in visited:
+            raise QuarantineViolation("provenance ancestry contains a cycle")
+        self.registry.require_exact(record)
+
+        parent_sources: set[str] = set()
+        for parent in parents:
+            if not isinstance(parent, dict) or set(parent) != {
+                "path", "provenance_sha256"
+            }:
+                raise QuarantineViolation("parent provenance fields differ")
+            if not isinstance(parent["path"], str) or not isinstance(
+                parent["provenance_sha256"], str
+            ):
+                raise QuarantineViolation("parent provenance values are malformed")
+            parent_view = self._read(
+                Path(parent["path"]),
+                surface=Surface.T,
+                visited=visited | {provenance_hash},
             )
-        allowed_sources = {"engineering-fixture", "test-only-native"}
-        if not set(sources).issubset(allowed_sources):
-            raise QuarantineViolation("native artifact provenance source is unauthorized")
-        label = ArtifactLabel(
-            sources=tuple(sources),
-            promotable=record["promotable"],
-            certified=True,
-        )
-        tagged = self._tag(
+            if parent_view.provenance_sha256 != parent["provenance_sha256"]:
+                raise QuarantineViolation("parent provenance identity mismatch")
+            parent_sources.update(parent_view.label.sources)
+
+        expected_sources = {"test-only-native"} if not parents else parent_sources
+        if set(sources) != expected_sources:
+            raise QuarantineViolation("artifact source union differs from its parents")
+        label = ArtifactLabel(sources=tuple(sorted(expected_sources)), certified=True)
+        label.require_promotable(surface)
+        return ArtifactView(
             path=resolved,
             payload=payload,
             label=label,
-            provenance_sha256=str(record["provenance_sha256"]),
+            provenance_sha256=provenance_hash,
         )
-        tagged.label.require_promotable(surface)
-        return tagged
 
     def _write(
         self,
@@ -136,33 +224,30 @@ class ArtifactStore:
         path: Path,
         payload: bytes,
         purpose: str,
-        label: ArtifactLabel,
-        parents: Iterable[TaggedArtifact],
-    ) -> TaggedArtifact:
+        parents: tuple[ArtifactView, ...],
+    ) -> ArtifactView:
         if not purpose:
             raise ValueError("artifact purpose must be named")
         resolved, _ = self.policy.authorize(path, surface=Surface.T, write=True)
-        parent_values = tuple(parents)
-        for parent in parent_values:
-            if not isinstance(parent, TaggedArtifact) or parent._token is not _TAG_TOKEN:
-                raise QuarantineViolation("derived artifacts require store-issued parents")
+        sources = {"test-only-native"} if not parents else {
+            source for parent in parents for source in parent.label.sources
+        }
         core = {
             "content_sha256": sha256_bytes(payload),
-            "parent_provenance_sha256": [
-                parent.provenance_sha256 for parent in parent_values
+            "parents": [
+                {"path": str(parent.path), "provenance_sha256": parent.provenance_sha256}
+                for parent in parents
             ],
             "path": str(resolved),
-            "promotable": label.promotable,
+            "promotable": False,
             "purpose": purpose,
             "schema": SCHEMA,
-            "sources": list(label.sources),
+            "sources": sorted(sources),
         }
-        record = {
-            **core,
-            "provenance_sha256": sha256_bytes(canonical_json(core)),
-        }
+        record = {**core, "provenance_sha256": sha256_bytes(canonical_json(core))}
         atomic_create(resolved, payload)
         atomic_create(self.metadata_path(resolved), canonical_json(record))
+        self.registry._append(record)  # noqa: SLF001 - store owns registry issuance
         return self.read(resolved, surface=Surface.T)
 
     def write_test_only(
@@ -172,15 +257,9 @@ class ArtifactStore:
         payload: bytes,
         purpose: str,
         capability: TestOnlyCapability,
-    ) -> TaggedArtifact:
+    ) -> ArtifactView:
         require_test_only(capability)
-        return self._write(
-            path=path,
-            payload=payload,
-            purpose=purpose,
-            label=ArtifactLabel.test_only_native(),
-            parents=(),
-        )
+        return self._write(path=path, payload=payload, purpose=purpose, parents=())
 
     def write_derived(
         self,
@@ -188,21 +267,16 @@ class ArtifactStore:
         path: Path,
         payload: bytes,
         purpose: str,
-        parents: tuple[TaggedArtifact, ...],
-    ) -> TaggedArtifact:
-        if not parents:
+        parent_paths: tuple[Path, ...],
+    ) -> ArtifactView:
+        if not parent_paths:
             raise ValueError("derived provenance requires at least one parent")
+        parents = tuple(self.read(parent, surface=Surface.T) for parent in parent_paths)
         return self._write(
-            path=path,
-            payload=payload,
-            purpose=purpose,
-            label=ArtifactLabel.derived(*(parent.label for parent in parents)),
-            parents=parents,
+            path=path, payload=payload, purpose=purpose, parents=parents
         )
 
-    def admit(self, path: Path, *, surface: Surface) -> TaggedArtifact:
+    def admit(self, path: Path, *, surface: Surface) -> ArtifactView:
         if surface not in {Surface.Q, Surface.C}:
             raise ValueError("admission is defined only for Q/C")
-        artifact = self.read(path, surface=surface)
-        artifact.label.require_promotable(surface)
-        return artifact
+        return self.read(path, surface=surface)

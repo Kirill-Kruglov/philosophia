@@ -27,20 +27,24 @@ class FixtureGrant:
 @dataclass(frozen=True)
 class ArtifactLabel:
     sources: tuple[str, ...]
-    promotable: bool
     certified: bool
+
+    @property
+    def promotable(self) -> bool:
+        """Promotion authority does not exist in WP-1/WP-2."""
+        return False
 
     @classmethod
     def native(cls) -> "ArtifactLabel":
-        return cls(sources=("officina-storage",), promotable=False, certified=False)
+        return cls(sources=("officina-storage",), certified=False)
 
     @classmethod
     def engineering_fixture(cls) -> "ArtifactLabel":
-        return cls(sources=("engineering-fixture",), promotable=False, certified=True)
+        return cls(sources=("engineering-fixture",), certified=True)
 
     @classmethod
     def test_only_native(cls) -> "ArtifactLabel":
-        return cls(sources=("test-only-native",), promotable=False, certified=True)
+        return cls(sources=("test-only-native",), certified=True)
 
     @classmethod
     def derived(cls, *parents: "ArtifactLabel") -> "ArtifactLabel":
@@ -49,14 +53,11 @@ class ArtifactLabel:
         sources = tuple(sorted({source for parent in parents for source in parent.sources}))
         return cls(
             sources=sources,
-            promotable=all(parent.promotable for parent in parents),
             certified=all(parent.certified for parent in parents),
         )
 
     def require_promotable(self, surface: Surface) -> None:
-        if surface in {Surface.Q, Surface.C} and (
-            not self.certified or not self.promotable
-        ):
+        if surface in {Surface.Q, Surface.C}:
             raise QuarantineViolation(
                 f"{','.join(self.sources)} artifacts cannot enter {surface.value}"
             )

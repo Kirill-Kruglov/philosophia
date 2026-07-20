@@ -215,10 +215,50 @@ def test_overdue_resume_blocks_work_until_durable_review(tmp_path: Path) -> None
     assert gate.review_required is True
     with pytest.raises(PermissionError, match="blocks"):
         gate.admit_work()
+    with pytest.raises(ValueError, match="not available"):
+        gate.state.charge_device_nanoseconds(NANOSECONDS_PER_HOUR, TEnvelope())
+    with pytest.raises(ValueError, match="not available"):
+        gate.state.register_candidate("b" * 64, TEnvelope())
+    with pytest.raises(ValueError, match="durable ResumeGate"):
+        gate.state.complete_review(TEnvelope(), "2026-07-22T00:00:00Z")
+    with pytest.raises(ValueError, match="predates resume"):
+        gate.complete_overdue_review(timestamp_utc="2026-07-21T23:59:59Z")
     reviewed = gate.complete_overdue_review(timestamp_utc="2026-07-22T00:00:00Z")
     assert reviewed.last_review_utc == "2026-07-22T00:00:00Z"
     assert reviewed.device_nanoseconds == state.device_nanoseconds
     assert ledger.entries()[-1]["event"] == "T_REVIEW_COMPLETED"
+    with pytest.raises(ValueError, match="no longer current"):
+        gate.complete_overdue_review(timestamp_utc="2026-07-22T00:00:01Z")
+
+
+def test_pause_resume_and_ledger_timestamps_cannot_move_backwards(tmp_path: Path) -> None:
+    ledger, checkpoint, _ = _pause(tmp_path)
+    with pytest.raises(ValueError, match="predates operational pause"):
+        verify_resume(
+            ledger=ledger,
+            checkpoint_path=checkpoint,
+            envelope=TEnvelope(),
+            timestamp_utc="2026-07-20T07:59:59Z",
+        )
+    with pytest.raises(LedgerIntegrityError, match="move backwards"):
+        ledger.append(
+            event="BACKDATED",
+            timestamp_utc="2026-07-20T07:59:59Z",
+            data={"scientific_outcome": False},
+        )
+
+    fresh = AppendOnlyLedger(tmp_path / "fresh-ledger.md")
+    fresh.initialize()
+    state = _active_state()
+    with pytest.raises(ValueError, match="predates active"):
+        record_operational_pause(
+            ledger=fresh,
+            checkpoint_path=tmp_path / "backdated-pause.json",
+            state=state,
+            artifact_paths={},
+            timestamp_utc="2026-07-19T23:59:59Z",
+            reason="backdated",
+        )
 
 
 def test_pause_and_inactive_maintenance_are_mutually_exclusive(tmp_path: Path) -> None:
@@ -269,3 +309,10 @@ def test_t_state_mapping_is_exact_and_noncoercive() -> None:
     extra["unknown"] = False
     with pytest.raises(ValueError, match="fields differ"):
         TState.from_mapping(extra)
+    for noncanonical in (
+        "2026-07-20 00:00:00Z",
+        "2026-07-20T00:00:00.000Z",
+        "2026-7-20T00:00:00Z",
+    ):
+        with pytest.raises(ValueError, match="canonical UTC"):
+            TState().activate(noncanonical)

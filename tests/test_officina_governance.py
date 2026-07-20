@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -28,12 +29,16 @@ from philosophia.officina.manifest import (
     canonical_behavior_manifest,
     canonical_candidate_manifest,
 )
-from philosophia.officina.one_shot import AttemptRegistry, OneShotJournal
+from philosophia.officina.one_shot import (
+    AttemptPhase,
+    AttemptRegistry,
+    OneShotJournal,
+)
 from philosophia.officina.prf import (
     CounterStream,
-    TestOnlyKey as OfficinaTestOnlyKey,
     dummy_key,
     encode_component,
+    prf_digest,
     shuffled,
 )
 from philosophia.officina.terminal import (
@@ -93,9 +98,19 @@ def test_prf_is_typed_domain_separated_and_test_only() -> None:
         encode_component("x" * 65536)
     with pytest.raises(TypeError, match="booleans"):
         encode_component(True)
-    with pytest.raises(PermissionError, match="dummy_key"):
-        OfficinaTestOnlyKey(material=b"x" * 32, purpose="forged", _token=object())
     key = dummy_key("golden")
+    with pytest.raises(PermissionError, match="dummy_key"):
+        type(key)()
+    fake = SimpleNamespace(_material=b"x" * 32, purpose="forged")
+    with pytest.raises(PermissionError, match="not issued"):
+        prf_digest(fake, ("OFFICINA", "fake"), 0)
+    with pytest.raises(PermissionError, match="not issued"):
+        CounterStream(fake, ("OFFICINA", "fake"))
+    copied = object.__new__(type(key))
+    copied._material = key._material  # noqa: SLF001 - copied-key attack
+    copied.purpose = key.purpose
+    with pytest.raises(PermissionError, match="not issued"):
+        prf_digest(copied, ("OFFICINA", "copied"), 0)
     first = CounterStream(key, ("OFFICINA", "A", 1))
     second = CounterStream(key, ("OFFICINA", "A", 1))
     assert first.digest() == second.digest()
@@ -106,6 +121,9 @@ def test_prf_is_typed_domain_separated_and_test_only() -> None:
     assert shuffled(list(range(10)), CounterStream(key, ("shuffle",))) == shuffled(
         list(range(10)), CounterStream(key, ("shuffle",))
     )
+    for invalid_counter in (True, -1, 1 << 64):
+        with pytest.raises(ValueError, match="uint64"):
+            prf_digest(key, ("counter",), invalid_counter)
 
 
 def test_candidate_identity_excludes_only_whitelisted_inert_metadata() -> None:
@@ -218,6 +236,49 @@ def test_claimed_attempt_can_close_only_by_signed_pre_entropy_disposition(
     )
     assert terminal["payload"]["charged"] is False
     assert terminal["payload"]["competence"] is None
+
+
+@pytest.mark.parametrize("launched", [False, True])
+def test_pre_entropy_disposition_is_rejected_after_draw_boundary(
+    tmp_path: Path, launched: bool
+) -> None:
+    journal = _journal(tmp_path)
+    journal.create_claim("a" * 64)
+    journal.arm_draw("sealed-postfreeze-root")
+    if launched:
+        journal.record_launch_commitment("b" * 64)
+    with pytest.raises(ValueError, match="only from CLAIMED"):
+        journal.record_pre_entropy_disposition(
+            signature_id="late-stop", reason="must remain charged"
+        )
+
+
+def test_q_journal_rejects_duck_types_subclasses_and_malicious_payloads(
+    tmp_path: Path,
+) -> None:
+    journal = _journal(tmp_path)
+    journal.create_claim("a" * 64)
+    journal.arm_draw("sealed-postfreeze-root")
+
+    class DuckTerminal:
+        validity = QValidity.INVALID
+
+        @staticmethod
+        def to_mapping() -> dict[str, object]:
+            return {
+                "competence": True,
+                "extra": "injection",
+                "invalid_cause": "PROCESS",
+                "validity": "Q_INVALID",
+            }
+
+    with pytest.raises(TypeError, match="exact QTerminal"):
+        journal.record_q_terminal(DuckTerminal())  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="charged Q terminal payload differs"):
+        journal._append(  # noqa: SLF001 - direct invariant attack
+            AttemptPhase.TERMINAL,
+            {"charged": False, "competence": None},
+        )
 
 
 def test_one_shot_registry_blocks_id_reuse_and_suffix_reset(tmp_path: Path) -> None:

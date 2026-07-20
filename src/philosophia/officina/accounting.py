@@ -12,8 +12,11 @@ _HEX64 = re.compile(r"[0-9a-f]{64}")
 
 
 def parse_utc(value: str) -> datetime:
-    if not value.endswith("Z"):
-        raise ValueError("timestamp must use UTC Z form")
+    if not isinstance(value, str) or re.fullmatch(
+        r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z",
+        value,
+    ) is None:
+        raise ValueError("timestamp must use canonical UTC second Z form")
     parsed = datetime.fromisoformat(value[:-1] + "+00:00")
     if parsed.tzinfo != timezone.utc:
         raise ValueError("timestamp must be UTC")
@@ -55,11 +58,14 @@ class TState:
     last_review_utc: str | None = None
     device_nanoseconds_at_review: int = 0
     author_stopped: bool = False
+    resume_review_pending: bool = False
 
     def __post_init__(self) -> None:
         if type(self.device_nanoseconds) is not int or type(
             self.device_nanoseconds_at_review
-        ) is not int or type(self.author_stopped) is not bool:
+        ) is not int or type(self.author_stopped) is not bool or type(
+            self.resume_review_pending
+        ) is not bool:
             raise ValueError("T accounting fields have incorrect types")
         if type(self.candidate_ids) is not tuple or not all(
             type(item) is str for item in self.candidate_ids
@@ -86,6 +92,7 @@ class TState:
                 or self.last_review_utc is not None
                 or self.device_nanoseconds_at_review != 0
                 or self.author_stopped
+                or self.resume_review_pending
             ):
                 raise ValueError("inactive T state must be the exact pristine state")
         else:
@@ -104,7 +111,11 @@ class TState:
         return replace(self, activated_utc=timestamp_utc)
 
     def charge_device_nanoseconds(self, value: int, envelope: TEnvelope) -> "TState":
-        if self.activated_utc is None or self.author_stopped:
+        if (
+            self.activated_utc is None
+            or self.author_stopped
+            or self.resume_review_pending
+        ):
             raise ValueError("T is not available for charging")
         if self.exhausted(envelope):
             raise ValueError("T envelope is already exhausted")
@@ -113,7 +124,11 @@ class TState:
         return replace(self, device_nanoseconds=self.device_nanoseconds + value)
 
     def register_candidate(self, candidate_id: str, envelope: TEnvelope) -> "TState":
-        if self.activated_utc is None or self.author_stopped:
+        if (
+            self.activated_utc is None
+            or self.author_stopped
+            or self.resume_review_pending
+        ):
             raise ValueError("T is not available for registration")
         if _HEX64.fullmatch(candidate_id) is None:
             raise ValueError("candidate id must be lowercase SHA-256")
@@ -144,6 +159,8 @@ class TState:
         return wall_due or device_due
 
     def complete_review(self, envelope: TEnvelope, timestamp_utc: str) -> "TState":
+        if self.resume_review_pending:
+            raise ValueError("pending resume review requires the durable ResumeGate")
         if not self.review_due(envelope, timestamp_utc):
             raise ValueError("early review cannot reset E3 clocks")
         return replace(
@@ -165,7 +182,8 @@ class TState:
             "device_nanoseconds": self.device_nanoseconds,
             "device_nanoseconds_at_review": self.device_nanoseconds_at_review,
             "last_review_utc": self.last_review_utc,
-            "schema": "philosophia.officina.t-state.v1",
+            "resume_review_pending": self.resume_review_pending,
+            "schema": "philosophia.officina.t-state.v2",
         }
 
     @classmethod
@@ -174,10 +192,11 @@ class TState:
             "activated_utc", "author_stopped", "candidate_ids",
             "device_nanoseconds", "device_nanoseconds_at_review",
             "last_review_utc", "schema",
+            "resume_review_pending",
         }
         if set(value) != expected:
             raise ValueError("T state fields differ")
-        if value["schema"] != "philosophia.officina.t-state.v1":
+        if value["schema"] != "philosophia.officina.t-state.v2":
             raise ValueError("T state schema mismatch")
         candidates = value["candidate_ids"]
         if not isinstance(candidates, list) or not all(
@@ -189,6 +208,8 @@ class TState:
                 raise ValueError(f"T {field} must be an integer")
         if type(value["author_stopped"]) is not bool:
             raise ValueError("T author_stopped must be bool")
+        if type(value["resume_review_pending"]) is not bool:
+            raise ValueError("T resume_review_pending must be bool")
         for field in ("activated_utc", "last_review_utc"):
             if value[field] is not None and type(value[field]) is not str:
                 raise ValueError(f"T {field} must be string or null")
@@ -201,4 +222,5 @@ class TState:
                 "device_nanoseconds_at_review"
             ],  # type: ignore[arg-type]
             author_stopped=value["author_stopped"],  # type: ignore[arg-type]
+            resume_review_pending=value["resume_review_pending"],  # type: ignore[arg-type]
         )

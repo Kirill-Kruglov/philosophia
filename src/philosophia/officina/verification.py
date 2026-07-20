@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Iterable
 
 from .canonical import canonical_json, load_canonical_json, sha256_file
+from .ledger import GENESIS, HEADER, HEAD_SCHEMA
 
 
 FORBIDDEN_IMPORT_PREFIXES = (
@@ -23,10 +24,14 @@ ENTROPY_CALLS = {
     "torch.initial_seed",
     "torch.seed",
 }
-DYNAMIC_IMPORT_CALLS = {"__import__", "importlib.import_module"}
+DYNAMIC_IMPORT_CALLS = {
+    "__import__", "compile", "eval", "exec", "getattr",
+    "importlib.import_module",
+}
+RANDOM_DEVICE_PATHS = {"/dev/" + name for name in ("random", "urandom")}
 ALLOWED_ABSOLUTE_IMPORTS = {
     "__future__", "ast", "dataclasses", "datetime", "enum", "fcntl",
-    "hashlib", "hmac", "json", "os", "pathlib", "re", "typing",
+    "hashlib", "hmac", "json", "os", "pathlib", "re", "typing", "weakref",
 }
 ALLOWED_RELATIVE_IMPORTS = {
     "accounting", "canonical", "interlock", "ledger", "quarantine", "terminal"
@@ -83,7 +88,9 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
                 if name in ENTROPY_CALLS:
                     failures.append(f"entropy call {name} in {path}")
                 if name in DYNAMIC_IMPORT_CALLS:
-                    failures.append(f"dynamic import {name} in {path}")
+                    failures.append(f"reflective or dynamic call {name} in {path}")
+            if isinstance(node, ast.Constant) and node.value in RANDOM_DEVICE_PATHS:
+                failures.append(f"system random device {node.value} in {path}")
     return failures
 
 
@@ -155,16 +162,17 @@ def verify_bootstrap(repo: Path) -> list[str]:
     }
     if canonical_json(envelope) != canonical_json(expected_envelope):
         failures.append("T envelope differs from the signed inactive bootstrap")
-    ledger = (root / "T_LEDGER.md").read_text(encoding="utf-8")
-    if "Status: `NOT_ACTIVATED`" not in ledger or '\n- {' in ledger:
-        failures.append("committed T ledger is not an empty inactive skeleton")
+    ledger = (root / "T_LEDGER.md").read_bytes()
+    if ledger != HEADER.encode("ascii"):
+        failures.append("committed T ledger differs from exact inactive genesis")
     head = load_canonical_json(root / "T_LEDGER.md.head.json")
-    if head != {
+    expected_head = {
         "entry_count": 0,
-        "head_sha256": "0" * 64,
-        "schema": "philosophia.officina.ledger-head.v1",
+        "head_sha256": GENESIS,
+        "schema": HEAD_SCHEMA,
         "scientific_outcome": False,
-    }:
+    }
+    if canonical_json(head) != canonical_json(expected_head):
         failures.append("committed T ledger head is not genesis")
 
     source_paths = sorted((repo / "src/philosophia/officina").glob("*.py"))

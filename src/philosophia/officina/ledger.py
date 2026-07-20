@@ -3,7 +3,9 @@ from __future__ import annotations
 import fcntl
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
+import re
 from typing import Mapping
 
 from .canonical import (
@@ -29,6 +31,21 @@ HEAD_SCHEMA = "philosophia.officina.ledger-head.v1"
 
 class LedgerIntegrityError(ValueError):
     pass
+
+
+def _parse_timestamp(value: object) -> datetime:
+    if not isinstance(value, str) or re.fullmatch(
+        r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z",
+        value,
+    ) is None:
+        raise LedgerIntegrityError("ledger timestamp must use canonical UTC Z form")
+    try:
+        parsed = datetime.fromisoformat(value[:-1] + "+00:00")
+    except ValueError as error:
+        raise LedgerIntegrityError("ledger timestamp is invalid") from error
+    if parsed.tzinfo != timezone.utc:
+        raise LedgerIntegrityError("ledger timestamp must be UTC")
+    return parsed
 
 
 def _entry_payload(
@@ -81,6 +98,7 @@ def parse_ledger(raw: bytes) -> list[dict[str, object]]:
         raise LedgerIntegrityError("ledger header mismatch")
     entries: list[dict[str, object]] = []
     previous = GENESIS
+    previous_timestamp: datetime | None = None
     for line in text[len(HEADER) :].splitlines():
         if not line:
             continue
@@ -112,6 +130,10 @@ def parse_ledger(raw: bytes) -> list[dict[str, object]]:
             raise LedgerIntegrityError("ledger hash chain is broken")
         if entry_hash != sha256_bytes(canonical_json(payload)):
             raise LedgerIntegrityError("ledger entry hash mismatch")
+        timestamp = _parse_timestamp(value["timestamp_utc"])
+        if previous_timestamp is not None and timestamp < previous_timestamp:
+            raise LedgerIntegrityError("ledger timestamps move backwards")
+        previous_timestamp = timestamp
         previous = str(entry_hash)
         entries.append(value)
     return entries
@@ -146,7 +168,7 @@ class AppendOnlyLedger:
     def _verify_head(self, entries: list[dict[str, object]]) -> None:
         value = load_canonical_json(self.head_path)
         expected = json.loads(_head_payload(entries))
-        if value != expected:
+        if canonical_json(value) != canonical_json(expected):
             raise LedgerIntegrityError("ledger external head mismatch")
 
     def entries(self) -> list[dict[str, object]]:
@@ -168,6 +190,9 @@ class AppendOnlyLedger:
                 target.seek(0)
                 entries = parse_ledger(target.read())
                 self._verify_head(entries)
+                timestamp = _parse_timestamp(timestamp_utc)
+                if entries and timestamp < _parse_timestamp(entries[-1]["timestamp_utc"]):
+                    raise LedgerIntegrityError("ledger timestamps move backwards")
                 previous = str(entries[-1]["entry_sha256"]) if entries else GENESIS
                 entry = build_entry(
                     sequence=len(entries),

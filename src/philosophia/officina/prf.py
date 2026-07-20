@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import hashlib
 import hmac
+import weakref
 from typing import Sequence, TypeVar
 
 
@@ -44,36 +45,46 @@ def encode_domain(domain: Sequence[DomainComponent]) -> bytes:
     return b"".join(encode_component(component) for component in domain)
 
 
-_TEST_KEY_TOKEN = object()
+_ISSUED_TEST_KEYS: weakref.WeakSet[_TestOnlyKey]
 
 
-@dataclass(frozen=True)
-class TestOnlyKey:
-    """A deterministic dummy key. WP-1/WP-2 expose no production key type."""
+class _TestOnlyKey:
+    __slots__ = ("_material", "purpose", "__weakref__")
 
-    material: bytes
-    purpose: str
-    _token: object = field(repr=False, compare=False)
-
-    def __post_init__(self) -> None:
-        if len(self.material) != 32:
-            raise ValueError("PRF keys are exactly 32 bytes")
-        if not self.purpose:
-            raise ValueError("key purpose must be named")
-        if self._token is not _TEST_KEY_TOKEN:
-            raise PermissionError("test-only PRF keys must come from dummy_key")
+    def __init__(self, *_: object, **__: object) -> None:
+        raise PermissionError("test-only PRF keys must come from dummy_key")
 
 
-def dummy_key(label: str, *, purpose: str = "officina-test") -> TestOnlyKey:
+_ISSUED_TEST_KEYS = weakref.WeakSet()
+
+
+def require_test_only_key(key: object) -> _TestOnlyKey:
+    if type(key) is not _TestOnlyKey or key not in _ISSUED_TEST_KEYS:
+        raise PermissionError("PRF key was not issued by dummy_key")
+    if len(key._material) != 32 or not key.purpose:
+        raise PermissionError("issued PRF key is malformed")
+    return key
+
+
+def dummy_key(label: str, *, purpose: str = "officina-test") -> _TestOnlyKey:
+    if not label or not purpose:
+        raise ValueError("dummy key label and purpose must be named")
     material = hashlib.sha256(
         f"OFFICINA-TEST-ONLY/{purpose}/{label}".encode("ascii")
     ).digest()
-    return TestOnlyKey(material=material, purpose=purpose, _token=_TEST_KEY_TOKEN)
+    key = object.__new__(_TestOnlyKey)
+    key._material = material
+    key.purpose = purpose
+    _ISSUED_TEST_KEYS.add(key)
+    return key
 
 
-def prf_digest(key: TestOnlyKey, domain: Domain, counter: int) -> bytes:
+def prf_digest(key: object, domain: Domain, counter: int) -> bytes:
+    issued = require_test_only_key(key)
+    if type(counter) is not int or not 0 <= counter < (1 << 64):
+        raise ValueError("PRF counter must be a uint64 integer")
     return hmac.new(
-        key.material,
+        issued._material,
         encode_domain(domain) + _uint64_be(counter),
         hashlib.sha256,
     ).digest()
@@ -81,15 +92,14 @@ def prf_digest(key: TestOnlyKey, domain: Domain, counter: int) -> bytes:
 
 @dataclass
 class CounterStream:
-    key: TestOnlyKey
+    key: object
     domain: Domain
     counter: int = 0
 
     def __post_init__(self) -> None:
-        if self.key._token is not _TEST_KEY_TOKEN:
-            raise PermissionError("only test-only PRF keys exist before WP-6")
-        if self.counter < 0:
-            raise ValueError("counter must be non-negative")
+        require_test_only_key(self.key)
+        if type(self.counter) is not int or not 0 <= self.counter < (1 << 64):
+            raise ValueError("counter must be a uint64 integer")
 
     def digest(self) -> bytes:
         value = prf_digest(self.key, self.domain, self.counter)
@@ -97,7 +107,7 @@ class CounterStream:
         return value
 
     def uniform(self, modulus: int) -> int:
-        if modulus <= 0:
+        if type(modulus) is not int or modulus <= 0:
             raise ValueError("uniform modulus must be positive")
         if modulus == 1:
             return 0

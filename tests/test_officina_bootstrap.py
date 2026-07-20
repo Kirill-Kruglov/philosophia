@@ -17,7 +17,7 @@ from philosophia.officina.quarantine import (
 )
 from philosophia.officina.interlock import test_only_capability as make_test_capability
 from philosophia.officina.ledger import AppendOnlyLedger, parse_ledger
-from philosophia.officina.provenance import ArtifactStore
+from philosophia.officina.provenance import ArtifactStore, ProvenanceRegistry
 from philosophia.officina.verification import verify_bootstrap, verify_source_quarantine
 
 
@@ -68,6 +68,12 @@ def _policy(tmp_path: Path) -> tuple[PathPolicy, Path, Path, Path]:
     return policy, native, stopped, fixture
 
 
+def _store(policy: PathPolicy, native: Path) -> ArtifactStore:
+    registry = ProvenanceRegistry(native / "provenance-registry")
+    registry.initialize()
+    return ArtifactStore(policy, registry)
+
+
 def test_path_policy_allows_native_and_denies_predecessor_by_default(tmp_path: Path) -> None:
     policy, native, stopped, _ = _policy(tmp_path)
     destination, label = policy.authorize(native / "data.json", surface=Surface.T, write=True)
@@ -105,14 +111,14 @@ def test_artifact_store_propagates_taint_and_blocks_copy_relabel_mutation(
     tmp_path: Path,
 ) -> None:
     policy, native, _, fixture = _policy(tmp_path)
-    store = ArtifactStore(policy)
+    store = _store(policy, native)
     parent = store.read(fixture, surface=Surface.T)
     derived_path = native / "derived.bin"
     derived = store.write_derived(
         path=derived_path,
         payload=b"derived\n",
         purpose="fixture-derived-test",
-        parents=(parent,),
+        parent_paths=(parent.path,),
     )
     assert derived.label.sources == ("engineering-fixture",)
     assert derived.label.promotable is False
@@ -135,7 +141,7 @@ def test_artifact_store_propagates_taint_and_blocks_copy_relabel_mutation(
     core["promotable"] = True
     forged = {**core, "provenance_sha256": sha256_bytes(canonical_json(core))}
     store.metadata_path(derived_path).write_bytes(canonical_json(forged))
-    with pytest.raises(QuarantineViolation, match="no promotable"):
+    with pytest.raises(QuarantineViolation, match="no promotion"):
         store.read(derived_path, surface=Surface.T)
 
     # Restore the genuine record before testing content mutation.
@@ -150,7 +156,7 @@ def test_artifact_store_propagates_taint_and_blocks_copy_relabel_mutation(
 
 def test_test_only_native_artifacts_are_durably_nonpromotable(tmp_path: Path) -> None:
     policy, native, _, _ = _policy(tmp_path)
-    store = ArtifactStore(policy)
+    store = _store(policy, native)
     artifact = store.write_test_only(
         path=native / "dummy.bin",
         payload=b"dummy",
@@ -160,6 +166,66 @@ def test_test_only_native_artifacts_are_durably_nonpromotable(tmp_path: Path) ->
     assert artifact.label.sources == ("test-only-native",)
     with pytest.raises(QuarantineViolation, match="cannot enter C"):
         store.admit(artifact.path, surface=Surface.C)
+
+
+def test_provenance_registry_blocks_same_path_relabel_parent_loss_and_suffix_reset(
+    tmp_path: Path,
+) -> None:
+    policy, native, _, fixture = _policy(tmp_path)
+    store = _store(policy, native)
+    derived_path = native / "derived.bin"
+    store.write_derived(
+        path=derived_path,
+        payload=b"derived",
+        purpose="ancestry-test",
+        parent_paths=(fixture,),
+    )
+    metadata_path = store.metadata_path(derived_path)
+    genuine = json.loads(metadata_path.read_bytes())
+
+    relabeled_core = {
+        key: value for key, value in genuine.items() if key != "provenance_sha256"
+    }
+    relabeled_core["sources"] = ["test-only-native"]
+    relabeled_core["parents"] = []
+    relabeled = {
+        **relabeled_core,
+        "provenance_sha256": sha256_bytes(canonical_json(relabeled_core)),
+    }
+    metadata_path.write_bytes(canonical_json(relabeled))
+    with pytest.raises(QuarantineViolation, match="differs from registry"):
+        store.read(derived_path, surface=Surface.T)
+    metadata_path.write_bytes(canonical_json(genuine))
+
+    fixture.unlink()
+    with pytest.raises(QuarantineViolation, match="fixture hash mismatch"):
+        store.read(derived_path, surface=Surface.T)
+
+    registry = store.registry
+    event = sorted(registry.directory.glob("[0-9][0-9][0-9][0-9][0-9][0-9].json"))[-1]
+    event.unlink()
+    with pytest.raises(QuarantineViolation, match="head mismatch"):
+        registry.entries()
+
+
+def test_hand_built_native_provenance_without_registry_is_rejected(tmp_path: Path) -> None:
+    policy, native, _, _ = _policy(tmp_path)
+    store = _store(policy, native)
+    path = native / "hand-built.bin"
+    path.write_bytes(b"hand-built")
+    core = {
+        "content_sha256": sha256_bytes(path.read_bytes()),
+        "parents": [],
+        "path": str(path.resolve()),
+        "promotable": False,
+        "purpose": "forged",
+        "schema": "philosophia.officina.artifact-provenance.v2",
+        "sources": ["test-only-native"],
+    }
+    record = {**core, "provenance_sha256": sha256_bytes(canonical_json(core))}
+    store.metadata_path(path).write_bytes(canonical_json(record))
+    with pytest.raises(QuarantineViolation, match="differs from registry"):
+        store.read(path, surface=Surface.T)
 
 
 def test_realpath_resolution_blocks_symlink_escape(tmp_path: Path) -> None:
@@ -225,10 +291,44 @@ def test_entropy_scan_resolves_import_aliases_and_dynamic_imports(tmp_path: Path
     direct.write_text("from os import urandom as draw\nvalue = draw(32)\n", encoding="utf-8")
     dynamic = tmp_path / "dynamic.py"
     dynamic.write_text("module = __import__('secrets')\n", encoding="utf-8")
-    failures = verify_source_quarantine((aliased, direct, dynamic))
+    reflective = tmp_path / "reflective.py"
+    reflective.write_text(
+        "import os\ndraw = getattr(os, 'urandom')\nvalue = draw(32)\n",
+        encoding="utf-8",
+    )
+    device = tmp_path / "device.py"
+    device.write_text("path = '/dev/urandom'\n", encoding="utf-8")
+    failures = verify_source_quarantine(
+        (aliased, direct, dynamic, reflective, device)
+    )
     assert any("secrets.token_bytes" in failure for failure in failures)
     assert any("os.urandom" in failure for failure in failures)
-    assert any("dynamic import" in failure for failure in failures)
+    assert any("reflective or dynamic" in failure for failure in failures)
+    assert any("system random device" in failure for failure in failures)
+
+
+def test_bootstrap_verifier_requires_exact_ledger_and_head_genesis(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    shutil.copytree(REPO / "successor", repo / "successor")
+    ledger = repo / "successor/officina/T_LEDGER.md"
+    ledger.write_bytes(ledger.read_bytes().replace(b"public ledger", b"PUBLIC ledger"))
+    assert any("exact inactive genesis" in item for item in verify_bootstrap(repo))
+
+    shutil.rmtree(repo)
+    shutil.copytree(REPO / "successor", repo / "successor")
+    head = repo / "successor/officina/T_LEDGER.md.head.json"
+    original = json.loads(head.read_bytes())
+    for field, replacement in (
+        ("entry_count", "0"),
+        ("head_sha256", "1" * 64),
+        ("schema", "changed"),
+        ("scientific_outcome", 0),
+    ):
+        mutant = dict(original)
+        mutant[field] = replacement
+        head.write_bytes(canonical_json(mutant))
+        assert any("head is not genesis" in item for item in verify_bootstrap(repo))
+        head.write_bytes(canonical_json(original))
 
 
 def test_pyproject_packages_officina() -> None:

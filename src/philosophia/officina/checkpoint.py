@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Mapping
 
-from .accounting import TEnvelope, TState
+from .accounting import TEnvelope, TState, parse_utc
 from .canonical import (
     atomic_create,
     canonical_json,
@@ -37,7 +37,11 @@ def write_pause_checkpoint(
     artifact_paths: Mapping[str, Path],
     ledger_head_before: str,
 ) -> str:
-    if state.activated_utc is None or state.author_stopped:
+    if (
+        state.activated_utc is None
+        or state.author_stopped
+        or state.resume_review_pending
+    ):
         raise ValueError("operational pause requires active, available T")
     if len(ledger_head_before) != 64:
         raise ValueError("ledger head must be SHA-256")
@@ -64,6 +68,16 @@ def record_operational_pause(
 ) -> dict[str, object]:
     if not reason:
         raise ValueError("operational pause reason must be named")
+    if (
+        state.activated_utc is None
+        or state.author_stopped
+        or state.resume_review_pending
+    ):
+        raise ValueError("operational pause requires active, available T")
+    pause_time = parse_utc(timestamp_utc)
+    origin = parse_utc(state.last_review_utc or state.activated_utc)
+    if pause_time < origin:
+        raise ValueError("operational pause predates active T state")
     entries = ledger.entries()
     ledger_head = str(entries[-1]["entry_sha256"]) if entries else "0" * 64
     checkpoint_hash = write_pause_checkpoint(
@@ -105,14 +119,28 @@ class ResumeGate:
     review_required: bool
 
     def admit_work(self) -> TState:
-        if self.review_required:
+        if self.review_required or self.state.resume_review_pending:
             raise PermissionError("overdue E3 review blocks resumed work")
         return self.state
 
     def complete_overdue_review(self, *, timestamp_utc: str) -> TState:
         if not self.review_required:
             raise ValueError("resume review is not due")
-        reviewed = self.state.complete_review(self.envelope, timestamp_utc)
+        if parse_utc(timestamp_utc) < parse_utc(self.resumed_utc):
+            raise ValueError("resume review predates resume admission")
+        if not self.state.resume_review_pending:
+            raise ValueError("resume gate state is not pending review")
+        entries = self.ledger.entries()
+        if not entries or entries[-1]["event"] != "T_OPERATIONAL_PAUSE":
+            raise ValueError("resume review transaction is no longer current")
+        if not self.state.review_due(self.envelope, timestamp_utc):
+            raise ValueError("resume review is not due at completion time")
+        reviewed = replace(
+            self.state,
+            last_review_utc=timestamp_utc,
+            device_nanoseconds_at_review=self.state.device_nanoseconds,
+            resume_review_pending=False,
+        )
         self.ledger.append(
             event="T_REVIEW_COMPLETED",
             timestamp_utc=timestamp_utc,
@@ -181,12 +209,25 @@ def verify_resume(
     if not isinstance(state_value, dict):
         raise ValueError("pause checkpoint T state is malformed")
     state = TState.from_mapping(state_value)
-    if state.activated_utc is None or state.author_stopped:
+    if (
+        state.activated_utc is None
+        or state.author_stopped
+        or state.resume_review_pending
+    ):
         raise ValueError("pause checkpoint does not contain available active T")
+    pause_timestamp = entries[-1]["timestamp_utc"]
+    if not isinstance(pause_timestamp, str):
+        raise ValueError("pause ledger timestamp is malformed")
+    resume_time = parse_utc(timestamp_utc)
+    pause_time = parse_utc(pause_timestamp)
+    if resume_time < pause_time:
+        raise ValueError("resume timestamp predates operational pause")
+    due = state.review_due(envelope, timestamp_utc)
+    resumed_state = replace(state, resume_review_pending=due)
     return ResumeGate(
-        state=state,
+        state=resumed_state,
         ledger=ledger,
         envelope=envelope,
         resumed_utc=timestamp_utc,
-        review_required=state.review_due(envelope, timestamp_utc),
+        review_required=due,
     )

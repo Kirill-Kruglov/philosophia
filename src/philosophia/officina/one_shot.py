@@ -3,6 +3,7 @@ from __future__ import annotations
 from enum import Enum
 import json
 from pathlib import Path
+import re
 from typing import Mapping
 
 from .canonical import (
@@ -16,6 +17,11 @@ from .terminal import QTerminal, QValidity
 
 
 GENESIS = "0" * 64
+_HEX64 = re.compile(r"[0-9a-f]{64}")
+
+
+def _is_sha256(value: object) -> bool:
+    return isinstance(value, str) and _HEX64.fullmatch(value) is not None
 
 
 class AttemptPhase(str, Enum):
@@ -38,7 +44,12 @@ def _head(schema: str, events: list[dict[str, object]]) -> bytes:
 
 def _read_chain(directory: Path, *, stem: str) -> list[dict[str, object]]:
     events: list[dict[str, object]] = []
-    for index, path in enumerate(sorted(directory.glob(f"[0-9][0-9][0-9]-{stem}-*.json"))):
+    event_paths = sorted(directory.glob(f"[0-9][0-9][0-9]-{stem}-*.json"))
+    expected_names = {"HEAD.json", *(path.name for path in event_paths)}
+    actual_names = {path.name for path in directory.iterdir() if path.is_file()}
+    if actual_names != expected_names:
+        raise ValueError(f"{stem} journal files differ")
+    for index, path in enumerate(event_paths):
         value = load_canonical_json(path)
         expected_keys = {
             "event_sha256", "payload", "phase", "previous_sha256", "sequence"
@@ -74,8 +85,22 @@ class AttemptRegistry:
         if not self.head_path.exists():
             raise ValueError("attempt registry is not initialized")
         events = _read_chain(self.directory, stem="registry")
-        if load_canonical_json(self.head_path) != json.loads(_head(self.SCHEMA, events)):
+        if canonical_json(load_canonical_json(self.head_path)) != canonical_json(
+            json.loads(_head(self.SCHEMA, events))
+        ):
             raise ValueError("attempt registry head mismatch")
+        for event in events:
+            payload = event["payload"]
+            if not isinstance(payload, dict) or set(payload) != {
+                "attempt_id", "journal_head", "phase"
+            }:
+                raise ValueError("attempt registry payload fields differ")
+            if (
+                type(payload["attempt_id"]) is not int
+                or not _is_sha256(payload["journal_head"])
+                or payload["phase"] not in {phase.value for phase in AttemptPhase}
+            ):
+                raise ValueError("attempt registry payload values are malformed")
         return events
 
     def assert_unused(self, attempt_id: int) -> None:
@@ -135,8 +160,18 @@ class OneShotJournal:
         if not self.head_path.exists():
             return []
         events = _read_chain(self.directory, stem="attempt")
-        if load_canonical_json(self.head_path) != json.loads(_head(self.SCHEMA, events)):
+        if canonical_json(load_canonical_json(self.head_path)) != canonical_json(
+            json.loads(_head(self.SCHEMA, events))
+        ):
             raise ValueError("one-shot journal head mismatch")
+        previous: AttemptPhase | None = None
+        for event in events:
+            phase = AttemptPhase(str(event["phase"]))
+            payload = event["payload"]
+            if not isinstance(payload, dict):
+                raise ValueError("attempt event payload must be an object")
+            self._validate_transition(previous, phase, payload)
+            previous = phase
         latest = self.registry.latest_for(self.attempt_id)
         if not events or latest is None:
             raise ValueError("journal is not committed by the attempt registry")
@@ -163,6 +198,7 @@ class OneShotJournal:
         )
         if not allowed:
             raise ValueError(f"invalid one-shot transition: {previous_phase} -> {phase}")
+        self._validate_transition(previous_phase, phase, payload)
         sequence = len(events)
         core = {
             "payload": dict(payload),
@@ -187,8 +223,74 @@ class OneShotJournal:
         )
         return event
 
+    @staticmethod
+    def _validate_transition(
+        previous: AttemptPhase | None,
+        phase: AttemptPhase,
+        payload: Mapping[str, object],
+    ) -> None:
+        keys = set(payload)
+        if previous is None:
+            if phase is not AttemptPhase.CLAIMED or keys != {
+                "attempt_id", "manifest_sha256"
+            }:
+                raise ValueError("initial attempt claim payload differs")
+            if type(payload["attempt_id"]) is not int or not isinstance(
+                payload["manifest_sha256"], str
+            ):
+                raise ValueError("initial attempt claim values are malformed")
+            if not _is_sha256(payload["manifest_sha256"]):
+                raise ValueError("candidate manifest commitment is not SHA-256")
+            return
+        if previous is AttemptPhase.CLAIMED and phase is AttemptPhase.DRAW_ARMED:
+            if (
+                keys != {"source"}
+                or not isinstance(payload["source"], str)
+                or not payload["source"]
+            ):
+                raise ValueError("draw-armed payload differs")
+            return
+        if previous is AttemptPhase.CLAIMED and phase is AttemptPhase.TERMINAL:
+            expected = {
+                "charged", "competence", "disposition", "reason", "signature_id"
+            }
+            if (
+                keys != expected
+                or payload["charged"] is not False
+                or payload["competence"] is not None
+                or payload["disposition"] != "PRE_ENTROPY_STOP"
+                or not isinstance(payload["reason"], str)
+                or not payload["reason"]
+                or not isinstance(payload["signature_id"], str)
+                or not payload["signature_id"]
+            ):
+                raise ValueError("pre-entropy disposition payload differs")
+            return
+        if previous is AttemptPhase.DRAW_ARMED and phase is AttemptPhase.LAUNCHED:
+            if (
+                keys != {"charged", "root_commitment"}
+                or payload["charged"] is not True
+                or not _is_sha256(payload["root_commitment"])
+            ):
+                raise ValueError("launch commitment payload differs")
+            return
+        if (
+            previous in {AttemptPhase.DRAW_ARMED, AttemptPhase.LAUNCHED}
+            and phase is AttemptPhase.TERMINAL
+        ):
+            if keys != {"charged", "q_terminal"} or payload["charged"] is not True:
+                raise ValueError("charged Q terminal payload differs")
+            terminal = QTerminal.from_mapping(payload["q_terminal"])
+            if (
+                previous is AttemptPhase.DRAW_ARMED
+                and terminal.validity is not QValidity.INVALID
+            ):
+                raise ValueError("draw-armed ambiguity requires Q invalid")
+            return
+        raise ValueError("one-shot transition validator has no matching branch")
+
     def create_claim(self, manifest_sha256: str) -> dict[str, object]:
-        if len(manifest_sha256) != 64:
+        if not _is_sha256(manifest_sha256):
             raise ValueError("candidate manifest commitment must be SHA-256")
         return self._append(
             AttemptPhase.CLAIMED,
@@ -200,6 +302,12 @@ class OneShotJournal:
     ) -> dict[str, object]:
         if not signature_id or not reason:
             raise ValueError("pre-entropy disposition must be signed and reasoned")
+        events = self._events()
+        if (
+            not events
+            or AttemptPhase(str(events[-1]["phase"])) is not AttemptPhase.CLAIMED
+        ):
+            raise ValueError("pre-entropy disposition is valid only from CLAIMED")
         return self._append(
             AttemptPhase.TERMINAL,
             {
@@ -217,7 +325,7 @@ class OneShotJournal:
         return self._append(AttemptPhase.DRAW_ARMED, {"source": source})
 
     def record_launch_commitment(self, root_commitment: str) -> dict[str, object]:
-        if len(root_commitment) != 64:
+        if not _is_sha256(root_commitment):
             raise ValueError("root commitment must be SHA-256")
         return self._append(
             AttemptPhase.LAUNCHED,
@@ -225,17 +333,23 @@ class OneShotJournal:
         )
 
     def record_q_terminal(self, terminal: QTerminal) -> dict[str, object]:
+        if type(terminal) is not QTerminal:
+            raise TypeError("Q journal terminal must be an exact QTerminal")
+        canonical_terminal = QTerminal.from_mapping(terminal.to_mapping())
         events = self._events()
         if not events:
             raise ValueError("attempt has no claim")
         phase = AttemptPhase(str(events[-1]["phase"]))
-        if phase is AttemptPhase.DRAW_ARMED and terminal.validity is not QValidity.INVALID:
+        if (
+            phase is AttemptPhase.DRAW_ARMED
+            and canonical_terminal.validity is not QValidity.INVALID
+        ):
             raise ValueError("draw-armed ambiguity can close only as charged Q invalid")
         if phase not in {AttemptPhase.DRAW_ARMED, AttemptPhase.LAUNCHED}:
             raise ValueError("Q terminal requires a charged attempt")
         return self._append(
             AttemptPhase.TERMINAL,
-            {"charged": True, "q_terminal": terminal.to_mapping()},
+            {"charged": True, "q_terminal": canonical_terminal.to_mapping()},
         )
 
     def recovery_requires_charge(self) -> bool:
