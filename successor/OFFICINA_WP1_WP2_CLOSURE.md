@@ -66,4 +66,3 @@ This closure authorizes no entropy, T activation, world generation, breathing
 check, candidate registration, Q attempt, promotion, scientific specification,
 preregistration lock, C-root generation, escrow, T/Q/C execution, datum,
 outcome, or claim movement. The Officina T ledger remains `NOT_ACTIVATED`.
-
