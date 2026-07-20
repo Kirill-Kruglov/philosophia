@@ -119,7 +119,9 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    aliases[alias.asname or alias.name.split(".")[0]] = alias.name
+                    bound = alias.asname or alias.name.split(".")[0]
+                    resolved = alias.name if alias.asname else alias.name.split(".")[0]
+                    aliases[bound] = resolved
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""
                 for alias in node.names:

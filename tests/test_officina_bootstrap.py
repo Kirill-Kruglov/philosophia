@@ -344,6 +344,33 @@ def test_entropy_scan_propagates_local_aliases_and_static_paths(tmp_path: Path) 
     assert any("reflective or dynamic reference eval" in item for item in failures)
 
 
+def test_entropy_scan_models_dotted_import_binding_exactly(tmp_path: Path) -> None:
+    dotted = tmp_path / "dotted.py"
+    dotted.write_text(
+        "import os.path\ndraw = os.urandom\nvalue = draw(32)\n",
+        encoding="utf-8",
+    )
+    repeated = tmp_path / "repeated.py"
+    repeated.write_text(
+        "import os, os.path\ndraw = os.urandom\nvalue = draw(32)\n",
+        encoding="utf-8",
+    )
+    benign = tmp_path / "benign.py"
+    benign.write_text(
+        "import os.path as osp\njoin = osp.join\nvalue = join('/tmp', 'data')\n",
+        encoding="utf-8",
+    )
+    assert any(
+        "entropy reference os.urandom" in item
+        for item in verify_source_quarantine((dotted,))
+    )
+    assert any(
+        "entropy reference os.urandom" in item
+        for item in verify_source_quarantine((repeated,))
+    )
+    assert verify_source_quarantine((benign,)) == []
+
+
 def test_bootstrap_verifier_requires_exact_ledger_and_head_genesis(tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     shutil.copytree(REPO / "successor", repo / "successor")
