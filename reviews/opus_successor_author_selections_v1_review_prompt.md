@@ -17,6 +17,14 @@ Perform a bounded X-line review of Kirill's provisional A1-A5 selections. This
 is not a charter reopening, implementation review, population-contract review,
 Q-numeric review, or scientific-spec review. Choose no alternative for Kirill.
 
+Operational constraint supplied after the provisional record: the host must be
+powered off within 96 wall-hours. `E1=168_DEVICE_HOURS` is a cumulative envelope,
+not a continuous-run promise or deadline. Review the requirement that any
+planned power-off occurs only after a durable T checkpoint and ledger flush,
+does not become `T_AUTHOR_STOP`, does not erase E1/E2 consumption, and permits a
+later resume from the durable T state. No real T run is authorized before this
+review or expected before that shutdown.
+
 ## Required checks
 
 1. **Same-repo quarantine:** can WP-1 implement a fail-closed path allowlist
@@ -31,7 +39,8 @@ Q-numeric review, or scientific-spec review. Choose no alternative for Kirill.
    and checkpoint-at-48-wall-or-40-device-hours single-valued? Attack parallel
    accounting, restart/accounting gaps, dummy-to-real promotion, ledger
    omission, checkpoint reset, behavior-inert/effective candidate changes, and
-   author-stop/exhaustion ambiguity.
+   author-stop/exhaustion ambiguity. Classify planned power-off/resume as a
+   later WP-2/WP-4 implementation obligation, not a new scientific terminal.
 4. **Device positive path:** does off-CPU-with-breathing-check remain achievable
    without pretending Level 0 transfers, and is the later ownership of stack,
    tolerance, and reproducibility exact enough?

@@ -18,6 +18,14 @@ A1-A5 selections. This is not a charter reopening, implementation review,
 WP-3 population specification, WP-6 Q-numeric specification, or WP-9
 confirmatory specification. Choose no alternative for Kirill.
 
+Operational constraint supplied after the provisional record: the host must be
+powered off within 96 wall-hours. `E1=168_DEVICE_HOURS` is a cumulative envelope,
+not a continuous-run promise or deadline. Review the requirement that any
+planned power-off occurs only after a durable T checkpoint and ledger flush,
+does not become `T_AUTHOR_STOP`, does not erase E1/E2 consumption, and permits a
+later resume from the durable T state. No real T run is authorized before this
+review or expected before that shutdown.
+
 ## Required checks
 
 1. **Finite-frame interpretation:** is the selected design-based claim scope
@@ -34,7 +42,9 @@ confirmatory specification. Choose no alternative for Kirill.
    governance limits that remain permanently non-citable? Attack parallel
    accounting, early author stop, checkpoint cadence, repeated tuning under
    behavior-inert labels, and any path by which the envelope or breathing check
-   becomes an undeclared competence/scientific threshold.
+   becomes an undeclared competence/scientific threshold. Confirm that a planned
+   power cycle is a non-scientific operational pause, not a free reset, terminal,
+   or selection event.
 4. **Device policy:** does the bounded non-citable breathing check reduce
    engineering invalidity risk without selecting a scientific winner or
    altering the candidate-blind Q predicate? Are stack/tolerance/numerical
