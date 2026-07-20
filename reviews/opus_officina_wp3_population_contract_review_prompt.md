@@ -98,4 +98,3 @@ revision, not author selection, WP-4, entropy, or execution. If accepted, state
 the exact author tokens that become eligible, but do not sign them.
 
 Do not predict qualification or any scientific outcome.
-
