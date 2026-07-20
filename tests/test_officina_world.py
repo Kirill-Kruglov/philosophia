@@ -157,6 +157,17 @@ def test_test_contact_hook_charges_and_logs_without_real_activation(
     assert entry["data"]["test_only"] is True
     assert entry["data"]["scientific_outcome"] is False
     assert len(ledger.entries()) == 1
+    with pytest.raises(ValueError, match="positive integer"):
+        record_test_t_contact(
+            capability=_capability(Surface.T),
+            modulus=10,
+            raw_query=query,
+            device_nanoseconds=True,
+            timestamp_utc="2026-07-21T00:00:02Z",
+            state=next_state,
+            envelope=TEnvelope(),
+            ledger=ledger,
+        )
     with pytest.raises(PermissionError, match="T test capability"):
         record_test_t_contact(
             capability=_capability(Surface.Q),

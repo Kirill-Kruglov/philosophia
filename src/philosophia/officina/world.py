@@ -118,7 +118,19 @@ def _validate_frame(blocks: list[dict[str, object]]) -> None:
     q_worlds: set[int] = set()
     c_counts = {h: 0 for h in range(1, STRATUM_COUNT + 1)}
     q_counts = {h: 0 for h in range(1, STRATUM_COUNT + 1)}
-    for block in blocks:
+    for expected_p, block in enumerate(blocks, start=1):
+        expected_h = (expected_p - 1) // BLOCKS_PER_STRATUM + 1
+        expected_j = (expected_p - 1) % BLOCKS_PER_STRATUM + 1
+        expected_assignment = "C" if expected_j in C_POSITIONS else "Q"
+        expected_block = {
+            "assignment": expected_assignment,
+            "h": expected_h,
+            "j": expected_j,
+            "members": list(_block(expected_h, expected_j)),
+            "p": expected_p,
+        }
+        if block != expected_block:
+            raise ValueError("frame block differs from the governing formula")
         members = block["members"]
         h = block["h"]
         if not isinstance(members, list) or len(members) != 2 or type(h) is not int:
@@ -290,6 +302,8 @@ def record_test_t_contact(
     _require_world_capability(capability)
     if capability.surface is not Surface.T:
         raise PermissionError("T contact logging requires a T test capability")
+    if type(device_nanoseconds) is not int or device_nanoseconds <= 0:
+        raise ValueError("test contact device charge must be a positive integer")
     parse_utc(timestamp_utc)
     response = evaluate_test_query(
         capability=capability, modulus=modulus, raw_query=raw_query
@@ -311,4 +325,3 @@ def record_test_t_contact(
         },
     )
     return next_state, response, entry
-
