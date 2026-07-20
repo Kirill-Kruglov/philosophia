@@ -43,4 +43,3 @@ for Kirill's informed selection/signature. Do not authorize WP-4 or any
 execution; even a positive verdict authorizes only the author's tokens.
 
 Preserve the full negative space and make no prediction.
-
