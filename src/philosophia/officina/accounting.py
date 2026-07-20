@@ -28,6 +28,16 @@ class TEnvelope:
     review_device_hours: int = 40
 
     def __post_init__(self) -> None:
+        if not all(
+            type(value) is int
+            for value in (
+                self.device_hour_cap,
+                self.candidate_cap,
+                self.review_wall_hours,
+                self.review_device_hours,
+            )
+        ):
+            raise ValueError("T envelope values must be integers")
         if min(
             self.device_hour_cap,
             self.candidate_cap,
@@ -47,19 +57,45 @@ class TState:
     author_stopped: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.device_nanoseconds) is not int or type(
+            self.device_nanoseconds_at_review
+        ) is not int or type(self.author_stopped) is not bool:
+            raise ValueError("T accounting fields have incorrect types")
+        if type(self.candidate_ids) is not tuple or not all(
+            type(item) is str for item in self.candidate_ids
+        ):
+            raise ValueError("T candidate_ids must be a tuple of strings")
+        for name, value in (
+            ("activated_utc", self.activated_utc),
+            ("last_review_utc", self.last_review_utc),
+        ):
+            if value is not None and type(value) is not str:
+                raise ValueError(f"T {name} must be string or null")
         if self.device_nanoseconds < 0 or self.device_nanoseconds_at_review < 0:
             raise ValueError("T accounting cannot be negative")
         if self.device_nanoseconds_at_review > self.device_nanoseconds:
             raise ValueError("review counter exceeds total device time")
         if len(set(self.candidate_ids)) != len(self.candidate_ids):
             raise ValueError("candidate registrations must be unique")
+        if any(_HEX64.fullmatch(item) is None for item in self.candidate_ids):
+            raise ValueError("candidate ids must be lowercase SHA-256")
         if self.activated_utc is None:
-            if self.last_review_utc is not None or self.device_nanoseconds != 0:
-                raise ValueError("inactive T cannot contain active accounting")
+            if (
+                self.device_nanoseconds != 0
+                or self.candidate_ids
+                or self.last_review_utc is not None
+                or self.device_nanoseconds_at_review != 0
+                or self.author_stopped
+            ):
+                raise ValueError("inactive T state must be the exact pristine state")
         else:
-            parse_utc(self.activated_utc)
+            activated = parse_utc(self.activated_utc)
             if self.last_review_utc is not None:
-                parse_utc(self.last_review_utc)
+                reviewed = parse_utc(self.last_review_utc)
+                if reviewed < activated:
+                    raise ValueError("T review predates activation")
+            if self.author_stopped and self.last_review_utc is None:
+                raise ValueError("author stop requires a completed review")
 
     def activate(self, timestamp_utc: str) -> "TState":
         if self.activated_utc is not None:
@@ -134,20 +170,35 @@ class TState:
 
     @classmethod
     def from_mapping(cls, value: Mapping[str, object]) -> "TState":
-        if value.get("schema") != "philosophia.officina.t-state.v1":
+        expected = {
+            "activated_utc", "author_stopped", "candidate_ids",
+            "device_nanoseconds", "device_nanoseconds_at_review",
+            "last_review_utc", "schema",
+        }
+        if set(value) != expected:
+            raise ValueError("T state fields differ")
+        if value["schema"] != "philosophia.officina.t-state.v1":
             raise ValueError("T state schema mismatch")
-        candidates = value.get("candidate_ids")
+        candidates = value["candidate_ids"]
         if not isinstance(candidates, list) or not all(
-            isinstance(item, str) for item in candidates
+            type(item) is str for item in candidates
         ):
             raise ValueError("T candidate ids must be strings")
+        for field in ("device_nanoseconds", "device_nanoseconds_at_review"):
+            if type(value[field]) is not int:
+                raise ValueError(f"T {field} must be an integer")
+        if type(value["author_stopped"]) is not bool:
+            raise ValueError("T author_stopped must be bool")
+        for field in ("activated_utc", "last_review_utc"):
+            if value[field] is not None and type(value[field]) is not str:
+                raise ValueError(f"T {field} must be string or null")
         return cls(
-            activated_utc=value.get("activated_utc"),  # type: ignore[arg-type]
-            device_nanoseconds=int(value.get("device_nanoseconds", -1)),
+            activated_utc=value["activated_utc"],  # type: ignore[arg-type]
+            device_nanoseconds=value["device_nanoseconds"],  # type: ignore[arg-type]
             candidate_ids=tuple(candidates),
-            last_review_utc=value.get("last_review_utc"),  # type: ignore[arg-type]
-            device_nanoseconds_at_review=int(
-                value.get("device_nanoseconds_at_review", -1)
-            ),
-            author_stopped=bool(value.get("author_stopped")),
+            last_review_utc=value["last_review_utc"],  # type: ignore[arg-type]
+            device_nanoseconds_at_review=value[
+                "device_nanoseconds_at_review"
+            ],  # type: ignore[arg-type]
+            author_stopped=value["author_stopped"],  # type: ignore[arg-type]
         )

@@ -5,17 +5,20 @@ Authorization: `successor/AUTHOR_SELECTIONS_V1_SIGNATURE.md`, commit
 
 ## Implemented surface
 
-- `philosophia.officina.quarantine`: realpath-first, deny-by-default data access;
-  T-only hash-pinned engineering fixtures; non-promotable provenance propagation.
-- `manifest`: conservative content-addressed candidate identity with mandatory
-  from-scratch initialization and no unknown fields.
+- `philosophia.officina.quarantine`, `provenance`: realpath-first,
+  deny-by-default data access; content/path/parent-bound durable provenance;
+  T-only hash-pinned engineering fixtures and non-promotable taint propagation.
+- `manifest`: conservative behavioral identity with mandatory from-scratch
+  initialization, a load-bearing source digest, and a closed inert-metadata list.
 - `canonical`, `prf`, `escrow`: canonical ASCII JSON, durable file primitives,
-  caller-supplied domain-separated PRF, and caller-supplied salted commitments.
+  typed domain-separated test-only PRF, and caller-supplied salted commitments.
 - `terminal`, `interlock`, `one_shot`: validity-first result types, explicit
-  execution refusal, and an immutable pre-entropy journal whose ambiguous
-  draw-armed recovery is charged with competence unset.
-- `ledger`, `accounting`, `checkpoint`: append-only hash-chain, exact cumulative
-  E1/E2/E3 state, durable operational pause, and fail-closed resume verification.
+  execution refusal, typed Q/C terminals, and an immutable attempt journal bound
+  to an external attempt-id/head registry. Pre-entropy closure requires a signed
+  disposition; every draw-armed or launched closure is charged.
+- `ledger`, `accounting`, `checkpoint`: append-only hash-chain bound to an
+  external head, exact non-coercive E1/E2/E3 state, artifact-recomputing durable
+  pause, and an overdue-review gate that blocks resumed work.
 - `verification`: canonical bootstrap, governing hashes, inactive T state,
   forbidden runtime imports, and zero entropy calls.
 
@@ -26,9 +29,10 @@ temporary ledgers, dummy manifests, and dummy state bytes. No test may create or
 read a real T/Q/C world, obtain entropy, register a real candidate, run a model,
 or create a scientific artifact.
 
-The committed `T_LEDGER.md` remains a valid empty ledger with status
-`NOT_ACTIVATED`. No committed checkpoint, attempt journal, fixture grant, root,
-or escrow artifact exists.
+The committed `T_LEDGER.md` and `T_LEDGER.md.head.json` remain a valid empty
+ledger at the genesis head with status `NOT_ACTIVATED`. No committed checkpoint,
+attempt journal/registry, provenance record, fixture grant, root, or escrow
+artifact exists.
 
 ## Deferred obligations
 

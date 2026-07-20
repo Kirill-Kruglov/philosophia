@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import hmac
 from typing import Sequence, TypeVar
@@ -28,12 +28,14 @@ def encode_component(component: DomainComponent) -> bytes:
     if isinstance(component, bool):
         raise TypeError("booleans are not domain integers")
     if isinstance(component, int):
+        tag = b"i"
         payload = str(component).encode("ascii")
     elif isinstance(component, str):
+        tag = b"s"
         payload = component.encode("utf-8")
     else:
         raise TypeError(f"unsupported domain component: {type(component)!r}")
-    return _uint16_be(len(payload)) + payload
+    return tag + _uint16_be(len(payload)) + payload
 
 
 def encode_domain(domain: Sequence[DomainComponent]) -> bytes:
@@ -42,29 +44,34 @@ def encode_domain(domain: Sequence[DomainComponent]) -> bytes:
     return b"".join(encode_component(component) for component in domain)
 
 
+_TEST_KEY_TOKEN = object()
+
+
 @dataclass(frozen=True)
-class ProvidedKey:
-    """Caller-provided key material; this module never obtains entropy."""
+class TestOnlyKey:
+    """A deterministic dummy key. WP-1/WP-2 expose no production key type."""
 
     material: bytes
     purpose: str
-    test_only: bool
+    _token: object = field(repr=False, compare=False)
 
     def __post_init__(self) -> None:
         if len(self.material) != 32:
             raise ValueError("PRF keys are exactly 32 bytes")
         if not self.purpose:
             raise ValueError("key purpose must be named")
+        if self._token is not _TEST_KEY_TOKEN:
+            raise PermissionError("test-only PRF keys must come from dummy_key")
 
 
-def dummy_key(label: str, *, purpose: str = "officina-test") -> ProvidedKey:
+def dummy_key(label: str, *, purpose: str = "officina-test") -> TestOnlyKey:
     material = hashlib.sha256(
         f"OFFICINA-TEST-ONLY/{purpose}/{label}".encode("ascii")
     ).digest()
-    return ProvidedKey(material=material, purpose=purpose, test_only=True)
+    return TestOnlyKey(material=material, purpose=purpose, _token=_TEST_KEY_TOKEN)
 
 
-def prf_digest(key: ProvidedKey, domain: Domain, counter: int) -> bytes:
+def prf_digest(key: TestOnlyKey, domain: Domain, counter: int) -> bytes:
     return hmac.new(
         key.material,
         encode_domain(domain) + _uint64_be(counter),
@@ -74,11 +81,13 @@ def prf_digest(key: ProvidedKey, domain: Domain, counter: int) -> bytes:
 
 @dataclass
 class CounterStream:
-    key: ProvidedKey
+    key: TestOnlyKey
     domain: Domain
     counter: int = 0
 
     def __post_init__(self) -> None:
+        if self.key._token is not _TEST_KEY_TOKEN:
+            raise PermissionError("only test-only PRF keys exist before WP-6")
         if self.counter < 0:
             raise ValueError("counter must be non-negative")
 

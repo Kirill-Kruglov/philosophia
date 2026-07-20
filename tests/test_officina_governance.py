@@ -25,31 +25,50 @@ from philosophia.officina.interlock import (
 from philosophia.officina.manifest import (
     behaviorally_equivalent,
     candidate_id,
+    canonical_behavior_manifest,
     canonical_candidate_manifest,
 )
-from philosophia.officina.one_shot import OneShotJournal
-from philosophia.officina.prf import CounterStream, dummy_key, shuffled
+from philosophia.officina.one_shot import AttemptRegistry, OneShotJournal
+from philosophia.officina.prf import (
+    CounterStream,
+    TestOnlyKey as OfficinaTestOnlyKey,
+    dummy_key,
+    encode_component,
+    shuffled,
+)
 from philosophia.officina.terminal import (
+    CScientificTerminal,
     CTerminal,
     InvalidCause,
     QTerminal,
     QValidity,
+    TEnding,
 )
 
 
 def _manifest(**changes: object) -> dict[str, object]:
     value: dict[str, object] = {
-        "schema": "philosophia.officina.candidate.v1",
-        "code_commit": "a" * 40,
+        "schema": "philosophia.officina.candidate.v2",
+        "provenance_commit": "a" * 40,
+        "behavior_source_sha256": "b" * 64,
         "stack_id": "cpu-test-stack",
         "initialization": {"checkpoint": None, "kind": "from-scratch"},
         "optimizer": {"kind": "AdamW", "lr": "0.001"},
         "policy": {"kind": "random-static"},
         "interface": {"encoding": "tokens-v1"},
         "config": {"width": 16},
+        "inert_metadata": {},
     }
     value.update(changes)
     return value
+
+
+def _journal(tmp_path: Path, attempt_id: int = 1) -> OneShotJournal:
+    registry = AttemptRegistry(tmp_path / "registry")
+    registry.initialize()
+    return OneShotJournal(
+        tmp_path / f"attempt-{attempt_id}", attempt_id=attempt_id, registry=registry
+    )
 
 
 def test_canonical_files_create_refuse_replace_and_round_trip(tmp_path: Path) -> None:
@@ -65,30 +84,52 @@ def test_canonical_files_create_refuse_replace_and_round_trip(tmp_path: Path) ->
         canonical_json({"not_finite": float("nan")})
 
 
-def test_prf_is_domain_separated_deterministic_and_caller_supplied() -> None:
+def test_prf_is_typed_domain_separated_and_test_only() -> None:
+    assert encode_component(1) != encode_component("1")
+    assert len({encode_component(value) for value in (0, -1, (1 << 64) - 1)}) == 3
+    assert encode_component("") != encode_component(0)
+    assert len(encode_component("x" * 65535)) == 65538
+    with pytest.raises(ValueError, match="uint16"):
+        encode_component("x" * 65536)
+    with pytest.raises(TypeError, match="booleans"):
+        encode_component(True)
+    with pytest.raises(PermissionError, match="dummy_key"):
+        OfficinaTestOnlyKey(material=b"x" * 32, purpose="forged", _token=object())
     key = dummy_key("golden")
     first = CounterStream(key, ("OFFICINA", "A", 1))
     second = CounterStream(key, ("OFFICINA", "A", 1))
-    other = CounterStream(key, ("OFFICINA", "B", 1))
     assert first.digest() == second.digest()
     assert first.digest() == second.digest()
-    assert other.digest() != CounterStream(key, ("OFFICINA", "A", 1)).digest()
+    assert CounterStream(key, ("OFFICINA", "A", 1)).digest() != CounterStream(
+        key, ("OFFICINA", "A", "1")
+    ).digest()
     assert shuffled(list(range(10)), CounterStream(key, ("shuffle",))) == shuffled(
         list(range(10)), CounterStream(key, ("shuffle",))
     )
 
 
-def test_candidate_manifest_is_conservative_and_content_addressed() -> None:
+def test_candidate_identity_excludes_only_whitelisted_inert_metadata() -> None:
     manifest = _manifest()
-    raw = canonical_candidate_manifest(manifest)
-    assert candidate_id(manifest) == sha256_bytes(raw)
-    assert behaviorally_equivalent(manifest, dict(manifest))
-    changed = _manifest(config={"width": 32})
-    assert candidate_id(changed) != candidate_id(manifest)
+    assert candidate_id(manifest) == sha256_bytes(canonical_behavior_manifest(manifest))
+    provenance_only = _manifest(
+        provenance_commit="c" * 40,
+        inert_metadata={"comments": "same behavior", "display_name": "candidate"},
+    )
+    assert behaviorally_equivalent(manifest, provenance_only)
+    assert candidate_id(manifest) == candidate_id(provenance_only)
+    for changed in (
+        _manifest(config={"width": 32}),
+        _manifest(behavior_source_sha256="d" * 64),
+        _manifest(stack_id="different-stack"),
+    ):
+        assert not behaviorally_equivalent(manifest, changed)
+        assert candidate_id(changed) != candidate_id(manifest)
     with pytest.raises(ValueError, match="fields differ"):
-        canonical_candidate_manifest({**manifest, "comment": "inert?"})
+        canonical_candidate_manifest({**manifest, "unknown": "inert?"})
+    with pytest.raises(ValueError, match="unrecognized"):
+        canonical_candidate_manifest(_manifest(inert_metadata={"unknown": "x"}))
     with pytest.raises(ValueError, match="40-hex"):
-        canonical_candidate_manifest(_manifest(code_commit="not-a-commit"))
+        canonical_candidate_manifest(_manifest(provenance_commit="not-a-commit"))
     with pytest.raises(ValueError, match="from scratch"):
         canonical_candidate_manifest(
             _manifest(initialization={"kind": "warm-start", "checkpoint": "old.pt"})
@@ -98,13 +139,33 @@ def test_candidate_manifest_is_conservative_and_content_addressed() -> None:
 def test_terminal_types_cannot_turn_invalidity_into_science() -> None:
     assert QTerminal(QValidity.PASS, True).competence is True
     assert QTerminal(QValidity.FAIL, False).competence is False
-    assert QTerminal(QValidity.INVALID, None, InvalidCause.PROCESS).competence is None
+    invalid = QTerminal(QValidity.INVALID, None, InvalidCause.PROCESS)
+    assert QTerminal.from_mapping(invalid.to_mapping()) == invalid
     with pytest.raises(ValueError, match="unset"):
         QTerminal(QValidity.INVALID, False, InvalidCause.PROCESS)
-    assert CTerminal(True, "INSUFFICIENT").scientific_label == "INSUFFICIENT"
+    with pytest.raises(ValueError, match="typed"):
+        QTerminal("Q_INVALID", None, InvalidCause.PROCESS)  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="typed"):
+        QTerminal(QValidity.INVALID, None, "PROCESS")  # type: ignore[arg-type]
+    assert CTerminal(True, CScientificTerminal.INSUFFICIENT).scientific_label \
+        is CScientificTerminal.INSUFFICIENT
     assert CTerminal(False, None, InvalidCause.HASH).scientific_label is None
+    with pytest.raises(ValueError, match="scientific label"):
+        CTerminal(True, "INSUFFICIENT")  # type: ignore[arg-type]
     with pytest.raises(ValueError, match="unset"):
-        CTerminal(False, "BOUNDARY", InvalidCause.HASH)
+        CTerminal(False, CScientificTerminal.BOUNDARY, InvalidCause.HASH)
+    with pytest.raises(ValueError, match="typed"):
+        CTerminal(False, None, "HASH")  # type: ignore[arg-type]
+    forbidden_labels = [
+        *(item.value for item in TEnding),
+        *(item.value for item in QValidity),
+        *(item.value for item in InvalidCause),
+        "T_OPERATIONAL_PAUSE",
+        "Q_INVALID:PROCESS",
+    ]
+    for label in forbidden_labels:
+        with pytest.raises(ValueError, match="scientific label"):
+            CTerminal(True, label)  # type: ignore[arg-type]
 
 
 def test_interlock_has_only_test_capability_and_real_entry_points_fail() -> None:
@@ -115,47 +176,93 @@ def test_interlock_has_only_test_capability_and_real_entry_points_fail() -> None
             function()
 
 
-def test_one_shot_journal_is_monotonic_and_ambiguous_draw_armed_is_charged(
+def test_one_shot_has_exhaustive_charged_transition_partition(tmp_path: Path) -> None:
+    journal = _journal(tmp_path)
+    journal.create_claim("a" * 64)
+    assert journal.recovery_requires_charge() is False
+    journal.arm_draw("sealed-postfreeze-root")
+    assert journal.recovery_requires_charge() is True
+    with pytest.raises(ValueError, match="only as charged Q invalid"):
+        journal.record_q_terminal(QTerminal(QValidity.PASS, True))
+    terminal = journal.record_q_terminal(
+        QTerminal(QValidity.INVALID, None, InvalidCause.PROCESS)
+    )
+    assert terminal["payload"]["charged"] is True
+    assert terminal["payload"]["q_terminal"]["competence"] is None
+    assert journal.recovery_requires_charge() is False
+
+
+def test_launched_attempts_are_always_charged_and_typed(tmp_path: Path) -> None:
+    journal = _journal(tmp_path)
+    journal.create_claim("a" * 64)
+    journal.arm_draw("sealed-postfreeze-root")
+    journal.record_launch_commitment("b" * 64)
+    terminal = journal.record_q_terminal(QTerminal(QValidity.FAIL, False))
+    assert terminal["payload"] == {
+        "charged": True,
+        "q_terminal": {
+            "competence": False,
+            "invalid_cause": None,
+            "validity": "Q_VALID_FAIL",
+        },
+    }
+
+
+def test_claimed_attempt_can_close_only_by_signed_pre_entropy_disposition(
     tmp_path: Path,
 ) -> None:
-    journal = OneShotJournal(tmp_path / "attempt")
-    journal.create_claim({"attempt_id": 1, "manifest": "a" * 64})
-    assert journal.recovery_requires_charge() is False
-    journal.arm_draw({"source": "caller-owned-future-root"})
-    assert journal.recovery_requires_charge() is True
-    journal.record_launch_commitment("b" * 64)
-    assert journal.recovery_requires_charge() is True
-    journal.record_terminal({"validity": "Q_INVALID:PROCESS", "competence": None})
-    assert journal.recovery_requires_charge() is False
-    with pytest.raises(ValueError, match="invalid one-shot transition"):
-        journal.record_terminal({"again": True})
+    journal = _journal(tmp_path)
+    journal.create_claim("a" * 64)
+    terminal = journal.record_pre_entropy_disposition(
+        signature_id="author-decision-1", reason="candidate withdrawn before launch"
+    )
+    assert terminal["payload"]["charged"] is False
+    assert terminal["payload"]["competence"] is None
 
 
-def test_one_shot_journal_detects_tampering(tmp_path: Path) -> None:
-    journal = OneShotJournal(tmp_path / "attempt")
-    journal.create_claim({"attempt_id": 1})
-    path = next((tmp_path / "attempt").glob("*.json"))
+def test_one_shot_registry_blocks_id_reuse_and_suffix_reset(tmp_path: Path) -> None:
+    registry = AttemptRegistry(tmp_path / "registry")
+    registry.initialize()
+    first = OneShotJournal(tmp_path / "first", attempt_id=7, registry=registry)
+    first.create_claim("a" * 64)
+    first.arm_draw("sealed-postfreeze-root")
+    second = OneShotJournal(tmp_path / "second", attempt_id=7, registry=registry)
+    with pytest.raises(ValueError, match="already been used"):
+        second.create_claim("b" * 64)
+    last_event = sorted((tmp_path / "first").glob("*-attempt-*.json"))[-1]
+    last_event.unlink()
+    with pytest.raises(ValueError, match="head mismatch"):
+        first.recovery_requires_charge()
+
+
+def test_terminal_persistence_crash_is_ambiguous_not_reopenable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    journal = _journal(tmp_path)
+    journal.create_claim("a" * 64)
+    journal.arm_draw("sealed-postfreeze-root")
+
+    def fail_registry_append(**_: object) -> None:
+        raise OSError("injected registry persistence failure")
+
+    monkeypatch.setattr(journal.registry, "append", fail_registry_append)
+    with pytest.raises(OSError, match="injected"):
+        journal.record_q_terminal(
+            QTerminal(QValidity.INVALID, None, InvalidCause.PROCESS)
+        )
+    with pytest.raises(ValueError, match="registry and journal head differ"):
+        journal.recovery_requires_charge()
+
+
+def test_one_shot_journal_detects_content_tampering(tmp_path: Path) -> None:
+    journal = _journal(tmp_path)
+    journal.create_claim("a" * 64)
+    path = next((tmp_path / "attempt-1").glob("*-attempt-*.json"))
     value = json.loads(path.read_bytes())
-    value["payload"]["attempt_id"] = 2
+    value["payload"]["manifest_sha256"] = "b" * 64
     path.write_bytes(canonical_json(value))
     with pytest.raises(ValueError, match="hash mismatch"):
-        journal.arm_draw({"source": "test"})
-
-
-def test_ambiguous_draw_armed_recovery_closes_as_charged_invalid(tmp_path: Path) -> None:
-    journal = OneShotJournal(tmp_path / "attempt")
-    journal.create_claim({"attempt_id": 1})
-    journal.arm_draw({"source": "future-root"})
-    with pytest.raises(ValueError, match="charged with competence unset"):
-        journal.record_terminal({"charged": False, "competence": None})
-    journal.record_terminal(
-        {
-            "charged": True,
-            "competence": None,
-            "validity": "Q_INVALID:PROCESS",
-        }
-    )
-    assert journal.recovery_requires_charge() is False
+        journal.arm_draw("test")
 
 
 def test_escrow_building_blocks_use_only_caller_supplied_material() -> None:

@@ -28,14 +28,19 @@ class FixtureGrant:
 class ArtifactLabel:
     sources: tuple[str, ...]
     promotable: bool
+    certified: bool
 
     @classmethod
     def native(cls) -> "ArtifactLabel":
-        return cls(sources=("officina-native",), promotable=True)
+        return cls(sources=("officina-storage",), promotable=False, certified=False)
 
     @classmethod
     def engineering_fixture(cls) -> "ArtifactLabel":
-        return cls(sources=("engineering-fixture",), promotable=False)
+        return cls(sources=("engineering-fixture",), promotable=False, certified=True)
+
+    @classmethod
+    def test_only_native(cls) -> "ArtifactLabel":
+        return cls(sources=("test-only-native",), promotable=False, certified=True)
 
     @classmethod
     def derived(cls, *parents: "ArtifactLabel") -> "ArtifactLabel":
@@ -45,10 +50,13 @@ class ArtifactLabel:
         return cls(
             sources=sources,
             promotable=all(parent.promotable for parent in parents),
+            certified=all(parent.certified for parent in parents),
         )
 
     def require_promotable(self, surface: Surface) -> None:
-        if surface in {Surface.Q, Surface.C} and not self.promotable:
+        if surface in {Surface.Q, Surface.C} and (
+            not self.certified or not self.promotable
+        ):
             raise QuarantineViolation(
                 f"{','.join(self.sources)} artifacts cannot enter {surface.value}"
             )
@@ -99,4 +107,8 @@ class PathPolicy:
 
     def read_bytes(self, path: Path, *, surface: Surface) -> tuple[bytes, ArtifactLabel]:
         resolved, label = self.authorize(path, surface=surface)
+        if not label.certified:
+            raise QuarantineViolation(
+                "native reads require canonical ArtifactStore provenance"
+            )
         return resolved.read_bytes(), label

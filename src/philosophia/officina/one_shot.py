@@ -1,11 +1,21 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from enum import Enum
+import json
 from pathlib import Path
 from typing import Mapping
 
-from .canonical import atomic_create, canonical_json, load_canonical_json, sha256_bytes
+from .canonical import (
+    atomic_create,
+    atomic_replace,
+    canonical_json,
+    load_canonical_json,
+    sha256_bytes,
+)
+from .terminal import QTerminal, QValidity
+
+
+GENESIS = "0" * 64
 
 
 class AttemptPhase(str, Enum):
@@ -15,37 +25,127 @@ class AttemptPhase(str, Enum):
     TERMINAL = "TERMINAL"
 
 
-@dataclass(frozen=True)
-class AttemptEvent:
-    phase: AttemptPhase
-    charged: bool
-    payload: Mapping[str, object]
+def _head(schema: str, events: list[dict[str, object]]) -> bytes:
+    return canonical_json(
+        {
+            "entry_count": len(events),
+            "head_sha256": str(events[-1]["event_sha256"]) if events else GENESIS,
+            "schema": schema,
+            "scientific_outcome": False,
+        }
+    )
 
 
-class OneShotJournal:
-    """Immutable event journal around a caller-owned future entropy invocation."""
+def _read_chain(directory: Path, *, stem: str) -> list[dict[str, object]]:
+    events: list[dict[str, object]] = []
+    for index, path in enumerate(sorted(directory.glob(f"[0-9][0-9][0-9]-{stem}-*.json"))):
+        value = load_canonical_json(path)
+        expected_keys = {
+            "event_sha256", "payload", "phase", "previous_sha256", "sequence"
+        }
+        if not isinstance(value, dict) or set(value) != expected_keys:
+            raise ValueError(f"{stem} event fields differ")
+        if type(value["sequence"]) is not int or value["sequence"] != index:
+            raise ValueError(f"{stem} sequence mismatch")
+        previous = GENESIS if not events else str(events[-1]["event_sha256"])
+        if value["previous_sha256"] != previous:
+            raise ValueError(f"{stem} hash chain mismatch")
+        payload = {key: item for key, item in value.items() if key != "event_sha256"}
+        if value["event_sha256"] != sha256_bytes(canonical_json(payload)):
+            raise ValueError(f"{stem} event hash mismatch")
+        events.append(value)
+    return events
+
+
+class AttemptRegistry:
+    """External append-only commitment to attempt ids and journal heads."""
+
+    SCHEMA = "philosophia.officina.attempt-registry-head.v1"
 
     def __init__(self, directory: Path) -> None:
         self.directory = directory
+        self.head_path = directory / "HEAD.json"
 
-    def _path(self, sequence: int, phase: AttemptPhase) -> Path:
-        return self.directory / f"{sequence:03d}-{phase.value.lower()}.json"
+    def initialize(self) -> None:
+        self.directory.mkdir(parents=True, exist_ok=True)
+        atomic_create(self.head_path, _head(self.SCHEMA, []))
 
     def _events(self) -> list[dict[str, object]]:
-        if not self.directory.exists():
+        if not self.head_path.exists():
+            raise ValueError("attempt registry is not initialized")
+        events = _read_chain(self.directory, stem="registry")
+        if load_canonical_json(self.head_path) != json.loads(_head(self.SCHEMA, events)):
+            raise ValueError("attempt registry head mismatch")
+        return events
+
+    def assert_unused(self, attempt_id: int) -> None:
+        if type(attempt_id) is not int or attempt_id < 0:
+            raise ValueError("attempt id must be a non-negative integer")
+        if any(event["payload"]["attempt_id"] == attempt_id for event in self._events()):
+            raise ValueError("attempt id has already been used")
+
+    def latest_for(self, attempt_id: int) -> dict[str, object] | None:
+        matches = [
+            event for event in self._events()
+            if event["payload"]["attempt_id"] == attempt_id
+        ]
+        return matches[-1] if matches else None
+
+    def append(
+        self, *, attempt_id: int, phase: AttemptPhase, journal_head: str
+    ) -> dict[str, object]:
+        events = self._events()
+        payload = {
+            "attempt_id": attempt_id,
+            "journal_head": journal_head,
+            "phase": phase.value,
+        }
+        sequence = len(events)
+        core = {
+            "payload": payload,
+            "phase": "REGISTRY",
+            "previous_sha256": GENESIS if not events else events[-1]["event_sha256"],
+            "sequence": sequence,
+        }
+        event = {**core, "event_sha256": sha256_bytes(canonical_json(core))}
+        atomic_create(
+            self.directory / f"{sequence:03d}-registry-{attempt_id}.json",
+            canonical_json(event),
+        )
+        atomic_replace(self.head_path, _head(self.SCHEMA, [*events, event]))
+        return event
+
+
+class OneShotJournal:
+    """Fail-closed Q attempt journal. It performs no entropy draw or launch."""
+
+    SCHEMA = "philosophia.officina.attempt-head.v1"
+
+    def __init__(
+        self, directory: Path, *, attempt_id: int, registry: AttemptRegistry
+    ) -> None:
+        if type(attempt_id) is not int or attempt_id < 0:
+            raise ValueError("attempt id must be a non-negative integer")
+        self.directory = directory
+        self.attempt_id = attempt_id
+        self.registry = registry
+        self.head_path = directory / "HEAD.json"
+
+    def _events(self) -> list[dict[str, object]]:
+        if not self.head_path.exists():
             return []
-        events: list[dict[str, object]] = []
-        for index, path in enumerate(sorted(self.directory.glob("*.json"))):
-            value = load_canonical_json(path)
-            if not isinstance(value, dict) or value.get("sequence") != index:
-                raise ValueError("one-shot journal sequence mismatch")
-            previous = "0" * 64 if not events else str(events[-1]["event_sha256"])
-            if value.get("previous_sha256") != previous:
-                raise ValueError("one-shot journal hash chain mismatch")
-            payload = {key: item for key, item in value.items() if key != "event_sha256"}
-            if value.get("event_sha256") != sha256_bytes(canonical_json(payload)):
-                raise ValueError("one-shot journal event hash mismatch")
-            events.append(value)
+        events = _read_chain(self.directory, stem="attempt")
+        if load_canonical_json(self.head_path) != json.loads(_head(self.SCHEMA, events)):
+            raise ValueError("one-shot journal head mismatch")
+        latest = self.registry.latest_for(self.attempt_id)
+        if not events or latest is None:
+            raise ValueError("journal is not committed by the attempt registry")
+        if latest["payload"] != {
+            "attempt_id": self.attempt_id,
+            "journal_head": events[-1]["event_sha256"],
+            "phase": events[-1]["phase"],
+        }:
+            raise ValueError("attempt registry and journal head differ")
         return events
 
     def _append(self, phase: AttemptPhase, payload: Mapping[str, object]) -> dict[str, object]:
@@ -53,35 +153,68 @@ class OneShotJournal:
         previous_phase = AttemptPhase(str(events[-1]["phase"])) if events else None
         allowed = (
             (previous_phase is None and phase is AttemptPhase.CLAIMED)
-            or (previous_phase is AttemptPhase.CLAIMED and phase is AttemptPhase.DRAW_ARMED)
-            or (
-                previous_phase is AttemptPhase.DRAW_ARMED
-                and phase in {AttemptPhase.LAUNCHED, AttemptPhase.TERMINAL}
-            )
+            or (previous_phase is AttemptPhase.CLAIMED and phase in {
+                AttemptPhase.DRAW_ARMED, AttemptPhase.TERMINAL
+            })
+            or (previous_phase is AttemptPhase.DRAW_ARMED and phase in {
+                AttemptPhase.LAUNCHED, AttemptPhase.TERMINAL
+            })
             or (previous_phase is AttemptPhase.LAUNCHED and phase is AttemptPhase.TERMINAL)
         )
         if not allowed:
             raise ValueError(f"invalid one-shot transition: {previous_phase} -> {phase}")
-        if previous_phase is AttemptPhase.DRAW_ARMED and phase is AttemptPhase.TERMINAL:
-            if payload.get("charged") is not True or payload.get("competence") is not None:
-                raise ValueError("ambiguous draw recovery must be charged with competence unset")
         sequence = len(events)
-        previous_hash = "0" * 64 if not events else str(events[-1]["event_sha256"])
         core = {
             "payload": dict(payload),
             "phase": phase.value,
-            "previous_sha256": previous_hash,
+            "previous_sha256": GENESIS if not events else events[-1]["event_sha256"],
             "sequence": sequence,
         }
         event = {**core, "event_sha256": sha256_bytes(canonical_json(core))}
-        atomic_create(self._path(sequence, phase), canonical_json(event))
+        if not events:
+            self.registry.assert_unused(self.attempt_id)
+            self.directory.mkdir(parents=True, exist_ok=False)
+            atomic_create(self.head_path, _head(self.SCHEMA, []))
+        atomic_create(
+            self.directory / f"{sequence:03d}-attempt-{phase.value.lower()}.json",
+            canonical_json(event),
+        )
+        atomic_replace(self.head_path, _head(self.SCHEMA, [*events, event]))
+        self.registry.append(
+            attempt_id=self.attempt_id,
+            phase=phase,
+            journal_head=str(event["event_sha256"]),
+        )
         return event
 
-    def create_claim(self, payload: Mapping[str, object]) -> dict[str, object]:
-        return self._append(AttemptPhase.CLAIMED, payload)
+    def create_claim(self, manifest_sha256: str) -> dict[str, object]:
+        if len(manifest_sha256) != 64:
+            raise ValueError("candidate manifest commitment must be SHA-256")
+        return self._append(
+            AttemptPhase.CLAIMED,
+            {"attempt_id": self.attempt_id, "manifest_sha256": manifest_sha256},
+        )
 
-    def arm_draw(self, payload: Mapping[str, object]) -> dict[str, object]:
-        return self._append(AttemptPhase.DRAW_ARMED, payload)
+    def record_pre_entropy_disposition(
+        self, *, signature_id: str, reason: str
+    ) -> dict[str, object]:
+        if not signature_id or not reason:
+            raise ValueError("pre-entropy disposition must be signed and reasoned")
+        return self._append(
+            AttemptPhase.TERMINAL,
+            {
+                "charged": False,
+                "competence": None,
+                "disposition": "PRE_ENTROPY_STOP",
+                "reason": reason,
+                "signature_id": signature_id,
+            },
+        )
+
+    def arm_draw(self, source: str) -> dict[str, object]:
+        if not source:
+            raise ValueError("entropy source must be named")
+        return self._append(AttemptPhase.DRAW_ARMED, {"source": source})
 
     def record_launch_commitment(self, root_commitment: str) -> dict[str, object]:
         if len(root_commitment) != 64:
@@ -91,14 +224,23 @@ class OneShotJournal:
             {"charged": True, "root_commitment": root_commitment},
         )
 
-    def record_terminal(self, payload: Mapping[str, object]) -> dict[str, object]:
-        return self._append(AttemptPhase.TERMINAL, payload)
+    def record_q_terminal(self, terminal: QTerminal) -> dict[str, object]:
+        events = self._events()
+        if not events:
+            raise ValueError("attempt has no claim")
+        phase = AttemptPhase(str(events[-1]["phase"]))
+        if phase is AttemptPhase.DRAW_ARMED and terminal.validity is not QValidity.INVALID:
+            raise ValueError("draw-armed ambiguity can close only as charged Q invalid")
+        if phase not in {AttemptPhase.DRAW_ARMED, AttemptPhase.LAUNCHED}:
+            raise ValueError("Q terminal requires a charged attempt")
+        return self._append(
+            AttemptPhase.TERMINAL,
+            {"charged": True, "q_terminal": terminal.to_mapping()},
+        )
 
     def recovery_requires_charge(self) -> bool:
         events = self._events()
-        if not events:
-            return False
-        return AttemptPhase(str(events[-1]["phase"])) in {
+        return bool(events) and AttemptPhase(str(events[-1]["phase"])) in {
             AttemptPhase.DRAW_ARMED,
             AttemptPhase.LAUNCHED,
         }

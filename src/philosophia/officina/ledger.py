@@ -6,7 +6,14 @@ import os
 from pathlib import Path
 from typing import Mapping
 
-from .canonical import canonical_json, fsync_directory, sha256_bytes
+from .canonical import (
+    atomic_create,
+    atomic_replace,
+    canonical_json,
+    fsync_directory,
+    load_canonical_json,
+    sha256_bytes,
+)
 
 
 HEADER = (
@@ -17,6 +24,7 @@ HEADER = (
     "tests use temporary ledgers only. No real T entry exists in this file.\n"
 )
 GENESIS = "0" * 64
+HEAD_SCHEMA = "philosophia.officina.ledger-head.v1"
 
 
 class LedgerIntegrityError(ValueError):
@@ -84,13 +92,23 @@ def parse_ledger(raw: bytes) -> list[dict[str, object]]:
             raise LedgerIntegrityError("ledger entry is not JSON") from error
         if not isinstance(value, dict):
             raise LedgerIntegrityError("ledger entry must be an object")
-        entry_hash = value.get("entry_sha256")
+        expected_keys = {
+            "data",
+            "entry_sha256",
+            "event",
+            "previous_sha256",
+            "sequence",
+            "timestamp_utc",
+        }
+        if set(value) != expected_keys:
+            raise LedgerIntegrityError("ledger entry fields differ")
+        entry_hash = value["entry_sha256"]
         payload = {key: item for key, item in value.items() if key != "entry_sha256"}
         if canonical_json(value).decode("ascii").rstrip("\n") != line[2:]:
             raise LedgerIntegrityError("ledger entry is not canonical JSON")
-        if value.get("sequence") != len(entries):
+        if type(value["sequence"]) is not int or value["sequence"] != len(entries):
             raise LedgerIntegrityError("ledger sequence is not contiguous")
-        if value.get("previous_sha256") != previous:
+        if value["previous_sha256"] != previous:
             raise LedgerIntegrityError("ledger hash chain is broken")
         if entry_hash != sha256_bytes(canonical_json(payload)):
             raise LedgerIntegrityError("ledger entry hash mismatch")
@@ -99,25 +117,42 @@ def parse_ledger(raw: bytes) -> list[dict[str, object]]:
     return entries
 
 
+def _head_payload(entries: list[dict[str, object]]) -> bytes:
+    return canonical_json(
+        {
+            "entry_count": len(entries),
+            "head_sha256": str(entries[-1]["entry_sha256"]) if entries else GENESIS,
+            "schema": HEAD_SCHEMA,
+            "scientific_outcome": False,
+        }
+    )
+
+
 class AppendOnlyLedger:
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, head_path: Path | None = None) -> None:
         self.path = path
+        self.head_path = head_path or path.with_name(f"{path.name}.head.json")
 
     def initialize(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        descriptor = os.open(
-            self.path,
-            os.O_WRONLY | os.O_CREAT | os.O_EXCL,
-            0o644,
-        )
-        with os.fdopen(descriptor, "wb") as target:
-            target.write(HEADER.encode("ascii"))
-            target.flush()
-            os.fsync(target.fileno())
-        fsync_directory(self.path.parent)
+        atomic_create(self.path, HEADER.encode("ascii"), mode=0o644)
+        try:
+            atomic_create(self.head_path, _head_payload([]), mode=0o644)
+        except BaseException:
+            # A ledger without its external head is invalid and intentionally
+            # not removed or retried silently.
+            raise
+
+    def _verify_head(self, entries: list[dict[str, object]]) -> None:
+        value = load_canonical_json(self.head_path)
+        expected = json.loads(_head_payload(entries))
+        if value != expected:
+            raise LedgerIntegrityError("ledger external head mismatch")
 
     def entries(self) -> list[dict[str, object]]:
-        return parse_ledger(self.path.read_bytes())
+        entries = parse_ledger(self.path.read_bytes())
+        self._verify_head(entries)
+        return entries
 
     def append(
         self,
@@ -132,6 +167,7 @@ class AppendOnlyLedger:
             with os.fdopen(descriptor, "r+b", closefd=False) as target:
                 target.seek(0)
                 entries = parse_ledger(target.read())
+                self._verify_head(entries)
                 previous = str(entries[-1]["entry_sha256"]) if entries else GENESIS
                 entry = build_entry(
                     sequence=len(entries),
@@ -140,11 +176,12 @@ class AppendOnlyLedger:
                     timestamp_utc=timestamp_utc,
                     data=data,
                 )
-                line = b"- " + canonical_json(entry)
                 target.seek(0, os.SEEK_END)
-                target.write(line)
+                target.write(b"- " + canonical_json(entry))
                 target.flush()
                 os.fsync(target.fileno())
+                entries.append(entry)
+            atomic_replace(self.head_path, _head_payload(entries), mode=0o644)
             fsync_directory(self.path.parent)
             return entry
         finally:
