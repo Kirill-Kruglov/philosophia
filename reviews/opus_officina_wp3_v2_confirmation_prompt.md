@@ -76,4 +76,3 @@ do not waive it silently.
 This confirmation authorizes no author token itself, WP-4, entropy, T
 activation, world generation, Q/C process, lock, escrow, datum, outcome, or
 claim movement. Do not predict qualification or scientific direction.
-
