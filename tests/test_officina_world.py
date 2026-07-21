@@ -1,16 +1,21 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
-from philosophia.officina.accounting import TEnvelope, TState
 from philosophia.officina.canonical import canonical_json, sha256_file
-from philosophia.officina.interlock import test_only_capability as make_test_capability
+from philosophia.officina.interlock import (
+    execute_c,
+    launch_q,
+    test_only_capability as make_test_capability,
+)
 from philosophia.officina.ledger import AppendOnlyLedger
-from philosophia.officina.quarantine import Surface
+from philosophia.officina.provenance import ArtifactStore, ProvenanceRegistry
+from philosophia.officina.quarantine import PathPolicy, QuarantineViolation, Surface
 from philosophia.officina.world import (
     CH1_TOKEN,
     CH2_TOKEN,
@@ -23,6 +28,7 @@ from philosophia.officina.world import (
     frame_mapping,
     frame_sha256,
     record_test_t_contact,
+    issue_test_t_contact_harness,
     test_world_capability as make_test_world_capability,
     verify_frame_bytes,
 )
@@ -31,7 +37,7 @@ from philosophia.officina.world import (
 REPO = Path(__file__).resolve().parent.parent
 
 
-def _capability(surface: Surface):
+def _capability(surface: Surface = Surface.T):
     return make_test_world_capability(
         surface,
         capability=make_test_capability("world-tests"),
@@ -92,32 +98,29 @@ def test_oracle_wire_classifier_is_total_ordered_and_exact(
     raw: bytes, expected: bytes
 ) -> None:
     assert evaluate_test_query(
-        capability=_capability(Surface.T), modulus=10, raw_query=raw
+        capability=_capability(), modulus=10, raw_query=raw
     ) == expected
 
 
 def test_oracle_matches_cyclic_equality_and_surface_gates() -> None:
     query = canonical_json({"u": "R" * 10, "v": ""})
     assert evaluate_test_query(
-        capability=_capability(Surface.T), modulus=10, raw_query=query
+        capability=_capability(), modulus=10, raw_query=query
     ) == canonical_json(1)
     assert evaluate_test_query(
-        capability=_capability(Surface.T), modulus=11, raw_query=query
+        capability=_capability(), modulus=11, raw_query=query
     ) == canonical_json(0)
     with pytest.raises(PermissionError, match="outside the T"):
         evaluate_test_query(
-            capability=_capability(Surface.T), modulus=26, raw_query=query
+            capability=_capability(), modulus=26, raw_query=query
         )
-    assert evaluate_test_query(
-        capability=_capability(Surface.Q), modulus=28, raw_query=query
-    ) in {canonical_json(0), canonical_json(1)}
-    with pytest.raises(PermissionError, match="outside the Q"):
-        evaluate_test_query(
-            capability=_capability(Surface.Q), modulus=26, raw_query=query
-        )
-    assert evaluate_test_query(
-        capability=_capability(Surface.C), modulus=26, raw_query=query
-    ) in {canonical_json(0), canonical_json(1)}
+    for surface in (Surface.Q, Surface.C):
+        with pytest.raises(PermissionError, match="T-only"):
+            _capability(surface)
+    with pytest.raises(Exception, match="separately signed WP-6"):
+        launch_q()
+    with pytest.raises(Exception, match="one-shot authorization"):
+        execute_c()
 
 
 def test_world_capability_is_test_only_exact_and_unforgeable() -> None:
@@ -130,52 +133,129 @@ def test_world_capability_is_test_only_exact_and_unforgeable() -> None:
             modulus=10,
             raw_query=canonical_json({"u": "", "v": ""}),
         )
-    with pytest.raises(ValueError, match="T, Q, or C"):
+    with pytest.raises(PermissionError, match="T-only"):
         _capability(Surface.TEST)
 
 
 def test_test_contact_hook_charges_and_logs_without_real_activation(
     tmp_path: Path,
 ) -> None:
-    ledger = AppendOnlyLedger(tmp_path / "T_LEDGER.md")
-    ledger.initialize()
-    state = TState().activate("2026-07-21T00:00:00Z")
+    harness = issue_test_t_contact_harness(
+        temp_root=tmp_path,
+        capability=make_test_capability("contact-harness"),
+        purpose="world-tests",
+    )
     query = canonical_json({"u": "R" * 10, "v": ""})
     next_state, response, entry = record_test_t_contact(
-        capability=_capability(Surface.T),
+        capability=_capability(),
         modulus=10,
         raw_query=query,
         device_nanoseconds=123,
         timestamp_utc="2026-07-21T00:00:01Z",
-        state=state,
-        envelope=TEnvelope(),
-        ledger=ledger,
+        harness=harness,
     )
     assert response == canonical_json(1)
     assert next_state.device_nanoseconds == 123
+    assert next_state.test_only is True
+    assert next_state.purpose == "test-only:world-tests"
     assert entry["event"] == "T_TEST_ONLY_WORLD_CONTACT"
     assert entry["data"]["test_only"] is True
     assert entry["data"]["scientific_outcome"] is False
-    assert len(ledger.entries()) == 1
+    assert len(harness.entries()) == 1
     with pytest.raises(ValueError, match="positive integer"):
         record_test_t_contact(
-            capability=_capability(Surface.T),
+            capability=_capability(),
             modulus=10,
             raw_query=query,
             device_nanoseconds=True,
             timestamp_utc="2026-07-21T00:00:02Z",
-            state=next_state,
-            envelope=TEnvelope(),
-            ledger=ledger,
+            harness=harness,
         )
-    with pytest.raises(PermissionError, match="T test capability"):
+
+
+def test_test_contact_harness_refuses_production_compatible_objects_and_aliases(
+    tmp_path: Path,
+) -> None:
+    protected = (
+        REPO / "successor/officina/T_ENVELOPE.json",
+        REPO / "successor/officina/T_LEDGER.md",
+        REPO / "successor/officina/T_LEDGER.md.head.json",
+    )
+    before = {path: sha256_file(path) for path in protected}
+    query = canonical_json({"u": "", "v": ""})
+    ordinary = AppendOnlyLedger(tmp_path / "ordinary.md")
+    ordinary.initialize()
+    with pytest.raises(PermissionError, match="issued test harness"):
         record_test_t_contact(
-            capability=_capability(Surface.Q),
-            modulus=28,
+            capability=_capability(),
+            modulus=10,
             raw_query=query,
             device_nanoseconds=1,
             timestamp_utc="2026-07-21T00:00:02Z",
-            state=next_state,
-            envelope=TEnvelope(),
-            ledger=ledger,
+            harness=ordinary,  # type: ignore[arg-type]
         )
+
+    with pytest.raises(PermissionError, match="outside the repository"):
+        issue_test_t_contact_harness(
+            temp_root=REPO / "successor/officina",
+            capability=make_test_capability("direct-alias"),
+            purpose="direct-alias",
+        )
+    with pytest.raises(PermissionError, match="absolute Path"):
+        issue_test_t_contact_harness(
+            temp_root=Path("successor/officina"),
+            capability=make_test_capability("relative-alias"),
+            purpose="relative-alias",
+        )
+
+    symlink_root = tmp_path / "symlink-root"
+    symlink_root.symlink_to(REPO / "successor/officina", target_is_directory=True)
+    with pytest.raises(PermissionError, match="path aliases"):
+        issue_test_t_contact_harness(
+            temp_root=symlink_root,
+            capability=make_test_capability("symlink-alias"),
+            purpose="symlink-alias",
+        )
+
+    for name, protected_path in (
+        ("ledger-hardlink", protected[1]),
+        ("head-hardlink", protected[2]),
+    ):
+        root = tmp_path / name
+        root.mkdir()
+        alias_name = "T_LEDGER.md" if "ledger" in name else "T_LEDGER.md.head.json"
+        os.link(protected_path, root / alias_name)
+        with pytest.raises(PermissionError, match="aliases a committed|newly created"):
+            issue_test_t_contact_harness(
+                temp_root=root,
+                capability=make_test_capability(name),
+                purpose=name,
+            )
+
+    assert {path: sha256_file(path) for path in protected} == before
+
+
+def test_test_oracle_artifact_cannot_be_admitted_to_q_or_c(tmp_path: Path) -> None:
+    repository = tmp_path / "repository"
+    successor = repository / "successor"
+    successor.mkdir(parents=True)
+    registry = ProvenanceRegistry(repository / "registry")
+    registry.initialize()
+    store = ArtifactStore(
+        PathPolicy(repository_root=repository, successor_root=successor), registry
+    )
+    artifact = successor / "test-response.json"
+    response = evaluate_test_query(
+        capability=_capability(),
+        modulus=10,
+        raw_query=canonical_json({"u": "", "v": ""}),
+    )
+    store.write_test_only(
+        path=artifact,
+        payload=response,
+        purpose="test-only-oracle-response",
+        capability=make_test_capability("test-response"),
+    )
+    for surface in (Surface.Q, Surface.C):
+        with pytest.raises(QuarantineViolation, match="cannot enter"):
+            store.admit(artifact, surface=surface)

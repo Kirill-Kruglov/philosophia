@@ -8,12 +8,13 @@ Authorization: `successor/OFFICINA_WP3_SIGNATURE.md`.
   exact verifier are derived from the governing formulas and selected tokens.
 - The cyclic-equality construct has a total ordered raw-wire classifier and a
   pure mathematical oracle. PAD/SEP remain outside oracle semantics.
-- Oracle contact is possible only through issued `TestWorldCapability` objects
-  backed by the existing test-only interlock. T, Q, and C test surfaces enforce
-  their signed modulus sets. No real surface-capability factory exists.
-- A temporary-ledger hook exercises T accounting and canonical contact logging
-  as `T_TEST_ONLY_WORLD_CONTACT`. It is not a production transaction or a T
-  activation path.
+- Oracle contact is possible only through issued T-only `TestWorldCapability`
+  objects backed by the existing test-only interlock. Q/C-labelled capabilities
+  do not exist before their future roots; frame membership remains pure data.
+- An internally issued harness owns a fresh ledger and fake accounting state
+  under a non-aliased temporary root outside the repository. The hook records
+  `T_TEST_ONLY_WORLD_CONTACT` and cannot accept production-compatible ledger,
+  state, or envelope objects.
 
 ## Deliberately absent
 

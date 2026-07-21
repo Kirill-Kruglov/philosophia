@@ -10,6 +10,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 import json
+import os
+from pathlib import Path
 from typing import Mapping
 
 from .accounting import TEnvelope, TState, parse_utc
@@ -48,6 +50,12 @@ class RefusalCode(str, Enum):
 
 
 _WORLD_TOKEN = object()
+_CONTACT_TOKEN = object()
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+_COMMITTED_T_PATHS = (
+    _REPOSITORY_ROOT / "successor/officina/T_LEDGER.md",
+    _REPOSITORY_ROOT / "successor/officina/T_LEDGER.md.head.json",
+)
 
 
 @dataclass(frozen=True)
@@ -61,8 +69,8 @@ class TestWorldCapability:
     def __post_init__(self) -> None:
         if self._token is not _WORLD_TOKEN:
             raise PermissionError("world capability must use the test-only factory")
-        if self.surface not in {Surface.T, Surface.Q, Surface.C}:
-            raise ValueError("test world capability requires T, Q, or C surface")
+        if self.surface is not Surface.T:
+            raise PermissionError("pre-root test world capability is T-only")
         if not self.purpose.startswith("test-only:"):
             raise PermissionError("world capability purpose must be test-only")
 
@@ -76,6 +84,119 @@ def test_world_capability(
     if type(surface) is not Surface:
         raise TypeError("world surface must be an exact Surface")
     return TestWorldCapability(surface, f"test-only:{purpose}", _WORLD_TOKEN)
+
+
+@dataclass(frozen=True)
+class TestTContactState:
+    """Non-promotable view of accounting exercised by the test harness."""
+
+    device_nanoseconds: int
+    purpose: str
+    test_only: bool = True
+
+
+class TestTContactHarness:
+    """Owns a fresh temporary ledger and fake accounting state."""
+
+    __slots__ = (
+        "_envelope",
+        "_head_identity",
+        "_ledger",
+        "_ledger_identity",
+        "_purpose",
+        "_root",
+        "_state",
+        "_token",
+    )
+
+    def __init__(
+        self,
+        *,
+        root: Path,
+        ledger: AppendOnlyLedger,
+        purpose: str,
+        token: object,
+    ) -> None:
+        if token is not _CONTACT_TOKEN:
+            raise PermissionError("test contact harness requires its internal factory")
+        self._token = token
+        self._root = root
+        self._ledger = ledger
+        self._purpose = purpose
+        self._state = TState().activate("2000-01-01T00:00:00Z")
+        self._envelope = TEnvelope()
+        self._ledger_identity = _path_identity(ledger.path)
+        self._head_identity = _path_identity(ledger.head_path)
+
+    def entries(self) -> list[dict[str, object]]:
+        _require_test_contact_harness(self)
+        return self._ledger.entries()
+
+
+def _path_identity(path: Path) -> tuple[int, int]:
+    stat = path.stat(follow_symlinks=False)
+    return stat.st_dev, stat.st_ino
+
+
+def _reject_protected_alias(path: Path) -> None:
+    for protected in _COMMITTED_T_PATHS:
+        if protected.exists() and os.path.samefile(path, protected):
+            raise PermissionError("test contact path aliases a committed T artifact")
+
+
+def issue_test_t_contact_harness(
+    *, temp_root: Path, capability: TestOnlyCapability, purpose: str
+) -> TestTContactHarness:
+    """Create a fresh test ledger outside the repository."""
+
+    require_test_only(capability)
+    if not isinstance(temp_root, Path) or not temp_root.is_absolute():
+        raise PermissionError("test contact root must be an absolute Path")
+    if not purpose:
+        raise ValueError("test contact harness purpose must be named")
+    resolved_root = temp_root.resolve(strict=True)
+    if temp_root != resolved_root or temp_root.is_symlink():
+        raise PermissionError("test contact root must not use path aliases")
+    if not resolved_root.is_dir():
+        raise PermissionError("test contact root must be a directory")
+    if resolved_root.is_relative_to(_REPOSITORY_ROOT):
+        raise PermissionError("test contact root must be outside the repository")
+
+    ledger = AppendOnlyLedger(resolved_root / "T_LEDGER.md")
+    if ledger.path.exists() or ledger.head_path.exists():
+        for path in (ledger.path, ledger.head_path):
+            if path.exists():
+                _reject_protected_alias(path)
+        raise PermissionError("test contact ledger must be newly created")
+    ledger.initialize()
+    try:
+        _reject_protected_alias(ledger.path)
+        _reject_protected_alias(ledger.head_path)
+    except BaseException:
+        # A failed separation check invalidates this test root. It is not reused.
+        raise
+    return TestTContactHarness(
+        root=resolved_root,
+        ledger=ledger,
+        purpose=f"test-only:{purpose}",
+        token=_CONTACT_TOKEN,
+    )
+
+
+def _require_test_contact_harness(harness: TestTContactHarness) -> None:
+    if type(harness) is not TestTContactHarness or harness._token is not _CONTACT_TOKEN:
+        raise PermissionError("T contact logging requires an issued test harness")
+    if harness._root.resolve(strict=True) != harness._root:
+        raise PermissionError("test contact root changed identity")
+    paths = (harness._ledger.path, harness._ledger.head_path)
+    identities = (harness._ledger_identity, harness._head_identity)
+    for path, identity in zip(paths, identities, strict=True):
+        if path.is_symlink() or path.resolve(strict=True).parent != harness._root:
+            raise PermissionError("test contact ledger escaped its issued root")
+        if _path_identity(path) != identity:
+            raise PermissionError("test contact ledger changed identity")
+        _reject_protected_alias(path)
+    harness._ledger.entries()
 
 
 def _require_world_capability(capability: TestWorldCapability) -> None:
@@ -293,13 +414,12 @@ def record_test_t_contact(
     raw_query: bytes,
     device_nanoseconds: int,
     timestamp_utc: str,
-    state: TState,
-    envelope: TEnvelope,
-    ledger: AppendOnlyLedger,
-) -> tuple[TState, bytes, dict[str, object]]:
-    """Exercise accounting/logging on temporary test ledgers only."""
+    harness: TestTContactHarness,
+) -> tuple[TestTContactState, bytes, dict[str, object]]:
+    """Exercise accounting/logging inside an issued temporary harness."""
 
     _require_world_capability(capability)
+    _require_test_contact_harness(harness)
     if capability.surface is not Surface.T:
         raise PermissionError("T contact logging requires a T test capability")
     if type(device_nanoseconds) is not int or device_nanoseconds <= 0:
@@ -308,8 +428,10 @@ def record_test_t_contact(
     response = evaluate_test_query(
         capability=capability, modulus=modulus, raw_query=raw_query
     )
-    next_state = state.charge_device_nanoseconds(device_nanoseconds, envelope)
-    entry = ledger.append(
+    next_state = harness._state.charge_device_nanoseconds(
+        device_nanoseconds, harness._envelope
+    )
+    entry = harness._ledger.append(
         event="T_TEST_ONLY_WORLD_CONTACT",
         timestamp_utc=timestamp_utc,
         data={
@@ -324,4 +446,14 @@ def record_test_t_contact(
             "test_only": True,
         },
     )
-    return next_state, response, entry
+    # The append-only ledger replaces its external head atomically by design.
+    harness._head_identity = _path_identity(harness._ledger.head_path)
+    harness._state = next_state
+    return (
+        TestTContactState(
+            device_nanoseconds=next_state.device_nanoseconds,
+            purpose=harness._purpose,
+        ),
+        response,
+        entry,
+    )
