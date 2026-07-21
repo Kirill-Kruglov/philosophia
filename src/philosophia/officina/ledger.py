@@ -182,9 +182,25 @@ class AppendOnlyLedger:
         event: str,
         timestamp_utc: str,
         data: Mapping[str, object],
+        expected_file_descriptor: int | None = None,
     ) -> dict[str, object]:
-        descriptor = os.open(self.path, os.O_RDWR | os.O_APPEND)
+        descriptor = os.open(
+            self.path, os.O_RDWR | os.O_APPEND | os.O_CLOEXEC | os.O_NOFOLLOW
+        )
         try:
+            if expected_file_descriptor is not None:
+                if type(expected_file_descriptor) is not int:
+                    raise LedgerIntegrityError("ledger anchor descriptor is malformed")
+                try:
+                    matches_anchor = os.path.samestat(
+                        os.fstat(descriptor), os.fstat(expected_file_descriptor)
+                    )
+                except OSError as error:
+                    raise LedgerIntegrityError(
+                        "ledger anchor descriptor is unavailable"
+                    ) from error
+                if not matches_anchor:
+                    raise LedgerIntegrityError("opened ledger differs from its anchor")
             fcntl.flock(descriptor, fcntl.LOCK_EX)
             with os.fdopen(descriptor, "r+b", closefd=False) as target:
                 target.seek(0)

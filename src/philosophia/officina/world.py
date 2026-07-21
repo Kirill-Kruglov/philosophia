@@ -51,6 +51,9 @@ class RefusalCode(str, Enum):
 
 _WORLD_TOKEN = object()
 _CONTACT_TOKEN = object()
+_FILE_TYPE_MASK = 0o170000
+_DIRECTORY_TYPE = 0o040000
+_REGULAR_FILE_TYPE = 0o100000
 _REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 _COMMITTED_T_PATHS = (
     _REPOSITORY_ROOT / "successor/officina/T_LEDGER.md",
@@ -99,12 +102,14 @@ class TestTContactHarness:
     """Owns a fresh temporary ledger and fake accounting state."""
 
     __slots__ = (
+        "_closed",
         "_envelope",
-        "_head_identity",
+        "_head_fd",
         "_ledger",
-        "_ledger_identity",
+        "_ledger_fd",
         "_purpose",
         "_root",
+        "_root_fd",
         "_state",
         "_token",
     )
@@ -125,17 +130,73 @@ class TestTContactHarness:
         self._purpose = purpose
         self._state = TState().activate("2000-01-01T00:00:00Z")
         self._envelope = TEnvelope()
-        self._ledger_identity = _path_identity(ledger.path)
-        self._head_identity = _path_identity(ledger.head_path)
+        self._closed = False
+        self._root_fd = -1
+        self._ledger_fd = -1
+        self._head_fd = -1
+        opened: list[int] = []
+        try:
+            self._root_fd = _open_anchor(root, directory=True)
+            opened.append(self._root_fd)
+            self._ledger_fd = _open_anchor(ledger.path)
+            opened.append(self._ledger_fd)
+            self._head_fd = _open_anchor(ledger.head_path)
+            opened.append(self._head_fd)
+        except BaseException:
+            for descriptor in reversed(opened):
+                os.close(descriptor)
+            self._closed = True
+            raise
 
     def entries(self) -> list[dict[str, object]]:
         _require_test_contact_harness(self)
         return self._ledger.entries()
 
+    def close(self) -> None:
+        if self._closed:
+            return
+        self._closed = True
+        for descriptor in (self._head_fd, self._ledger_fd, self._root_fd):
+            if descriptor >= 0:
+                os.close(descriptor)
 
-def _path_identity(path: Path) -> tuple[int, int]:
-    stat = path.stat(follow_symlinks=False)
-    return stat.st_dev, stat.st_ino
+    def __enter__(self) -> "TestTContactHarness":
+        _require_test_contact_harness(self)
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        del args
+        self.close()
+
+    def __del__(self) -> None:
+        if hasattr(self, "_closed"):
+            try:
+                self.close()
+            except OSError:
+                pass
+
+
+def _open_anchor(path: Path, *, directory: bool = False) -> int:
+    flags = os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW
+    if directory:
+        flags |= os.O_DIRECTORY
+    descriptor = os.open(path, flags)
+    file_type = os.fstat(descriptor).st_mode & _FILE_TYPE_MASK
+    expected_type = _DIRECTORY_TYPE if directory else _REGULAR_FILE_TYPE
+    expected = file_type == expected_type
+    if not expected:
+        os.close(descriptor)
+        raise PermissionError("test contact anchor has the wrong file type")
+    return descriptor
+
+
+def _anchor_matches(descriptor: int, path: Path) -> bool:
+    try:
+        return os.path.samestat(
+            os.fstat(descriptor), path.stat(follow_symlinks=False)
+        )
+    except OSError:
+        return False
 
 
 def _reject_protected_alias(path: Path) -> None:
@@ -186,14 +247,19 @@ def issue_test_t_contact_harness(
 def _require_test_contact_harness(harness: TestTContactHarness) -> None:
     if type(harness) is not TestTContactHarness or harness._token is not _CONTACT_TOKEN:
         raise PermissionError("T contact logging requires an issued test harness")
-    if harness._root.resolve(strict=True) != harness._root:
+    if harness._closed:
+        raise PermissionError("test contact harness is closed")
+    if (
+        harness._root.resolve(strict=True) != harness._root
+        or not _anchor_matches(harness._root_fd, harness._root)
+    ):
         raise PermissionError("test contact root changed identity")
     paths = (harness._ledger.path, harness._ledger.head_path)
-    identities = (harness._ledger_identity, harness._head_identity)
-    for path, identity in zip(paths, identities, strict=True):
+    descriptors = (harness._ledger_fd, harness._head_fd)
+    for path, descriptor in zip(paths, descriptors, strict=True):
         if path.is_symlink() or path.resolve(strict=True).parent != harness._root:
             raise PermissionError("test contact ledger escaped its issued root")
-        if _path_identity(path) != identity:
+        if not _anchor_matches(descriptor, path):
             raise PermissionError("test contact ledger changed identity")
         _reject_protected_alias(path)
     harness._ledger.entries()
@@ -206,6 +272,8 @@ def _require_world_capability(capability: TestWorldCapability) -> None:
         or not capability.purpose.startswith("test-only:")
     ):
         raise PermissionError("world operation requires an issued test-only capability")
+    if capability.surface is not Surface.T:
+        raise PermissionError("pre-root test world capability is T-only at use")
 
 
 def _block(h: int, j: int) -> tuple[int, int]:
@@ -331,6 +399,8 @@ def _surface_moduli(surface: Surface) -> frozenset[int]:
             for lower, upper in T_DEV_BANDS
             for modulus in range(lower, upper + 1)
         )
+    if surface not in {Surface.Q, Surface.C}:
+        raise ValueError("world surface has no registered modulus set")
     blocks = _frame_blocks()
     assignment = "Q" if surface is Surface.Q else "C"
     return frozenset(
@@ -445,9 +515,20 @@ def record_test_t_contact(
             "t_state": next_state.to_mapping(),
             "test_only": True,
         },
+        expected_file_descriptor=harness._ledger_fd,
     )
-    # The append-only ledger replaces its external head atomically by design.
-    harness._head_identity = _path_identity(harness._ledger.head_path)
+    # Retain the old head anchor until its atomic successor is open and verified.
+    next_head_fd = _open_anchor(harness._ledger.head_path)
+    try:
+        if not _anchor_matches(next_head_fd, harness._ledger.head_path):
+            raise PermissionError("new test contact head changed before anchoring")
+        harness._ledger.entries()
+    except BaseException:
+        os.close(next_head_fd)
+        raise
+    previous_head_fd = harness._head_fd
+    harness._head_fd = next_head_fd
+    os.close(previous_head_fd)
     harness._state = next_state
     return (
         TestTContactState(

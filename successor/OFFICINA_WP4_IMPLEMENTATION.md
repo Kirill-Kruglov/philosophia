@@ -14,7 +14,9 @@ Authorization: `successor/OFFICINA_WP3_SIGNATURE.md`.
 - An internally issued harness owns a fresh ledger and fake accounting state
   under a non-aliased temporary root outside the repository. The hook records
   `T_TEST_ONLY_WORLD_CONTACT` and cannot accept production-compatible ledger,
-  state, or envelope objects.
+  state, or envelope objects. Held root/ledger/head descriptors prevent valid
+  history substitution after issuance; the descriptor opened for append must
+  match the retained ledger anchor.
 
 ## Deliberately absent
 

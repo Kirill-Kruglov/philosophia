@@ -13,7 +13,7 @@ from philosophia.officina.interlock import (
     launch_q,
     test_only_capability as make_test_capability,
 )
-from philosophia.officina.ledger import AppendOnlyLedger
+from philosophia.officina.ledger import AppendOnlyLedger, LedgerIntegrityError
 from philosophia.officina.provenance import ArtifactStore, ProvenanceRegistry
 from philosophia.officina.quarantine import PathPolicy, QuarantineViolation, Surface
 from philosophia.officina.world import (
@@ -123,6 +123,23 @@ def test_oracle_matches_cyclic_equality_and_surface_gates() -> None:
         execute_c()
 
 
+@pytest.mark.parametrize(
+    ("surface", "modulus"),
+    [(Surface.Q, 28), (Surface.C, 26), (Surface.TEST, 26)],
+)
+def test_issued_t_capability_cannot_be_relabelled_at_use(
+    surface: Surface, modulus: int
+) -> None:
+    capability = _capability()
+    object.__setattr__(capability, "surface", surface)
+    with pytest.raises(PermissionError, match="T-only at use"):
+        evaluate_test_query(
+            capability=capability,
+            modulus=modulus,
+            raw_query=b"not-json\n",
+        )
+
+
 def test_world_capability_is_test_only_exact_and_unforgeable() -> None:
     with pytest.raises(PermissionError, match="factory"):
         WorldCapabilityForTest(Surface.T, "test-only:forged", object())
@@ -171,6 +188,19 @@ def test_test_contact_hook_charges_and_logs_without_real_activation(
             timestamp_utc="2026-07-21T00:00:02Z",
             harness=harness,
         )
+    final_state, _, _ = record_test_t_contact(
+        capability=_capability(),
+        modulus=10,
+        raw_query=query,
+        device_nanoseconds=1,
+        timestamp_utc="2026-07-21T00:00:02Z",
+        harness=harness,
+    )
+    assert final_state.device_nanoseconds == 124
+    assert len(harness.entries()) == 2
+    harness.close()
+    with pytest.raises(PermissionError, match="closed"):
+        harness.entries()
 
 
 def test_test_contact_harness_refuses_production_compatible_objects_and_aliases(
@@ -233,6 +263,57 @@ def test_test_contact_harness_refuses_production_compatible_objects_and_aliases(
             )
 
     assert {path: sha256_file(path) for path in protected} == before
+
+
+def test_test_contact_harness_rejects_valid_post_issuance_substitution(
+    tmp_path: Path,
+) -> None:
+    issued_root = tmp_path / "issued"
+    issued_root.mkdir()
+    harness = issue_test_t_contact_harness(
+        temp_root=issued_root,
+        capability=make_test_capability("substitution-target"),
+        purpose="substitution-target",
+    )
+
+    replacement_root = tmp_path / "replacement"
+    replacement_root.mkdir()
+    replacement = AppendOnlyLedger(replacement_root / "T_LEDGER.md")
+    replacement.initialize()
+    replacement.append(
+        event="FORGED_TEST_ENTRY",
+        timestamp_utc="2026-07-21T00:00:00Z",
+        data={"scientific_outcome": False, "test_only": True},
+    )
+    os.replace(replacement.path, issued_root / "T_LEDGER.md")
+    os.replace(replacement.head_path, issued_root / "T_LEDGER.md.head.json")
+
+    assert not os.path.samestat(
+        os.fstat(harness._ledger_fd),  # noqa: SLF001 - adversarial anchor test
+        (issued_root / "T_LEDGER.md").stat(),
+    )
+    with pytest.raises(PermissionError, match="changed identity"):
+        harness.entries()
+    with pytest.raises(PermissionError, match="changed identity"):
+        record_test_t_contact(
+            capability=_capability(),
+            modulus=10,
+            raw_query=canonical_json({"u": "", "v": ""}),
+            device_nanoseconds=1,
+            timestamp_utc="2026-07-21T00:00:01Z",
+            harness=harness,
+        )
+    substituted = AppendOnlyLedger(issued_root / "T_LEDGER.md")
+    replacement_bytes = substituted.path.read_bytes()
+    with pytest.raises(LedgerIntegrityError, match="differs from its anchor"):
+        substituted.append(
+            event="SECOND_FORGED_ENTRY",
+            timestamp_utc="2026-07-21T00:00:01Z",
+            data={"scientific_outcome": False, "test_only": True},
+            expected_file_descriptor=harness._ledger_fd,  # noqa: SLF001
+        )
+    assert substituted.path.read_bytes() == replacement_bytes
+    harness.close()
 
 
 def test_test_oracle_artifact_cannot_be_admitted_to_q_or_c(tmp_path: Path) -> None:
