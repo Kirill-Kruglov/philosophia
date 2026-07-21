@@ -94,6 +94,7 @@ def record_operational_pause(
             "checkpoint_sha256": checkpoint_hash,
             "reason": reason,
             "resets_e3": False,
+            "scientific_outcome": False,
             "t_state": state.to_mapping(),
         },
     )
@@ -193,11 +194,14 @@ def verify_resume(
         raise ValueError("ledger does not end in an operational pause")
     data = entries[-1].get("data")
     if not isinstance(data, dict) or set(data) != {
-        "checkpoint_path", "checkpoint_sha256", "reason", "resets_e3", "t_state"
+        "checkpoint_path", "checkpoint_sha256", "reason", "resets_e3",
+        "scientific_outcome", "t_state"
     }:
         raise ValueError("pause ledger data fields differ")
     if data["resets_e3"] is not False:
         raise ValueError("operational pause cannot reset E3")
+    if data["scientific_outcome"] is not False:
+        raise ValueError("operational pause must be non-scientific")
     if data["checkpoint_sha256"] != sha256_file(checkpoint_path):
         raise ValueError("pause checkpoint hash mismatch")
     if canonical_json(data["t_state"]) != canonical_json(checkpoint["t_state"]):

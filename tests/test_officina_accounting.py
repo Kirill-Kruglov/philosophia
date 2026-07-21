@@ -90,12 +90,9 @@ def test_t_envelope_is_cumulative_additive_and_candidate_bounded() -> None:
     state = state.complete_review(envelope, "2026-07-20T01:00:00Z")
     with pytest.raises(ValueError, match="early review"):
         state.complete_review(envelope, "2026-07-21T00:00:00Z")
-    for index in range(12):
-        state = state.register_candidate(f"{index:064x}", envelope)
-    assert state.exhausted(envelope)
-    assert state.register_candidate(f"{11:064x}", envelope) == state
-    with pytest.raises(ValueError, match="already exhausted"):
-        state.register_candidate(f"{12:064x}", envelope)
+    with pytest.raises(PermissionError, match="absent signed WP-6"):
+        state.register_candidate("a" * 64, envelope)
+    assert state.candidate_ids == ()
 
 
 def test_e3_wall_clock_includes_powered_off_time_and_pause_does_not_reset() -> None:
@@ -117,7 +114,7 @@ def test_operational_pause_recomputes_artifacts_and_preserves_counters(
     envelope = TEnvelope()
     state = _active_state().charge_device_nanoseconds(
         7 * NANOSECONDS_PER_HOUR, envelope
-    ).register_candidate("a" * 64, envelope)
+    )
     ledger, checkpoint, _ = _pause(
         tmp_path, state=state, artifacts={"model": model, "optimizer": optimizer}
     )
@@ -217,7 +214,7 @@ def test_overdue_resume_blocks_work_until_durable_review(tmp_path: Path) -> None
         gate.admit_work()
     with pytest.raises(ValueError, match="not available"):
         gate.state.charge_device_nanoseconds(NANOSECONDS_PER_HOUR, TEnvelope())
-    with pytest.raises(ValueError, match="not available"):
+    with pytest.raises(PermissionError, match="absent signed WP-6"):
         gate.state.register_candidate("b" * 64, TEnvelope())
     with pytest.raises(ValueError, match="durable ResumeGate"):
         gate.state.complete_review(TEnvelope(), "2026-07-22T00:00:00Z")

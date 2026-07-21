@@ -49,6 +49,15 @@ PRODUCTION_TEST_SURFACE_SYMBOLS = frozenset(
         "TestTContactHarness",
     }
 )
+PRODUCTION_MANIFEST_RELATIVE = Path(
+    "successor/officina/runtime_control/PRODUCTION_CALL_GRAPH.json"
+)
+PRODUCTION_MANIFEST_SCHEMA = "philosophia.officina.production-call-graph.v1"
+PRODUCTION_ROOTS = (
+    "scripts/officina_activate_t.py",
+    "scripts/verify_officina_active.py",
+    "src/philosophia/officina/generic_harness.py",
+)
 
 
 def _resolved_symbol(
@@ -193,13 +202,14 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
 
 
 def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> list[str]:
-    """Reject test-world symbols from every production caller in the review set."""
+    """Verify the closed reviewed Python graph and lint forbidden capabilities."""
 
     failures: list[str] = []
-    for relative in sorted(set(reviewed_paths)):
+    reviewed = tuple(sorted(set(reviewed_paths)))
+    python_paths = tuple(relative for relative in reviewed if relative.endswith(".py"))
+    computed_edges: dict[str, list[str]] = {}
+    for relative in python_paths:
         path = repo / relative
-        if path.suffix != ".py" or path.name == "world.py":
-            continue
         if not path.is_file() or path.is_symlink():
             failures.append(f"reviewed production source is missing or aliased: {relative}")
             continue
@@ -208,7 +218,35 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
         except (OSError, SyntaxError) as error:
             failures.append(f"reviewed production source cannot be parsed: {relative}: {error}")
             continue
+        aliases: dict[str, str] = {}
         for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    aliases[alias.asname or alias.name.split(".")[0]] = alias.name
+            elif isinstance(node, ast.ImportFrom):
+                module = node.module or ""
+                for alias in node.names:
+                    aliases[alias.asname or alias.name] = f"{module}.{alias.name}".strip(".")
+        local_symbols = _local_symbol_table(tree, aliases)
+        dependencies: set[str] = set()
+        for node in ast.walk(tree):
+            module = ""
+            if isinstance(node, ast.ImportFrom):
+                module = node.module or ""
+                if node.level > 0 and relative.startswith("src/philosophia/officina/"):
+                    module = f"philosophia.officina.{module}".rstrip(".")
+            elif isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name.startswith("philosophia.officina."):
+                        dependencies.add(
+                            "src/philosophia/officina/"
+                            + alias.name.rsplit(".", 1)[-1]
+                            + ".py"
+                        )
+            if module.startswith("philosophia.officina."):
+                dependencies.add(
+                    "src/philosophia/officina/" + module.rsplit(".", 1)[-1] + ".py"
+                )
             names: list[str] = []
             if isinstance(node, ast.ImportFrom):
                 names.extend(alias.name for alias in node.names)
@@ -217,10 +255,52 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
             elif isinstance(node, ast.Attribute):
                 names.append(node.attr)
             for name in names:
-                if name in PRODUCTION_TEST_SURFACE_SYMBOLS:
+                if path.name != "world.py" and name in PRODUCTION_TEST_SURFACE_SYMBOLS:
                     failures.append(
                         f"production source references test-world symbol {name}: {relative}"
                     )
+            if isinstance(node, ast.Call):
+                resolved = _resolved_symbol(node.func, aliases, local_symbols)
+                if resolved in DYNAMIC_IMPORT_CALLS:
+                    failures.append(
+                        f"production source uses dynamic resolution {resolved}: {relative}"
+                    )
+                if resolved in ENTROPY_CALLS:
+                    failures.append(
+                        f"production source uses entropy {resolved}: {relative}"
+                    )
+        missing = dependencies - set(python_paths)
+        if missing:
+            failures.append(
+                f"production source has omitted local dependencies {relative}: {sorted(missing)}"
+            )
+        computed_edges[relative] = sorted(dependencies)
+
+    manifest_path = repo / PRODUCTION_MANIFEST_RELATIVE
+    try:
+        manifest = load_canonical_json(manifest_path)
+    except (OSError, ValueError) as error:
+        failures.append(f"production call-graph manifest is unavailable: {error}")
+        return sorted(set(failures))
+    expected_keys = {
+        "schema", "scientific_outcome", "roots", "reachable_sources",
+        "import_edges", "dynamic_resolution",
+    }
+    if not isinstance(manifest, dict) or set(manifest) != expected_keys:
+        failures.append("production call-graph manifest fields differ")
+        return sorted(set(failures))
+    if (
+        manifest["schema"] != PRODUCTION_MANIFEST_SCHEMA
+        or manifest["scientific_outcome"] is not False
+        or manifest["dynamic_resolution"] is not False
+    ):
+        failures.append("production call-graph manifest contract differs")
+    if manifest["roots"] != list(PRODUCTION_ROOTS):
+        failures.append("production call-graph roots differ")
+    if manifest["reachable_sources"] != list(python_paths):
+        failures.append("production reachable-source closure differs")
+    if canonical_json(manifest["import_edges"]) != canonical_json(computed_edges):
+        failures.append("production import-edge closure differs")
     return sorted(set(failures))
 
 

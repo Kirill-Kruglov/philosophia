@@ -11,11 +11,15 @@ from philosophia.officina.accounting import (
     TEnvelope,
     TState,
 )
+from philosophia.officina.canonical import canonical_json, sha256_bytes
+from philosophia.officina.ledger import build_entry
 from philosophia.officina.runtime import (
     HEARTBEAT_LIABILITY_SECONDS,
     MAX_AGGREGATE_LIABILITY_DEVICE_SECONDS,
     InvalidCause,
     ProcessDisposition,
+    Reservation,
+    ReservationRoute,
     RuntimeContractError,
     RuntimeLock,
     build_active_lease,
@@ -24,11 +28,15 @@ from philosophia.officina.runtime import (
     issue_real_t_capability,
     reject_scientific_fields,
     reservation_for,
+    reservation_route,
     settle_active_lease,
     settle_monotonic_delta,
     validate_invalidity_record,
+    validate_ledger_event,
     validate_active_lease,
+    validate_active_lease_against_claim,
     validate_process_claim,
+    validate_process_claim_against_activation,
     validate_process_record,
     verify_runtime_lock,
 )
@@ -64,7 +72,7 @@ def test_runtime_lock_refuses_symlink_and_byte_substitution(tmp_path: Path) -> N
 
 def test_reservation_caps_concurrency_and_aggregate_liability() -> None:
     reservation = reservation_for(
-        state=_state(), envelope=TEnvelope(), live_liabilities_ns=()
+        state=_state(), envelope=TEnvelope(), live_reservations=()
     )
     assert reservation is not None
     assert reservation.liability_ns_per_unit == (
@@ -72,19 +80,32 @@ def test_reservation_caps_concurrency_and_aggregate_liability() -> None:
     )
     assert reservation.aggregate_liability_ns == 60 * NANOSECONDS_PER_SECOND
 
-    existing = (60 * NANOSECONDS_PER_SECOND,) * 3
+    existing = (Reservation(3, 60 * NANOSECONDS_PER_SECOND),)
     last = reservation_for(
-        state=_state(), envelope=TEnvelope(), live_liabilities_ns=existing
+        state=_state(), envelope=TEnvelope(), live_reservations=existing
     )
     assert last is not None
-    assert sum(existing) + last.aggregate_liability_ns == (
+    assert sum(item.aggregate_liability_ns for item in existing) + last.aggregate_liability_ns == (
         MAX_AGGREGATE_LIABILITY_DEVICE_SECONDS * NANOSECONDS_PER_SECOND
     )
     with pytest.raises(RuntimeContractError, match="concurrency"):
         reservation_for(
             state=_state(),
             envelope=TEnvelope(),
-            live_liabilities_ns=(60 * NANOSECONDS_PER_SECOND,) * 4,
+            live_reservations=(Reservation(4, 60 * NANOSECONDS_PER_SECOND),),
+        )
+    with pytest.raises(RuntimeContractError, match="concurrency"):
+        reservation_for(
+            state=_state(),
+            envelope=TEnvelope(),
+            live_reservations=(Reservation(2, 1),),
+            requested_units=3,
+        )
+    with pytest.raises(ValueError, match="exact Reservation"):
+        reservation_for(
+            state=_state(),
+            envelope=TEnvelope(),
+            live_reservations=(1,),  # type: ignore[arg-type]
         )
 
 
@@ -97,12 +118,12 @@ def test_reservation_shortens_at_e1_and_e3_boundaries_without_stranding() -> Non
         device_nanoseconds_at_review=167 * NANOSECONDS_PER_HOUR,
     )
     reservation = reservation_for(
-        state=near_e1, envelope=envelope, live_liabilities_ns=()
+        state=near_e1, envelope=envelope, live_reservations=()
     )
     assert reservation is not None and reservation.liability_ns_per_unit == 7
     exhausted = near_e1.charge_device_nanoseconds(7, envelope)
     assert reservation_for(
-        state=exhausted, envelope=envelope, live_liabilities_ns=()
+        state=exhausted, envelope=envelope, live_reservations=()
     ) is None
 
     near_e3 = TState(
@@ -110,9 +131,30 @@ def test_reservation_shortens_at_e1_and_e3_boundaries_without_stranding() -> Non
         device_nanoseconds=40 * NANOSECONDS_PER_HOUR - 9,
     )
     reservation = reservation_for(
-        state=near_e3, envelope=envelope, live_liabilities_ns=()
+        state=near_e3, envelope=envelope, live_reservations=()
     )
     assert reservation is not None and reservation.liability_ns_per_unit == 9
+    assert reservation_route(
+        state=near_e3.charge_device_nanoseconds(9, envelope),
+        envelope=envelope,
+        live_reservations=(),
+    ) is ReservationRoute.E3_DUE
+    assert reservation_route(
+        state=exhausted,
+        envelope=envelope,
+        live_reservations=(),
+    ) is ReservationRoute.E1_EXHAUSTED
+    both_zero = TState(
+        activated_utc="2026-07-21T00:00:00Z",
+        device_nanoseconds=168 * NANOSECONDS_PER_HOUR,
+        last_review_utc="2026-07-21T01:00:00Z",
+        device_nanoseconds_at_review=128 * NANOSECONDS_PER_HOUR,
+    )
+    assert reservation_route(
+        state=both_zero,
+        envelope=envelope,
+        live_reservations=(),
+    ) is ReservationRoute.E1_EXHAUSTED
 
 
 def test_monotonic_settlement_is_additive_and_retains_crossing_charge() -> None:
@@ -178,6 +220,123 @@ def test_public_runtime_records_reject_scientific_and_behavior_fields() -> None:
             reject_scientific_fields({"nested": {forbidden: 0}})
 
 
+def test_all_nine_ledger_payloads_are_closed_and_non_scientific() -> None:
+    state = _state().to_mapping()
+    stopped_state = TState(
+        activated_utc="2026-07-21T00:00:00Z",
+        last_review_utc="2026-07-21T00:00:00Z",
+        author_stopped=True,
+    ).to_mapping()
+    exhausted_state = TState(
+        activated_utc="2026-07-21T00:00:00Z",
+        device_nanoseconds=168 * NANOSECONDS_PER_HOUR,
+    ).to_mapping()
+    payloads: dict[str, dict[str, object]] = {
+        "T_ACTIVATED": {
+            "authorization_sha256": "a" * 64,
+            "claim_sha256": "b" * 64,
+            "device_policy_token": "device",
+            "envelope_token": "envelope",
+            "scientific_outcome": False,
+            "t_state": state,
+        },
+        "T_PROCESS_STARTED": {
+            "process_claim_sha256": "a" * 64,
+            "process_id": "b" * 64,
+            "scientific_outcome": False,
+        },
+        "T_DEVICE_TIME_CHARGED": {
+            "active_lease_sha256": "a" * 64,
+            "charge_ns": 1,
+            "process_id": "b" * 64,
+            "scientific_outcome": False,
+            "t_state": state,
+        },
+        "T_REVIEW_COMPLETED": {
+            "review_record_sha256": "a" * 64,
+            "scientific_outcome": False,
+            "t_state": state,
+        },
+        "T_OPERATIONAL_PAUSE": {
+            "checkpoint_path": "/tmp/pause",
+            "checkpoint_sha256": "a" * 64,
+            "reason": "planned",
+            "resets_e3": False,
+            "scientific_outcome": False,
+            "t_state": state,
+        },
+        "T_PROCESS_STOPPED": {
+            "process_id": "a" * 64,
+            "process_record_sha256": "b" * 64,
+            "scientific_outcome": False,
+            "t_state": state,
+        },
+        "T_RUNTIME_INVALID": {
+            "invalid_cause": "PROCESS",
+            "invalidity_record_sha256": "a" * 64,
+            "required_action": "SIGNED_BOUNDED_RECOVERY_NO_AUTOMATIC_RETRY",
+            "scientific_outcome": False,
+            "t_state": state,
+        },
+        "T_AUTHOR_STOP": {
+            "author_decision_sha256": "a" * 64,
+            "scientific_outcome": False,
+            "t_state": stopped_state,
+        },
+        "T_ENVELOPE_EXHAUSTED": {
+            "resource_axis": "E1",
+            "scientific_outcome": False,
+            "t_state": exhausted_state,
+        },
+    }
+    for sequence, (event, data) in enumerate(payloads.items()):
+        entry = build_entry(
+            sequence=sequence,
+            previous_sha256="0" * 64,
+            event=event,
+            timestamp_utc="2026-07-21T00:00:00Z",
+            data=data,
+        )
+        assert validate_ledger_event(entry)["event"] == event
+
+    started = dict(payloads["T_PROCESS_STARTED"])
+    started["t_state"] = state
+    with pytest.raises(ValueError, match="payload fields"):
+        validate_ledger_event(
+            build_entry(
+                sequence=0,
+                previous_sha256="0" * 64,
+                event="T_PROCESS_STARTED",
+                timestamp_utc="2026-07-21T00:00:00Z",
+                data=started,
+            )
+        )
+    contaminated = dict(payloads["T_DEVICE_TIME_CHARGED"])
+    contaminated["pass"] = True
+    with pytest.raises(ValueError):
+        validate_ledger_event(
+            build_entry(
+                sequence=0,
+                previous_sha256="0" * 64,
+                event="T_DEVICE_TIME_CHARGED",
+                timestamp_utc="2026-07-21T00:00:00Z",
+                data=contaminated,
+            )
+        )
+    e2 = dict(payloads["T_ENVELOPE_EXHAUSTED"])
+    e2["resource_axis"] = "E2"
+    with pytest.raises(ValueError, match="only name E1"):
+        validate_ledger_event(
+            build_entry(
+                sequence=0,
+                previous_sha256="0" * 64,
+                event="T_ENVELOPE_EXHAUSTED",
+                timestamp_utc="2026-07-21T00:00:00Z",
+                data=e2,
+            )
+        )
+
+
 def test_real_capability_factory_remains_absent() -> None:
     with pytest.raises(RuntimeContractError, match="harness is absent"):
         issue_real_t_capability()
@@ -219,7 +378,7 @@ def test_process_claim_identity_is_canonical_and_mutation_detected() -> None:
 def test_lease_heartbeat_and_process_close_round_trip() -> None:
     claim = _claim()
     reservation = reservation_for(
-        state=_state(), envelope=TEnvelope(), live_liabilities_ns=()
+        state=_state(), envelope=TEnvelope(), live_reservations=()
     )
     assert reservation is not None
     lease = build_active_lease(
@@ -238,25 +397,106 @@ def test_lease_heartbeat_and_process_close_round_trip() -> None:
     )
     assert state.device_nanoseconds == 60
     assert renewed["cumulative_charge_ns"] == 60
+    final_event = build_entry(
+        sequence=1,
+        previous_sha256="0" * 64,
+        event="T_DEVICE_TIME_CHARGED",
+        timestamp_utc="2026-07-21T00:00:01Z",
+        data={
+            "active_lease_sha256": sha256_bytes(canonical_json(renewed)),
+            "charge_ns": 60,
+            "process_id": claim["process_id"],
+            "scientific_outcome": False,
+            "t_state": state.to_mapping(),
+        },
+    )
     record = build_process_record(
         claim=claim,
-        claim_sha256="2" * 64,
         lease=renewed,
         disposition=ProcessDisposition.CLOSED,
         invalid_cause=None,
         closed_utc="2026-07-21T00:00:01Z",
-        final_charge_event_sha256="3" * 64,
-        final_t_state_sha256="4" * 64,
+        final_charge_event=final_event,
+        final_state=state,
     )
     assert validate_process_record(record)["validity"] == "VALID_PROCESS_RECORD"
     with pytest.raises(ValueError, match="typed public cause"):
         build_process_record(
             claim=claim,
-            claim_sha256="2" * 64,
             lease=renewed,
             disposition=ProcessDisposition.INVALID,
             invalid_cause=None,
             closed_utc="2026-07-21T00:00:01Z",
-            final_charge_event_sha256="3" * 64,
-            final_t_state_sha256="4" * 64,
+            final_charge_event=final_event,
+            final_state=state,
+        )
+
+
+def test_claim_lease_and_activation_links_are_byte_exact() -> None:
+    claim = _claim()
+    reservation = Reservation(1, 60 * NANOSECONDS_PER_SECOND)
+    lease = build_active_lease(
+        claim, reservation=reservation, prior_charge_event_sha256="0" * 64
+    )
+    validate_process_claim_against_activation(
+        claim,
+        activation_record_sha256="a" * 64,
+        immutable_control_sha256={"control.py": "f" * 64},
+    )
+    changed_controller = dict(lease)
+    changed_controller["controller_pid"] = int(lease["controller_pid"]) + 1
+    validate_active_lease(changed_controller)
+    with pytest.raises(ValueError, match="byte-exact durable claim"):
+        validate_active_lease_against_claim(changed_controller, claim)
+    final_event = build_entry(
+        sequence=1,
+        previous_sha256="0" * 64,
+        event="T_DEVICE_TIME_CHARGED",
+        timestamp_utc="2026-07-21T00:00:01Z",
+        data={
+            "active_lease_sha256": sha256_bytes(canonical_json(lease)),
+            "charge_ns": 1,
+            "process_id": claim["process_id"],
+            "scientific_outcome": False,
+            "t_state": _state().to_mapping(),
+        },
+    )
+    with pytest.raises(ValueError, match="byte-exact durable claim"):
+        build_process_record(
+            claim=claim,
+            lease=changed_controller,
+            disposition=ProcessDisposition.CLOSED,
+            invalid_cause=None,
+            closed_utc="2026-07-21T00:00:01Z",
+            final_charge_event=final_event,
+            final_state=_state(),
+        )
+    changed_liability = dict(lease)
+    changed_liability["outstanding_liability_ns"] = 1
+    with pytest.raises(ValueError, match="liability and deadline"):
+        validate_active_lease(changed_liability)
+    wrong_data = dict(final_event["data"])
+    wrong_data["process_id"] = "9" * 64
+    wrong_process_event = build_entry(
+        sequence=1,
+        previous_sha256="0" * 64,
+        event="T_DEVICE_TIME_CHARGED",
+        timestamp_utc="2026-07-21T00:00:01Z",
+        data=wrong_data,
+    )
+    with pytest.raises(ValueError, match="process id differs"):
+        build_process_record(
+            claim=claim,
+            lease=lease,
+            disposition=ProcessDisposition.CLOSED,
+            invalid_cause=None,
+            closed_utc="2026-07-21T00:00:01Z",
+            final_charge_event=wrong_process_event,
+            final_state=_state(),
+        )
+    with pytest.raises(ValueError, match="immutable controls"):
+        validate_process_claim_against_activation(
+            claim,
+            activation_record_sha256="a" * 64,
+            immutable_control_sha256={"other.py": "f" * 64},
         )

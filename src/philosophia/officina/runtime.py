@@ -67,6 +67,11 @@ _PUBLIC_FORBIDDEN_KEYS = frozenset(
         "scientific_label",
         "outcome",
         "outcome_summary",
+        "pass",
+        "fail",
+        "insufficient",
+        "equivalence",
+        "boundary",
     }
 )
 
@@ -97,6 +102,15 @@ class Reservation:
     units: int
     liability_ns_per_unit: int
 
+    def __post_init__(self) -> None:
+        if type(self.units) is not int or not 1 <= self.units <= MAX_CONCURRENT_LEASES:
+            raise ValueError("reservation units are outside the signed boundary")
+        if type(self.liability_ns_per_unit) is not int or not (
+            0 < self.liability_ns_per_unit
+            <= HEARTBEAT_LIABILITY_SECONDS * NANOSECONDS_PER_SECOND
+        ):
+            raise ValueError("reservation liability is outside the signed boundary")
+
     @property
     def aggregate_liability_ns(self) -> int:
         return self.units * self.liability_ns_per_unit
@@ -104,6 +118,12 @@ class Reservation:
     @property
     def deadline_delta_ns(self) -> int:
         return self.liability_ns_per_unit
+
+
+class ReservationRoute(str, Enum):
+    RESERVE = "RESERVE"
+    E1_EXHAUSTED = "E1_EXHAUSTED"
+    E3_DUE = "E3_DUE"
 
 
 class RuntimeLock:
@@ -182,20 +202,21 @@ def reservation_for(
     *,
     state: TState,
     envelope: TEnvelope,
-    live_liabilities_ns: Iterable[int],
+    live_reservations: Iterable[Reservation],
     requested_units: int = DEVICE_UNITS_PER_LEASE,
 ) -> Reservation | None:
     if type(requested_units) is not int or not 1 <= requested_units <= MAX_CONCURRENT_LEASES:
         raise ValueError("requested behavior-capable stream count is invalid")
-    liabilities = tuple(live_liabilities_ns)
-    if any(type(value) is not int or value <= 0 for value in liabilities):
-        raise ValueError("live liability values must be positive integers")
-    if len(liabilities) + requested_units > MAX_CONCURRENT_LEASES:
+    reservations = tuple(live_reservations)
+    if any(type(value) is not Reservation for value in reservations):
+        raise ValueError("live reservations must use the exact Reservation type")
+    live_units = sum(value.units for value in reservations)
+    if live_units + requested_units > MAX_CONCURRENT_LEASES:
         raise RuntimeContractError("behavior-capable concurrency cap reached")
     if state.activated_utc is None or state.author_stopped or state.resume_review_pending:
         raise RuntimeContractError("T runtime state is unavailable")
 
-    live_total = sum(liabilities)
+    live_total = sum(value.aggregate_liability_ns for value in reservations)
     e1_remaining = envelope.device_hour_cap * NANOSECONDS_PER_HOUR - (
         state.device_nanoseconds + live_total
     )
@@ -215,6 +236,38 @@ def reservation_for(
     ):
         raise RuntimeContractError("aggregate liability bound exceeded")
     return result
+
+
+def reservation_route(
+    *,
+    state: TState,
+    envelope: TEnvelope,
+    live_reservations: Iterable[Reservation],
+    requested_units: int = DEVICE_UNITS_PER_LEASE,
+) -> ReservationRoute:
+    reservations = tuple(live_reservations)
+    if any(type(value) is not Reservation for value in reservations):
+        raise ValueError("live reservations must use the exact Reservation type")
+    live_total = sum(value.aggregate_liability_ns for value in reservations)
+    e1_remaining = envelope.device_hour_cap * NANOSECONDS_PER_HOUR - (
+        state.device_nanoseconds + live_total
+    )
+    e3_remaining = envelope.review_device_hours * NANOSECONDS_PER_HOUR - (
+        state.device_nanoseconds - state.device_nanoseconds_at_review + live_total
+    )
+    if e1_remaining <= 0:
+        return ReservationRoute.E1_EXHAUSTED
+    if e3_remaining <= 0:
+        return ReservationRoute.E3_DUE
+    result = reservation_for(
+        state=state,
+        envelope=envelope,
+        live_reservations=reservations,
+        requested_units=requested_units,
+    )
+    if result is None:
+        raise RuntimeContractError("positive reservation boundary became empty")
+    return ReservationRoute.RESERVE
 
 
 def settle_monotonic_delta(
@@ -352,6 +405,8 @@ def build_process_claim(
 
 
 def validate_process_claim(value: object) -> dict[str, object]:
+    from .accounting import parse_utc
+
     if not isinstance(value, dict) or set(value) != _PROCESS_CLAIM_KEYS:
         raise ValueError("process claim fields differ")
     if value["schema"] != PROCESS_CLAIM_SCHEMA or value["scientific_outcome"] is not False:
@@ -379,8 +434,34 @@ def validate_process_claim(value: object) -> dict[str, object]:
     ):
         raise ValueError("process argv is malformed")
     require_sha256_map(value["immutable_control_sha256"], name="immutable control")
+    for field in (
+        "controller_start_identity", "device_identity", "boot_identity"
+    ):
+        if not isinstance(value[field], str) or not value[field]:
+            raise ValueError(f"process claim {field} is malformed")
+    parse_utc(str(value["created_utc"]))
     reject_scientific_fields(value)
     return dict(value)
+
+
+def validate_process_claim_against_activation(
+    value: object,
+    *,
+    activation_record_sha256: str,
+    immutable_control_sha256: Mapping[str, str],
+) -> dict[str, object]:
+    claim = validate_process_claim(value)
+    _require_sha256(activation_record_sha256, "activation record")
+    expected_hashes = require_sha256_map(
+        dict(immutable_control_sha256), name="activation immutable control"
+    )
+    if canonical_json(claim["immutable_control_sha256"]) != canonical_json(
+        expected_hashes
+    ):
+        raise ValueError("process claim immutable controls differ from activation")
+    if claim["activation_record_sha256"] != activation_record_sha256:
+        raise ValueError("process claim activation record hash differs")
+    return claim
 
 
 def build_active_lease(
@@ -424,8 +505,28 @@ def validate_active_lease(value: object) -> dict[str, object]:
         raise ValueError("active lease deadline is not future")
     if value["outstanding_liability_ns"] <= 0:
         raise ValueError("active lease liability must be positive")
+    expected_liability = int(value["device_units"]) * (
+        int(value["heartbeat_deadline_ns"])
+        - int(value["last_charged_reading_ns"])
+    )
+    if value["outstanding_liability_ns"] != expected_liability:
+        raise ValueError("active lease liability and deadline differ")
     _require_sha256(value["prior_charge_event_sha256"], "prior charge event")
     return dict(value)
+
+
+def validate_active_lease_against_claim(
+    lease: object, claim: object
+) -> tuple[dict[str, object], dict[str, object]]:
+    lease_value = validate_active_lease(lease)
+    claim_value = validate_process_claim(claim)
+    lease_claim = {
+        key: item for key, item in lease_value.items() if key not in _LEASE_EXTRA_KEYS
+    }
+    lease_claim["schema"] = PROCESS_CLAIM_SCHEMA
+    if canonical_json(lease_claim) != canonical_json(claim_value):
+        raise ValueError("lease does not contain the byte-exact durable claim")
+    return lease_value, claim_value
 
 
 def settle_active_lease(
@@ -466,20 +567,18 @@ def settle_active_lease(
 def build_process_record(
     *,
     claim: Mapping[str, object],
-    claim_sha256: str,
     lease: Mapping[str, object],
     disposition: ProcessDisposition,
     invalid_cause: InvalidCause | None,
     closed_utc: str,
-    final_charge_event_sha256: str,
-    final_t_state_sha256: str,
+    final_charge_event: Mapping[str, object],
+    final_state: TState,
 ) -> dict[str, object]:
     from .accounting import parse_utc
 
-    claim_value = validate_process_claim(dict(claim))
-    lease_value = validate_active_lease(dict(lease))
-    if claim_value["process_id"] != lease_value["process_id"]:
-        raise ValueError("claim and lease process identities differ")
+    lease_value, claim_value = validate_active_lease_against_claim(
+        dict(lease), dict(claim)
+    )
     if not isinstance(disposition, ProcessDisposition):
         raise ValueError("process disposition must be typed")
     if disposition is ProcessDisposition.INVALID:
@@ -487,13 +586,29 @@ def build_process_record(
             raise ValueError("invalid process requires a typed public cause")
     elif invalid_cause is not None:
         raise ValueError("valid process disposition cannot carry invalid cause")
-    for name, digest in (
-        ("process claim", claim_sha256),
-        ("final charge event", final_charge_event_sha256),
-        ("final T state", final_t_state_sha256),
+    event = validate_ledger_event(dict(final_charge_event))
+    if event["event"] not in {"T_DEVICE_TIME_CHARGED", "T_RUNTIME_INVALID"}:
+        raise ValueError("final process event is not a settlement event")
+    event_data = event["data"]
+    if not isinstance(event_data, dict):
+        raise ValueError("final settlement payload is malformed")
+    if event["event"] == "T_DEVICE_TIME_CHARGED" and (
+        event_data["process_id"] != claim_value["process_id"]
     ):
-        _require_sha256(digest, name)
-    parse_utc(closed_utc)
+        raise ValueError("final settlement process id differs")
+    if event["event"] == "T_DEVICE_TIME_CHARGED" and (
+        event_data["active_lease_sha256"]
+        != sha256_bytes(canonical_json(lease_value))
+    ):
+        raise ValueError("final settlement lease hash differs")
+    if canonical_json(event_data["t_state"]) != canonical_json(final_state.to_mapping()):
+        raise ValueError("final settlement state differs")
+    claim_sha256 = sha256_bytes(canonical_json(claim_value))
+    final_charge_event_sha256 = str(event["entry_sha256"])
+    closed = parse_utc(closed_utc)
+    if closed < parse_utc(str(claim_value["created_utc"])):
+        raise ValueError("process close predates process start")
+    final_state_sha256 = sha256_bytes(canonical_json(final_state.to_mapping()))
     record = {
         "schema": PROCESS_RECORD_SCHEMA,
         "scientific_outcome": False,
@@ -518,7 +633,7 @@ def build_process_record(
         "closed_utc": closed_utc,
         "cumulative_charge_ns": lease_value["cumulative_charge_ns"],
         "final_charge_event_sha256": final_charge_event_sha256,
-        "final_t_state_sha256": final_t_state_sha256,
+        "final_t_state_sha256": final_state_sha256,
         "immutable_control_sha256": claim_value["immutable_control_sha256"],
     }
     validate_process_record(record)
@@ -526,6 +641,8 @@ def build_process_record(
 
 
 def validate_process_record(value: object) -> dict[str, object]:
+    from .accounting import parse_utc
+
     if not isinstance(value, dict) or set(value) != _PROCESS_RECORD_KEYS:
         raise ValueError("process record fields differ")
     if value["schema"] != PROCESS_RECORD_SCHEMA or value["scientific_outcome"] is not False:
@@ -549,6 +666,18 @@ def validate_process_record(value: object) -> dict[str, object]:
         _require_sha256(value[field], field)
     if type(value["cumulative_charge_ns"]) is not int or value["cumulative_charge_ns"] < 0:
         raise ValueError("process record charge is malformed")
+    if type(value["process_sequence"]) is not int or value["process_sequence"] < 0:
+        raise ValueError("process record sequence is malformed")
+    if type(value["device_units"]) is not int or not (
+        1 <= value["device_units"] <= MAX_CONCURRENT_LEASES
+    ):
+        raise ValueError("process record device units are malformed")
+    if not isinstance(value["device_identity"], str) or not value["device_identity"]:
+        raise ValueError("process record device identity is malformed")
+    started = parse_utc(str(value["started_utc"]))
+    closed = parse_utc(str(value["closed_utc"]))
+    if closed < started:
+        raise ValueError("process record closes before it starts")
     require_sha256_map(value["immutable_control_sha256"], name="immutable control")
     reject_scientific_fields(value)
     return dict(value)
@@ -588,12 +717,130 @@ def reject_scientific_fields(value: object, *, path: str = "record") -> None:
             if not isinstance(key, str):
                 raise ValueError(f"{path} contains a non-string key")
             lowered = key.lower()
-            if key in _PUBLIC_FORBIDDEN_KEYS or re.fullmatch(r"c[1-6]", lowered):
+            if lowered in _PUBLIC_FORBIDDEN_KEYS or re.fullmatch(r"c[1-6]", lowered):
                 raise ValueError(f"{path} contains forbidden scientific field {key}")
             reject_scientific_fields(item, path=f"{path}.{key}")
     elif isinstance(value, list):
         for index, item in enumerate(value):
             reject_scientific_fields(item, path=f"{path}[{index}]")
+
+
+_EVENT_DATA_KEYS = {
+    "T_ACTIVATED": {
+        "authorization_sha256", "claim_sha256", "device_policy_token",
+        "envelope_token", "scientific_outcome", "t_state",
+    },
+    "T_PROCESS_STARTED": {
+        "process_claim_sha256", "process_id", "scientific_outcome",
+    },
+    "T_DEVICE_TIME_CHARGED": {
+        "active_lease_sha256", "charge_ns", "process_id",
+        "scientific_outcome", "t_state",
+    },
+    "T_REVIEW_COMPLETED": {
+        "review_record_sha256", "scientific_outcome", "t_state",
+    },
+    "T_OPERATIONAL_PAUSE": {
+        "checkpoint_path", "checkpoint_sha256", "reason", "resets_e3",
+        "scientific_outcome", "t_state",
+    },
+    "T_PROCESS_STOPPED": {
+        "process_id", "process_record_sha256", "scientific_outcome", "t_state",
+    },
+    "T_RUNTIME_INVALID": {
+        "invalid_cause", "invalidity_record_sha256", "required_action",
+        "scientific_outcome", "t_state",
+    },
+    "T_AUTHOR_STOP": {
+        "author_decision_sha256", "scientific_outcome", "t_state",
+    },
+    "T_ENVELOPE_EXHAUSTED": {
+        "resource_axis", "scientific_outcome", "t_state",
+    },
+}
+
+
+def validate_ledger_event(value: object) -> dict[str, object]:
+    from .accounting import parse_utc
+
+    if not isinstance(value, dict) or set(value) != {
+        "data", "entry_sha256", "event", "previous_sha256", "sequence",
+        "timestamp_utc",
+    }:
+        raise ValueError("ledger event fields differ")
+    event = value["event"]
+    if not isinstance(event, str) or event not in POST_ACTIVATION_EVENTS:
+        raise ValueError("ledger event is outside the closed vocabulary")
+    data = value["data"]
+    if not isinstance(data, dict) or set(data) != _EVENT_DATA_KEYS[event]:
+        raise ValueError(f"{event} payload fields differ")
+    if data["scientific_outcome"] is not False:
+        raise ValueError(f"{event} must be non-scientific")
+    if type(value["sequence"]) is not int or value["sequence"] < 0:
+        raise ValueError("ledger event sequence is malformed")
+    _require_sha256(value["previous_sha256"], "previous ledger event")
+    _require_sha256(value["entry_sha256"], "ledger event")
+    payload = {key: item for key, item in value.items() if key != "entry_sha256"}
+    if value["entry_sha256"] != sha256_bytes(canonical_json(payload)):
+        raise ValueError("ledger event hash differs")
+    parse_utc(str(value["timestamp_utc"]))
+    reject_scientific_fields(data, path=f"ledger.{event}")
+    if event in STATE_BEARING_EVENTS:
+        state = data.get("t_state")
+        if not isinstance(state, dict):
+            raise ValueError(f"{event} lacks a complete post-state")
+        parsed_state = TState.from_mapping(state)
+    elif "t_state" in data:
+        raise ValueError("T_PROCESS_STARTED must not carry t_state")
+    if event == "T_RUNTIME_INVALID":
+        InvalidCause(str(data["invalid_cause"]))
+        _require_sha256(data["invalidity_record_sha256"], "invalidity record")
+        if data["required_action"] != "SIGNED_BOUNDED_RECOVERY_NO_AUTOMATIC_RETRY":
+            raise ValueError("runtime invalidity event recovery route differs")
+    if event == "T_ENVELOPE_EXHAUSTED" and data["resource_axis"] != "E1":
+        raise ValueError("pre-WP-6 exhaustion may only name E1")
+    hash_fields = {
+        "T_ACTIVATED": ("authorization_sha256", "claim_sha256"),
+        "T_PROCESS_STARTED": ("process_claim_sha256", "process_id"),
+        "T_DEVICE_TIME_CHARGED": ("active_lease_sha256", "process_id"),
+        "T_REVIEW_COMPLETED": ("review_record_sha256",),
+        "T_OPERATIONAL_PAUSE": ("checkpoint_sha256",),
+        "T_PROCESS_STOPPED": ("process_id", "process_record_sha256"),
+        "T_RUNTIME_INVALID": ("invalidity_record_sha256",),
+        "T_AUTHOR_STOP": ("author_decision_sha256",),
+        "T_ENVELOPE_EXHAUSTED": (),
+    }
+    for field in hash_fields[event]:
+        _require_sha256(data[field], f"{event} {field}")
+    if event == "T_ACTIVATED":
+        if any(
+            not isinstance(data[field], str) or not data[field]
+            for field in ("device_policy_token", "envelope_token")
+        ):
+            raise ValueError("activation event tokens are malformed")
+        if parsed_state.activated_utc != value["timestamp_utc"]:
+            raise ValueError("activation event timestamp and state differ")
+        if parsed_state.device_nanoseconds != 0 or parsed_state.candidate_ids:
+            raise ValueError("activation event state is not pristine-active")
+    elif event == "T_DEVICE_TIME_CHARGED":
+        if type(data["charge_ns"]) is not int or data["charge_ns"] <= 0:
+            raise ValueError("device-time event charge is malformed")
+    elif event == "T_OPERATIONAL_PAUSE":
+        if (
+            not isinstance(data["checkpoint_path"], str)
+            or not data["checkpoint_path"]
+            or not isinstance(data["reason"], str)
+            or not data["reason"]
+            or data["resets_e3"] is not False
+        ):
+            raise ValueError("operational-pause payload values differ")
+    elif event == "T_AUTHOR_STOP" and not parsed_state.author_stopped:
+        raise ValueError("author-stop event lacks an author-stopped post-state")
+    elif event == "T_ENVELOPE_EXHAUSTED" and (
+        parsed_state.device_nanoseconds < 168 * NANOSECONDS_PER_HOUR
+    ):
+        raise ValueError("E1 exhaustion event precedes the signed E1 cap")
+    return dict(value)
 
 
 def validate_invalidity_record(value: object) -> dict[str, object]:

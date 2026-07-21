@@ -124,19 +124,10 @@ class TState:
         return replace(self, device_nanoseconds=self.device_nanoseconds + value)
 
     def register_candidate(self, candidate_id: str, envelope: TEnvelope) -> "TState":
-        if (
-            self.activated_utc is None
-            or self.author_stopped
-            or self.resume_review_pending
-        ):
-            raise ValueError("T is not available for registration")
-        if _HEX64.fullmatch(candidate_id) is None:
-            raise ValueError("candidate id must be lowercase SHA-256")
-        if candidate_id in self.candidate_ids:
-            return self
-        if self.exhausted(envelope):
-            raise ValueError("T envelope is already exhausted")
-        return replace(self, candidate_ids=(*self.candidate_ids, candidate_id))
+        del candidate_id, envelope
+        raise PermissionError(
+            "candidate registration requires the absent signed WP-6 registry authority"
+        )
 
     def exhausted(self, envelope: TEnvelope) -> bool:
         return (
