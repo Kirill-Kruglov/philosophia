@@ -17,6 +17,8 @@ def main() -> int:
     for failure in failures:
         print(f"FAIL: {failure}")
     if failures:
+        if failures == ["ACTIVE_TREE_REQUIRES_ACTIVE_VERIFIER"]:
+            print("ACTIVE_TREE_REQUIRES_ACTIVE_VERIFIER")
         return 1
     print("OK: Officina WP-1/WP-2 bootstrap is quarantined and inactive.")
     return 0

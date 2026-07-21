@@ -31,11 +31,24 @@ DYNAMIC_IMPORT_CALLS = {
 RANDOM_DEVICE_PATHS = {"/dev/" + name for name in ("random", "urandom")}
 ALLOWED_ABSOLUTE_IMPORTS = {
     "__future__", "ast", "dataclasses", "datetime", "enum", "fcntl",
-    "hashlib", "hmac", "json", "os", "pathlib", "re", "typing", "weakref",
+    "hashlib", "hmac", "json", "os", "pathlib", "re", "subprocess", "time",
+    "typing", "weakref",
 }
 ALLOWED_RELATIVE_IMPORTS = {
-    "accounting", "canonical", "interlock", "ledger", "quarantine", "terminal"
+    "accounting", "activation", "canonical", "checkpoint", "interlock", "ledger",
+    "quarantine", "runtime", "terminal", "verification", "world",
 }
+
+PRODUCTION_TEST_SURFACE_SYMBOLS = frozenset(
+    {
+        "test_world_capability",
+        "issue_test_t_contact_harness",
+        "evaluate_test_query",
+        "record_test_t_contact",
+        "TestWorldCapability",
+        "TestTContactHarness",
+    }
+)
 
 
 def _resolved_symbol(
@@ -179,7 +192,39 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
     return failures
 
 
-def verify_bootstrap(repo: Path) -> list[str]:
+def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> list[str]:
+    """Reject test-world symbols from every production caller in the review set."""
+
+    failures: list[str] = []
+    for relative in sorted(set(reviewed_paths)):
+        path = repo / relative
+        if path.suffix != ".py" or path.name == "world.py":
+            continue
+        if not path.is_file() or path.is_symlink():
+            failures.append(f"reviewed production source is missing or aliased: {relative}")
+            continue
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        except (OSError, SyntaxError) as error:
+            failures.append(f"reviewed production source cannot be parsed: {relative}: {error}")
+            continue
+        for node in ast.walk(tree):
+            names: list[str] = []
+            if isinstance(node, ast.ImportFrom):
+                names.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.Name):
+                names.append(node.id)
+            elif isinstance(node, ast.Attribute):
+                names.append(node.attr)
+            for name in names:
+                if name in PRODUCTION_TEST_SURFACE_SYMBOLS:
+                    failures.append(
+                        f"production source references test-world symbol {name}: {relative}"
+                    )
+    return sorted(set(failures))
+
+
+def verify_bootstrap(repo: Path, *, allow_activation_authorization: bool = False) -> list[str]:
     failures: list[str] = []
     root = repo / "successor/officina"
     expected = {
@@ -189,8 +234,11 @@ def verify_bootstrap(repo: Path) -> list[str]:
         "T_ENVELOPE.json",
         "T_LEDGER.md",
         "T_LEDGER.md.head.json",
+        "T_ACTIVATION_IMPLEMENTATION.md",
         "WP1_WP2_IMPLEMENTATION.md",
     }
+    if allow_activation_authorization:
+        expected.add("OFFICINA_T_ACTIVATION_AUTHORIZATION.json")
     actual = {path.name for path in root.iterdir() if path.is_file()}
     if actual != expected:
         failures.append(f"Officina bootstrap files differ: {sorted(actual)}")
@@ -233,6 +281,8 @@ def verify_bootstrap(repo: Path) -> list[str]:
     if canonical_json(policy) != canonical_json(expected_policy):
         failures.append("path policy differs from the signed bootstrap")
     envelope = load_canonical_json(root / "T_ENVELOPE.json")
+    if isinstance(envelope, dict) and envelope.get("activated") is True:
+        return ["ACTIVE_TREE_REQUIRES_ACTIVE_VERIFIER"]
     expected_envelope = {
         "activated": False,
         "candidate_registration_cap": 12,
@@ -259,6 +309,10 @@ def verify_bootstrap(repo: Path) -> list[str]:
     }
     if canonical_json(head) != canonical_json(expected_head):
         failures.append("committed T ledger head is not genesis")
+
+    from .runtime import verify_runtime_lock
+
+    failures.extend(verify_runtime_lock(repo))
 
     source_paths = sorted((repo / "src/philosophia/officina").glob("*.py"))
     failures.extend(verify_source_quarantine(source_paths))
