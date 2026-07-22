@@ -29,10 +29,10 @@ Implemented boundaries:
   invalidity event and matching invalidity record;
 - reviewed-commit presence checks over reviewed source, governing, and protocol
   pins, in addition to current-tree hash and alias checks.
+- mutually exclusive inactive and active verifiers.
 
 The complete functional E1 boundary is not claimed until that separate package
 and its supervisor/backend paths pass bounded review.
-- mutually exclusive inactive and active verifiers.
 
 The exact-type real-T capability has no issuer. Actual activation remains
 mechanically blocked until a separately reviewed generic metered learner
