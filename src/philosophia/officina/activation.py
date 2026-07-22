@@ -330,7 +330,18 @@ def _preflight_git(repo: Path, authorization: Mapping[str, object]) -> str:
             or not path.resolve(strict=True).is_relative_to(repo)
         ):
             raise ActivationRefused(f"activation pinned path is untracked or aliased: {relative}")
-    for relative in tuple(str(item) for item in authorization["reviewed_source_paths"]):
+    reviewed_commit_paths = tuple(
+        dict.fromkeys(
+            (
+                *tuple(
+                    str(item) for item in authorization["reviewed_source_paths"]
+                ),
+                *GOVERNING_PATHS,
+                *PROTOCOL_PATHS,
+            )
+        )
+    )
+    for relative in reviewed_commit_paths:
         if _git(
             repo,
             "cat-file",
@@ -338,7 +349,7 @@ def _preflight_git(repo: Path, authorization: Mapping[str, object]) -> str:
             f"{reviewed}:{relative}",
             check=False,
         ).returncode:
-            raise ActivationRefused(f"reviewed source is absent at reviewed HEAD: {relative}")
+            raise ActivationRefused(f"pinned path is absent at reviewed HEAD: {relative}")
     return head
 
 

@@ -208,6 +208,67 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
     reviewed = tuple(sorted(set(reviewed_paths)))
     python_paths = tuple(relative for relative in reviewed if relative.endswith(".py"))
     computed_edges: dict[str, list[str]] = {}
+
+    def module_context(relative: str) -> tuple[tuple[str, ...], bool]:
+        path = Path(relative)
+        parts = path.with_suffix("").parts
+        if parts and parts[0] == "src":
+            parts = parts[1:]
+        is_package = parts[-1:] == ("__init__",)
+        if is_package:
+            parts = parts[:-1]
+        return tuple(parts), is_package
+
+    def resolve_module(name: str) -> tuple[str | None, bool]:
+        parts = tuple(part for part in name.split(".") if part)
+        if not parts:
+            return None, False
+        candidates: set[str] = set()
+        for base in (repo, repo / "src"):
+            source = base.joinpath(*parts).with_suffix(".py")
+            package = base.joinpath(*parts, "__init__.py")
+            for candidate in (source, package):
+                if candidate.is_file() and not candidate.is_symlink():
+                    candidates.add(candidate.relative_to(repo).as_posix())
+        if len(candidates) > 1:
+            return None, True
+        return (next(iter(candidates)), False) if candidates else (None, False)
+
+    def imported_modules(relative: str, tree: ast.Module) -> tuple[set[str], bool]:
+        current_parts, is_package = module_context(relative)
+        current_package = current_parts if is_package else current_parts[:-1]
+        dependencies: set[str] = set()
+        ambiguous = False
+        for node in ast.walk(tree):
+            names: list[str] = []
+            if isinstance(node, ast.Import):
+                names.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom):
+                if node.level:
+                    keep = len(current_package) - (node.level - 1)
+                    if keep < 0:
+                        ambiguous = True
+                        continue
+                    base_parts = current_package[:keep]
+                    if node.module:
+                        base_parts = (*base_parts, *node.module.split("."))
+                    base = ".".join(base_parts)
+                else:
+                    base = node.module or ""
+                if base:
+                    names.append(base)
+                for alias in node.names:
+                    if alias.name != "*":
+                        candidate = f"{base}.{alias.name}".strip(".")
+                        if candidate:
+                            names.append(candidate)
+            for name in names:
+                resolved, is_ambiguous = resolve_module(name)
+                ambiguous = ambiguous or is_ambiguous
+                if resolved is not None:
+                    dependencies.add(resolved)
+        return dependencies, ambiguous
+
     for relative in python_paths:
         path = repo / relative
         if not path.is_file() or path.is_symlink():
@@ -228,25 +289,20 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
                 for alias in node.names:
                     aliases[alias.asname or alias.name] = f"{module}.{alias.name}".strip(".")
         local_symbols = _local_symbol_table(tree, aliases)
-        dependencies: set[str] = set()
+        dependencies, ambiguous = imported_modules(relative, tree)
+        if ambiguous:
+            failures.append(f"production source has ambiguous local imports: {relative}")
         for node in ast.walk(tree):
-            module = ""
-            if isinstance(node, ast.ImportFrom):
-                module = node.module or ""
-                if node.level > 0 and relative.startswith("src/philosophia/officina/"):
-                    module = f"philosophia.officina.{module}".rstrip(".")
-            elif isinstance(node, ast.Import):
-                for alias in node.names:
-                    if alias.name.startswith("philosophia.officina."):
-                        dependencies.add(
-                            "src/philosophia/officina/"
-                            + alias.name.rsplit(".", 1)[-1]
-                            + ".py"
-                        )
-            if module.startswith("philosophia.officina."):
-                dependencies.add(
-                    "src/philosophia/officina/" + module.rsplit(".", 1)[-1] + ".py"
-                )
+            imported_names: list[str] = []
+            if isinstance(node, ast.Import):
+                imported_names.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom):
+                imported_names.append(node.module or "")
+            for imported in imported_names:
+                if imported.startswith(FORBIDDEN_IMPORT_PREFIXES):
+                    failures.append(
+                        f"production source uses quarantined import {imported}: {relative}"
+                    )
             names: list[str] = []
             if isinstance(node, ast.ImportFrom):
                 names.extend(alias.name for alias in node.names)
@@ -276,6 +332,28 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
             )
         computed_edges[relative] = sorted(dependencies)
 
+    roots = set(PRODUCTION_ROOTS)
+    missing_roots = roots - set(python_paths)
+    if missing_roots:
+        failures.append(f"production executable roots are unreviewed: {sorted(missing_roots)}")
+    reachable: set[str] = set()
+    pending = list(sorted(roots & set(python_paths)))
+    while pending:
+        relative = pending.pop()
+        if relative in reachable:
+            continue
+        reachable.add(relative)
+        pending.extend(
+            dependency
+            for dependency in computed_edges.get(relative, ())
+            if dependency in computed_edges and dependency not in reachable
+        )
+    unreachable = set(python_paths) - reachable
+    if unreachable:
+        failures.append(
+            f"reviewed production sources are unreachable from roots: {sorted(unreachable)}"
+        )
+
     manifest_path = repo / PRODUCTION_MANIFEST_RELATIVE
     try:
         manifest = load_canonical_json(manifest_path)
@@ -297,9 +375,14 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
         failures.append("production call-graph manifest contract differs")
     if manifest["roots"] != list(PRODUCTION_ROOTS):
         failures.append("production call-graph roots differ")
-    if manifest["reachable_sources"] != list(python_paths):
+    if manifest["reachable_sources"] != sorted(reachable):
         failures.append("production reachable-source closure differs")
-    if canonical_json(manifest["import_edges"]) != canonical_json(computed_edges):
+    reachable_edges = {
+        relative: computed_edges[relative]
+        for relative in sorted(reachable)
+        if relative in computed_edges
+    }
+    if canonical_json(manifest["import_edges"]) != canonical_json(reachable_edges):
         failures.append("production import-edge closure differs")
     return sorted(set(failures))
 

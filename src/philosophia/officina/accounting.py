@@ -71,6 +71,10 @@ class TState:
             type(item) is str for item in self.candidate_ids
         ):
             raise ValueError("T candidate_ids must be a tuple of strings")
+        if self.candidate_ids:
+            raise ValueError(
+                "candidate registrations require the absent signed WP-6 authority"
+            )
         for name, value in (
             ("activated_utc", self.activated_utc),
             ("last_review_utc", self.last_review_utc),
@@ -130,9 +134,8 @@ class TState:
         )
 
     def exhausted(self, envelope: TEnvelope) -> bool:
-        return (
-            self.device_nanoseconds >= envelope.device_hour_cap * NANOSECONDS_PER_HOUR
-            or len(self.candidate_ids) >= envelope.candidate_cap
+        return self.device_nanoseconds >= (
+            envelope.device_hour_cap * NANOSECONDS_PER_HOUR
         )
 
     def review_due(self, envelope: TEnvelope, timestamp_utc: str) -> bool:

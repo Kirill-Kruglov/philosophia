@@ -95,6 +95,24 @@ def test_t_envelope_is_cumulative_additive_and_candidate_bounded() -> None:
     assert state.candidate_ids == ()
 
 
+def test_pre_wp6_state_cannot_represent_or_interpret_e2_consumption() -> None:
+    envelope = TEnvelope()
+    active = _active_state()
+    candidate = "a" * 64
+    with pytest.raises(ValueError, match="absent signed WP-6"):
+        TState(activated_utc=active.activated_utc, candidate_ids=(candidate,))
+    mapping = active.to_mapping()
+    mapping["candidate_ids"] = [candidate]
+    with pytest.raises(ValueError, match="absent signed WP-6"):
+        TState.from_mapping(mapping)
+    assert not active.exhausted(envelope)
+    charged = TState(
+        activated_utc=active.activated_utc,
+        device_nanoseconds=envelope.device_hour_cap * NANOSECONDS_PER_HOUR,
+    )
+    assert charged.exhausted(envelope)
+
+
 def test_e3_wall_clock_includes_powered_off_time_and_pause_does_not_reset() -> None:
     envelope = TEnvelope()
     state = _active_state().charge_device_nanoseconds(

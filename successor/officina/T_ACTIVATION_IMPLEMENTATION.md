@@ -18,10 +18,20 @@ Implemented boundaries:
   hash-linked ledger;
 - fixed liability constants, shortened E1/E3 reservation arithmetic,
   monotonic additive settlement, typed invalidity and process dispositions;
-- a direct-symbol production lint; activation additionally requires the absent
-  reviewed generic harness and a canonical closed production call-graph manifest.
-  The complete functional E1 boundary is not claimed until that separate package
-  and its supervisor/backend paths pass bounded review;
+- a closed repository-local import graph rooted at the declared executables,
+  with unreachable, ambiguous, omitted, reflective, entropy-bearing, and
+  test-surface sources rejected; activation additionally requires the absent
+  reviewed generic harness and its exact production call-graph manifest;
+- an exact pre-WP-6 E2 barrier: candidate ids remain an empty schema placeholder
+  and only the signed E1 device-time cap can exhaust the inactive implementation;
+- activation-bound process claims and typed settlement composition: invalid
+  closes require a process-specific charge followed by its hash-linked runtime
+  invalidity event and matching invalidity record;
+- reviewed-commit presence checks over reviewed source, governing, and protocol
+  pins, in addition to current-tree hash and alias checks.
+
+The complete functional E1 boundary is not claimed until that separate package
+and its supervisor/backend paths pass bounded review.
 - mutually exclusive inactive and active verifiers.
 
 The exact-type real-T capability has no issuer. Actual activation remains

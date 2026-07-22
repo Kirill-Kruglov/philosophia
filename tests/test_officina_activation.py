@@ -91,16 +91,19 @@ def _mirror(tmp_path: Path) -> tuple[Path, Path]:
         shutil.copy2(REPO / "scripts" / name, repo / "scripts" / name)
     harness = repo / GENERIC_HARNESS_RELATIVE
     harness.write_text(
-        '"""Reviewed mirror-only harness fixture."""\nHARNESS_REVIEWED = True\n',
+        '"""Reviewed mirror-only harness fixture."""\n'
+        'from .checkpoint import write_pause_checkpoint\n'
+        'from .interlock import ExecutionNotAuthorized\n'
+        'from .terminal import QTerminal\n'
+        'from .world import TDevWorld\n'
+        'HARNESS_REVIEWED = True\n',
         encoding="ascii",
     )
     reviewed_python = sorted(
         {
             *IMMUTABLE_CONTROL_PATHS,
             GENERIC_HARNESS_RELATIVE.as_posix(),
-            *(path.relative_to(repo).as_posix() for path in (
-                repo / "src/philosophia/officina"
-            ).glob("*.py")),
+            "src/philosophia/officina/quarantine.py",
         }
     )
     manifest_path = repo / PRODUCTION_MANIFEST_RELATIVE
@@ -190,6 +193,7 @@ def test_production_boundary_rejects_reflection_and_omitted_local_source(
 ) -> None:
     source = tmp_path / "src/philosophia/officina/generic_harness.py"
     source.parent.mkdir(parents=True)
+    (source.parent / "world.py").write_text("\n", encoding="ascii")
     source.write_text(
         'import philosophia.officina.world as w\n'
         'name = "evaluate_" + "test_query"\n'
@@ -201,6 +205,59 @@ def test_production_boundary_rejects_reflection_and_omitted_local_source(
     )
     assert any("dynamic resolution" in item for item in failures)
     assert any("omitted local dependencies" in item for item in failures)
+
+
+def test_production_boundary_closes_arbitrary_repository_local_imports(
+    tmp_path: Path,
+) -> None:
+    repo, authorization = _mirror(tmp_path)
+    reviewed = json.loads(authorization.read_bytes())["reviewed_source_paths"]
+    harness = repo / GENERIC_HARNESS_RELATIVE
+    harness.write_text("import external_behavior\n", encoding="ascii")
+    external = repo / "external_behavior.py"
+    external.write_text("import local_helper\n", encoding="ascii")
+    helper = repo / "local_helper.py"
+    helper.write_text(
+        "from philosophia.officina.world import evaluate_test_query\n",
+        encoding="ascii",
+    )
+    reviewed_without_helper = [
+        *[item for item in reviewed if item != PRODUCTION_MANIFEST_RELATIVE.as_posix()],
+        "external_behavior.py",
+    ]
+    failures = verify_production_boundary(repo, reviewed_without_helper)
+    assert any("omitted local dependencies" in item for item in failures)
+    failures = verify_production_boundary(
+        repo, (*reviewed_without_helper, "local_helper.py")
+    )
+    assert any("evaluate_test_query" in item for item in failures)
+
+
+def test_production_boundary_rejects_unreachable_roots_and_ambiguous_modules(
+    tmp_path: Path,
+) -> None:
+    repo, authorization = _mirror(tmp_path)
+    reviewed = json.loads(authorization.read_bytes())["reviewed_source_paths"]
+    reviewed_python = [item for item in reviewed if item.endswith(".py")]
+    orphan = repo / "orphan.py"
+    orphan.write_text("VALUE = 1\n", encoding="ascii")
+    failures = verify_production_boundary(repo, (*reviewed_python, "orphan.py"))
+    assert any("unreachable from roots" in item for item in failures)
+
+    without_root = [
+        item for item in reviewed_python if item != PRODUCTION_ROOTS[0]
+    ]
+    failures = verify_production_boundary(repo, without_root)
+    assert any("executable roots are unreviewed" in item for item in failures)
+
+    harness = repo / GENERIC_HARNESS_RELATIVE
+    harness.write_text("import ambiguous\n", encoding="ascii")
+    (repo / "ambiguous.py").write_text("VALUE = 1\n", encoding="ascii")
+    (repo / "src/ambiguous.py").write_text("VALUE = 2\n", encoding="ascii")
+    failures = verify_production_boundary(
+        repo, (*reviewed_python, "ambiguous.py", "src/ambiguous.py")
+    )
+    assert any("ambiguous local imports" in item for item in failures)
 
 
 def test_activation_completes_only_in_disposable_reviewed_mirror(tmp_path: Path) -> None:
@@ -319,6 +376,29 @@ def test_authorization_requires_exact_governing_chain_and_tokens(tmp_path: Path)
     _git(repo, "add", AUTHORIZATION_RELATIVE.as_posix(), GOVERNING_PATHS[0])
     _git(repo, "commit", "-q", "--amend", "--no-edit")
     with pytest.raises(ValueError, match="governing hashes"):
+        activate_repository(repo, authorization)
+
+
+@pytest.mark.parametrize("kind", ["governing", "protocol"])
+def test_every_pinned_path_must_exist_at_reviewed_head(
+    tmp_path: Path, kind: str
+) -> None:
+    repo, authorization = _mirror(tmp_path)
+    path_set = GOVERNING_PATHS if kind == "governing" else PROTOCOL_PATHS
+    relative = path_set[0]
+    path = repo / relative
+    original = path.read_bytes()
+    path.unlink()
+    _git(repo, "add", relative)
+    _git(repo, "commit", "-q", "-m", f"reviewed head missing {kind}")
+    deficient_head = _git(repo, "rev-parse", "HEAD")
+    path.write_bytes(original)
+    value = json.loads(authorization.read_bytes())
+    value["reviewed_code_head"] = deficient_head
+    authorization.write_bytes(canonical_json(value))
+    _git(repo, "add", relative, AUTHORIZATION_RELATIVE.as_posix())
+    _git(repo, "commit", "-q", "-m", f"restore {kind} and authorize")
+    with pytest.raises(ActivationRefused, match="absent at reviewed HEAD"):
         activate_repository(repo, authorization)
 
 

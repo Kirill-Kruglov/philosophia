@@ -465,9 +465,18 @@ def validate_process_claim_against_activation(
 
 
 def build_active_lease(
-    claim: Mapping[str, object], *, reservation: Reservation, prior_charge_event_sha256: str
+    claim: Mapping[str, object],
+    *,
+    reservation: Reservation,
+    prior_charge_event_sha256: str,
+    activation_record_sha256: str,
+    immutable_control_sha256: Mapping[str, str],
 ) -> dict[str, object]:
-    validated = validate_process_claim(dict(claim))
+    validated = validate_process_claim_against_activation(
+        dict(claim),
+        activation_record_sha256=activation_record_sha256,
+        immutable_control_sha256=immutable_control_sha256,
+    )
     if reservation.units != validated["device_units"]:
         raise ValueError("lease reservation units differ from the process claim")
     _require_sha256(prior_charge_event_sha256, "prior charge event")
@@ -573,11 +582,20 @@ def build_process_record(
     closed_utc: str,
     final_charge_event: Mapping[str, object],
     final_state: TState,
+    activation_record_sha256: str,
+    immutable_control_sha256: Mapping[str, str],
+    terminal_event: Mapping[str, object] | None = None,
+    invalidity_record: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
     from .accounting import parse_utc
 
     lease_value, claim_value = validate_active_lease_against_claim(
         dict(lease), dict(claim)
+    )
+    validate_process_claim_against_activation(
+        claim_value,
+        activation_record_sha256=activation_record_sha256,
+        immutable_control_sha256=immutable_control_sha256,
     )
     if not isinstance(disposition, ProcessDisposition):
         raise ValueError("process disposition must be typed")
@@ -587,27 +605,66 @@ def build_process_record(
     elif invalid_cause is not None:
         raise ValueError("valid process disposition cannot carry invalid cause")
     event = validate_ledger_event(dict(final_charge_event))
-    if event["event"] not in {"T_DEVICE_TIME_CHARGED", "T_RUNTIME_INVALID"}:
-        raise ValueError("final process event is not a settlement event")
+    if event["event"] != "T_DEVICE_TIME_CHARGED":
+        raise ValueError("process settlement requires a device-time charge event")
     event_data = event["data"]
     if not isinstance(event_data, dict):
         raise ValueError("final settlement payload is malformed")
-    if event["event"] == "T_DEVICE_TIME_CHARGED" and (
-        event_data["process_id"] != claim_value["process_id"]
-    ):
+    if event_data["process_id"] != claim_value["process_id"]:
         raise ValueError("final settlement process id differs")
-    if event["event"] == "T_DEVICE_TIME_CHARGED" and (
-        event_data["active_lease_sha256"]
-        != sha256_bytes(canonical_json(lease_value))
+    if event_data["active_lease_sha256"] != sha256_bytes(
+        canonical_json(lease_value)
     ):
         raise ValueError("final settlement lease hash differs")
     if canonical_json(event_data["t_state"]) != canonical_json(final_state.to_mapping()):
         raise ValueError("final settlement state differs")
     claim_sha256 = sha256_bytes(canonical_json(claim_value))
     final_charge_event_sha256 = str(event["entry_sha256"])
+    terminal_event_sha256 = final_charge_event_sha256
+    invalidity_record_sha256: str | None = None
+    terminal_timestamp = str(event["timestamp_utc"])
+    if disposition is ProcessDisposition.INVALID:
+        if terminal_event is None or invalidity_record is None:
+            raise ValueError(
+                "invalid process requires its runtime-invalid event and invalidity record"
+            )
+        terminal = validate_ledger_event(dict(terminal_event))
+        invalidity = validate_invalidity_record(dict(invalidity_record))
+        if terminal["event"] != "T_RUNTIME_INVALID":
+            raise ValueError("invalid process terminal event kind differs")
+        terminal_data = terminal["data"]
+        if terminal["previous_sha256"] != final_charge_event_sha256 or (
+            terminal["sequence"] != event["sequence"] + 1
+        ):
+            raise ValueError("invalid process event ancestry differs")
+        if canonical_json(terminal_data["t_state"]) != canonical_json(
+            final_state.to_mapping()
+        ):
+            raise ValueError("invalid process terminal state differs")
+        if terminal_data["invalid_cause"] != invalid_cause.value or (
+            invalidity["invalid_cause"] != invalid_cause.value
+        ):
+            raise ValueError("invalid process cause differs")
+        if invalidity["transaction_kind"] == "T_ACTIVATION":
+            raise ValueError("process close cannot use activation invalidity")
+        if invalidity["observed_utc"] != terminal["timestamp_utc"]:
+            raise ValueError("invalid process observation time differs")
+        invalidity_record_sha256 = sha256_bytes(canonical_json(invalidity))
+        if terminal_data["invalidity_record_sha256"] != invalidity_record_sha256:
+            raise ValueError("invalid process record hash differs")
+        if invalidity["outstanding_liability_ns"] != lease_value[
+            "outstanding_liability_ns"
+        ]:
+            raise ValueError("invalid process liability differs")
+        terminal_event_sha256 = str(terminal["entry_sha256"])
+        terminal_timestamp = str(terminal["timestamp_utc"])
+    elif terminal_event is not None or invalidity_record is not None:
+        raise ValueError("valid process cannot carry runtime invalidity artifacts")
     closed = parse_utc(closed_utc)
     if closed < parse_utc(str(claim_value["created_utc"])):
         raise ValueError("process close predates process start")
+    if closed_utc != terminal_timestamp:
+        raise ValueError("process close time differs from terminal event")
     final_state_sha256 = sha256_bytes(canonical_json(final_state.to_mapping()))
     record = {
         "schema": PROCESS_RECORD_SCHEMA,
@@ -632,7 +689,7 @@ def build_process_record(
         "started_utc": claim_value["created_utc"],
         "closed_utc": closed_utc,
         "cumulative_charge_ns": lease_value["cumulative_charge_ns"],
-        "final_charge_event_sha256": final_charge_event_sha256,
+        "final_charge_event_sha256": terminal_event_sha256,
         "final_t_state_sha256": final_state_sha256,
         "immutable_control_sha256": claim_value["immutable_control_sha256"],
     }
@@ -857,12 +914,33 @@ def validate_invalidity_record(value: object) -> dict[str, object]:
     if value["validity"] != "INVALID_PROCESS_RECORD":
         raise ValueError("runtime invalidity validity differs")
     InvalidCause(str(value["invalid_cause"]))
+    if not isinstance(value["transaction_kind"], str) or not value[
+        "transaction_kind"
+    ]:
+        raise ValueError("runtime invalidity transaction kind differs")
     if value["required_action"] != "SIGNED_BOUNDED_RECOVERY_NO_AUTOMATIC_RETRY":
         raise ValueError("runtime invalidity recovery route differs")
     if type(value["durable_step_index"]) is not int or value["durable_step_index"] < 0:
         raise ValueError("runtime invalidity step is malformed")
     if type(value["outstanding_liability_ns"]) is not int or value["outstanding_liability_ns"] < 0:
         raise ValueError("runtime invalidity liability is malformed")
+    affected = value["affected_path_sha256"]
+    if not isinstance(affected, dict):
+        raise ValueError("runtime invalidity affected paths are malformed")
+    for path, digest in affected.items():
+        if not isinstance(path, str) or not path:
+            raise ValueError("runtime invalidity affected path is malformed")
+        _require_sha256(digest, "runtime invalidity affected path")
+    from .accounting import parse_utc
+
+    parse_utc(str(value["observed_utc"]))
+    if value["transaction_kind"] == "T_ACTIVATION":
+        if value["clock_kind"] is not None or value["boot_identity"] is not None:
+            raise ValueError("activation invalidity must not claim a process clock")
+    elif value["clock_kind"] != CLOCK_KIND or not isinstance(
+        value["boot_identity"], str
+    ) or not value["boot_identity"]:
+        raise ValueError("process invalidity clock identity differs")
     reject_scientific_fields(value)
     return dict(value)
 

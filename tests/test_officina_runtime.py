@@ -363,6 +363,10 @@ def _claim() -> dict[str, object]:
     )
 
 
+_ACTIVATION_HASH = "a" * 64
+_CONTROL_HASHES = {"control.py": "f" * 64}
+
+
 def test_process_claim_identity_is_canonical_and_mutation_detected() -> None:
     claim = _claim()
     assert validate_process_claim(claim)["process_id"] == claim["process_id"]
@@ -382,7 +386,11 @@ def test_lease_heartbeat_and_process_close_round_trip() -> None:
     )
     assert reservation is not None
     lease = build_active_lease(
-        claim, reservation=reservation, prior_charge_event_sha256="0" * 64
+        claim,
+        reservation=reservation,
+        prior_charge_event_sha256="0" * 64,
+        activation_record_sha256=_ACTIVATION_HASH,
+        immutable_control_sha256=_CONTROL_HASHES,
     )
     assert validate_active_lease(lease)["heartbeat_deadline_ns"] == (
         100 + 60 * NANOSECONDS_PER_SECOND
@@ -418,6 +426,8 @@ def test_lease_heartbeat_and_process_close_round_trip() -> None:
         closed_utc="2026-07-21T00:00:01Z",
         final_charge_event=final_event,
         final_state=state,
+        activation_record_sha256=_ACTIVATION_HASH,
+        immutable_control_sha256=_CONTROL_HASHES,
     )
     assert validate_process_record(record)["validity"] == "VALID_PROCESS_RECORD"
     with pytest.raises(ValueError, match="typed public cause"):
@@ -429,6 +439,8 @@ def test_lease_heartbeat_and_process_close_round_trip() -> None:
             closed_utc="2026-07-21T00:00:01Z",
             final_charge_event=final_event,
             final_state=state,
+            activation_record_sha256=_ACTIVATION_HASH,
+            immutable_control_sha256=_CONTROL_HASHES,
         )
 
 
@@ -436,7 +448,11 @@ def test_claim_lease_and_activation_links_are_byte_exact() -> None:
     claim = _claim()
     reservation = Reservation(1, 60 * NANOSECONDS_PER_SECOND)
     lease = build_active_lease(
-        claim, reservation=reservation, prior_charge_event_sha256="0" * 64
+        claim,
+        reservation=reservation,
+        prior_charge_event_sha256="0" * 64,
+        activation_record_sha256=_ACTIVATION_HASH,
+        immutable_control_sha256=_CONTROL_HASHES,
     )
     validate_process_claim_against_activation(
         claim,
@@ -470,6 +486,8 @@ def test_claim_lease_and_activation_links_are_byte_exact() -> None:
             closed_utc="2026-07-21T00:00:01Z",
             final_charge_event=final_event,
             final_state=_state(),
+            activation_record_sha256=_ACTIVATION_HASH,
+            immutable_control_sha256=_CONTROL_HASHES,
         )
     changed_liability = dict(lease)
     changed_liability["outstanding_liability_ns"] = 1
@@ -493,6 +511,8 @@ def test_claim_lease_and_activation_links_are_byte_exact() -> None:
             closed_utc="2026-07-21T00:00:01Z",
             final_charge_event=wrong_process_event,
             final_state=_state(),
+            activation_record_sha256=_ACTIVATION_HASH,
+            immutable_control_sha256=_CONTROL_HASHES,
         )
     with pytest.raises(ValueError, match="immutable controls"):
         validate_process_claim_against_activation(
@@ -500,3 +520,146 @@ def test_claim_lease_and_activation_links_are_byte_exact() -> None:
             activation_record_sha256="a" * 64,
             immutable_control_sha256={"other.py": "f" * 64},
         )
+    with pytest.raises(ValueError, match="immutable controls"):
+        build_active_lease(
+            claim,
+            reservation=reservation,
+            prior_charge_event_sha256="0" * 64,
+            activation_record_sha256=_ACTIVATION_HASH,
+            immutable_control_sha256={"other.py": "f" * 64},
+        )
+
+
+def test_process_record_requires_typed_settlement_and_invalidity_chain() -> None:
+    claim = _claim()
+    reservation = Reservation(1, 60 * NANOSECONDS_PER_SECOND)
+    lease = build_active_lease(
+        claim,
+        reservation=reservation,
+        prior_charge_event_sha256="0" * 64,
+        activation_record_sha256=_ACTIVATION_HASH,
+        immutable_control_sha256=_CONTROL_HASHES,
+    )
+    state, renewed = settle_active_lease(
+        lease=lease,
+        state=_state(),
+        envelope=TEnvelope(),
+        current_reading_ns=160,
+        next_reservation=reservation,
+        charge_event_sha256="1" * 64,
+    )
+    charge = build_entry(
+        sequence=1,
+        previous_sha256="0" * 64,
+        event="T_DEVICE_TIME_CHARGED",
+        timestamp_utc="2026-07-21T00:00:01Z",
+        data={
+            "active_lease_sha256": sha256_bytes(canonical_json(renewed)),
+            "charge_ns": 60,
+            "process_id": claim["process_id"],
+            "scientific_outcome": False,
+            "t_state": state.to_mapping(),
+        },
+    )
+    invalidity = {
+        "schema": "philosophia.officina.t-runtime-invalidity.v1",
+        "scientific_outcome": False,
+        "validity": "INVALID_PROCESS_RECORD",
+        "invalid_cause": "CLOCK",
+        "transaction_kind": "T_PROCESS",
+        "durable_step_index": 3,
+        "affected_path_sha256": {},
+        "clock_kind": "CLOCK_MONOTONIC",
+        "boot_identity": "test-boot-id",
+        "observed_utc": "2026-07-21T00:00:02Z",
+        "outstanding_liability_ns": renewed["outstanding_liability_ns"],
+        "required_action": "SIGNED_BOUNDED_RECOVERY_NO_AUTOMATIC_RETRY",
+    }
+    invalid_event = build_entry(
+        sequence=2,
+        previous_sha256=str(charge["entry_sha256"]),
+        event="T_RUNTIME_INVALID",
+        timestamp_utc="2026-07-21T00:00:02Z",
+        data={
+            "invalid_cause": "CLOCK",
+            "invalidity_record_sha256": sha256_bytes(canonical_json(invalidity)),
+            "required_action": "SIGNED_BOUNDED_RECOVERY_NO_AUTOMATIC_RETRY",
+            "scientific_outcome": False,
+            "t_state": state.to_mapping(),
+        },
+    )
+    record = build_process_record(
+        claim=claim,
+        lease=renewed,
+        disposition=ProcessDisposition.INVALID,
+        invalid_cause=InvalidCause.CLOCK,
+        closed_utc="2026-07-21T00:00:02Z",
+        final_charge_event=charge,
+        final_state=state,
+        activation_record_sha256=_ACTIVATION_HASH,
+        immutable_control_sha256=_CONTROL_HASHES,
+        terminal_event=invalid_event,
+        invalidity_record=invalidity,
+    )
+    assert validate_process_record(record)["validity"] == "INVALID_PROCESS_RECORD"
+
+    with pytest.raises(ValueError, match="device-time charge"):
+        build_process_record(
+            claim=claim,
+            lease=renewed,
+            disposition=ProcessDisposition.CLOSED,
+            invalid_cause=None,
+            closed_utc="2026-07-21T00:00:02Z",
+            final_charge_event=invalid_event,
+            final_state=state,
+            activation_record_sha256=_ACTIVATION_HASH,
+            immutable_control_sha256=_CONTROL_HASHES,
+        )
+    with pytest.raises(ValueError, match="runtime-invalid event"):
+        build_process_record(
+            claim=claim,
+            lease=renewed,
+            disposition=ProcessDisposition.INVALID,
+            invalid_cause=InvalidCause.CLOCK,
+            closed_utc="2026-07-21T00:00:01Z",
+            final_charge_event=charge,
+            final_state=state,
+            activation_record_sha256=_ACTIVATION_HASH,
+            immutable_control_sha256=_CONTROL_HASHES,
+        )
+    wrong_cause = dict(invalidity)
+    wrong_cause["invalid_cause"] = "PROCESS"
+    with pytest.raises(ValueError, match="cause differs|record hash differs"):
+        build_process_record(
+            claim=claim,
+            lease=renewed,
+            disposition=ProcessDisposition.INVALID,
+            invalid_cause=InvalidCause.CLOCK,
+            closed_utc="2026-07-21T00:00:02Z",
+            final_charge_event=charge,
+            final_state=state,
+            activation_record_sha256=_ACTIVATION_HASH,
+            immutable_control_sha256=_CONTROL_HASHES,
+            terminal_event=invalid_event,
+            invalidity_record=wrong_cause,
+        )
+
+
+def test_ledger_event_refuses_pre_wp6_candidate_state() -> None:
+    state = _state().to_mapping()
+    state["candidate_ids"] = ["a" * 64]
+    event = build_entry(
+        sequence=1,
+        previous_sha256="0" * 64,
+        event="T_DEVICE_TIME_CHARGED",
+        timestamp_utc="2026-07-21T00:00:01Z",
+        data={
+            "active_lease_sha256": "b" * 64,
+            "charge_ns": 1,
+            "process_id": "c" * 64,
+            "scientific_outcome": False,
+            "t_state": state,
+        },
+    )
+    with pytest.raises(ValueError, match="absent signed WP-6"):
+        validate_ledger_event(event)
