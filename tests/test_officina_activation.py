@@ -260,6 +260,62 @@ def test_production_boundary_rejects_unreachable_roots_and_ambiguous_modules(
     assert any("ambiguous local imports" in item for item in failures)
 
 
+def test_production_boundary_rejects_cross_module_loaded_entropy_alias(
+    tmp_path: Path,
+) -> None:
+    repo, authorization = _mirror(tmp_path)
+    reviewed = json.loads(authorization.read_bytes())["reviewed_source_paths"]
+    reviewed_python = [item for item in reviewed if item.endswith(".py")]
+    activation_root = repo / PRODUCTION_ROOTS[0]
+    activation_root.write_bytes(
+        activation_root.read_bytes() + b"\nimport external_behavior\n"
+    )
+    (repo / "external_behavior.py").write_text(
+        "from local_helper import draw\nvalue = draw(32)\n",
+        encoding="ascii",
+    )
+    (repo / "local_helper.py").write_text(
+        "import os\ndraw = os.urandom\n",
+        encoding="ascii",
+    )
+    manifest_path = repo / PRODUCTION_MANIFEST_RELATIVE
+    manifest = json.loads(manifest_path.read_bytes())
+    reachable = sorted(
+        {*manifest["reachable_sources"], "external_behavior.py", "local_helper.py"}
+    )
+    edges = dict(manifest["import_edges"])
+    edges[PRODUCTION_ROOTS[0]] = sorted(
+        {*edges[PRODUCTION_ROOTS[0]], "external_behavior.py"}
+    )
+    edges["external_behavior.py"] = ["local_helper.py"]
+    edges["local_helper.py"] = []
+    manifest["reachable_sources"] = reachable
+    manifest["import_edges"] = {key: edges[key] for key in sorted(edges)}
+    manifest_path.write_bytes(canonical_json(manifest))
+    failures = verify_production_boundary(
+        repo, (*reviewed_python, "external_behavior.py", "local_helper.py")
+    )
+    assert any("references entropy os.urandom" in item for item in failures)
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ("import builtins\nresolver = getattr\n", "dynamic resolution getattr"),
+        ('DEVICE = "/dev/" + "urandom"\n', "system random device /dev/urandom"),
+    ],
+)
+def test_production_boundary_rejects_loaded_dynamic_and_random_device_paths(
+    tmp_path: Path, source: str, expected: str
+) -> None:
+    repo, authorization = _mirror(tmp_path)
+    reviewed = json.loads(authorization.read_bytes())["reviewed_source_paths"]
+    harness = repo / GENERIC_HARNESS_RELATIVE
+    harness.write_text(source, encoding="ascii")
+    failures = verify_production_boundary(repo, reviewed)
+    assert any(expected in item for item in failures)
+
+
 def test_activation_completes_only_in_disposable_reviewed_mirror(tmp_path: Path) -> None:
     repo, authorization = _mirror(tmp_path)
     committed = activate_repository(repo, authorization)

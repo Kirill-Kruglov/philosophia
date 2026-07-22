@@ -289,6 +289,7 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
                 for alias in node.names:
                     aliases[alias.asname or alias.name] = f"{module}.{alias.name}".strip(".")
         local_symbols = _local_symbol_table(tree, aliases)
+        static_strings = _static_string_table(tree)
         dependencies, ambiguous = imported_modules(relative, tree)
         if ambiguous:
             failures.append(f"production source has ambiguous local imports: {relative}")
@@ -315,6 +316,21 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
                     failures.append(
                         f"production source references test-world symbol {name}: {relative}"
                     )
+            is_loaded_symbol = (
+                isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)
+            ) or (
+                isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Load)
+            )
+            if is_loaded_symbol:
+                resolved = _resolved_symbol(node, aliases, local_symbols)
+                if resolved in ENTROPY_CALLS:
+                    failures.append(
+                        f"production source references entropy {resolved}: {relative}"
+                    )
+                if resolved in DYNAMIC_IMPORT_CALLS:
+                    failures.append(
+                        f"production source references dynamic resolution {resolved}: {relative}"
+                    )
             if isinstance(node, ast.Call):
                 resolved = _resolved_symbol(node.func, aliases, local_symbols)
                 if resolved in DYNAMIC_IMPORT_CALLS:
@@ -325,6 +341,12 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
                     failures.append(
                         f"production source uses entropy {resolved}: {relative}"
                     )
+            static_value = _static_string(node, static_strings)
+            if static_value in RANDOM_DEVICE_PATHS:
+                failures.append(
+                    f"production source references system random device "
+                    f"{static_value}: {relative}"
+                )
         missing = dependencies - set(python_paths)
         if missing:
             failures.append(
