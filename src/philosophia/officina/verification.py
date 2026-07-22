@@ -28,6 +28,9 @@ DYNAMIC_IMPORT_CALLS = {
     "__import__", "compile", "eval", "exec", "getattr",
     "importlib.import_module",
 }
+BUILTIN_DYNAMIC_IMPORT_CALLS = {
+    name for name in DYNAMIC_IMPORT_CALLS if "." not in name
+}
 RANDOM_DEVICE_PATHS = {"/dev/" + name for name in ("random", "urandom")}
 ALLOWED_ABSOLUTE_IMPORTS = {
     "__future__", "ast", "dataclasses", "datetime", "enum", "fcntl",
@@ -69,6 +72,14 @@ def _resolved_symbol(
         prefix = _resolved_symbol(node.value, aliases, local_symbols)
         return f"{prefix}.{node.attr}" if prefix else None
     return None
+
+
+def _normalized_capability_name(name: str | None) -> str | None:
+    if name is not None and name.startswith("builtins."):
+        builtin_name = name.removeprefix("builtins.")
+        if builtin_name in BUILTIN_DYNAMIC_IMPORT_CALLS:
+            return builtin_name
+    return name
 
 
 def _assignment_pairs(tree: ast.AST) -> list[tuple[str, ast.AST]]:
@@ -176,13 +187,26 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
                 alias.name == "*" for alias in node.names
             ):
                 failures.append(f"star import is forbidden in {path}")
+            if isinstance(node, ast.ImportFrom):
+                for alias in node.names:
+                    imported = _normalized_capability_name(
+                        f"{node.module or ''}.{alias.name}".strip(".")
+                    )
+                    if imported in ENTROPY_CALLS:
+                        failures.append(f"entropy reference {imported} in {path}")
+                    if imported in DYNAMIC_IMPORT_CALLS:
+                        failures.append(
+                            f"reflective or dynamic reference {imported} in {path}"
+                        )
             is_loaded_symbol = (
                 isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)
             ) or (
                 isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Load)
             )
             if is_loaded_symbol:
-                name = _resolved_symbol(node, aliases, local_symbols)
+                name = _normalized_capability_name(
+                    _resolved_symbol(node, aliases, local_symbols)
+                )
                 if name in ENTROPY_CALLS:
                     failures.append(f"entropy reference {name} in {path}")
                 if name in DYNAMIC_IMPORT_CALLS:
@@ -190,7 +214,9 @@ def verify_source_quarantine(paths: Iterable[Path]) -> list[str]:
                         f"reflective or dynamic reference {name} in {path}"
                     )
             if isinstance(node, ast.Call):
-                name = _resolved_symbol(node.func, aliases, local_symbols)
+                name = _normalized_capability_name(
+                    _resolved_symbol(node.func, aliases, local_symbols)
+                )
                 if name in ENTROPY_CALLS:
                     failures.append(f"entropy call {name} in {path}")
                 if name in DYNAMIC_IMPORT_CALLS:
@@ -304,6 +330,20 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
                     failures.append(
                         f"production source uses quarantined import {imported}: {relative}"
                     )
+            if isinstance(node, ast.ImportFrom):
+                for alias in node.names:
+                    imported = _normalized_capability_name(
+                        f"{node.module or ''}.{alias.name}".strip(".")
+                    )
+                    if imported in ENTROPY_CALLS:
+                        failures.append(
+                            f"production source references entropy {imported}: {relative}"
+                        )
+                    if imported in DYNAMIC_IMPORT_CALLS:
+                        failures.append(
+                            "production source references dynamic resolution "
+                            f"{imported}: {relative}"
+                        )
             names: list[str] = []
             if isinstance(node, ast.ImportFrom):
                 names.extend(alias.name for alias in node.names)
@@ -322,7 +362,9 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
                 isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Load)
             )
             if is_loaded_symbol:
-                resolved = _resolved_symbol(node, aliases, local_symbols)
+                resolved = _normalized_capability_name(
+                    _resolved_symbol(node, aliases, local_symbols)
+                )
                 if resolved in ENTROPY_CALLS:
                     failures.append(
                         f"production source references entropy {resolved}: {relative}"
@@ -332,7 +374,9 @@ def verify_production_boundary(repo: Path, reviewed_paths: Iterable[str]) -> lis
                         f"production source references dynamic resolution {resolved}: {relative}"
                     )
             if isinstance(node, ast.Call):
-                resolved = _resolved_symbol(node.func, aliases, local_symbols)
+                resolved = _normalized_capability_name(
+                    _resolved_symbol(node.func, aliases, local_symbols)
+                )
                 if resolved in DYNAMIC_IMPORT_CALLS:
                     failures.append(
                         f"production source uses dynamic resolution {resolved}: {relative}"
