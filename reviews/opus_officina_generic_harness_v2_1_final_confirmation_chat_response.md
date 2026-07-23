@@ -1,0 +1,12 @@
+Review complete. Verdict: **`OFFICINA_GENERIC_HARNESS_V2_1_XLINE_CONFIRMED`**, written to `reviews/opus_officina_generic_harness_v2_1_final_confirmation.md` (one new file, verdict token on the first line).
+
+The v2.1 correction closes all six of my M-1..M-6 findings via the code-compatible **no-core-amendment** route, and I verified each against the immutable constructors at HEAD:
+
+- **M-1/M-3** (Â§A): per-process aggregation (â¤1 positive `T_DEVICE_TIME_CHARGED` per process against its exact lease); the `U = max(m ns, remaining â K)` pool gives every unknowable stream a â¥1 ns integer share (`Î£share=U`, floorâ¥1 â verified on all five worked batches + a 200k sweep, 0 failures); and the "crossing charge last" ordering is *forced* by `charge_device_nanoseconds` refusing only when already at cap. The zero-share/R=0 case is deleted; invalid tuples are interleaved to the pinned `sequence+1`/`previous=charge` adjacency.
+- **M-2** (Â§B.1/B.4): `T_ENVELOPE_EXHAUSTED` only on the all-valid B.1 route (âG7); every invalid crossing stays G5 with cap facts only in post-state. The full B.5 compound table is single-valued and uses only existing `ProcessDisposition`/`InvalidCause` members; G5âG5 is structurally legal.
+- **M-4/M-5** (Â§B.3/D): collateral siblings inherit the one precedence-selected cause; the "lists every observed cause" sentence is deleted â single signed `invalid_cause`, no schema amendment.
+- **M-6** (Â§C.1/C.2): immutable original checkpoint; fresh pending artifact bound to the first-pause entry hash with byte-identical payload hashes; second pause via the generic Â§3 transaction â and critically `verify_resume` has **no standing caller**, so no collision; G4 power-loss re-enters G4.
+- **Check 5** (Â§C.3/E): recovery disposition + five decision schemas are closed generic-harness artifacts referencing only already-permitted hash fields â no new event/schema/core constructor; deterministic admission predicate.
+- **Check 6**: no concrete contradiction changing charge, ancestry, terminal state, artifact bytes, or admission. The one non-blocking observation (fixed-path pending checkpoint on *recurring* reviews) causes no two-implementer divergence and per the mandate is not treated as a blocker.
+
+I answered Fable's two Opus questions affirmatively. I created only this one review file; the tree is pristine and `NOT_ACTIVATED`. A positive verdict authorizes **only** Kirill's informed contract signature â no implementation, activation, manifest, spend, or claim movement.
