@@ -1,0 +1,11 @@
+Confirmation complete. Verdict: **`OFFICINA_BATCH_SETTLEMENT_V1_1_1_XLINE_CONFIRMED`**, written to `reviews/opus_officina_batch_settlement_v1_1_1_final_confirmation.md` (one new file, verdict token on the first line).
+
+This is a literal final confirmation of two author-decided corrections; I checked only for v1.1.1 regressions and did not reopen the confirmed F1..F4 alternatives.
+
+- **Fable's §6 Opus question — YES.** Grounded in the immutable `ledger.append`: it calls `_verify_head` *before* writing and updates the head *after* the entry `fsync`, so a crash leaves the ledger **at most one** entry ahead of the head/cache. §D1 completion then recomputes the head from durable entries and copies the entry's *embedded* post-state into the cache — byte-deterministic, no clock, and fully pre-authorized by the durable claim's automaton prefix; every non-byte-identical/ambiguous/second-discrepancy cut refuses into record-first invalidity/recovery.
+- **Classification honest (check 2):** the completion is named as **token-1** amendment-authorized control behavior in both tables, moved out of "harness clarifications"; precondition 6 leaves ordinary recovery (v2 §3a, v2.1 C.4) unchanged outside unresolved batch claims.
+- **Inline evidence (check 3):** the claim hash now directly binds every meter fact (nested `meter_evidence` per stream, no duplicated field, known charges recompute inline, no orphan state); authority consumption (§3b/§3c) and the prefix automaton (§4) are byte-unchanged; `runtime.py`/`ledger.py`/`checkpoint.py` stay outside the change set (deleting a family adds no code); `MAX_CONCURRENT_LEASES=4` bounds the claim to four objects.
+- **F1..F4 intact (check 4):** §1e full-live-set ("no live lease silently stranded") untouched; §3b core API untouched; automaton/§5 override byte-unchanged; §4e determinism *improved* (meter facts frozen in the claim, one fewer re-derivation path).
+- **No blocker (check 5):** no concrete difference in claim bytes (intended surface, never instantiated), charge/event sequence, recovery action (stricter), terminal state, or admission.
+
+I created only this one review file; the tree is pristine and `NOT_ACTIVATED`. A positive verdict makes the two ordered tokens eligible (with the Y-line confirmation) but authorizes no implementation, activation, or spend by itself.
