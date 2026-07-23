@@ -371,6 +371,25 @@ def test_entropy_scan_models_dotted_import_binding_exactly(tmp_path: Path) -> No
     assert verify_source_quarantine((benign,)) == []
 
 
+@pytest.mark.parametrize(
+    "source",
+    (
+        "resolver = __builtins__.eval\n",
+        "resolver = __builtins__.getattr\n",
+        "namespace = __builtins__\nresolver = namespace.eval\n",
+    ),
+)
+def test_entropy_scan_normalizes_dunder_builtins_namespace(
+    tmp_path: Path, source: str
+) -> None:
+    candidate = tmp_path / "dunder_builtins.py"
+    candidate.write_text(source, encoding="ascii")
+    assert any(
+        "reflective or dynamic reference" in item
+        for item in verify_source_quarantine((candidate,))
+    )
+
+
 def test_bootstrap_verifier_requires_exact_ledger_and_head_genesis(tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     shutil.copytree(REPO / "successor", repo / "successor")

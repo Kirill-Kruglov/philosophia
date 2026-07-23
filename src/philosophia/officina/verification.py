@@ -75,10 +75,12 @@ def _resolved_symbol(
 
 
 def _normalized_capability_name(name: str | None) -> str | None:
-    if name is not None and name.startswith("builtins."):
-        builtin_name = name.removeprefix("builtins.")
-        if builtin_name in BUILTIN_DYNAMIC_IMPORT_CALLS:
-            return builtin_name
+    if name is not None:
+        for namespace in ("builtins.", "__builtins__."):
+            if name.startswith(namespace):
+                builtin_name = name.removeprefix(namespace)
+                if builtin_name in BUILTIN_DYNAMIC_IMPORT_CALLS:
+                    return builtin_name
     return name
 
 

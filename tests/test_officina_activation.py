@@ -314,6 +314,18 @@ def test_production_boundary_rejects_cross_module_loaded_entropy_alias(
             "import builtins as bi\nresolver = bi.getattr\nalias = resolver\n",
             "dynamic resolution getattr",
         ),
+        (
+            "resolver = __builtins__.eval\n",
+            "dynamic resolution eval",
+        ),
+        (
+            "resolver = __builtins__.getattr\n",
+            "dynamic resolution getattr",
+        ),
+        (
+            "namespace = __builtins__\nresolver = namespace.eval\n",
+            "dynamic resolution eval",
+        ),
         ('DEVICE = "/dev/" + "urandom"\n', "system random device /dev/urandom"),
     ],
 )
