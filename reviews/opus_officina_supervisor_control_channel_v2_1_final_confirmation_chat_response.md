@@ -1,0 +1,21 @@
+I'll start by reading the authorship note and the v2.1 correction.
+
+Wrote [reviews/opus_officina_supervisor_control_channel_v2_1_final_confirmation.md](reviews/opus_officina_supervisor_control_channel_v2_1_final_confirmation.md) — one new file. (The two `sol_…v2_1_final_confirmation*` files appeared during this pass; those are the parallel Y-line, not mine.)
+
+**Verdict: `REVISE_OFFICINA_SUPERVISOR_CONTROL_CHANNEL_V2_1`** — 5 Critical, 8 Major, 7 Minor. No repair reopens A3/B1/C1/D1/K1.
+
+v2.1 is a real correction: 4 of my 6 v2 Criticals, 10 of 11 Majors, and all 7 Minors are genuinely closed. K1's write-path mediation closes the output-work cascade at the source (better than the `statvfs` mitigation I proposed), and the two-level `intent_scope`+`occurrence_index` identity is better than the `SHA-256(command,arguments)` key I recommended, which would have collapsed successive heartbeats. §W6.5 is exactly the explicit §5a supersession I asked for.
+
+Three of the five Criticals are defects **inside the new repairs**:
+
+- **`spawn_intent_id` is circular and cannot be computed.** §W2.4 puts `--officina-spawn-intent <spawn_intent_id_hex>` into the argv, §W2.3 hashes the *complete* argv into `argv_sha256`, and `spawn_intent_id` is a function of `argv_sha256`. v2 had explicitly avoided this. The embedded `--officina-ctrl-fds` numbers also make the id generation-local, breaking both reducer rows that respawn "under the same intent".
+- **The `spawning_id` marker cannot exist.** §W2.1 makes the grandchild an in-process post-fork entry — no `exec` — so its `/proc/cmdline` is the CLI's, and Python cannot rewrite it without `ctypes` (outside the allowlist). Every discovery/kill rule for a half-initialized grandchild is inexecutable, and since §W2.2 has the grandchild *retain* `SPAWN.lock`, a grandchild hung awaiting its watchdog's first ack holds the singleton forever, undiscoverable, while every later CLI blocks. This is the one place v2.1 is worse than v2 — it emerged from combining two individually-correct repairs (X-M1 + X-M6).
+- **The watchdog lease table lost its renewal-publication trigger.** §W0 replaced §V2.6.3 (which had "after every locked renew/remove/claim-start") with §W3.2, which only requires publication before the first `SIGCONT`. `HEARTBEAT`'s "keys exactly" effect plan has no `watchdog_table_seq` (START's does). So a correctly heartbeating process is frozen at its stale original deadline — and §W3.4 gives that freeze exactly one route: record-first invalidity, cause `PROCESS`, all-live batch, G5. The contract manufactures an invalid ending for a healthy process.
+
+Plus: no durable locator proves worker start (crash between `reply.json` and `SIGCONT` returns `PENDING` forever; §W4.8 names a *signal* as a durable trigger), and §W7's client-slot GC contradicts §W1.1's allocation rule — the sanctioned deletion re-uses an occurrence index, gets `ALREADY_ACKNOWLEDGED`/`retryable=false`, and since §W5.2 fixes the refusal detail to `{token, retryable}` there's no way to learn the high water. For `HEARTBEAT` (one scope per process) that is permanent loss of forward progress.
+
+On the two questions you flagged as new surfaces: the watchdog writing `WATCHDOG/FREEZE/*.json` **is** a compatible control-plane witness (it writes nothing under `runtime/`, holds no lock, appends no ledger) — but the supervisor has no acceptance predicate for it, and the filename lacks a generation/`table_seq` component so a stale generation's watchdog collides on a no-replace path. Implicit acknowledgement by `SUCCESSOR_OCCURRENCE` does prove observation for a contract-following client; `PROCESS_TERMINAL` does not, because `CLOSE`'s own effect *is* the terminal that acks it.
+
+Two things I checked against source rather than assumed and confirmed correct: §W1.5's `head_ok` guard is type-correct because `head_sha256` is the last entry's `entry_sha256` ([ledger.py:146](src/philosophia/officina/ledger.py:146)), and §W5.4's reliance on `EPIPE` works without the forbidden `signal` module because CPython sets `SIGPIPE` to `SIG_IGN` at startup.
+
+No process, test, probe, or smoke was run; nothing committed. `runtime/` holds only `T_RUNTIME.lock`, `runtime_control/` does not exist, envelope `activated: false`, T remains `NOT_ACTIVATED`.
