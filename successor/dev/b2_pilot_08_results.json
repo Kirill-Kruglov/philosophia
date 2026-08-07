@@ -1,0 +1,752 @@
+{
+  "N_max": 2000,
+  "K": 250,
+  "H_DEST": 500,
+  "M_PATH": 600,
+  "overlap": {
+    "path_abs_d_count": 81,
+    "panel_diff_count": 72,
+    "abs_d_intersect_panel_diff": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68
+    ],
+    "n_overlap": 69,
+    "note": "word-level intersect=0 does not establish content independence: path road-pool and panel can still share displacement classes."
+  },
+  "results": [
+    {
+      "arm": "D",
+      "seed": 0,
+      "k_hash": "7af5a1ca28e9e59f",
+      "path_wall_s": 0.0,
+      "dest_wall_s": 380.0003397001419,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 56,
+          "need": 118,
+          "abst": 36,
+          "lies": 3,
+          "brier": 0.24305530627624067,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 3,
+          "need": 15,
+          "abst": 8,
+          "lies": 1,
+          "brier": 0.33676075028870833,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 5,
+          "need": 15,
+          "abst": 3,
+          "lies": 2,
+          "brier": 0.3967332341079978,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 7,
+          "brier": 0.47265572311402126,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 8,
+          "need": 14,
+          "abst": 3,
+          "lies": 0,
+          "brier": 0.22911423530034578,
+          "qualifies": false
+        }
+      },
+      "probes": {
+        "init": {
+          "tag": "init",
+          "exact_d_acc": 0.3979591727256775,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.5255101919174194,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.009061488322913647,
+          "residue_chance": 0.015151515151515152
+        },
+        "D": {
+          "tag": "D",
+          "exact_d_acc": 0.38725489377975464,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.5539215803146362,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.012121211737394333,
+          "residue_chance": 0.015151515151515152
+        }
+      },
+      "wrap_anti_correct": null,
+      "wrap_n": null,
+      "scoring_mode": "committee_head"
+    },
+    {
+      "arm": "P0",
+      "seed": 0,
+      "k_hash": "7af5a1ca28e9e59f",
+      "path_wall_s": 87.39785870001651,
+      "dest_wall_s": 0.0,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 2,
+          "need": 118,
+          "abst": 2,
+          "lies": 27,
+          "brier": 0.6928008956375703,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 4,
+          "brier": 0.41423724424738473,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 2,
+          "brier": 0.36240097250755143,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 8,
+          "brier": 0.4919425304153666,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 5,
+          "need": 14,
+          "abst": 3,
+          "lies": 4,
+          "brier": 0.5021520204991002,
+          "qualifies": false
+        }
+      },
+      "probes": {
+        "P0": {
+          "tag": "P0",
+          "exact_d_acc": 0.23834197223186493,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.14507772028446198,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.00657894741743803,
+          "residue_chance": 0.015151515151515152
+        }
+      },
+      "wrap_anti_correct": 8,
+      "wrap_n": 20,
+      "scoring_mode": "path_exact_d_linear_readout"
+    },
+    {
+      "arm": "P0-neg",
+      "seed": 0,
+      "k_hash": "7af5a1ca28e9e59f",
+      "path_wall_s": 128.53446429991163,
+      "dest_wall_s": 0.0,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 0,
+          "need": 118,
+          "abst": 1,
+          "lies": 119,
+          "brier": 0.9476007117876831,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 8,
+          "brier": 0.4908677050093111,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 7,
+          "brier": 0.47663221021174773,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 8,
+          "brier": 0.47382664294478793,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 6,
+          "need": 14,
+          "abst": 0,
+          "lies": 8,
+          "brier": 0.5612944144015037,
+          "qualifies": false
+        }
+      },
+      "probes": {},
+      "wrap_anti_correct": 10,
+      "wrap_n": 20,
+      "scoring_mode": "path_exact_d_linear_readout"
+    },
+    {
+      "arm": "P+",
+      "seed": 0,
+      "k_hash": "7af5a1ca28e9e59f",
+      "path_wall_s": 87.33490050002001,
+      "dest_wall_s": 200.6572866998613,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 2,
+          "need": 118,
+          "abst": 122,
+          "lies": 0,
+          "brier": 0.2221719262091651,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 1,
+          "need": 15,
+          "abst": 15,
+          "lies": 0,
+          "brier": 0.24867261178869932,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 1,
+          "need": 15,
+          "abst": 15,
+          "lies": 0,
+          "brier": 0.24838939999194354,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 3,
+          "need": 15,
+          "abst": 10,
+          "lies": 0,
+          "brier": 0.2593301433242631,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 0,
+          "need": 14,
+          "abst": 16,
+          "lies": 0,
+          "brier": 0.22570199028372134,
+          "qualifies": false
+        }
+      },
+      "probes": {
+        "P0pre": {
+          "tag": "P0preP+",
+          "exact_d_acc": 0.21256038546562195,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.1304347813129425,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.014383561909198761,
+          "residue_chance": 0.015151515151515152
+        },
+        "P+": {
+          "tag": "P+",
+          "exact_d_acc": 0.24590164422988892,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.12568305432796478,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.014103424735367298,
+          "residue_chance": 0.015151515151515152
+        }
+      },
+      "wrap_anti_correct": null,
+      "wrap_n": null,
+      "scoring_mode": "committee_head_frozen_trunk"
+    },
+    {
+      "arm": "P_shuf",
+      "seed": 0,
+      "k_hash": "7af5a1ca28e9e59f",
+      "path_wall_s": 87.27752610016614,
+      "dest_wall_s": 201.08747239992954,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 28,
+          "need": 118,
+          "abst": 80,
+          "lies": 0,
+          "brier": 0.24474820710440134,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 2,
+          "need": 15,
+          "abst": 14,
+          "lies": 0,
+          "brier": 0.24093053477334897,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 3,
+          "need": 15,
+          "abst": 10,
+          "lies": 0,
+          "brier": 0.27288682603682496,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 0,
+          "brier": 0.36552611893738285,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 7,
+          "need": 14,
+          "abst": 5,
+          "lies": 0,
+          "brier": 0.22951941131718068,
+          "qualifies": false
+        }
+      },
+      "probes": {},
+      "wrap_anti_correct": null,
+      "wrap_n": null,
+      "scoring_mode": "committee_head_frozen_trunk"
+    },
+    {
+      "arm": "D",
+      "seed": 1,
+      "k_hash": "f8975793c9be5f51",
+      "path_wall_s": 0.0,
+      "dest_wall_s": 379.10636559990235,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 25,
+          "need": 118,
+          "abst": 31,
+          "lies": 44,
+          "brier": 0.5318582591686197,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 6,
+          "need": 15,
+          "abst": 6,
+          "lies": 0,
+          "brier": 0.25941447961726916,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 7,
+          "need": 15,
+          "abst": 3,
+          "lies": 5,
+          "brier": 0.40550891132668554,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 8,
+          "brier": 0.499999636060202,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 7,
+          "need": 14,
+          "abst": 4,
+          "lies": 1,
+          "brier": 0.262954821038158,
+          "qualifies": false
+        }
+      },
+      "probes": {
+        "init": {
+          "tag": "init",
+          "exact_d_acc": 0.45502644777297974,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.6666666865348816,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.013245033100247383,
+          "residue_chance": 0.015151515151515152
+        },
+        "D": {
+          "tag": "D",
+          "exact_d_acc": 0.3300970792770386,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.5048543810844421,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.011703510768711567,
+          "residue_chance": 0.015151515151515152
+        }
+      },
+      "wrap_anti_correct": null,
+      "wrap_n": null,
+      "scoring_mode": "committee_head"
+    },
+    {
+      "arm": "P0",
+      "seed": 1,
+      "k_hash": "f8975793c9be5f51",
+      "path_wall_s": 87.1298779998906,
+      "dest_wall_s": 0.0,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 120,
+          "need": 118,
+          "abst": 1,
+          "lies": 2,
+          "brier": 0.052343938640204965,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 7,
+          "need": 15,
+          "abst": 1,
+          "lies": 1,
+          "brier": 0.40278349893451043,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 7,
+          "need": 15,
+          "abst": 1,
+          "lies": 1,
+          "brier": 0.3990364765352623,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 8,
+          "brier": 0.48886900934886013,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 10,
+          "need": 14,
+          "abst": 0,
+          "lies": 0,
+          "brier": 0.26979817860838595,
+          "qualifies": false
+        }
+      },
+      "probes": {
+        "P0": {
+          "tag": "P0",
+          "exact_d_acc": 0.26865673065185547,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.09950248897075653,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.01516195759177208,
+          "residue_chance": 0.015151515151515152
+        }
+      },
+      "wrap_anti_correct": 17,
+      "wrap_n": 20,
+      "scoring_mode": "path_exact_d_linear_readout"
+    },
+    {
+      "arm": "P0-neg",
+      "seed": 1,
+      "k_hash": "f8975793c9be5f51",
+      "path_wall_s": 128.82217320008203,
+      "dest_wall_s": 0.0,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 0,
+          "need": 118,
+          "abst": 11,
+          "lies": 33,
+          "brier": 0.6437900718408375,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 8,
+          "need": 15,
+          "abst": 1,
+          "lies": 2,
+          "brier": 0.3445674004459143,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 6,
+          "need": 15,
+          "abst": 3,
+          "lies": 3,
+          "brier": 0.3813927985986323,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 8,
+          "brier": 0.49399028102137277,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 6,
+          "need": 14,
+          "abst": 1,
+          "lies": 3,
+          "brier": 0.43185175809252657,
+          "qualifies": false
+        }
+      },
+      "probes": {},
+      "wrap_anti_correct": 10,
+      "wrap_n": 20,
+      "scoring_mode": "path_exact_d_linear_readout"
+    },
+    {
+      "arm": "P+",
+      "seed": 1,
+      "k_hash": "f8975793c9be5f51",
+      "path_wall_s": 88.46785829984583,
+      "dest_wall_s": 204.75662050000392,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 2,
+          "need": 118,
+          "abst": 122,
+          "lies": 0,
+          "brier": 0.3067589299233223,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 1,
+          "need": 15,
+          "abst": 15,
+          "lies": 0,
+          "brier": 0.23941180407011764,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 1,
+          "need": 15,
+          "abst": 15,
+          "lies": 0,
+          "brier": 0.24457315650087602,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 0,
+          "brier": 0.2689770051220961,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 0,
+          "need": 14,
+          "abst": 16,
+          "lies": 0,
+          "brier": 0.26829388004483024,
+          "qualifies": false
+        }
+      },
+      "probes": {
+        "P0pre": {
+          "tag": "P0preP+",
+          "exact_d_acc": 0.2842639684677124,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.10659898817539215,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.00826446246355772,
+          "residue_chance": 0.015151515151515152
+        },
+        "P+": {
+          "tag": "P+",
+          "exact_d_acc": 0.2835051417350769,
+          "exact_d_chance": 0.025,
+          "length_only_acc": 0.15463916957378387,
+          "length_chance": 0.022222222222222223,
+          "exact_d_within_length_acc": NaN,
+          "sign_d_acc": 1.0,
+          "sign_d_chance": 0.5,
+          "residue_acc_disjoint_d": 0.009933775290846825,
+          "residue_chance": 0.015151515151515152
+        }
+      },
+      "wrap_anti_correct": null,
+      "wrap_n": null,
+      "scoring_mode": "committee_head_frozen_trunk"
+    },
+    {
+      "arm": "P_shuf",
+      "seed": 1,
+      "k_hash": "f8975793c9be5f51",
+      "path_wall_s": 88.790355599951,
+      "dest_wall_s": 203.80823369999416,
+      "first_persistent_step": null,
+      "strata": {
+        "S1": {
+          "correct": 1,
+          "need": 118,
+          "abst": 101,
+          "lies": 0,
+          "brier": 0.3011533946175671,
+          "qualifies": false
+        },
+        "S2": {
+          "correct": 4,
+          "need": 15,
+          "abst": 9,
+          "lies": 0,
+          "brier": 0.25466887482061323,
+          "qualifies": false
+        },
+        "S3": {
+          "correct": 1,
+          "need": 15,
+          "abst": 14,
+          "lies": 0,
+          "brier": 0.25136050839337043,
+          "qualifies": false
+        },
+        "S4": {
+          "correct": 8,
+          "need": 15,
+          "abst": 0,
+          "lies": 0,
+          "brier": 0.3094010560296586,
+          "qualifies": false
+        },
+        "S5": {
+          "correct": 3,
+          "need": 14,
+          "abst": 9,
+          "lies": 0,
+          "brier": 0.2566525832344551,
+          "qualifies": false
+        }
+      },
+      "probes": {},
+      "wrap_anti_correct": null,
+      "wrap_n": null,
+      "scoring_mode": "committee_head_frozen_trunk"
+    }
+  ],
+  "total_wall_s": 2431.7828259998932
+}
