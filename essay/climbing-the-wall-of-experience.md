@@ -593,13 +593,15 @@ measured.
 One limit on that hope is definitional rather than empirical, so I record it as
 reasoning about the world's structure and not as anything measured here. A mind
 can manufacture only what is invariant under its own transformations. Take the
-walk behind these worlds: words over the two generators, the element reached
-being the displacement. Rearranging one's own moves preserves exactly one
-quantity -- the displacement, right steps minus left -- and that is a linear
-function of the move counts, already sitting in the input. The one structure
-that is not trivial, the modulus `n`, is exactly what no rearrangement can
-reveal, because passing from the integers to the integers mod `n` is not a
-symmetry of the walk. Only the wall supplies it. So where the manufacturable
+walk behind these worlds: words over the two moves, the element reached
+being the displacement. Everything rearranging one's own moves preserves is a function of one
+quantity -- the displacement, right steps minus left -- a linear function of
+the move counts, already sitting in the input. The one structure that is not
+trivial, the modulus `n`, is exactly what no rearrangement can reveal -- and
+not because rearrangement disturbs it. Rearrangement leaves it perfectly
+intact whatever it is, and that is the difficulty: every modulus survives
+every road the mind can lay, so no road singles one out. Only the wall picks
+one. So where the manufacturable
 invariant is trivial, manufacturing is empty, and the content is precisely the
 wall that could not be manufactured. Self-supervised learning met this edge from
 the other side: invariance imposed too strongly suppresses the structure it was
