@@ -2,22 +2,17 @@
 
 ### Can a mind earn a world from contact it manufactures itself?
 
-> **Programme status note, July 2026.** This essay was drafted before the first
-> Philosophia outcome. Level 0 has since reproduced delayed generalization on
-> the canonical CPU platform in five of five paper-mainline seeds. That result is
-> real, locked, and deliberately narrower than the programme claim: it validates
-> the workshop, not manufactured experience. One authorized, non-comparative
-> Level 1 feasibility trajectory then completed validly and was censored at its
-> signed floor. The comparative detector never ran: C1 is untested, no contact
-> mode was selected, Level 2 is blocked, and the programme claim remains open.
-> I have selected Route B: publish this stopped-open record and make any further
-> science a separately signed successor line, with permanently non-citable
-> development before its confirmatory lock. This is a governance decision, not
-> a result and not a third intervention in the censored Level 1 route.
-> Where the essay reaches active contact, cross-world transfer, or path credit,
-> it now describes an unrun design and retains the registered way each claim
-> could die.
-> Readers who prefer evidence before the climb can go directly to
+> **Programme status note, July 2026.** Drafted before the first Philosophia
+> outcome. Level 0 has since reproduced delayed generalization: locked, and
+> narrower than the programme claim -- it validates the workshop, not
+> manufactured experience. The one authorized Level 1 feasibility trajectory then
+> completed validly and was censored at its signed floor, so the comparative
+> detector never ran: C1 untested, no contact mode selected, Level 2 blocked,
+> programme claim open. I chose Route B: publish stopped-open; further science
+> becomes a separately signed successor line, its development permanently
+> non-citable. Governance, not a result. Active contact, cross-world transfer,
+> and path credit stay unrun designs, each keeping its registered way to die.
+> Evidence before the climb:
 > [**What the Instrument Has Shown -- and What the Small Mind Has Not**](#what-the-instrument-has-shown----and-what-the-small-mind-has-not).
 
 ---
