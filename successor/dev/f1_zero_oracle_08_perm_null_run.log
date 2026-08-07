@@ -1,0 +1,40 @@
+device=cpu
+=== rebuild post probe seed 0 on cpu ===
+training zero-oracle masked LM...
+  MLM step=100/1000 member3_loss=0.1197
+  MLM step=200/1000 member3_loss=0.1709
+  MLM step=300/1000 member3_loss=0.1653
+  MLM step=400/1000 member3_loss=0.1197
+  MLM step=500/1000 member3_loss=0.1548
+  MLM step=600/1000 member3_loss=0.1188
+  MLM step=700/1000 member3_loss=0.1543
+  MLM step=800/1000 member3_loss=0.1374
+  MLM step=900/1000 member3_loss=0.1609
+  MLM step=1000/1000 member3_loss=0.1532
+extracting POST activations...
+wrote cache /home/master/llm_projects/philosophia/successor/dev/f1_zero_oracle_08_cache/post_probe_seed0.pt
+seed 0: reconstructed observed rank=61 lift=0.137177 (reported GPU rank=60)
+  perm 50/1000 last_rank=68 elapsed=16.4s
+  perm 100/1000 last_rank=113 elapsed=32.5s
+  perm 150/1000 last_rank=30 elapsed=48.0s
+  perm 200/1000 last_rank=66 elapsed=63.4s
+  perm 250/1000 last_rank=108 elapsed=79.2s
+  perm 300/1000 last_rank=98 elapsed=95.7s
+  perm 350/1000 last_rank=59 elapsed=112.1s
+  perm 400/1000 last_rank=106 elapsed=127.7s
+  perm 450/1000 last_rank=98 elapsed=143.6s
+  perm 500/1000 last_rank=82 elapsed=159.3s
+  perm 550/1000 last_rank=105 elapsed=175.4s
+  perm 600/1000 last_rank=36 elapsed=190.7s
+  perm 650/1000 last_rank=22 elapsed=206.2s
+  perm 700/1000 last_rank=60 elapsed=221.6s
+  perm 750/1000 last_rank=38 elapsed=237.1s
+  perm 800/1000 last_rank=92 elapsed=252.7s
+  perm 850/1000 last_rank=63 elapsed=268.8s
+  perm 900/1000 last_rank=26 elapsed=284.8s
+  perm 950/1000 last_rank=47 elapsed=300.3s
+  perm 1000/1000 last_rank=70 elapsed=315.6s
+seed 0: p_reported=0.9500 p_recon=0.9690
+wrote /home/master/llm_projects/philosophia/successor/dev/F1_ZERO_ORACLE_08.md
+wrote /home/master/llm_projects/philosophia/successor/dev/f1_zero_oracle_08_perm_null.json
+PVALUE_RANK60=0.950050
