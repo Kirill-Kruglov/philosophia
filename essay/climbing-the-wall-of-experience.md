@@ -58,6 +58,25 @@ I think they are pointing in the right direction. I also think the word doing
 the work in that sentence -- *experience* -- is carrying more than we have made
 it earn.
 
+The position has stronger and more current forms than a position paper, and I
+would rather argue with those. Blaise Agüera y Arcas holds in
+[*What Is Intelligence?*](https://mitpress.mit.edu/9780262049955/what-is-intelligence/)
+that prediction runs all the way down, through mind and brain and life, and the
+[Computational Life](https://arxiv.org/abs/2406.19108) work he co-authored shows
+self-replicating programs arising in a soup of random ones with no fitness
+function imposed: structure from interaction, with nobody supplying the
+structure. The verified-discovery line proposes the other half.
+[*Formal Conjectures*](https://arxiv.org/abs/2605.13171) puts more than a
+thousand open research conjectures into Lean so that a machine's mathematics can
+be checked by a kernel instead of argued about by us.
+
+I think both are right about what they claim, and neither is what I am asking.
+Emergence from interaction says that structure can arise unaided; it does not
+say which learner earned which structure. A complete verifier says whether an
+answer holds; it does not say whether the mind that produced it touched anything.
+My question is what a mind is entitled to claim when nothing is checking, and
+how anyone outside it could tell.
+
 The internet is full of experience, but almost none of it belongs to the model
 reading it. It is the fossil of somebody else's contact: measurements and
 memories, arguments and incentives, honest errors and performed certainty,
@@ -437,6 +456,29 @@ not forced by the world's one door. It cannot certify independence. No finite
 failure-detector can -- and twice now, once inside the run and once on the
 holdout, it showed me the edge of what it can do rather than let me pretend the
 edge was further out.
+
+There is also a domain where none of this is the right tool at all, and I should
+say so before the fence is mistaken for a perimeter. Where a complete verifier
+exists and is cheap -- a formal statement and a proof kernel, as in the open
+Lean conjecture benchmarks -- the question this essay circles is already settled
+for the answer. The proof checks or it does not. Nobody needs a co-failure
+statistic to decide whether a machine memorized or knew, because the check is
+not a matter of agreement in the first place. The same-wall instrument is for the
+remainder: taste, which conjecture is worth the afternoon, transfer into a domain
+with no formal target, and every regime where no complete oracle exists and
+agreement is all one has. That remainder is most of thinking, but it is a
+remainder, and the concession is not a rhetorical one.
+
+Even inside formal mathematics the criterion does not vanish; it moves down one
+level. A verified theorem is a wall of the formal language, and the formal
+statement may not be the mathematical one. A formalization can be vacuous or
+accidentally trivial, and the kernel will certify it exactly as willingly. The
+*Formal Conjectures* authors handle this by having systems attempt proofs and
+disproofs of their own statements and treating a suspiciously easy result as
+evidence that the formalization, rather than the mathematics, was what gave way.
+That is this essay's criterion running inside theirs: change the road and see
+whether the wall dissolves. They arrived at it by needing it. I am claiming only
+the name.
 
 > The knife can find a shared cut. It cannot prove that two uncut surfaces came
 > from different blades -- and the run that taught me that is the one I trust,
@@ -948,8 +990,10 @@ in multiversion software, error-consistency work by Geirhos and colleagues,
 grokking and Fourier progress measures (Power et al.; Nanda et al.; Gromov),
 DreamCoder's library learning, active learning, EWC and replay, process- versus
 outcome-based supervision (Uesato et al.; Lightman et al.), equivariant
-self-supervised learning, POET and PAIRED, AlphaGeometry and AlphaProof, and
-Silver and Sutton's *Era of Experience*.
+self-supervised learning, POET and PAIRED, AlphaGeometry and AlphaProof and the
+*Formal Conjectures* benchmark that continues that line, Agüera y Arcas on
+prediction and on structure emerging from bare interaction, and Silver and
+Sutton's *Era of Experience*.
 
 The novelty claims are deliberately narrow. Grokking, Fourier circuits, active
 learning, replay, consolidation, library learning, and verifiable reward are not
