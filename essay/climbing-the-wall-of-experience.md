@@ -536,10 +536,38 @@ carries the effect, the claim that experience shortened future work fails.
 
 ### 4. The road must add something beyond the destination
 
-The verifiable-reward wave gives credit for arriving at a checked answer. The
-core hypothesis here is narrower and stranger: experience lives partly in the
-bundle of roads. The unrun Level 2.5 design compares destination credit with
-credit assigned only to ledger entries that survive resampled paths.
+The verifiable-reward wave gives credit for arriving at a checked answer. That
+the road can carry credit the destination does not is already established, and
+not ours: process supervision, which rewards the steps rather than the final
+answer, outperforms outcome supervision on reasoning tasks. I mark that
+direction known.
+
+What remains for this level is narrower and stranger: experience may live partly
+in the bundle of roads, and the bundle may be self-supplied. Process supervision
+grades a path against an outside judgment of good steps. Here there is no judge.
+The credit is supposed to come from invariance across the mind's *own* resampled
+roads, with the oracle answering equality questions and never scoring a step.
+The unrun Level 2.5 design compares destination credit with credit assigned only
+to ledger entries that survive resampled paths. The claim on this axis is not
+that the path beats the destination. It is that path credit might be
+manufactured with no oracle for paths -- and that the difference can be
+measured.
+
+One limit on that hope is definitional rather than empirical, so I record it as
+reasoning about the world's structure and not as anything measured here. A mind
+can manufacture only what is invariant under its own transformations. Take the
+walk behind these worlds: words over the two generators, the element reached
+being the displacement. Rearranging one's own moves preserves exactly one
+quantity -- the displacement, right steps minus left -- and that is a linear
+function of the move counts, already sitting in the input. The one structure
+that is not trivial, the modulus `n`, is exactly what no rearrangement can
+reveal, because passing from the integers to the integers mod `n` is not a
+symmetry of the walk. Only the wall supplies it. So where the manufacturable
+invariant is trivial, manufacturing is empty, and the content is precisely the
+wall that could not be manufactured. Self-supervised learning met this edge from
+the other side: invariance imposed too strongly suppresses the structure it was
+meant to expose, which is why equivariant objectives keep what a transformation
+changes as well as what it holds fixed.
 
 **Registered kill:** if matched path credit and answer credit produce
 indistinguishable transfer, the path axis is redundant. That would be a useful
@@ -918,14 +946,21 @@ algorithmic information theory (Solomonoff, Kolmogorov, Martin-Lof, Chaitin),
 Wimsatt's robustness by multiple means, Knight and Leveson on correlated failure
 in multiversion software, error-consistency work by Geirhos and colleagues,
 grokking and Fourier progress measures (Power et al.; Nanda et al.; Gromov),
-DreamCoder's library learning, active learning, EWC and replay, POET and PAIRED,
-AlphaGeometry and AlphaProof, and Silver and Sutton's *Era of Experience*.
+DreamCoder's library learning, active learning, EWC and replay, process- versus
+outcome-based supervision (Uesato et al.; Lightman et al.), equivariant
+self-supervised learning, POET and PAIRED, AlphaGeometry and AlphaProof, and
+Silver and Sutton's *Era of Experience*.
 
 The novelty claims are deliberately narrow. Grokking, Fourier circuits, active
 learning, replay, consolidation, library learning, and verifiable reward are not
-ours. The inherited contribution is the same-wall instrument and its measured
-limits. The open contribution is the attempt to turn path-invariant failure into
-a training signal and test manufactured contact by forward work reduction and
+ours. Neither is the direction of the path axis: that process supervision beats
+outcome supervision is an established result, and so is the observation that
+invariance imposed too strongly suppresses the structure it was meant to expose.
+The inherited contribution is the same-wall instrument and its measured limits.
+The open contribution is narrower than "the road matters": it is the attempt to
+earn path credit from invariance across the mind's own resampled roads, with no
+oracle grading a step, to turn path-invariant failure into a training signal,
+and to test manufactured contact by forward work reduction and
 cross-representation transfer.
 
 Primary reading and exact links are collected in the repository's
