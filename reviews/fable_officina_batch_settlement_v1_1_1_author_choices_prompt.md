@@ -1,103 +1,15 @@
-# Fable 5: apply two bounded Officina v1.1 author choices before final review
+Ответ Claude Code Fable 5:
 
-Work in `/home/master/llm_projects/philosophia`.
+---
 
-The v1.1 packet is structurally complete, but its author explicitly exposed two
-engineering choices. Resolve them now, before X/Y final confirmation, using the
-decisions below. Do not reopen F1..F4/R1..R4 or any scientific cell.
+Done — both author decisions are applied, exactly three files created (the v1.1 files were already committed; `git status` shows only the new v1.1.1 files, plus two pre-existing unrelated entries). The closure verdict is `READY_FOR_OFFICINA_BATCH_SETTLEMENT_V1_1_1_FINAL_XY_CONFIRMATION`.
 
-## Authorization boundary
+**`successor/OFFICINA_BATCH_SETTLEMENT_CORE_AMENDMENT_V1_1_1_CORRECTION.md`** — a two-row replacement index over v1+v1.1:
+- **§D1 (Decision 1)** retains the head/cache completion but narrows it to six mandatory preconditions: exactly one unresolved and fully re-validated claim; a held-lock scan proving an exact byte-match to the next automaton prefix with only head/cache lagging (no extra entry, missing dependency, competing claim/override, path/hash/lease discrepancy, or ambiguous state); lag bounded to the one just-appended state-bearing entry (since `ledger.append` revalidates the head), with cache completion copying only that entry's embedded post-state; authority binding of claim hash, prefix index, and old/new head+state hashes with idempotent completion followed immediately by full verification; any second discrepancy refusing into inherited record-first invalidity; and the prior sole-completion boundary unchanged outside batches. It is reclassified as amendment-authorized control behavior under `I_ACCEPT_OFFICINA_BATCH_SETTLEMENT_CORE_AMENDMENT`.
+- **§D2 (Decision 2)** deletes the `t-meter-evidence.v1` family entirely (paths, hashes, orphan rules, crash cuts, archive obligations) and replaces each stream's `meter_evidence_sha256` with a nested `meter_evidence` object carrying exactly the seven mandated keys, no duplicated fields, and all v1.1 evidence rules carried forward (monotonic clock, lease-matched boot/adapter identity, `end − start` recomputation, `UNKNOWABLE` nullability, `observed_utc` before claim installation, recursive scientific-field rejection). The bounded-size argument cites the signed `MAX_CONCURRENT_LEASES = 4` constant, which I verified in `runtime.py` — at most four stream entries per claim.
 
-Create exactly three files and change nothing else:
+**`successor/OFFICINA_GENERIC_HARNESS_CONTRACT_V2_3_1_CORRECTION.md`** replaces v2.3 §H3 with a by-reference §J1 (reclassified under token 1), updates every evidence reference and worked-ledger reading (§J2, with a concrete inline-evidence illustration on the 60/60/60 example), and swaps the §10 probes (§J3): evidence-artifact probes deleted, inline-validation and six-precondition-violation probes added.
 
-1. `successor/OFFICINA_BATCH_SETTLEMENT_CORE_AMENDMENT_V1_1_1_CORRECTION.md`
-2. `successor/OFFICINA_GENERIC_HARNESS_CONTRACT_V2_3_1_CORRECTION.md`
-3. `reviews/fable_officina_batch_settlement_v1_1_1_closure.md`
+**`reviews/fable_officina_batch_settlement_v1_1_1_closure.md`** contains all seven mandated sections, including the no-regression table over F1..F4/R1..R4 (F4 and R1 are strengthened rather than merely preserved, since meter facts are now claim-hash-bound with no separately re-derivable artifact), the updated code/control surface, one literal yes/no question each for Opus and Sol, and the negative-authorization confirmation. Neither token becomes eligible from this correction; T remains `NOT_ACTIVATED`.
 
-Carry v1 + v1.1 and harness v2/v2.1/v2.2/v2.3 forward except for the exact two
-corrections below. Do not implement code or create any runtime artifact.
-
-## Decision 1 — keep deterministic head/cache completion, classify it loudly
-
-Retain v1.1 §4d / v2.3 §H3, but classify this rule as an explicit bounded part of
-the author-signed batch-settlement **core amendment**, not as an inherited
-clarification and not as a silent repair.
-
-Narrow and pin it:
-
-- only one currently unresolved, valid batch claim may exist;
-- the held-lock scan proves the ledger suffix is an exact byte-match to the next
-  canonical automaton prefix and that only the external head and/or state cache
-  lag; no extra entry, missing dependency, competing claim/override, path/hash/
-  lease discrepancy or ambiguous state is permitted;
-- because ordinary ledger append revalidates the external head, the lag is at
-  most the one just-appended state-bearing entry; state-cache completion copies
-  only the exact post-state already embedded in that entry;
-- reconstructed authority binds claim hash, prefix index, old/new head and state
-  hashes; completion is idempotent under the same lock and immediately followed
-  by full verification;
-- any non-byte-identical suffix or any second discrepancy follows the inherited
-  record-first invalidity/recovery route; it is never repaired by this authority;
-- outside unresolved batch claims, the prior sole-completion boundary is
-  unchanged.
-
-The compatibility and signature tables must name this as amendment-authorized
-control behavior covered by:
-`I_ACCEPT_OFFICINA_BATCH_SETTLEMENT_CORE_AMENDMENT`.
-This avoids a Kirill-signed recovery decision for a fully pre-authorized,
-byte-identical crash cut without weakening general record-first invalidity.
-
-## Decision 2 — inline meter evidence into the claim
-
-Delete the separate `t-meter-evidence.v1` artifact family and every
-`T_METER_EVIDENCE/` path, hash, orphan rule, crash cut and archive obligation.
-The signed four-stream cap makes a separate family unnecessary.
-
-Replace each stream entry's `meter_evidence_sha256` with one exact nested
-`meter_evidence` object. Avoid duplicated fields already fixed by the containing
-stream entry. Pin its exact keys as:
-
-```text
-clock_kind, boot_identity, adapter_identity,
-interval_start_reading_ns, interval_end_reading_ns,
-backend_synchronized, observed_utc
-```
-
-Carry forward the v1.1 evidence rules and nullability:
-
-- `clock_kind = CLOCK_MONOTONIC`;
-- `boot_identity` and adapter identity match the owning durable lease/adapter;
-- known classifications: end is integer > start ≥ last charged reading,
-  backend synchronized true, known charge recomputes as end-start;
-- `UNKNOWABLE`: end null and backend synchronized false;
-- observed time is canonical and derived/captured before claim installation;
-- the outer claim's `scientific_outcome:false` and recursive scientific-field
-  rejection govern the nested object; no learner/output/result fact is allowed.
-
-The claim hash now directly binds every meter fact. Update validator duties,
-worked examples, schemas, prefix automaton, archival sets and harness references.
-No pre-claim evidence file exists, so no orphan-evidence state exists. State the
-maximum four-stream bound as the reason claim size remains bounded, not as a
-scientific choice.
-
-## Closure
-
-First line exactly one verdict:
-
-- `READY_FOR_OFFICINA_BATCH_SETTLEMENT_V1_1_1_FINAL_XY_CONFIRMATION`
-- `REVISE_OFFICINA_BATCH_SETTLEMENT_V1_1_1`
-- `BLOCKED_OFFICINA_BATCH_SETTLEMENT_V1_1_1`
-
-Then include:
-
-1. exact two-row replacement index;
-2. final inline claim/stream schema and validator delta;
-3. final head/cache completion preconditions and compatibility classification;
-4. proof no F1..F4/R1..R4 closure regressed;
-5. updated code/control surface and two-token order;
-6. one literal yes/no question for Opus and one for Sol;
-7. negative authorization confirmation.
-
-The next step is one final bounded X/Y confirmation, then the two signatures in
-order. Neither token is eligible from this correction alone. T remains
-`NOT_ACTIVATED`.
+One small consistency note rather than an open question: I kept the claim key count at 18 (unchanged from v1.1) because Decision 2 only restructures the stream entries — the top-level schema is untouched, which also keeps the claim path/no-replace rule and the F1 completeness duties byte-stable for the reviewers.

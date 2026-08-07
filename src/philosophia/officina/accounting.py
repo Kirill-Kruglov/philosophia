@@ -5,10 +5,72 @@ from datetime import datetime, timezone
 import re
 from typing import Mapping
 
+from .canonical import hash_mapping
+
 
 NANOSECONDS_PER_SECOND = 1_000_000_000
 NANOSECONDS_PER_HOUR = 3600 * NANOSECONDS_PER_SECOND
 _HEX64 = re.compile(r"[0-9a-f]{64}")
+
+
+def _require_sha256(value: object, name: str) -> str:
+    if not isinstance(value, str) or _HEX64.fullmatch(value) is None:
+        raise ValueError(f"{name} must be lowercase SHA-256")
+    return value
+
+
+@dataclass(frozen=True)
+class BatchSettlementAuthority:
+    """Single-use frozen-batch charge authority bound to one validated claim."""
+
+    claim_sha256: str
+    entries: tuple[tuple[str, str, int], ...]
+    consumed_count: int
+    expected_ledger_head_sha256: str
+    expected_state_sha256: str
+
+    def __post_init__(self) -> None:
+        _require_sha256(self.claim_sha256, "batch claim")
+        _require_sha256(self.expected_ledger_head_sha256, "expected ledger head")
+        _require_sha256(self.expected_state_sha256, "expected state")
+        if type(self.consumed_count) is not int or self.consumed_count < 0:
+            raise ValueError("batch authority consumed_count is malformed")
+        if type(self.entries) is not tuple:
+            raise ValueError("batch authority entries must be a tuple")
+        if self.consumed_count > len(self.entries):
+            raise ValueError("batch authority consumed_count exceeds entries")
+        seen_processes: set[str] = set()
+        for index, entry in enumerate(self.entries):
+            if type(entry) is not tuple or len(entry) != 3:
+                raise ValueError("batch authority entry shape differs")
+            process_id, active_lease_sha256, charge_ns = entry
+            _require_sha256(process_id, f"batch authority process_id[{index}]")
+            _require_sha256(
+                active_lease_sha256, f"batch authority active_lease_sha256[{index}]"
+            )
+            if type(charge_ns) is not int or charge_ns <= 0:
+                raise ValueError("batch authority charge_ns must be positive")
+            if process_id in seen_processes:
+                raise ValueError("batch authority process ids must be unique")
+            seen_processes.add(process_id)
+
+    @classmethod
+    def from_validated_claim(
+        cls,
+        *,
+        claim_sha256: str,
+        entries: tuple[tuple[str, str, int], ...],
+        expected_ledger_head_sha256: str,
+        expected_state_sha256: str,
+        consumed_count: int = 0,
+    ) -> "BatchSettlementAuthority":
+        return cls(
+            claim_sha256=claim_sha256,
+            entries=entries,
+            consumed_count=consumed_count,
+            expected_ledger_head_sha256=expected_ledger_head_sha256,
+            expected_state_sha256=expected_state_sha256,
+        )
 
 
 def parse_utc(value: str) -> datetime:
@@ -126,6 +188,59 @@ class TState:
         if value <= 0:
             raise ValueError("device charge must be positive")
         return replace(self, device_nanoseconds=self.device_nanoseconds + value)
+
+    def charge_batch_settlement(
+        self,
+        *,
+        process_id: str,
+        active_lease_sha256: str,
+        value: int,
+        envelope: TEnvelope,
+        authority: BatchSettlementAuthority,
+        current_ledger_head_sha256: str,
+    ) -> tuple["TState", BatchSettlementAuthority]:
+        """Append one frozen-batch charge; may cross or exceed E1 within the claim.
+
+        Ordinary ``charge_device_nanoseconds`` is unchanged and still refuses at
+        or above the cap. This narrow path is the only post-cap route.
+        """
+        if not isinstance(envelope, TEnvelope):
+            raise ValueError("batch settlement requires a TEnvelope")
+        if not isinstance(authority, BatchSettlementAuthority):
+            raise ValueError("batch settlement requires a BatchSettlementAuthority")
+        if value <= 0:
+            raise ValueError("batch settlement charge must be positive")
+        _require_sha256(process_id, "batch settlement process_id")
+        _require_sha256(active_lease_sha256, "batch settlement active_lease_sha256")
+        _require_sha256(current_ledger_head_sha256, "current ledger head")
+        if current_ledger_head_sha256 != authority.expected_ledger_head_sha256:
+            raise ValueError("batch settlement expected ledger head differs")
+        if hash_mapping(self.to_mapping()) != authority.expected_state_sha256:
+            raise ValueError("batch settlement expected state differs")
+        if authority.consumed_count >= len(authority.entries):
+            raise ValueError("batch settlement authority is fully consumed")
+        expected = authority.entries[authority.consumed_count]
+        actual = (process_id, active_lease_sha256, value)
+        if actual != expected:
+            raise ValueError(
+                "batch settlement entry mismatch "
+                "(reorder, duplicate, omission, or value change refused)"
+            )
+        if (
+            self.activated_utc is None
+            or self.author_stopped
+            or self.resume_review_pending
+        ):
+            raise ValueError("T is not available for batch settlement")
+        next_state = replace(self, device_nanoseconds=self.device_nanoseconds + value)
+        successor = BatchSettlementAuthority(
+            claim_sha256=authority.claim_sha256,
+            entries=authority.entries,
+            consumed_count=authority.consumed_count + 1,
+            expected_ledger_head_sha256=authority.expected_ledger_head_sha256,
+            expected_state_sha256=hash_mapping(next_state.to_mapping()),
+        )
+        return next_state, successor
 
     def register_candidate(self, candidate_id: str, envelope: TEnvelope) -> "TState":
         del candidate_id, envelope

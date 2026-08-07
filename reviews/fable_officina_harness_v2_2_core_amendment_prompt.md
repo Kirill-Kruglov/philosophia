@@ -1,4 +1,4 @@
-# Fable 5: Officina harness v2.2 and bounded batch-settlement core amendment
+# Officina harness v2.2 and bounded batch-settlement core amendment
 
 Work in `/home/master/llm_projects/philosophia`.
 

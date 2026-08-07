@@ -1,4 +1,4 @@
-# GPT-5.6 Sol prompt: successor charter v1 Y-line review
+# Successor charter v1 Y-line review
 
 Review the Route B successor charter at commit `6e3de4d`. This is a bounded
 statistical and identifiability audit. It authorizes no edit to the charter, no

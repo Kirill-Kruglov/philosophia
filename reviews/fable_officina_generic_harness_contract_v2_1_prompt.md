@@ -1,4 +1,4 @@
-# Fable 5: bounded Officina generic harness contract v2.1 repair
+# Bounded Officina generic harness contract v2.1 repair
 
 Work in `/home/master/llm_projects/philosophia`.
 

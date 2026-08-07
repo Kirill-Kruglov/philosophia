@@ -7,10 +7,12 @@ import pytest
 
 from philosophia.officina.accounting import (
     NANOSECONDS_PER_HOUR,
+    BatchSettlementAuthority,
     TEnvelope,
     TState,
 )
-from philosophia.officina.canonical import canonical_json
+from philosophia.officina.canonical import canonical_json, hash_mapping
+
 from philosophia.officina.checkpoint import (
     record_not_activated_maintenance,
     record_operational_pause,
@@ -331,3 +333,263 @@ def test_t_state_mapping_is_exact_and_noncoercive() -> None:
     ):
         with pytest.raises(ValueError, match="canonical UTC"):
             TState().activate(noncanonical)
+
+
+def _authority(
+    *,
+    state: TState,
+    entries: tuple[tuple[str, str, int], ...],
+    head: str = "a" * 64,
+    claim: str = "b" * 64,
+    consumed: int = 0,
+) -> BatchSettlementAuthority:
+    return BatchSettlementAuthority.from_validated_claim(
+        claim_sha256=claim,
+        entries=entries,
+        expected_ledger_head_sha256=head,
+        expected_state_sha256=hash_mapping(state.to_mapping()),
+        consumed_count=consumed,
+    )
+
+
+def test_batch_settlement_represents_signed_60_60_60_counterexample() -> None:
+    envelope = TEnvelope()
+    cap = envelope.device_hour_cap * NANOSECONDS_PER_HOUR
+    processes = ("1" * 64, "2" * 64, "3" * 64)
+    leases = ("c" * 64, "d" * 64, "e" * 64)
+    entries = tuple(
+        (process_id, lease, 60)
+        for process_id, lease in zip(processes, leases, strict=True)
+    )
+    # Ordinary sequential charging cannot represent the batch: after the
+    # second 60 ns charge the envelope is exhausted and the third refuses.
+    ordinary = TState(
+        activated_utc="2026-07-20T00:00:00Z",
+        device_nanoseconds=cap - 100,
+    )
+    ordinary = ordinary.charge_device_nanoseconds(60, envelope)
+    assert ordinary.device_nanoseconds == cap - 40
+    ordinary = ordinary.charge_device_nanoseconds(60, envelope)
+    assert ordinary.device_nanoseconds == cap + 20
+    assert ordinary.exhausted(envelope)
+    with pytest.raises(ValueError, match="already exhausted"):
+        ordinary.charge_device_nanoseconds(60, envelope)
+
+    # Frozen-batch authority appends all three charges, including post-cap.
+    state = TState(
+        activated_utc="2026-07-20T00:00:00Z",
+        device_nanoseconds=cap - 100,
+    )
+    head = "f" * 64
+    authority = _authority(state=state, entries=entries, head=head)
+    expected_totals = (cap - 40, cap + 20, cap + 80)
+    for (process_id, lease, value), expected in zip(
+        entries, expected_totals, strict=True
+    ):
+        if state.exhausted(envelope):
+            with pytest.raises(ValueError, match="already exhausted"):
+                state.charge_device_nanoseconds(value, envelope)
+        state, authority = state.charge_batch_settlement(
+            process_id=process_id,
+            active_lease_sha256=lease,
+            value=value,
+            envelope=envelope,
+            authority=authority,
+            current_ledger_head_sha256=head,
+        )
+        assert state.device_nanoseconds == expected
+        assert hash_mapping(state.to_mapping()) == authority.expected_state_sha256
+    assert authority.consumed_count == 3
+    assert state.device_nanoseconds == cap + 80
+
+
+def test_ordinary_post_cap_charge_still_refused_after_batch_crossing() -> None:
+    envelope = TEnvelope()
+    cap = envelope.device_hour_cap * NANOSECONDS_PER_HOUR
+    state = TState(
+        activated_utc="2026-07-20T00:00:00Z",
+        device_nanoseconds=cap - 10,
+    )
+    lease = "a" * 64
+    process = "b" * 64
+    head = "c" * 64
+    authority = _authority(
+        state=state,
+        entries=((process, lease, 20),),
+        head=head,
+    )
+    state, authority = state.charge_batch_settlement(
+        process_id=process,
+        active_lease_sha256=lease,
+        value=20,
+        envelope=envelope,
+        authority=authority,
+        current_ledger_head_sha256=head,
+    )
+    assert state.device_nanoseconds == cap + 10
+    with pytest.raises(ValueError, match="already exhausted"):
+        state.charge_device_nanoseconds(1, envelope)
+
+
+def test_batch_authority_non_reuse_and_membership_refusals() -> None:
+    envelope = TEnvelope()
+    state = _active_state().charge_device_nanoseconds(100, envelope)
+    p1, p2 = "1" * 64, "2" * 64
+    l1, l2 = "3" * 64, "4" * 64
+    head = "5" * 64
+    entries = ((p1, l1, 10), (p2, l2, 20))
+    authority = _authority(state=state, entries=entries, head=head)
+    original = authority
+    state, authority = state.charge_batch_settlement(
+        process_id=p1,
+        active_lease_sha256=l1,
+        value=10,
+        envelope=envelope,
+        authority=authority,
+        current_ledger_head_sha256=head,
+    )
+    # Reusing the pre-charge authority fails on advanced state.
+    with pytest.raises(ValueError, match="expected state"):
+        state.charge_batch_settlement(
+            process_id=p1,
+            active_lease_sha256=l1,
+            value=10,
+            envelope=envelope,
+            authority=original,
+            current_ledger_head_sha256=head,
+        )
+    # Wrong process / value / order.
+    with pytest.raises(ValueError, match="entry mismatch"):
+        state.charge_batch_settlement(
+            process_id=p1,
+            active_lease_sha256=l1,
+            value=10,
+            envelope=envelope,
+            authority=authority,
+            current_ledger_head_sha256=head,
+        )
+    with pytest.raises(ValueError, match="entry mismatch"):
+        state.charge_batch_settlement(
+            process_id=p2,
+            active_lease_sha256=l2,
+            value=21,
+            envelope=envelope,
+            authority=authority,
+            current_ledger_head_sha256=head,
+        )
+    with pytest.raises(ValueError, match="entry mismatch"):
+        state.charge_batch_settlement(
+            process_id=p2,
+            active_lease_sha256=l1,
+            value=20,
+            envelope=envelope,
+            authority=authority,
+            current_ledger_head_sha256=head,
+        )
+    state, authority = state.charge_batch_settlement(
+        process_id=p2,
+        active_lease_sha256=l2,
+        value=20,
+        envelope=envelope,
+        authority=authority,
+        current_ledger_head_sha256=head,
+    )
+    with pytest.raises(ValueError, match="fully consumed"):
+        state.charge_batch_settlement(
+            process_id=p2,
+            active_lease_sha256=l2,
+            value=20,
+            envelope=envelope,
+            authority=authority,
+            current_ledger_head_sha256=head,
+        )
+
+
+def test_batch_settlement_refuses_stale_head_and_state() -> None:
+    envelope = TEnvelope()
+    state = _active_state()
+    other = state.charge_device_nanoseconds(5, envelope)
+    p1, l1 = "1" * 64, "2" * 64
+    head = "3" * 64
+    authority = _authority(
+        state=state,
+        entries=((p1, l1, 7),),
+        head=head,
+    )
+    with pytest.raises(ValueError, match="expected ledger head"):
+        state.charge_batch_settlement(
+            process_id=p1,
+            active_lease_sha256=l1,
+            value=7,
+            envelope=envelope,
+            authority=authority,
+            current_ledger_head_sha256="4" * 64,
+        )
+    with pytest.raises(ValueError, match="expected state"):
+        other.charge_batch_settlement(
+            process_id=p1,
+            active_lease_sha256=l1,
+            value=7,
+            envelope=envelope,
+            authority=authority,
+            current_ledger_head_sha256=head,
+        )
+
+
+def test_batch_settlement_prefix_reconstruction_and_multiple_e1_crossings() -> None:
+    envelope = TEnvelope()
+    cap = envelope.device_hour_cap * NANOSECONDS_PER_HOUR
+    pre = TState(
+        activated_utc="2026-07-20T00:00:00Z",
+        device_nanoseconds=cap - 50,
+    )
+    entries = (
+        ("1" * 64, "a" * 64, 30),
+        ("2" * 64, "b" * 64, 40),
+        ("3" * 64, "c" * 64, 25),
+    )
+    head = "d" * 64
+    authority = _authority(state=pre, entries=entries, head=head)
+    state = pre
+    # Consume a prefix, then reconstruct the successor authority from the
+    # durable consumed count and post-prefix state (restart reconstruction).
+    state, authority = state.charge_batch_settlement(
+        process_id=entries[0][0],
+        active_lease_sha256=entries[0][1],
+        value=entries[0][2],
+        envelope=envelope,
+        authority=authority,
+        current_ledger_head_sha256=head,
+    )
+    assert state.device_nanoseconds == cap - 20
+    reconstructed = BatchSettlementAuthority.from_validated_claim(
+        claim_sha256=authority.claim_sha256,
+        entries=entries,
+        expected_ledger_head_sha256=head,
+        expected_state_sha256=hash_mapping(state.to_mapping()),
+        consumed_count=1,
+    )
+    assert reconstructed == authority
+    state, authority = state.charge_batch_settlement(
+        process_id=entries[1][0],
+        active_lease_sha256=entries[1][1],
+        value=entries[1][2],
+        envelope=envelope,
+        authority=reconstructed,
+        current_ledger_head_sha256=head,
+    )
+    assert state.device_nanoseconds == cap + 20
+    state, authority = state.charge_batch_settlement(
+        process_id=entries[2][0],
+        active_lease_sha256=entries[2][1],
+        value=entries[2][2],
+        envelope=envelope,
+        authority=authority,
+        current_ledger_head_sha256=head,
+    )
+    assert state.device_nanoseconds == cap + 45
+    assert authority.consumed_count == 3
+    # Conservation: post = pre + Σ claimed.
+    assert state.device_nanoseconds == pre.device_nanoseconds + sum(
+        entry[2] for entry in entries
+    )
