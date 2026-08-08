@@ -1,0 +1,2355 @@
+{
+  "disjointness": {
+    "n_train_equal": 1256,
+    "n_train_unequal": 1256,
+    "n_train_pairs": 2512,
+    "n_panel_pairs": 188,
+    "n_heldout_equal": 536,
+    "n_heldout_unequal": 536,
+    "train_intersect_panel": 0,
+    "train_intersect_heldout": 0,
+    "heldout_intersect_panel": 0,
+    "panel_cell_in_acquisition": false,
+    "n_probe_train_words": 1848,
+    "n_probe_test_words": 792
+  },
+  "config": {
+    "modulus": 66,
+    "world_slot": 0,
+    "device": "cuda",
+    "microbatch": 256,
+    "steps": 50000,
+    "ckpt_every": 2500,
+    "lr": 0.001,
+    "betas": [
+      0.9,
+      0.98
+    ],
+    "eps": 1e-08,
+    "weight_decays": [
+      0.0,
+      0.01,
+      0.1,
+      1.0
+    ],
+    "seeds": [
+      0
+    ],
+    "forward": "cropped-leading-pad + fused SDPA (self-consistent; train==eval)",
+    "public_label": "successor-dev-competence-diag-01",
+    "panel_label": "successor-dev-competence-diag-01",
+    "torch": "2.7.0+cu128",
+    "device_name": "NVIDIA GeForce RTX 4060 Laptop GPU"
+  },
+  "runs": [
+    {
+      "weight_decay": 0.0,
+      "seed": 0,
+      "wall_s": 3308.8,
+      "best_heldout_acc": 0.5532,
+      "best_residue_probe": 0.0669,
+      "ever_cleared_floor": false,
+      "checkpoints": [
+        {
+          "step": 0,
+          "train_acc": 0.5104,
+          "heldout_acc": 0.5485,
+          "heldout_eq_acc": 0.5541,
+          "heldout_neq_acc": 0.5429,
+          "gap": -0.0382,
+          "panel_qualifies": false,
+          "panel_strata_ok": 1,
+          "panel_stratum_acc": {
+            "S1": 1.0,
+            "S2": 0.4375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.875
+          },
+          "panel_stratum_correct": {
+            "S1": 124,
+            "S2": 7,
+            "S3": 8,
+            "S4": 8,
+            "S5": 14
+          },
+          "panel_mean_brier": 0.227132,
+          "residue_probe_test": 0.0669,
+          "residue_probe_train": 0.1439
+        },
+        {
+          "step": 2500,
+          "train_acc": 0.7329,
+          "heldout_acc": 0.5532,
+          "heldout_eq_acc": 0.7052,
+          "heldout_neq_acc": 0.4011,
+          "gap": 0.1797,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4435,
+            "S2": 0.125,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 55,
+            "S2": 2,
+            "S3": 8,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.352271,
+          "residue_probe_test": 0.0429,
+          "residue_probe_train": 0.2549
+        },
+        {
+          "step": 5000,
+          "train_acc": 0.7882,
+          "heldout_acc": 0.4944,
+          "heldout_eq_acc": 0.6045,
+          "heldout_neq_acc": 0.3843,
+          "gap": 0.2938,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4516,
+            "S2": 0.3125,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 56,
+            "S2": 5,
+            "S3": 7,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.338421,
+          "residue_probe_test": 0.053,
+          "residue_probe_train": 0.2668
+        },
+        {
+          "step": 7500,
+          "train_acc": 0.7532,
+          "heldout_acc": 0.5299,
+          "heldout_eq_acc": 0.694,
+          "heldout_neq_acc": 0.3657,
+          "gap": 0.2233,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5161,
+            "S2": 0.375,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 64,
+            "S2": 6,
+            "S3": 6,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.334508,
+          "residue_probe_test": 0.0619,
+          "residue_probe_train": 0.2738
+        },
+        {
+          "step": 10000,
+          "train_acc": 0.8762,
+          "heldout_acc": 0.5196,
+          "heldout_eq_acc": 0.681,
+          "heldout_neq_acc": 0.3582,
+          "gap": 0.3566,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6613,
+            "S2": 0.5,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 82,
+            "S2": 8,
+            "S3": 9,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.374087,
+          "residue_probe_test": 0.0593,
+          "residue_probe_train": 0.2662
+        },
+        {
+          "step": 12500,
+          "train_acc": 0.8416,
+          "heldout_acc": 0.5159,
+          "heldout_eq_acc": 0.6549,
+          "heldout_neq_acc": 0.3769,
+          "gap": 0.3257,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5968,
+            "S2": 0.5,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 74,
+            "S2": 8,
+            "S3": 7,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.407457,
+          "residue_probe_test": 0.0556,
+          "residue_probe_train": 0.2825
+        },
+        {
+          "step": 15000,
+          "train_acc": 0.8424,
+          "heldout_acc": 0.5131,
+          "heldout_eq_acc": 0.6455,
+          "heldout_neq_acc": 0.3806,
+          "gap": 0.3293,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5242,
+            "S2": 0.375,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 65,
+            "S2": 6,
+            "S3": 6,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.34805,
+          "residue_probe_test": 0.0556,
+          "residue_probe_train": 0.263
+        },
+        {
+          "step": 17500,
+          "train_acc": 0.7488,
+          "heldout_acc": 0.5373,
+          "heldout_eq_acc": 0.6903,
+          "heldout_neq_acc": 0.3843,
+          "gap": 0.2115,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4194,
+            "S2": 0.375,
+            "S3": 0.3125,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 52,
+            "S2": 6,
+            "S3": 5,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.340337,
+          "residue_probe_test": 0.0492,
+          "residue_probe_train": 0.2771
+        },
+        {
+          "step": 20000,
+          "train_acc": 0.869,
+          "heldout_acc": 0.5373,
+          "heldout_eq_acc": 0.6716,
+          "heldout_neq_acc": 0.403,
+          "gap": 0.3317,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6855,
+            "S2": 0.4375,
+            "S3": 0.3125,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 85,
+            "S2": 7,
+            "S3": 5,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.342983,
+          "residue_probe_test": 0.0581,
+          "residue_probe_train": 0.2938
+        },
+        {
+          "step": 22500,
+          "train_acc": 0.8507,
+          "heldout_acc": 0.5532,
+          "heldout_eq_acc": 0.653,
+          "heldout_neq_acc": 0.4534,
+          "gap": 0.2975,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.7177,
+            "S2": 0.375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.6875
+          },
+          "panel_stratum_correct": {
+            "S1": 89,
+            "S2": 6,
+            "S3": 7,
+            "S4": 8,
+            "S5": 11
+          },
+          "panel_mean_brier": 0.355536,
+          "residue_probe_test": 0.0518,
+          "residue_probe_train": 0.2933
+        },
+        {
+          "step": 25000,
+          "train_acc": 0.8157,
+          "heldout_acc": 0.5364,
+          "heldout_eq_acc": 0.7034,
+          "heldout_neq_acc": 0.3694,
+          "gap": 0.2793,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5242,
+            "S2": 0.5,
+            "S3": 0.3125,
+            "S4": 0.5,
+            "S5": 0.6875
+          },
+          "panel_stratum_correct": {
+            "S1": 65,
+            "S2": 8,
+            "S3": 5,
+            "S4": 8,
+            "S5": 11
+          },
+          "panel_mean_brier": 0.423179,
+          "residue_probe_test": 0.0505,
+          "residue_probe_train": 0.3176
+        },
+        {
+          "step": 27500,
+          "train_acc": 0.7986,
+          "heldout_acc": 0.5205,
+          "heldout_eq_acc": 0.7425,
+          "heldout_neq_acc": 0.2985,
+          "gap": 0.278,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5484,
+            "S2": 0.5625,
+            "S3": 0.3125,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 68,
+            "S2": 9,
+            "S3": 5,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.39792,
+          "residue_probe_test": 0.0518,
+          "residue_probe_train": 0.2938
+        },
+        {
+          "step": 30000,
+          "train_acc": 0.8408,
+          "heldout_acc": 0.5037,
+          "heldout_eq_acc": 0.6959,
+          "heldout_neq_acc": 0.3116,
+          "gap": 0.337,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4032,
+            "S2": 0.4375,
+            "S3": 0.25,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 50,
+            "S2": 7,
+            "S3": 4,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.325491,
+          "residue_probe_test": 0.0619,
+          "residue_probe_train": 0.283
+        },
+        {
+          "step": 32500,
+          "train_acc": 0.8336,
+          "heldout_acc": 0.528,
+          "heldout_eq_acc": 0.75,
+          "heldout_neq_acc": 0.306,
+          "gap": 0.3056,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4355,
+            "S2": 0.4375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 54,
+            "S2": 7,
+            "S3": 7,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.322939,
+          "residue_probe_test": 0.0492,
+          "residue_probe_train": 0.2825
+        },
+        {
+          "step": 35000,
+          "train_acc": 0.869,
+          "heldout_acc": 0.528,
+          "heldout_eq_acc": 0.6996,
+          "heldout_neq_acc": 0.3563,
+          "gap": 0.341,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6371,
+            "S2": 0.4375,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 79,
+            "S2": 7,
+            "S3": 10,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.366127,
+          "residue_probe_test": 0.0556,
+          "residue_probe_train": 0.3101
+        },
+        {
+          "step": 37500,
+          "train_acc": 0.8897,
+          "heldout_acc": 0.5196,
+          "heldout_eq_acc": 0.7407,
+          "heldout_neq_acc": 0.2985,
+          "gap": 0.3701,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6532,
+            "S2": 0.625,
+            "S3": 0.3125,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 81,
+            "S2": 10,
+            "S3": 5,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.394978,
+          "residue_probe_test": 0.0657,
+          "residue_probe_train": 0.2965
+        },
+        {
+          "step": 40000,
+          "train_acc": 0.8682,
+          "heldout_acc": 0.5205,
+          "heldout_eq_acc": 0.7351,
+          "heldout_neq_acc": 0.306,
+          "gap": 0.3477,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5645,
+            "S2": 0.5,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.6875
+          },
+          "panel_stratum_correct": {
+            "S1": 70,
+            "S2": 8,
+            "S3": 8,
+            "S4": 8,
+            "S5": 11
+          },
+          "panel_mean_brier": 0.398872,
+          "residue_probe_test": 0.0556,
+          "residue_probe_train": 0.2879
+        },
+        {
+          "step": 42500,
+          "train_acc": 0.9224,
+          "heldout_acc": 0.5373,
+          "heldout_eq_acc": 0.709,
+          "heldout_neq_acc": 0.3657,
+          "gap": 0.3851,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6935,
+            "S2": 0.625,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.6875
+          },
+          "panel_stratum_correct": {
+            "S1": 86,
+            "S2": 10,
+            "S3": 9,
+            "S4": 8,
+            "S5": 11
+          },
+          "panel_mean_brier": 0.329161,
+          "residue_probe_test": 0.048,
+          "residue_probe_train": 0.3166
+        },
+        {
+          "step": 45000,
+          "train_acc": 0.9256,
+          "heldout_acc": 0.5233,
+          "heldout_eq_acc": 0.6586,
+          "heldout_neq_acc": 0.3881,
+          "gap": 0.4022,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.629,
+            "S2": 0.625,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 78,
+            "S2": 10,
+            "S3": 9,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.36329,
+          "residue_probe_test": 0.0492,
+          "residue_probe_train": 0.3111
+        },
+        {
+          "step": 47500,
+          "train_acc": 0.84,
+          "heldout_acc": 0.5261,
+          "heldout_eq_acc": 0.7071,
+          "heldout_neq_acc": 0.3451,
+          "gap": 0.3138,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5081,
+            "S2": 0.4375,
+            "S3": 0.6875,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 63,
+            "S2": 7,
+            "S3": 11,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.413193,
+          "residue_probe_test": 0.053,
+          "residue_probe_train": 0.2771
+        },
+        {
+          "step": 50000,
+          "train_acc": 0.9204,
+          "heldout_acc": 0.5466,
+          "heldout_eq_acc": 0.7183,
+          "heldout_neq_acc": 0.375,
+          "gap": 0.3737,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.629,
+            "S2": 0.625,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 78,
+            "S2": 10,
+            "S3": 6,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.381939,
+          "residue_probe_test": 0.0657,
+          "residue_probe_train": 0.3084
+        }
+      ]
+    },
+    {
+      "weight_decay": 0.01,
+      "seed": 0,
+      "wall_s": 3329.6,
+      "best_heldout_acc": 0.5485,
+      "best_residue_probe": 0.0707,
+      "ever_cleared_floor": false,
+      "checkpoints": [
+        {
+          "step": 0,
+          "train_acc": 0.5104,
+          "heldout_acc": 0.5485,
+          "heldout_eq_acc": 0.5541,
+          "heldout_neq_acc": 0.5429,
+          "gap": -0.0382,
+          "panel_qualifies": false,
+          "panel_strata_ok": 1,
+          "panel_stratum_acc": {
+            "S1": 1.0,
+            "S2": 0.4375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.875
+          },
+          "panel_stratum_correct": {
+            "S1": 124,
+            "S2": 7,
+            "S3": 8,
+            "S4": 8,
+            "S5": 14
+          },
+          "panel_mean_brier": 0.227132,
+          "residue_probe_test": 0.0669,
+          "residue_probe_train": 0.1439
+        },
+        {
+          "step": 2500,
+          "train_acc": 0.7826,
+          "heldout_acc": 0.5121,
+          "heldout_eq_acc": 0.6474,
+          "heldout_neq_acc": 0.3769,
+          "gap": 0.2705,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5161,
+            "S2": 0.375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 64,
+            "S2": 6,
+            "S3": 7,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.376923,
+          "residue_probe_test": 0.0505,
+          "residue_probe_train": 0.2684
+        },
+        {
+          "step": 5000,
+          "train_acc": 0.7329,
+          "heldout_acc": 0.5075,
+          "heldout_eq_acc": 0.6978,
+          "heldout_neq_acc": 0.3172,
+          "gap": 0.2254,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4113,
+            "S2": 0.25,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 51,
+            "S2": 4,
+            "S3": 8,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.442798,
+          "residue_probe_test": 0.048,
+          "residue_probe_train": 0.263
+        },
+        {
+          "step": 7500,
+          "train_acc": 0.7846,
+          "heldout_acc": 0.4991,
+          "heldout_eq_acc": 0.5933,
+          "heldout_neq_acc": 0.4049,
+          "gap": 0.2856,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5645,
+            "S2": 0.3125,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 70,
+            "S2": 5,
+            "S3": 10,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.45593,
+          "residue_probe_test": 0.0593,
+          "residue_probe_train": 0.2744
+        },
+        {
+          "step": 10000,
+          "train_acc": 0.7615,
+          "heldout_acc": 0.5177,
+          "heldout_eq_acc": 0.6884,
+          "heldout_neq_acc": 0.347,
+          "gap": 0.2438,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6371,
+            "S2": 0.1875,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 79,
+            "S2": 3,
+            "S3": 8,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.475841,
+          "residue_probe_test": 0.0543,
+          "residue_probe_train": 0.2619
+        },
+        {
+          "step": 12500,
+          "train_acc": 0.7775,
+          "heldout_acc": 0.5177,
+          "heldout_eq_acc": 0.7052,
+          "heldout_neq_acc": 0.3302,
+          "gap": 0.2597,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5161,
+            "S2": 0.375,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 64,
+            "S2": 6,
+            "S3": 6,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.457077,
+          "residue_probe_test": 0.0593,
+          "residue_probe_train": 0.2635
+        },
+        {
+          "step": 15000,
+          "train_acc": 0.7707,
+          "heldout_acc": 0.5252,
+          "heldout_eq_acc": 0.6716,
+          "heldout_neq_acc": 0.3787,
+          "gap": 0.2455,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6048,
+            "S2": 0.25,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 75,
+            "S2": 4,
+            "S3": 8,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.434017,
+          "residue_probe_test": 0.0581,
+          "residue_probe_train": 0.2587
+        },
+        {
+          "step": 17500,
+          "train_acc": 0.7341,
+          "heldout_acc": 0.5364,
+          "heldout_eq_acc": 0.694,
+          "heldout_neq_acc": 0.3787,
+          "gap": 0.1977,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6452,
+            "S2": 0.4375,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 80,
+            "S2": 7,
+            "S3": 9,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.388906,
+          "residue_probe_test": 0.0417,
+          "residue_probe_train": 0.263
+        },
+        {
+          "step": 20000,
+          "train_acc": 0.7834,
+          "heldout_acc": 0.5093,
+          "heldout_eq_acc": 0.6698,
+          "heldout_neq_acc": 0.3489,
+          "gap": 0.2741,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5645,
+            "S2": 0.3125,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 70,
+            "S2": 5,
+            "S3": 6,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.441675,
+          "residue_probe_test": 0.0581,
+          "residue_probe_train": 0.2927
+        },
+        {
+          "step": 22500,
+          "train_acc": 0.8244,
+          "heldout_acc": 0.5233,
+          "heldout_eq_acc": 0.7407,
+          "heldout_neq_acc": 0.306,
+          "gap": 0.3011,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5081,
+            "S2": 0.3125,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 63,
+            "S2": 5,
+            "S3": 8,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.486107,
+          "residue_probe_test": 0.0694,
+          "residue_probe_train": 0.2744
+        },
+        {
+          "step": 25000,
+          "train_acc": 0.8225,
+          "heldout_acc": 0.514,
+          "heldout_eq_acc": 0.666,
+          "heldout_neq_acc": 0.3619,
+          "gap": 0.3085,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.629,
+            "S2": 0.3125,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 78,
+            "S2": 5,
+            "S3": 9,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.438341,
+          "residue_probe_test": 0.0581,
+          "residue_probe_train": 0.3084
+        },
+        {
+          "step": 27500,
+          "train_acc": 0.8519,
+          "heldout_acc": 0.4944,
+          "heldout_eq_acc": 0.6642,
+          "heldout_neq_acc": 0.3246,
+          "gap": 0.3575,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6935,
+            "S2": 0.375,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 86,
+            "S2": 6,
+            "S3": 10,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.407743,
+          "residue_probe_test": 0.053,
+          "residue_probe_train": 0.2744
+        },
+        {
+          "step": 30000,
+          "train_acc": 0.8057,
+          "heldout_acc": 0.5103,
+          "heldout_eq_acc": 0.7127,
+          "heldout_neq_acc": 0.3078,
+          "gap": 0.2955,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4516,
+            "S2": 0.375,
+            "S3": 0.6875,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 56,
+            "S2": 6,
+            "S3": 11,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.39276,
+          "residue_probe_test": 0.0593,
+          "residue_probe_train": 0.2684
+        },
+        {
+          "step": 32500,
+          "train_acc": 0.8416,
+          "heldout_acc": 0.4981,
+          "heldout_eq_acc": 0.6586,
+          "heldout_neq_acc": 0.3377,
+          "gap": 0.3434,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.7016,
+            "S2": 0.4375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 87,
+            "S2": 7,
+            "S3": 7,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.392059,
+          "residue_probe_test": 0.0707,
+          "residue_probe_train": 0.2592
+        },
+        {
+          "step": 35000,
+          "train_acc": 0.8392,
+          "heldout_acc": 0.5112,
+          "heldout_eq_acc": 0.6978,
+          "heldout_neq_acc": 0.3246,
+          "gap": 0.328,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6048,
+            "S2": 0.4375,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 75,
+            "S2": 7,
+            "S3": 9,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.438351,
+          "residue_probe_test": 0.0631,
+          "residue_probe_train": 0.3209
+        },
+        {
+          "step": 37500,
+          "train_acc": 0.865,
+          "heldout_acc": 0.5065,
+          "heldout_eq_acc": 0.7127,
+          "heldout_neq_acc": 0.3004,
+          "gap": 0.3585,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6129,
+            "S2": 0.5,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 76,
+            "S2": 8,
+            "S3": 10,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.422122,
+          "residue_probe_test": 0.0543,
+          "residue_probe_train": 0.3041
+        },
+        {
+          "step": 40000,
+          "train_acc": 0.834,
+          "heldout_acc": 0.5019,
+          "heldout_eq_acc": 0.6996,
+          "heldout_neq_acc": 0.3041,
+          "gap": 0.3321,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6371,
+            "S2": 0.375,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 79,
+            "S2": 6,
+            "S3": 10,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.431815,
+          "residue_probe_test": 0.053,
+          "residue_probe_train": 0.2835
+        },
+        {
+          "step": 42500,
+          "train_acc": 0.8706,
+          "heldout_acc": 0.5009,
+          "heldout_eq_acc": 0.6362,
+          "heldout_neq_acc": 0.3657,
+          "gap": 0.3697,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6694,
+            "S2": 0.25,
+            "S3": 0.6875,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 83,
+            "S2": 4,
+            "S3": 11,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.436348,
+          "residue_probe_test": 0.0669,
+          "residue_probe_train": 0.2733
+        },
+        {
+          "step": 45000,
+          "train_acc": 0.8587,
+          "heldout_acc": 0.5243,
+          "heldout_eq_acc": 0.7034,
+          "heldout_neq_acc": 0.3451,
+          "gap": 0.3344,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6774,
+            "S2": 0.3125,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 84,
+            "S2": 5,
+            "S3": 8,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.470084,
+          "residue_probe_test": 0.0631,
+          "residue_probe_train": 0.2911
+        },
+        {
+          "step": 47500,
+          "train_acc": 0.8495,
+          "heldout_acc": 0.5205,
+          "heldout_eq_acc": 0.7369,
+          "heldout_neq_acc": 0.3041,
+          "gap": 0.329,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4435,
+            "S2": 0.5,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 55,
+            "S2": 8,
+            "S3": 6,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.48744,
+          "residue_probe_test": 0.0619,
+          "residue_probe_train": 0.2938
+        },
+        {
+          "step": 50000,
+          "train_acc": 0.8531,
+          "heldout_acc": 0.4991,
+          "heldout_eq_acc": 0.7127,
+          "heldout_neq_acc": 0.2854,
+          "gap": 0.354,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6613,
+            "S2": 0.375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 82,
+            "S2": 6,
+            "S3": 8,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.416356,
+          "residue_probe_test": 0.0568,
+          "residue_probe_train": 0.2841
+        }
+      ]
+    },
+    {
+      "weight_decay": 0.1,
+      "seed": 0,
+      "wall_s": 3324.3,
+      "best_heldout_acc": 0.5485,
+      "best_residue_probe": 0.0783,
+      "ever_cleared_floor": false,
+      "checkpoints": [
+        {
+          "step": 0,
+          "train_acc": 0.5104,
+          "heldout_acc": 0.5485,
+          "heldout_eq_acc": 0.5541,
+          "heldout_neq_acc": 0.5429,
+          "gap": -0.0382,
+          "panel_qualifies": false,
+          "panel_strata_ok": 1,
+          "panel_stratum_acc": {
+            "S1": 1.0,
+            "S2": 0.4375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.875
+          },
+          "panel_stratum_correct": {
+            "S1": 124,
+            "S2": 7,
+            "S3": 8,
+            "S4": 8,
+            "S5": 14
+          },
+          "panel_mean_brier": 0.227132,
+          "residue_probe_test": 0.0669,
+          "residue_probe_train": 0.1439
+        },
+        {
+          "step": 2500,
+          "train_acc": 0.7958,
+          "heldout_acc": 0.5056,
+          "heldout_eq_acc": 0.6604,
+          "heldout_neq_acc": 0.3507,
+          "gap": 0.2902,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4597,
+            "S2": 0.3125,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 57,
+            "S2": 5,
+            "S3": 8,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.371162,
+          "residue_probe_test": 0.0442,
+          "residue_probe_train": 0.2127
+        },
+        {
+          "step": 5000,
+          "train_acc": 0.8153,
+          "heldout_acc": 0.4972,
+          "heldout_eq_acc": 0.6772,
+          "heldout_neq_acc": 0.3172,
+          "gap": 0.3181,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4919,
+            "S2": 0.4375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 61,
+            "S2": 7,
+            "S3": 7,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.358034,
+          "residue_probe_test": 0.0543,
+          "residue_probe_train": 0.2256
+        },
+        {
+          "step": 7500,
+          "train_acc": 0.8205,
+          "heldout_acc": 0.4879,
+          "heldout_eq_acc": 0.6213,
+          "heldout_neq_acc": 0.3545,
+          "gap": 0.3326,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5806,
+            "S2": 0.4375,
+            "S3": 0.25,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 72,
+            "S2": 7,
+            "S3": 4,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.416221,
+          "residue_probe_test": 0.0581,
+          "residue_probe_train": 0.2484
+        },
+        {
+          "step": 10000,
+          "train_acc": 0.8284,
+          "heldout_acc": 0.5131,
+          "heldout_eq_acc": 0.7071,
+          "heldout_neq_acc": 0.319,
+          "gap": 0.3154,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5081,
+            "S2": 0.4375,
+            "S3": 0.3125,
+            "S4": 0.5,
+            "S5": 0.6875
+          },
+          "panel_stratum_correct": {
+            "S1": 63,
+            "S2": 7,
+            "S3": 5,
+            "S4": 8,
+            "S5": 11
+          },
+          "panel_mean_brier": 0.414618,
+          "residue_probe_test": 0.0758,
+          "residue_probe_train": 0.2538
+        },
+        {
+          "step": 12500,
+          "train_acc": 0.7687,
+          "heldout_acc": 0.4851,
+          "heldout_eq_acc": 0.5933,
+          "heldout_neq_acc": 0.3769,
+          "gap": 0.2836,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5806,
+            "S2": 0.4375,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 72,
+            "S2": 7,
+            "S3": 6,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.404472,
+          "residue_probe_test": 0.0606,
+          "residue_probe_train": 0.2478
+        },
+        {
+          "step": 15000,
+          "train_acc": 0.8328,
+          "heldout_acc": 0.4608,
+          "heldout_eq_acc": 0.6455,
+          "heldout_neq_acc": 0.2761,
+          "gap": 0.372,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6855,
+            "S2": 0.375,
+            "S3": 0.25,
+            "S4": 0.5,
+            "S5": 0.75
+          },
+          "panel_stratum_correct": {
+            "S1": 85,
+            "S2": 6,
+            "S3": 4,
+            "S4": 8,
+            "S5": 12
+          },
+          "panel_mean_brier": 0.386832,
+          "residue_probe_test": 0.053,
+          "residue_probe_train": 0.2662
+        },
+        {
+          "step": 17500,
+          "train_acc": 0.7026,
+          "heldout_acc": 0.4767,
+          "heldout_eq_acc": 0.6828,
+          "heldout_neq_acc": 0.2705,
+          "gap": 0.2259,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5887,
+            "S2": 0.5,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 73,
+            "S2": 8,
+            "S3": 6,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.418718,
+          "residue_probe_test": 0.0543,
+          "residue_probe_train": 0.2505
+        },
+        {
+          "step": 20000,
+          "train_acc": 0.7213,
+          "heldout_acc": 0.5215,
+          "heldout_eq_acc": 0.7369,
+          "heldout_neq_acc": 0.306,
+          "gap": 0.1999,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4274,
+            "S2": 0.5,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 53,
+            "S2": 8,
+            "S3": 7,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.430816,
+          "residue_probe_test": 0.0593,
+          "residue_probe_train": 0.2522
+        },
+        {
+          "step": 22500,
+          "train_acc": 0.8125,
+          "heldout_acc": 0.5028,
+          "heldout_eq_acc": 0.7127,
+          "heldout_neq_acc": 0.2929,
+          "gap": 0.3097,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6048,
+            "S2": 0.375,
+            "S3": 0.25,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 75,
+            "S2": 6,
+            "S3": 4,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.436583,
+          "residue_probe_test": 0.0606,
+          "residue_probe_train": 0.2733
+        },
+        {
+          "step": 25000,
+          "train_acc": 0.801,
+          "heldout_acc": 0.4963,
+          "heldout_eq_acc": 0.6698,
+          "heldout_neq_acc": 0.3228,
+          "gap": 0.3047,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6129,
+            "S2": 0.375,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 76,
+            "S2": 6,
+            "S3": 6,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.409049,
+          "residue_probe_test": 0.0581,
+          "residue_probe_train": 0.2321
+        },
+        {
+          "step": 27500,
+          "train_acc": 0.8006,
+          "heldout_acc": 0.4701,
+          "heldout_eq_acc": 0.6623,
+          "heldout_neq_acc": 0.278,
+          "gap": 0.3304,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5242,
+            "S2": 0.4375,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 65,
+            "S2": 7,
+            "S3": 9,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.427627,
+          "residue_probe_test": 0.0644,
+          "residue_probe_train": 0.2316
+        },
+        {
+          "step": 30000,
+          "train_acc": 0.7751,
+          "heldout_acc": 0.5065,
+          "heldout_eq_acc": 0.7295,
+          "heldout_neq_acc": 0.2836,
+          "gap": 0.2685,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4355,
+            "S2": 0.4375,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.375
+          },
+          "panel_stratum_correct": {
+            "S1": 54,
+            "S2": 7,
+            "S3": 6,
+            "S4": 8,
+            "S5": 6
+          },
+          "panel_mean_brier": 0.369159,
+          "residue_probe_test": 0.0581,
+          "residue_probe_train": 0.2262
+        },
+        {
+          "step": 32500,
+          "train_acc": 0.8109,
+          "heldout_acc": 0.4925,
+          "heldout_eq_acc": 0.6884,
+          "heldout_neq_acc": 0.2966,
+          "gap": 0.3184,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6129,
+            "S2": 0.4375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 76,
+            "S2": 7,
+            "S3": 7,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.420318,
+          "residue_probe_test": 0.0619,
+          "residue_probe_train": 0.243
+        },
+        {
+          "step": 35000,
+          "train_acc": 0.8575,
+          "heldout_acc": 0.4823,
+          "heldout_eq_acc": 0.6642,
+          "heldout_neq_acc": 0.3004,
+          "gap": 0.3752,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.7177,
+            "S2": 0.5,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.375
+          },
+          "panel_stratum_correct": {
+            "S1": 89,
+            "S2": 8,
+            "S3": 8,
+            "S4": 8,
+            "S5": 6
+          },
+          "panel_mean_brier": 0.405815,
+          "residue_probe_test": 0.0593,
+          "residue_probe_train": 0.2587
+        },
+        {
+          "step": 37500,
+          "train_acc": 0.8121,
+          "heldout_acc": 0.4907,
+          "heldout_eq_acc": 0.7836,
+          "heldout_neq_acc": 0.1978,
+          "gap": 0.3214,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6935,
+            "S2": 0.4375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 86,
+            "S2": 7,
+            "S3": 7,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.414201,
+          "residue_probe_test": 0.0644,
+          "residue_probe_train": 0.2262
+        },
+        {
+          "step": 40000,
+          "train_acc": 0.8225,
+          "heldout_acc": 0.4869,
+          "heldout_eq_acc": 0.6903,
+          "heldout_neq_acc": 0.2836,
+          "gap": 0.3355,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6048,
+            "S2": 0.5,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 75,
+            "S2": 8,
+            "S3": 8,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.429536,
+          "residue_probe_test": 0.0518,
+          "residue_probe_train": 0.2435
+        },
+        {
+          "step": 42500,
+          "train_acc": 0.877,
+          "heldout_acc": 0.4916,
+          "heldout_eq_acc": 0.7108,
+          "heldout_neq_acc": 0.2724,
+          "gap": 0.3854,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.7177,
+            "S2": 0.5,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 89,
+            "S2": 8,
+            "S3": 8,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.39562,
+          "residue_probe_test": 0.0619,
+          "residue_probe_train": 0.2435
+        },
+        {
+          "step": 45000,
+          "train_acc": 0.8133,
+          "heldout_acc": 0.5,
+          "heldout_eq_acc": 0.6586,
+          "heldout_neq_acc": 0.3414,
+          "gap": 0.3133,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6774,
+            "S2": 0.375,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 84,
+            "S2": 6,
+            "S3": 10,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.427886,
+          "residue_probe_test": 0.0694,
+          "residue_probe_train": 0.2716
+        },
+        {
+          "step": 47500,
+          "train_acc": 0.8599,
+          "heldout_acc": 0.4655,
+          "heldout_eq_acc": 0.6847,
+          "heldout_neq_acc": 0.2463,
+          "gap": 0.3944,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.6855,
+            "S2": 0.5,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 85,
+            "S2": 8,
+            "S3": 8,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.418983,
+          "residue_probe_test": 0.0593,
+          "residue_probe_train": 0.2689
+        },
+        {
+          "step": 50000,
+          "train_acc": 0.8459,
+          "heldout_acc": 0.4907,
+          "heldout_eq_acc": 0.7276,
+          "heldout_neq_acc": 0.2537,
+          "gap": 0.3553,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.7419,
+            "S2": 0.5,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.375
+          },
+          "panel_stratum_correct": {
+            "S1": 92,
+            "S2": 8,
+            "S3": 9,
+            "S4": 8,
+            "S5": 6
+          },
+          "panel_mean_brier": 0.338554,
+          "residue_probe_test": 0.0783,
+          "residue_probe_train": 0.2581
+        }
+      ]
+    },
+    {
+      "weight_decay": 1.0,
+      "seed": 0,
+      "wall_s": 3316.7,
+      "best_heldout_acc": 0.5877,
+      "best_residue_probe": 0.1073,
+      "ever_cleared_floor": false,
+      "checkpoints": [
+        {
+          "step": 0,
+          "train_acc": 0.5104,
+          "heldout_acc": 0.5485,
+          "heldout_eq_acc": 0.5541,
+          "heldout_neq_acc": 0.5429,
+          "gap": -0.0382,
+          "panel_qualifies": false,
+          "panel_strata_ok": 1,
+          "panel_stratum_acc": {
+            "S1": 1.0,
+            "S2": 0.4375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.875
+          },
+          "panel_stratum_correct": {
+            "S1": 124,
+            "S2": 7,
+            "S3": 8,
+            "S4": 8,
+            "S5": 14
+          },
+          "panel_mean_brier": 0.227132,
+          "residue_probe_test": 0.0669,
+          "residue_probe_train": 0.1439
+        },
+        {
+          "step": 2500,
+          "train_acc": 0.6771,
+          "heldout_acc": 0.5252,
+          "heldout_eq_acc": 0.8265,
+          "heldout_neq_acc": 0.2239,
+          "gap": 0.152,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.1694,
+            "S2": 0.375,
+            "S3": 0.3125,
+            "S4": 0.5,
+            "S5": 0.625
+          },
+          "panel_stratum_correct": {
+            "S1": 21,
+            "S2": 6,
+            "S3": 5,
+            "S4": 8,
+            "S5": 10
+          },
+          "panel_mean_brier": 0.339427,
+          "residue_probe_test": 0.0758,
+          "residue_probe_train": 0.1861
+        },
+        {
+          "step": 5000,
+          "train_acc": 0.8018,
+          "heldout_acc": 0.4823,
+          "heldout_eq_acc": 0.709,
+          "heldout_neq_acc": 0.2556,
+          "gap": 0.3195,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.3468,
+            "S2": 0.5,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 43,
+            "S2": 8,
+            "S3": 9,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.427042,
+          "residue_probe_test": 0.0682,
+          "residue_probe_train": 0.2094
+        },
+        {
+          "step": 7500,
+          "train_acc": 0.7607,
+          "heldout_acc": 0.5028,
+          "heldout_eq_acc": 0.7556,
+          "heldout_neq_acc": 0.25,
+          "gap": 0.2579,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4274,
+            "S2": 0.25,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 53,
+            "S2": 4,
+            "S3": 9,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.431764,
+          "residue_probe_test": 0.101,
+          "residue_probe_train": 0.2192
+        },
+        {
+          "step": 10000,
+          "train_acc": 0.7838,
+          "heldout_acc": 0.4953,
+          "heldout_eq_acc": 0.7313,
+          "heldout_neq_acc": 0.2593,
+          "gap": 0.2885,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.3871,
+            "S2": 0.4375,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.375
+          },
+          "panel_stratum_correct": {
+            "S1": 48,
+            "S2": 7,
+            "S3": 7,
+            "S4": 8,
+            "S5": 6
+          },
+          "panel_mean_brier": 0.484234,
+          "residue_probe_test": 0.0821,
+          "residue_probe_train": 0.2381
+        },
+        {
+          "step": 12500,
+          "train_acc": 0.789,
+          "heldout_acc": 0.5047,
+          "heldout_eq_acc": 0.8284,
+          "heldout_neq_acc": 0.181,
+          "gap": 0.2843,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.379,
+            "S2": 0.375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 47,
+            "S2": 6,
+            "S3": 8,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.434655,
+          "residue_probe_test": 0.0896,
+          "residue_probe_train": 0.237
+        },
+        {
+          "step": 15000,
+          "train_acc": 0.7822,
+          "heldout_acc": 0.5336,
+          "heldout_eq_acc": 0.7929,
+          "heldout_neq_acc": 0.2743,
+          "gap": 0.2487,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.621,
+            "S2": 0.4375,
+            "S3": 0.375,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 77,
+            "S2": 7,
+            "S3": 6,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.395788,
+          "residue_probe_test": 0.0859,
+          "residue_probe_train": 0.2343
+        },
+        {
+          "step": 17500,
+          "train_acc": 0.7731,
+          "heldout_acc": 0.4953,
+          "heldout_eq_acc": 0.7631,
+          "heldout_neq_acc": 0.2276,
+          "gap": 0.2778,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4597,
+            "S2": 0.25,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 57,
+            "S2": 4,
+            "S3": 9,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.411351,
+          "residue_probe_test": 0.0783,
+          "residue_probe_train": 0.2381
+        },
+        {
+          "step": 20000,
+          "train_acc": 0.7432,
+          "heldout_acc": 0.5877,
+          "heldout_eq_acc": 0.8489,
+          "heldout_neq_acc": 0.3265,
+          "gap": 0.1555,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5403,
+            "S2": 0.5,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 67,
+            "S2": 8,
+            "S3": 9,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.383605,
+          "residue_probe_test": 0.0972,
+          "residue_probe_train": 0.2359
+        },
+        {
+          "step": 22500,
+          "train_acc": 0.8133,
+          "heldout_acc": 0.4851,
+          "heldout_eq_acc": 0.8153,
+          "heldout_neq_acc": 0.1549,
+          "gap": 0.3282,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.2823,
+            "S2": 0.4375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 35,
+            "S2": 7,
+            "S3": 8,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.487917,
+          "residue_probe_test": 0.1048,
+          "residue_probe_train": 0.2392
+        },
+        {
+          "step": 25000,
+          "train_acc": 0.7986,
+          "heldout_acc": 0.5047,
+          "heldout_eq_acc": 0.7649,
+          "heldout_neq_acc": 0.2444,
+          "gap": 0.2939,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4677,
+            "S2": 0.5625,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.3125
+          },
+          "panel_stratum_correct": {
+            "S1": 58,
+            "S2": 9,
+            "S3": 8,
+            "S4": 8,
+            "S5": 5
+          },
+          "panel_mean_brier": 0.418721,
+          "residue_probe_test": 0.1048,
+          "residue_probe_train": 0.2348
+        },
+        {
+          "step": 27500,
+          "train_acc": 0.799,
+          "heldout_acc": 0.4767,
+          "heldout_eq_acc": 0.7425,
+          "heldout_neq_acc": 0.2108,
+          "gap": 0.3223,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4355,
+            "S2": 0.3125,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 54,
+            "S2": 5,
+            "S3": 8,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.395261,
+          "residue_probe_test": 0.0997,
+          "residue_probe_train": 0.243
+        },
+        {
+          "step": 30000,
+          "train_acc": 0.7691,
+          "heldout_acc": 0.5317,
+          "heldout_eq_acc": 0.8116,
+          "heldout_neq_acc": 0.2519,
+          "gap": 0.2374,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.379,
+            "S2": 0.5,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 47,
+            "S2": 8,
+            "S3": 10,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.374731,
+          "residue_probe_test": 0.096,
+          "residue_probe_train": 0.2381
+        },
+        {
+          "step": 32500,
+          "train_acc": 0.8189,
+          "heldout_acc": 0.4832,
+          "heldout_eq_acc": 0.7183,
+          "heldout_neq_acc": 0.2481,
+          "gap": 0.3357,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5081,
+            "S2": 0.5,
+            "S3": 0.625,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 63,
+            "S2": 8,
+            "S3": 10,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.401218,
+          "residue_probe_test": 0.1073,
+          "residue_probe_train": 0.2294
+        },
+        {
+          "step": 35000,
+          "train_acc": 0.8248,
+          "heldout_acc": 0.4655,
+          "heldout_eq_acc": 0.7201,
+          "heldout_neq_acc": 0.2108,
+          "gap": 0.3594,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5645,
+            "S2": 0.5,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.375
+          },
+          "panel_stratum_correct": {
+            "S1": 70,
+            "S2": 8,
+            "S3": 8,
+            "S4": 8,
+            "S5": 6
+          },
+          "panel_mean_brier": 0.412445,
+          "residue_probe_test": 0.0934,
+          "residue_probe_train": 0.2316
+        },
+        {
+          "step": 37500,
+          "train_acc": 0.7663,
+          "heldout_acc": 0.5466,
+          "heldout_eq_acc": 0.8246,
+          "heldout_neq_acc": 0.2687,
+          "gap": 0.2197,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.5726,
+            "S2": 0.4375,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 71,
+            "S2": 7,
+            "S3": 8,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.364237,
+          "residue_probe_test": 0.0859,
+          "residue_probe_train": 0.244
+        },
+        {
+          "step": 40000,
+          "train_acc": 0.8575,
+          "heldout_acc": 0.5177,
+          "heldout_eq_acc": 0.8414,
+          "heldout_neq_acc": 0.194,
+          "gap": 0.3398,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.3387,
+            "S2": 0.1875,
+            "S3": 0.5,
+            "S4": 0.5,
+            "S5": 0.4375
+          },
+          "panel_stratum_correct": {
+            "S1": 42,
+            "S2": 3,
+            "S3": 8,
+            "S4": 8,
+            "S5": 7
+          },
+          "panel_mean_brier": 0.461579,
+          "residue_probe_test": 0.0972,
+          "residue_probe_train": 0.2359
+        },
+        {
+          "step": 42500,
+          "train_acc": 0.8523,
+          "heldout_acc": 0.4599,
+          "heldout_eq_acc": 0.7071,
+          "heldout_neq_acc": 0.2127,
+          "gap": 0.3924,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.2661,
+            "S2": 0.3125,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 33,
+            "S2": 5,
+            "S3": 9,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.458371,
+          "residue_probe_test": 0.0922,
+          "residue_probe_train": 0.2376
+        },
+        {
+          "step": 45000,
+          "train_acc": 0.8256,
+          "heldout_acc": 0.486,
+          "heldout_eq_acc": 0.7631,
+          "heldout_neq_acc": 0.209,
+          "gap": 0.3396,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.371,
+            "S2": 0.375,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5625
+          },
+          "panel_stratum_correct": {
+            "S1": 46,
+            "S2": 6,
+            "S3": 9,
+            "S4": 8,
+            "S5": 9
+          },
+          "panel_mean_brier": 0.482422,
+          "residue_probe_test": 0.0833,
+          "residue_probe_train": 0.2294
+        },
+        {
+          "step": 47500,
+          "train_acc": 0.8376,
+          "heldout_acc": 0.5243,
+          "heldout_eq_acc": 0.7892,
+          "heldout_neq_acc": 0.2593,
+          "gap": 0.3133,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.4435,
+            "S2": 0.1875,
+            "S3": 0.4375,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 55,
+            "S2": 3,
+            "S3": 7,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.496593,
+          "residue_probe_test": 0.0997,
+          "residue_probe_train": 0.2403
+        },
+        {
+          "step": 50000,
+          "train_acc": 0.8332,
+          "heldout_acc": 0.4552,
+          "heldout_eq_acc": 0.6772,
+          "heldout_neq_acc": 0.2332,
+          "gap": 0.378,
+          "panel_qualifies": false,
+          "panel_strata_ok": 0,
+          "panel_stratum_acc": {
+            "S1": 0.2984,
+            "S2": 0.375,
+            "S3": 0.5625,
+            "S4": 0.5,
+            "S5": 0.5
+          },
+          "panel_stratum_correct": {
+            "S1": 37,
+            "S2": 6,
+            "S3": 9,
+            "S4": 8,
+            "S5": 8
+          },
+          "panel_mean_brier": 0.440866,
+          "residue_probe_test": 0.1073,
+          "residue_probe_train": 0.2284
+        }
+      ]
+    }
+  ],
+  "total_wall_s": 13279.4
+}
