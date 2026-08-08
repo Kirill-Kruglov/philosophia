@@ -1,390 +1,1237 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Philosophia Workshop evidence atlas: inherited instrument, platform replication, feasibility boundary, and unrun claims.">
-  <title>Philosophia — Workshop Evidence Atlas</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Climbing the Wall of Experience</title>
+<meta name="description" content="Can a mind earn experience from a world it derives — without a body, and without fooling itself? An instrument for telling a wall of the world from a wall of one's own language, and a precise limit on what contact can be manufactured. Written against the era of experience.">
+<meta property="og:title" content="Climbing the Wall of Experience">
+<meta property="og:description" content="Can a mind earn experience from a world it derives — without a body, and without fooling itself? An instrument for telling a wall of the world from a wall of one's own language, and a precise limit on what contact can be manufactured. Written against the era of experience.">
+<meta property="og:type" content="article">
+<style>
+:root{--bg:#fbfaf6;--ink:#1d1c1a;--muted:#6b6760;--line:#e4e0d6;--accent:#7a5b2e;--rule:#ece8de;--tablehead:#f3f0e8;--quote-bg:#f1ead9}
+:root[data-theme=dark]{--bg:#15171c;--ink:#dfdcd4;--muted:#9a958c;--line:#2a2d34;--accent:#cdb079;--rule:#23262d;--tablehead:#1c1f25;--quote-bg:#1e222a}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#15171c;--ink:#dfdcd4;--muted:#9a958c;--line:#2a2d34;--accent:#cdb079;--rule:#23262d;--tablehead:#1c1f25;--quote-bg:#1e222a}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:20px/1.7 Iowan Old Style,Palatino,Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.nav{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  gap:16px;padding:12px clamp(16px,5vw,40px);background:var(--bg);border-bottom:1px solid var(--line);
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:15px}
+.nav .brand{font-weight:700;letter-spacing:.02em;color:var(--ink);text-decoration:none}
+.nav .right{display:flex;align-items:center;gap:18px}
+.nav a{color:var(--muted);text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.nav button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;
+  width:34px;height:34px;cursor:pointer;font-size:15px;line-height:1}
+.nav button:hover{color:var(--ink)}
+main{max-width:680px;margin:0 auto;padding:0 22px 96px}
+.byline{margin:18px 0 0;font-family:system-ui,sans-serif;font-size:14px;color:var(--muted)}
+.byline a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.byline a:hover{color:var(--ink)}
+h1{font-size:clamp(34px,6vw,52px);line-height:1.08;letter-spacing:-.01em;margin:48px 0 8px}
+h2{font-size:26px;line-height:1.2;margin:52px 0 6px}
+h3{font-size:20px;line-height:1.25;margin:32px 0 4px;color:var(--muted);font-weight:600}
+p{margin:0 0 20px}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:.5px}
+strong{font-weight:700}
+hr{border:0;border-top:1px solid var(--rule);margin:44px 0}
+blockquote{margin:30px 0;padding:14px 22px;border-left:3px solid var(--accent);
+  background:var(--quote-bg);border-radius:0 8px 8px 0;color:var(--ink);font-size:20px;font-style:italic}
+blockquote p{margin:0 0 10px}
+blockquote p:last-child{margin:0}
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15.5px;font-family:system-ui,sans-serif}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+thead th{background:var(--tablehead);border-bottom:2px solid var(--line);font-weight:600}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
+  background:color-mix(in srgb,var(--ink) 7%,transparent);padding:.1em .35em;border-radius:4px}
+.contents{margin:34px 0 8px;border:1px solid var(--line);border-radius:10px;
+  font-family:system-ui,sans-serif;font-size:15px}
+.contents summary{cursor:pointer;padding:5px 18px;color:var(--muted);font-weight:600;list-style:none}
+.contents summary::-webkit-details-marker{display:none}
+.contents summary::before{content:"\203A";display:inline-block;padding-right:7px;transition:transform .15s}
+.contents[open] summary::before{transform:rotate(90deg)}
+.contents nav{display:flex;flex-direction:column;padding:0 16px 14px}
+.contents a{color:var(--muted);text-decoration:none;padding:4px 0}
+.contents a:hover{color:var(--ink)}
+.contents .toc-h1{color:var(--ink);font-weight:700;margin-top:10px}
+.contents .toc-h2{padding-left:16px}
+footer{max-width:680px;margin:0 auto;padding:28px 22px 64px;border-top:1px solid var(--rule);
+  color:var(--muted);font-family:system-ui,sans-serif;font-size:14px}
+footer a{color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem("philosophia-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#workshop" aria-label="Philosophia evidence atlas home">
-      <span class="brand-mark" aria-hidden="true">Φ</span>
-      <span>
-        <strong>philosophia</strong>
-        <small>Workshop evidence atlas</small>
-      </span>
-    </a>
-    <nav aria-label="Evidence sections">
-      <a href="#instrument">Instrument</a>
-      <a href="#platform">Platform</a>
-      <a href="#gate">Gate</a>
-      <a href="#claims">Claims</a>
-      <a href="#sources">Sources</a>
-    </nav>
-  </header>
+<nav class="nav">
+  <a class="brand" href="./">philosophia</a>
+  <div class="right">
+    <a href="./">Essay</a>
+    <a href="evidence.html">Evidence</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/Kirill-Kruglov/philosophia">GitHub</a>
+    <button id="theme" type="button" aria-label="Toggle light / dark">&#9682;</button>
+  </div>
+</nav>
+<main id="top">
+<p class="byline">By Kirill Kruglov, developed in dialogue with Codex, Claude, and Fable — <a href="about.html">how this was made</a>.</p>
+<details class="contents">
+<summary>Contents</summary>
+<nav>
+<a class="toc-h2" href="#introduction">Introduction</a>
+<a class="toc-h2" href="#i.-the-first-difference">I. The First Difference</a>
+<a class="toc-h2" href="#ii.-the-fall-and-the-trace">II. The Fall and the Trace</a>
+<a class="toc-h2" href="#iii.-the-same-wall">III. The Same Wall</a>
+<a class="toc-h2" href="#iv.-independence-is-practiced">IV. Independence Is
+Practiced</a>
+<a class="toc-h2" href="#v.-the-knife-misses">V. The Knife Misses</a>
+<a class="toc-h2" href="#vi.-the-workshop">VI. The Workshop</a>
+<a class="toc-h2" href="#vii.-three-endings-none-chosen">VII. Three Endings, None
+Chosen</a>
+<a class="toc-h2" href="#conclusion">Conclusion</a>
+<a class="toc-h2" href="#the-inherited-instrument">The inherited instrument</a>
+<a class="toc-h2" href="#the-24120-gradient">The 24/12/0 gradient</a>
+<a class="toc-h2" href="#the-three-amendments">The three amendments</a>
+<a class="toc-h2" href="#the-escrowed-holdout">The escrowed holdout</a>
+<a class="toc-h2" href="#what-philosophia-has-established">What Philosophia has
+established</a>
+<a class="toc-h2" href="#status-ledger">Status ledger</a>
+<a class="toc-h2" href="#what-this-does-not-show">What this does not show</a>
+<a class="toc-h2" href="#acknowledgements-and-references">Acknowledgements and
+references</a>
+</nav>
+</details>
+<article>
+<h1 id="climbing-the-wall-of-experience">Climbing the Wall of
+Experience</h1>
+<h3 id="can-a-mind-earn-a-world-from-contact-it-manufactures-itself">Can
+a mind earn a world from contact it manufactures itself?</h3>
+<blockquote>
+<p><strong>Programme status note, July 2026.</strong> Drafted before the
+first Philosophia outcome. Level 0 has since reproduced delayed
+generalization: locked, and narrower than the programme claim – it
+validates the workshop, not manufactured experience. The one authorized
+Level 1 feasibility trajectory then completed validly and was censored
+at its signed floor, so the comparative detector never ran: C1 untested,
+no contact mode selected, Level 2 blocked, programme claim open. I chose
+Route B: publish stopped-open; further science becomes a separately
+signed successor line, its development permanently non-citable.
+Governance, not a result. Active contact, cross-world transfer, and path
+credit stay unrun designs, each keeping its registered way to die.
+Evidence before the climb: <a
+href="#what-the-instrument-has-shown----and-what-the-small-mind-has-not"><strong>What
+the Instrument Has Shown – and What the Small Mind Has
+Not</strong></a>.</p>
+</blockquote>
+<hr />
+<p><em>Before the apparatus, the whole essay in plain words.</em></p>
+<p><em>A machine can read everything people have ever written and still
+never have touched the world. It inherits our</em> report <em>of contact
+– measurements retold, arguments already settled, errors already
+smoothed – not the contact itself. I wanted to know whether contact can
+be</em> manufactured<em>: not simulated, not narrated, but earned
+first-hand, in a world small enough that truth can answer a question
+exactly and nothing human is smuggled in. Finite algebra and geometry is
+that world.</em></p>
+<p><em>Two things here are done, and I can show you both: a world that
+answers back with no human inside it, and an instrument that tells real
+contact from a mind merely agreeing with itself – working, and blind in
+one place I will point to. The small mind and its apparatus also reached
+a narrower fact. In one frozen development world, under the one allowed
+training amendment, it completed its budget without producing the
+qualifying window required to spend the comparative experiment. That is
+a feasibility boundary, not an answer about contact. ACTIVE never met
+YOKED; no contact mode was chosen; the next level is blocked. Everything
+about what</em> that <em>mind has earned – whether it chooses well,
+remembers, or carries a shorter road into a world it has not seen –
+remains a question, now with the place where this route stopped written
+beside it.</em></p>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>We are entering what David Silver and Richard Sutton call an <a
+href="https://storage.googleapis.com/deepmind-media/Era-of-Experience%20/The%20Era%20of%20Experience%20Paper.pdf">era
+of experience</a>: systems that do not merely imitate records left by
+people, but act, observe, and learn over long horizons of their own.</p>
+<p>I think they are pointing in the right direction. I also think the
+word doing the work in that sentence – <em>experience</em> – is carrying
+more than we have made it earn.</p>
+<p>The position has stronger and more current forms than a position
+paper, and I would rather argue with those. Blaise Agüera y Arcas holds
+in <a
+href="https://mitpress.mit.edu/9780262049955/what-is-intelligence/"><em>What
+Is Intelligence?</em></a> that prediction runs all the way down, through
+mind and brain and life, and the <a
+href="https://arxiv.org/abs/2406.19108">Computational Life</a> work he
+co-authored shows self-replicating programs arising in a soup of random
+ones with no fitness function imposed: structure from interaction, with
+nobody supplying the structure. The verified-discovery line proposes the
+other half. <a href="https://arxiv.org/abs/2605.13171"><em>Formal
+Conjectures</em></a> puts more than a thousand open research conjectures
+into Lean so that a machine’s mathematics can be checked by a kernel
+instead of argued about by us.</p>
+<p>I think both are right about what they claim, and neither is what I
+am asking. Emergence from interaction says that structure can arise
+unaided; it does not say which learner earned which structure. A
+complete verifier says whether an answer holds; it does not say whether
+the mind that produced it touched anything. My question is what a mind
+is entitled to claim when nothing is checking, and how anyone outside it
+could tell.</p>
+<p>The internet is full of experience, but almost none of it belongs to
+the model reading it. It is the fossil of somebody else’s contact:
+measurements and memories, arguments and incentives, honest errors and
+performed certainty, pressed together into text. A model can learn
+extraordinary structure from that fossil. What it cannot recover from
+the fossil alone is the difference between what the world forced its
+authors to write and what their shared way of seeing made easy to
+repeat.</p>
+<p>My previous project, <em>proxylimen</em>, reached this boundary from
+below. A learner could derive real structure from surprisingly little,
+but never from nothing. Contact remained obligatory. The strong dream –
+a world derived without an oracle – was a category error. The useful
+remainder was <strong>calibrated derivation</strong>: minimal contact,
+declared and counted, with the place where the instrument goes blind
+drawn in advance.</p>
+<p>This essay asks the next question.</p>
+<p>If contact is what a mind is missing, can contact itself be
+manufactured?</p>
+<p>Not in an open world first. That would be too large, too
+contaminated, and too easy to narrate after the fact. I chose the
+smallest workshop I know: finite algebra and geometry. There the world
+can be generated without human examples, truth can answer a query
+exactly, and one can change a representation while holding the
+underlying object fixed. No body. No camera. No inherited proof. Just a
+small learner, a derivable world, and a ledger of the places where its
+expectations broke.</p>
+<p>I did not choose mathematics because mathematics is the destination.
+I chose it because it is the cleanest place to ask whether a mind can
+earn experience rather than inherit its description.</p>
+<p>The strong claim is tempting: give a model an inexhaustible formal
+world and it will grow knowledge. I do not believe that claim is even
+well-formed. A rule can generate endless data without giving the learner
+contact; a learner can agree with itself by walking the same road twice;
+a compressed representation can be nothing more than the generator’s
+hidden parameters discovered and renamed.</p>
+<p>So before growing the mind, I needed an instrument that could
+distinguish a wall of the world from two roads sharing one blindness. I
+built it in the line of work immediately before this one. It worked.
+Then the holdout found the place where part of it did not.</p>
+<p>That miss is the foundation of Philosophia, not an embarrassment at
+its edge.</p>
+<hr />
+<h2 id="i.-the-first-difference">I. The First Difference</h2>
+<p>Begin with a point in a zero-dimensional space.</p>
+<p>There is nowhere for it to go. No direction, no near or far, no
+before or after. Call this zero experience – not because the point is
+unreal, but because within the space there is no distinction for it to
+encounter.</p>
+<p>Now let there be one value.</p>
+<p>The value is already more than nothing. It can be present rather than
+absent. Let there be two values, and a relation appears: equal or
+unequal, before or after if an order is supplied, one transformed into
+the other if an operation is allowed. Experience begins as
+difference.</p>
+<p>But a third kind of thing is easy to smuggle in and call another
+value: linearity, curvature, order, chaos. These are not values sitting
+beside the others. They are claims about how values hang together under
+a way of describing them. The same finite sequence can look irregular in
+a language of raw symbols and short in a language that already contains
+its generating rule.</p>
+<p>This is the first discipline of the climb:</p>
+<blockquote>
+<p>A regularity does not live in the data alone. It lives in the
+relation between data and a language that makes the data short.</p>
+</blockquote>
+<p>Write the data as <span class="math inline"><em>x</em></span>, the
+language as <span class="math inline"><em>L</em></span>, and the
+shortest description of <span class="math inline"><em>x</em></span>
+available in that language as <span
+class="math inline"><em>K</em><sub><em>L</em></sub>(<em>x</em>)</span>.
+Then the candidate experience is not <span
+class="math inline"><em>x</em></span>, and it is not <span
+class="math inline"><em>L</em></span>. It is the change in description
+length when the two meet:</p>
+<p>[ R_L(x) = |x| - K_L(x). ]</p>
+<p>Large <span
+class="math inline"><em>R</em><sub><em>L</em></sub>(<em>x</em>)</span>
+means the language found a short account of what otherwise had to be
+stored raw. It is tempting to call that knowledge. It is not enough.</p>
+<p>Kolmogorov complexity is uncomputable in general, and the invariance
+theorem does not make description length independent of language. It
+bounds the difference between universal description languages by a
+language-dependent constant. In a finite experiment, that constant can
+be the whole apparent effect. A pattern can be short because the world
+has structure, or because the researcher placed the right primitive in
+the language before the learner began.</p>
+<p><em>Skip the formula and keep this: finding a short description is
+evidence that the data and the language fit. It is not yet evidence that
+the fit belongs to the world.</em></p>
+<p>So I use <em>experience</em> as a definition with obligations. A
+compression becomes a candidate for experience only if it does work the
+learner did not receive for free: it predicts held-out contact, survives
+a declared intervention, and shortens work in a world or representation
+not used to name it. Otherwise it is a regularity, perhaps a beautiful
+one, but not yet contact.</p>
+<p>So experience is not a substance stored inside a learner. It is a
+relation that must pay rent outside the description in which it was
+found.</p>
+<hr />
+<h2 id="ii.-the-fall-and-the-trace">II. The Fall and the Trace</h2>
+<p>A learner inside a language can do only local work. It can extend a
+proof, adjust a hypothesis, make another query, descend another
+gradient. From there, progress looks one-dimensional: the next grip is
+visible; the shape of the whole climb is not.</p>
+<p>Most of that work should be forgotten.</p>
+<p>If the next observation is exactly what the current description
+predicted, storing it separately adds nothing. The description already
+generates it. What deserves a mark is the place where the world and the
+description part company: an answer arrived that should not have
+arrived; a proof path closed where the learner expected an opening; a
+confident prediction failed.</p>
+<p>The trace is therefore sparse. Its landmarks are prediction
+errors.</p>
+<p>This gives three states that are easy to confuse if they are named
+only after success.</p>
+<p><strong>Climbing</strong> is work inside the current language.
+<strong>Falling</strong> is discovering that the language did not close
+over the world; the route is lost, but its surprises leave landmarks.
+<strong>Ascending</strong> is a representational change in which the old
+route becomes visible as one route among alternatives. Only there does
+cost become defined, because only there can the learner see that another
+path would have been shorter.</p>
+<p>I call that higher view a balcony. The word is phenomenological, not
+mystical. In a model it must cash out as an observable re-description:
+old records become shorter, previously separate cases share a reusable
+structure, and the new structure changes future work.</p>
+<p>This last condition matters. A post-hoc story can always trace itself
+backward. A real abstraction has to do both:</p>
+<ol type="1">
+<li>explain why the earlier landmarks belonged together; and</li>
+<li>reduce the cost of reaching truth after the abstraction exists.</li>
+</ol>
+<p>DreamCoder’s learned libraries are a bounded precedent for this
+shape. So are the Fourier circuits found in grokking transformers: a
+modular-addition network can move from memorized cases toward a
+representation in which addition is implemented through periodic
+structure. In Nanda and colleagues’ analysis, mechanism-derived progress
+measures reveal circuit formation before the abrupt change in test
+accuracy.</p>
+<p>But those precedents also keep the claim honest. A bounded system can
+detect a known family of abstractions. Nothing follows about a universal
+trigger for insight. A detector expressive enough to recognize every
+future shortening would have to solve the general problem of shortest
+description that made (K_L) uncomputable in the first place.</p>
+<p><em>Skip the computation and keep this: a balcony can be recognized
+after we know what kind of balcony to test for. No general instrument
+can promise to announce every new dimension before the old language
+contains it.</em></p>
+<p>The engineering goal is therefore smaller than programming insight.
+It is to make insight possible and auditable: preserve the sparse trace,
+provide genuinely different routes, and test whether a new description
+explains old failures and shortens new work.</p>
+<p>Experience leaves a trace before it has a language, but it earns its
+name only when a later language compresses the trace and changes what
+the learner can do next.</p>
+<hr />
+<h2 id="iii.-the-same-wall">III. The Same Wall</h2>
+<p>Suppose a learner approaches a problem by one route and stops. The
+stop could mean two incompatible things.</p>
+<p>The world may contain no passage. Or the learner’s language may be
+blind to the passage that exists.</p>
+<p>From inside the route, these states can be observationally identical.
+More effort in the same language does not resolve the ambiguity. A
+longer climb can end at the same wall for the same reason.</p>
+<p>The natural repair is triangulation. Approach by another road. If the
+obstacle dissolves, the first wall belonged to the route. If it remains,
+confidence grows that the wall belongs to the world.</p>
+<p>This is close to William Wimsatt’s notion of robustness by multiple
+means of access: what can be detected, produced, or derived in varied
+ways is less likely to be an artifact of any one way. It is also close
+to the ordinary practice of science. We trust an object more when
+instruments built on different principles find it.</p>
+<p>But the word <em>different</em> is carrying the result.</p>
+<p>Two implementations can have different names, random seeds, prompts,
+or surface algorithms and still share the assumption that causes both to
+fail. Knight and Leveson’s experiments on multiversion programming made
+the problem concrete decades ago: independently developed programs did
+not justify treating their failures as independent. Common
+specifications and common habits create common errors.</p>
+<p>A thousand roads drawn by the same road-maker may be one road with
+decorative noise.</p>
+<p>That creates the false wall: two paths fail in the same place, not
+because the world forced the failure, but because both paths inherited
+one blindness. From below, a false wall is more convincing than an
+honest uncertainty. It is stable, repeatable, and supported by
+agreement.</p>
+<p>The obvious statistic – how often two paths agree – is almost useless
+here. Correct answers are attractors. The world pushes competent paths
+toward the same destination. Agreement on success is primarily the
+world’s credit.</p>
+<p>Failures carry the more diagnostic trace. If two paths independently
+reach the same correct answer, they may have learned the same world. If
+they produce the same <em>wrong</em> answer on the same instance,
+something in their shared derivation has left a fingerprint.</p>
+<p>Not proof. A fingerprint.</p>
+<p>Let <span
+class="math inline"><em>e</em><sub><em>i</em></sub><sup>(<em>a</em>)</sup></span>
+be the error token left by path <span
+class="math inline"><em>a</em></span> on instance <span
+class="math inline"><em>i</em></span>, with zero meaning no relevant
+failure. A same-wall instrument looks for excess coincidence of nonzero
+tokens,</p>
+<p>[ C(a,b) = _i [e_i^{(a)} = e_i^{(b)} ], ]</p>
+<p>against an instance-matched and seed-crossed null. It asks whether
+the paths fall together more often, and more specifically, than
+competence and the world alone would predict.</p>
+<p><em>Skip the formula and keep this: do not ask whether two minds
+reached the same place. Ask whether they made the same mistake where
+other competent minds did not.</em></p>
+<p>Even this works only inside a stress window. If both paths are too
+competent, they leave no errors to compare. If the task is mostly noise,
+their traces decohere. Absence of co-failure can mean independence,
+perfect validation, or no signal. The instrument must be allowed to say
+<code>INADMISSIBLE</code> and <code>NO_TEST</code>.</p>
+<p>Robustness requires varied roads, but variety cannot be inferred from
+labels or origins.</p>
+<blockquote>
+<p>Independence is a property of measured failure, not a biography of
+the path.</p>
+</blockquote>
+<hr />
+<h2 id="iv.-independence-is-practiced">IV. Independence Is
+Practiced</h2>
+<p>Before trying to grow experience inside one model, I tested the
+same-wall instrument on several minds outside it.</p>
+<p>Clean-room agents received the same hidden task without seeing one
+another’s work or the detector that would later compare them. Their
+visible mechanisms were different. Their declared model families were
+different. That should have made their errors independent.</p>
+<p>It did not.</p>
+<p>Against the author’s reference path, one clean-room path agreed on
+the wrong value in <strong>24 of 24</strong> diagnostic cases. Another
+agreed in <strong>12 of 24</strong>. A third agreed in <strong>0 of
+24</strong>.</p>
+<p>The gradient did not follow the labels we had placed on the solvers.
+It followed the probe channel they converged upon and the discipline
+with which they checked their own answers. The path at zero was not
+independent because it came from a magically independent family. It had
+removed the visible trace by validating where the others guessed.</p>
+<p>The calibration study found the harder version of the same fact. A
+disciplined validator – one that double-checks itself before answering –
+was genuinely derived from its source, yet the detector saw the
+derivation <strong>0 times in 1,200 trials across all candidate
+windows</strong>. Discipline had not changed the ancestry. It had erased
+the symptom by which a black-box instrument could observe it.</p>
+<p>This result changes the sentence “use independent models” into an
+operational obligation. Different seeds are not independence. Different
+vendors are not independence. A clean room is not independence. These
+can help, but none of them is the thing itself.</p>
+<blockquote>
+<p>Independence is not inherited. It is practiced.</p>
+</blockquote>
+<p>And practiced independence has a cost. It may require a different
+probing mechanism, a different validation habit, a different
+representation of the task, or a counterfactual profile showing that the
+path fails differently when the world changes. The useful unit is not
+the number of minds. It is the effective number of failure channels.</p>
+<p>This cuts directly into the idea of one learner triangulating its own
+thoughts. A model can sample five chains of reasoning and still produce
+one epistemic sample. If all five inherit the same weights, prompt,
+curriculum, and verifier, their agreement may be a choir of one
+voice.</p>
+<p>The ledger I want to grow in Philosophia cannot count paths. It has
+to earn a reason to treat them as different.</p>
+<p>Self-consistency is not experience. It becomes evidence only to the
+extent that the learner’s roads are known to expose different ways of
+being wrong.</p>
+<hr />
+<h2 id="v.-the-knife-misses">V. The Knife Misses</h2>
+<p>The first same-wall run did what it was built to do. Inside its
+locked family the instrument told a derived pair apart from an
+independently built one – flagging the road that shared an origin,
+clearing the road that did not, while both still agreed on every core
+destination. The rules, the calibration, the null-world gate, and the
+pair assignments were all frozen before the run produced a number. Three
+hundred and twenty seeds. It held.</p>
+<p>That was validation, not confirmation. And before I say what the
+held-out test did to it, I owe a smaller admission, because it stung
+first and it is the kind of thing this whole project exists to make me
+say out loud.</p>
+<p>The same locked run carried one more pair – the two roads behind the
+loud number from earlier, the ones that had agreed on the same wrong
+value twenty-four times out of twenty-four when I first put them in
+contact by hand. I registered that pair as a control I expected the
+certified instrument to catch: a textbook case of a shared prior
+producing shared blindness. It was not caught. Under the frozen
+thresholds its shared-mistake signal fell just under the bar, and its
+schedule signal sat below the floor the design required. The one number
+loud enough to build a story on, before the instrument was locked, did
+not clear the instrument once the instrument was locked.</p>
+<p>I did not want to write that sentence. Twenty-four out of twenty-four
+is the better story, and it is a true number – I did not invent it. But
+it was a number from before the discipline, and the discipline discounts
+exactly the kind of agreement a world can force for free. When the
+field-relative instrument refused to credit that pair as shared
+ancestry, it may have been right to refuse, or it may have been
+under-powered on that one pair. The honest report does not get to choose
+which. The run is the run, and it is published as it fell – one control
+of eight reading the opposite of what I expected, and the whole run
+labelled by that one disagreement.</p>
+<p>Then came the part I could not tune. The confirmation set had been
+commissioned from a fresh clean-room agent under a hash-fixed prompt,
+encrypted the moment it arrived, and committed before the primary run. I
+could not read the plaintext until after the primary outcome was already
+public. The generator was allowed exactly one attempt; a malformed one
+would have ended the holdout, not invited a better one.</p>
+<p>On that holdout, the shared-mistake test held. The forward-derived
+pair and its reverse reconstruction were caught. A pair that shared only
+a prior, with genuinely different machinery, read clean. An independent
+replication of the derived construction was caught. And the strictest
+case – the cross-prior clean room the whole holdout was built around –
+read clean on the shared-mistake test, with its excess numerically at
+zero.</p>
+<p>The other blade failed. On that same cross-prior pair, the schedule
+test reported dependence where the registered holdout expected none. The
+two tests together therefore called a clean pair coupled, and
+confirmation of a world-portable combined instrument was withheld
+exactly as the preregistration required.</p>
+<p>This was not the instrument uncovering a secret ancestry it had been
+too polite to name. On fresh failure classes, several competent adaptive
+roads had simply found the world’s one useful door. Their
+failure-schedules lined up because the task funnelled every competent
+path through the same few places – shared adaptation to a world with one
+exit, wearing the costume of shared origin. The blade that had learned
+to tell a common road from a common wall met a new wall: sometimes the
+world itself manufactures the correlation.</p>
+<p>One limit underneath all of this cannot be repaired by any instrument
+that sees only outputs. Two roads can share an implementation and still
+express it through <em>opposite</em> symptoms – one falls silent where
+the other guesses wrong – and leave no common trace on the surface at
+all. I have a measured example of exactly that: two paths sharing their
+helpers, reading clean, because their visible errors diverged. No
+detector reading only what a mind produces can infer a kinship that
+produces nothing in common to read.</p>
+<p>So the instrument’s domain is not a boast; it is a fence. It detects
+one registered class of shared failure, when that failure is visible,
+admissible, and not forced by the world’s one door. It cannot certify
+independence. No finite failure-detector can – and twice now, once
+inside the run and once on the holdout, it showed me the edge of what it
+can do rather than let me pretend the edge was further out.</p>
+<p>There is also a domain where none of this is the right tool at all,
+and I should say so before the fence is mistaken for a perimeter. Where
+a complete verifier exists and is cheap – a formal statement and a proof
+kernel, as in the open Lean conjecture benchmarks – the question this
+essay circles is already settled for the answer. The proof checks or it
+does not. Nobody needs a co-failure statistic to decide whether a
+machine memorized or knew, because the check is not a matter of
+agreement in the first place. The same-wall instrument is for the
+remainder: taste, which conjecture is worth the afternoon, transfer into
+a domain with no formal target, and every regime where no complete
+oracle exists and agreement is all one has. That remainder is most of
+thinking, but it is a remainder, and the concession is not a rhetorical
+one.</p>
+<p>Even inside formal mathematics the criterion does not vanish; it
+moves down one level. A verified theorem is a wall of the formal
+language, and the formal statement may not be the mathematical one. A
+formalization can be vacuous or accidentally trivial, and the kernel
+will certify it exactly as willingly. The <em>Formal Conjectures</em>
+authors handle this by having systems attempt proofs and disproofs of
+their own statements and treating a suspiciously easy result as evidence
+that the formalization, rather than the mathematics, was what gave way.
+That is this essay’s criterion running inside theirs: change the road
+and see whether the wall dissolves. They arrived at it by needing it. I
+am claiming only the name.</p>
+<blockquote>
+<p>The knife can find a shared cut. It cannot prove that two uncut
+surfaces came from different blades – and the run that taught me that is
+the one I trust, precisely because it cost me the number I liked
+best.</p>
+</blockquote>
+<hr />
+<h2 id="vi.-the-workshop">VI. The Workshop</h2>
+<p>Now the original question can be stated without romance.</p>
+<p>Can a small learner, trained from scratch on a derivable algebraic
+and geometric world, acquire structure that satisfies the obligations of
+experience?</p>
+<p>The world must be derivable, but the learner must still touch it. It
+receives an oracle that answers narrow equality questions about hidden
+finite structures. The oracle is not a teacher and does not expose the
+generating formula. It is a wall that answers when pushed.</p>
+<p>The programme has four experimental steps. Level 0 answers whether
+the platform can breathe. Levels 1 through 3 ask the programme question
+and cannot inherit Level 0’s answer.</p>
+<h3 id="the-platform-must-breathe">1. The platform must breathe</h3>
+<p>A small transformer first had to reproduce published modular-addition
+grokking. This was Level 0: a replication anchor, not evidence for the
+thesis. Nanda and colleagues showed that such models can form
+Fourier-structured circuits and that mechanistic progress measures can
+precede the abrupt generalization transition.</p>
+<p>The reconstruction was reconciled against the official companion
+source, then reviewed, preregistered, and locked before outcome. The
+primary paper-mainline arm reproduced delayed generalization in
+<strong>five of five seeds</strong>, above the registered quorum of
+four. Every seed reached persistent FIT at step <strong>200</strong>;
+persistent GENERALIZE began between steps <strong>5,200 and
+7,700</strong>, leaving locked delays of <strong>5,000 to 7,500</strong>
+steps. The random-label control reached FIT and did not GENERALIZE.
+There were no platform violations. Recorded as diagnostic-only with
+<code>NO_PRIMARY_INFERENCE</code> because the primary arm already
+reproduced, the alternate-fidelity arm also generalized in three of
+three seeds.</p>
+<p><strong>Registered kill, resolved:</strong> the kill did not fire.
+The platform breathes. This licenses the replication statement and
+nothing about active contact, cross-world transfer, path credit, or
+manufactured experience.</p>
+<h3 id="contact-must-beat-a-corpus-honestly">2. Contact must beat a
+corpus honestly</h3>
+<p>Level 1 compares three ways of touching adjacent hidden cyclic
+worlds. ACTIVE chooses equality queries from its own uncertainty. YOKED
+receives the complete query geometry produced by an active learner on a
+different, precisely matched distance-1 world, but every answer still
+comes from its own oracle. RANDOM-STATIC draws from the same candidate
+pool without an active donor. All three receive one fixed budget and
+none stops early.</p>
+<p>Realized answer entropy is not matched away. It is part of what
+contact may change, so it is recorded as a mediator while success is
+judged on the same arm-independent escrowed panel with fixed per-stratum
+criteria for every arm.</p>
+<p>The scientific contract, implementation, and one-shot public
+allocation root were committed before any comparative trajectory. Before
+spending that comparison, the signed gate required one frozen
+RANDOM-STATIC development fixture to produce a complete qualifying
+window. The signed floor amendment fixed a full-history, mean-CE update
+after every answer. That amended one-shot fixture completed all
+<strong>2,000</strong> steps with finite losses and parameters and a
+computable dummy panel, but produced no complete qualifying window.</p>
+<p>The route had been written before those numbers existed. It now reads
+<code>BLOCKED_LEVEL1_FEASIBILITY</code>. This does not show that the
+learner lacked the modulus, that RANDOM-STATIC was inferior, or that
+chosen contact failed. The ACTIVE/YOKED comparison, scout, N3, lock,
+real-panel escrow, and outcome were never run. There is no third
+learner-policy intervention under the signed route.</p>
+<p><strong>Unreached registered boundary:</strong> if ACTIVE had failed
+to beat YOKED in the unrun comparison, the exact result would have been
+<code>BOUNDARY_CONTACT_CHOICE_AT_DISTANCE_1</code>: chosen contact has
+not added the proposed advantage under this narrow adjacent-world test
+of online responsiveness. First-hand contact may still matter; the
+programme does not die at this node. That boundary was not observed.</p>
+<h3 id="experience-must-shorten-the-next-work">3. Experience must
+shorten the next work</h3>
+<p>Level 2 would separate three things usually blended under “memory”:
+weights, an explicit ledger, and replay. Five arms move through a fixed
+curriculum of world families: fresh; inherited weights; inherited
+weights plus ledger; fresh weights plus ledger; inherited weights plus a
+false ledger.</p>
+<p>It was not run. The total contact-mode selector has no resolved Level
+1 comparison, so it returns <code>INSUFFICIENT</code> and blocks Level 2
+upstream. This is not a negative Level 2 result.</p>
+<p>The test is not whether an old task remains easy. It is whether
+history reduces budget-to-truth, confident lies, or
+time-to-honest-abstention on a new family – and whether the reduction
+survives a semantics-preserving change from algebraic interfaces to
+Cayley-graph geometry.</p>
+<p><strong>Registered kill:</strong> if history does not beat scratch,
+or if the false ledger carries the effect, the claim that experience
+shortened future work fails.</p>
+<h3 id="the-road-must-add-something-beyond-the-destination">4. The road
+must add something beyond the destination</h3>
+<p>The verifiable-reward wave gives credit for arriving at a checked
+answer. That the road can carry credit the destination does not is
+already established, and not ours: process supervision, which rewards
+the steps rather than the final answer, outperforms outcome supervision
+on reasoning tasks. I mark that direction known.</p>
+<p>What remains for this level is narrower and stranger: experience may
+live partly in the bundle of roads, and the bundle may be self-supplied.
+Process supervision grades a path against an outside judgment of good
+steps. Here there is no judge. The credit is supposed to come from
+invariance across the mind’s <em>own</em> resampled roads, with the
+oracle answering equality questions and never scoring a step. The unrun
+Level 2.5 design compares destination credit with credit assigned only
+to ledger entries that survive resampled paths. The claim on this axis
+is not that the path beats the destination. It is that path credit might
+be manufactured with no oracle for paths – and that the difference can
+be measured.</p>
+<p>One limit on that hope is definitional rather than empirical, so I
+record it as reasoning about the world’s structure and not as anything
+measured here. A mind can manufacture only what is invariant under its
+own transformations. Take the walk behind these worlds: words over the
+two moves, the element reached being the displacement. Everything
+rearranging one’s own moves preserves is a function of one quantity –
+the displacement, right steps minus left – a linear function of the move
+counts, already sitting in the input. The one structure that is not
+trivial, the modulus <code>n</code>, is exactly what no rearrangement
+can reveal – and not because rearrangement disturbs it. Rearrangement
+leaves it perfectly intact whatever it is, and that is the difficulty:
+every modulus survives every road the mind can lay, so no road singles
+one out. Only the wall picks one. So where the manufacturable invariant
+is trivial, manufacturing is empty, and the content is precisely the
+wall that could not be manufactured. Self-supervised learning met this
+edge from the other side: invariance imposed too strongly suppresses the
+structure it was meant to expose, which is why equivariant objectives
+keep what a transformation changes as well as what it holds fixed.</p>
+<p><strong>Registered kill:</strong> if matched path credit and answer
+credit produce indistinguishable transfer, the path axis is redundant.
+That would be a useful negative result, not a failed publication.</p>
+<p>Finally, the unrun Level 3 design asks whether the balcony can be
+detected rather than programmed: does the ledger undergo a cross-world
+compression event, and do mechanistic progress measures predict the
+transition before ordinary loss does? Random labels and shuffled
+checkpoints must receive their own null arms before any progress measure
+is trusted.</p>
+<p><strong>Registered kills:</strong> a compression event that also
+appears on random labels is a tautology; a “new” basis present from the
+beginning is an artifact; a progress measure that cannot beat its
+controls predicts nothing.</p>
+<p><em>Skip the design and keep this: the learner is not being asked to
+solve more problems. It is being asked to prove that yesterday’s contact
+changed the cost of understanding tomorrow’s world.</em></p>
+<p>Manufactured contact is a testable proposal only when contact,
+memory, transfer, and the path itself are separated into arms that can
+kill it.</p>
+<hr />
+<h2 id="vii.-three-endings-none-chosen">VII. Three Endings, None
+Chosen</h2>
+<p>It would be easy to write the rest of this essay now.</p>
+<p>The metaphor is ready. A mind climbs, falls, records landmarks, finds
+a balcony, and carries a shorter road into a new world. The story has
+the shape of a result.</p>
+<p>That is why the result must not be placed inside it yet. The current
+programme stopped before it could earn any of these endings: a valid
+feasibility censor is not a fourth ending and cannot be narrated as
+one.</p>
+<p>Philosophia can end in three ways.</p>
+<h3 id="proof">Proof</h3>
+<p>The signed rules distinguish two layers before any comparative data.
+<code>PROOF_CORE</code> requires retained history to shorten work on
+unseen families, the reduction to survive a semantics-preserving
+presentation change, and a truthful ledger to contribute content that
+neither weights alone nor a false ledger reproduces.
+<code>PROOF_STRONG</code> additionally requires ACTIVE to beat honestly
+yoked contact and path credit to add transferable structure beyond
+destination credit.</p>
+<p>Only <code>PROOF_STRONG</code> permits the unqualified word
+<em>Proof</em> and the claim that primary experience was manufactured in
+this bounded world. Compression and progress measures must still report
+whether they survived their nulls, but they stand beside that verdict as
+an annotation: they cannot grant it, veto it, or rescue it.</p>
+<h3 id="falsification">Falsification</h3>
+<p>The core claim may die when history fails to beat scratch, or when an
+otherwise unexplained benefit is reproduced by ledger form rather than
+truthful content. Those are not disappointing versions of Proof. They
+are the places where the proposed experience stopped doing work. A
+failed transfer draws a boundary; an invalid or unresolved comparison
+earns no ending at all.</p>
+<p>Then the result will be the coordinate where a beautiful account of
+experience stopped predicting.</p>
+<h3 id="boundary">Boundary</h3>
+<p>The most familiar ending is mixed. Active choice adds nothing, but
+first-hand contact still does. Contact helps inside one family but not
+across interfaces. Weights transfer while ledgers do not. Path credit
+changes calibration but not speed. A compression event exists but cannot
+be predicted early. The workshop manufactures something real and smaller
+than experience as we defined it.</p>
+<p>Then the essay will be a map of that boundary.</p>
+<p>Level 0 does not choose among these endings. Neither does the Level 1
+feasibility terminal. Level 0 was designed not to. Its
+<code>REPRODUCED</code> decision says that the platform can exhibit the
+phenomenon on which the later instruments depend; it says nothing about
+which ending the programme earns.</p>
+<blockquote>
+<p>Level 0 opened the workshop. Level 1 found that this route could not
+yet bring its smallest learner to the comparison. Neither answered what
+can be manufactured there.</p>
+</blockquote>
+<hr />
+<h2 id="conclusion">Conclusion</h2>
+<p>We began with almost nothing: a point with no direction and no
+difference to encounter.</p>
+<p>A value made the first distinction. Two values made a relation. A
+language made some relations short, and the shortening tempted us to
+call the pattern real. The first wall appeared there: from inside one
+language, a real absence of structure and blindness to structure can
+look the same.</p>
+<p>So the learner climbed. Where prediction held, the path disappeared
+into its description. Where prediction failed, a landmark remained. The
+learner fell and climbed again, not along the same line but by another
+road.</p>
+<p>Two roads reached one dead end. From below, that looked like a wall.
+From a balcony, it might have been the first route seen from another
+side. A change of description made cost visible: what had felt
+inevitable became one path among alternatives.</p>
+<p>The criterion emerged from the view: what survives a change of road
+is more likely to belong to the world; what dissolves belonged to the
+language.</p>
+<p>Then the second wall appeared. Roads do not become independent
+because we name them differently. Two paths can share a specification, a
+probe channel, a validator, a curriculum, or one silent assumption. They
+can meet at a false wall with more confidence than an honest path meets
+reality.</p>
+<p>The only blade we found was co-failure. Success is an attractor; the
+world deserves much of the agreement. A shared wrong answer is a more
+useful trace of shared blindness. The blade measured a gradient – 24,
+12, 0 – and taught us that independence follows practice more than
+pedigree.</p>
+<p>Then the holdout cut the blade. On a fresh world, competent adaptive
+roads found one door and failed together because of the world, not a
+common origin. The shared-mistake core survived; the schedule test did
+not. The instrument became smaller and more real at the same time.</p>
+<p>That is the height from which Philosophia begins.</p>
+<p>The proposal is not to give a machine a body made of algebra, nor to
+call an infinite rule generator a world. It is to build the smallest
+honest contact we can: a derivable world that still answers back; roads
+whose differences are measured rather than declared; a sparse ledger of
+surprise; and tests that ask whether the resulting structure predicts,
+survives intervention, shortens the next work, and crosses into another
+representation.</p>
+<p>If a future, separately signed programme reaches those tests and they
+hold, experience will not have appeared from nothing. It will have been
+manufactured from the minimum honest something: contact plus a way to
+distinguish the world’s resistance from the learner’s repeated
+blindness.</p>
+<p>If those tests fail, the failure can still locate the piece we had
+mistaken for experience – active choice, retained weights, the ledger,
+the bundle of paths, or the balcony itself. This run stopped earlier. It
+reached a different gate: the amended frozen fixture did not clear the
+declared feasibility floor, so the experiment refused to ask the larger
+question with an instrument that had not yet shown it could register an
+answer.</p>
+<p>I chose to publish that refusal rather than tune through it. Any next
+attempt will be a successor, not a repair disguised as continuity: it
+must earn learner competence in non-citable development before it locks
+a new scientific test. Chosen contact remains part of that test. The
+hardware may change, but only by a reviewed and signed choice made
+before the confirmatory lock.</p>
+<p>The distant hope is a mind that earns a world before inheriting our
+words for it, and can keep those layers explicitly apart. This project
+does not establish that such a mind can be built. It asks the preceding
+question in a world small enough to answer and names what would make the
+hope die.</p>
+<blockquote>
+<p>Knowledge is not a property of the learner. It is an invariance the
+learner earns across its own genuinely different roads – and whether
+that can be built has been made an experiment precise enough to refuse
+to run when its frozen feasibility fixture does not clear the floor.</p>
+</blockquote>
+<hr />
+<h1
+id="what-the-instrument-has-shown-and-what-the-small-mind-has-not">What
+the Instrument Has Shown – and What the Small Mind Has Not</h1>
+<p><em>This section is the evidence ledger behind the story. Every
+inherited number links to a committed artifact. Level 0 moves platform
+replication from slot to earned. Level 1 moves design, implementation,
+allocation, and one valid non-comparative feasibility terminal through
+completed process gates. It does not move the programme claims about
+contact, transfer, path credit, or cross-world compression.</em></p>
+<h2 id="the-inherited-instrument">The inherited instrument</h2>
+<p>Line 12’s primary result is mechanically harness-valid. Under its
+locked stress family, the v4 instrument assigned different
+residual-dependence labels to one registered derived pair and one
+registered clean-room pair while preserving destination agreement. The
+primary run used <strong>320 seeds</strong> and records the
+preregistration, leakage scan, evaluation oracle, tautology check, and
+harness version in its signed <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/inheritance/line12_same_wall/experiment_A/decision.json"><code>decision.json</code></a>.</p>
+<p>The scope is narrower than “the detector identifies ancestry.” It
+supports a token channel based on correlated wrong-value failures in the
+admitted stress window. It rejects co-success as ancestry evidence and
+permits <code>INADMISSIBLE</code>, <code>UNKNOWN_FIELD</code>, and
+<code>NO_TEST</code> rather than manufacturing a verdict.</p>
+<p>The same locked run also carried a common-prior control
+(<code>C_C8</code>) – the pair behind the 24/24 wrong-value agreement
+below – registered with the expectation that the certified instrument
+would flag it as coupled. It did not. Its token excess
+(<strong>0.034</strong>) fell below the margin and its journal statistic
+(<strong>0.565</strong>) sat below the field floor
+(<strong>0.672</strong>) on a three-pair quorum edge, so the pair read
+<code>CLEAN</code> and the whole run was labelled
+<code>EXPA-NOT-CLEAN</code>. The loud pre-lock number did not clear the
+instrument once the instrument was locked; the control is published as
+it fell, not reinterpreted.</p>
+<h2 id="the-24120-gradient">The 24/12/0 gradient</h2>
+<p>The clean-room battery measured wrong-value overlap with the author’s
+path:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Pairing class</th>
+<th style="text-align: right;">Shared wrong values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>common-prior / converged channel</td>
+<td style="text-align: right;">24/24</td>
+</tr>
+<tr class="even">
+<td>intermediate converged channel</td>
+<td style="text-align: right;">12/24</td>
+</tr>
+<tr class="odd">
+<td>cross-prior, independently validated channel</td>
+<td style="text-align: right;">0/24</td>
+</tr>
+</tbody>
+</table>
+<p>The exact battery and eligibility decisions are recorded in <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/inheritance/line12_same_wall/experiment_A/PREREG_v4_DRAFT.md#appendix-r--frozen-reference-matrix-part-of-the-prereg-hash"><code>PREREG_v4_DRAFT.md</code>,
+Amendment 1</a> and the first-contact table. This is direct evidence
+that declared family and clean-room commissioning do not by themselves
+buy error independence. It is not a universal ranking of model
+providers.</p>
+<p>The tune stage then found a base-class visibility boundary: derived-A
+fired 200/200, derived-gem 198/200, while derived-gptA fired
+<strong>0/200 at the best window and 0/1200 across all windows</strong>.
+That class was removed from the detector’s power domain and published as
+not tested against, rather than silently averaged away.</p>
+<h2 id="the-three-amendments">The three amendments</h2>
+<p>Each amendment changed the specification because an observation
+exposed a missing distinction.</p>
+<ol type="1">
+<li><strong>Correct agreement became the world’s credit.</strong> The
+reference criterion was changed from raw agreement to wrong-value
+agreement at most 6/24. A 16/24 overlap consisting entirely of correct
+answers remained eligible; a 12/24 all-wrong overlap did not.</li>
+<li><strong>Visibility became a base-class property.</strong> The 0/1200
+robust-validator result forced per-class power accounting and narrowed
+the claim domain to the classes whose derivation left a measurable
+trace.</li>
+<li><strong>Construction dependence survived a world with no
+world.</strong> A null-world clone flagged, correctly: same-construction
+paths can couple through any consistent answer function. The null gate
+was repaired to test only cross-construction specificity. The same run
+also exposed Python’s process-randomized <code>hash()</code> as a
+determinism defect and replaced it with stable hashing.</li>
+</ol>
+<p>These were not cosmetic revisions. Each paid for a distinction the
+previous specification lacked.</p>
+<h2 id="the-escrowed-holdout">The escrowed holdout</h2>
+<p>The holdout plaintext hash is
+<code>a0cb7bac0cdeb6d9e76a2336f8725fdee3b2cc879e233f8937cf1188c147bce0</code>.
+Its generation and encryption preceded the primary outcome; its key and
+plaintext were released only after publication. The committed <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/inheritance/line12_same_wall/experiment_A/holdout_result.json"><code>holdout_result.json</code></a>
+records:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Holdout arm</th>
+<th>Token channel</th>
+<th>Journal channel</th>
+<th>Combined</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>H1 forward derived</td>
+<td>DEPENDENT, 0.064</td>
+<td>DEPENDENT, J=0.857</td>
+<td>DEPENDENT</td>
+</tr>
+<tr class="even">
+<td>H2 reverse derived</td>
+<td>DEPENDENT, 0.064</td>
+<td>DEPENDENT, J=0.857</td>
+<td>DEPENDENT</td>
+</tr>
+<tr class="odd">
+<td>H3 same-prior / different mechanism</td>
+<td>CLEAN, 0.004</td>
+<td>INADMISSIBLE</td>
+<td>CLEAN</td>
+</tr>
+<tr class="even">
+<td>H4 cross-prior clean room</td>
+<td><strong>CLEAN, ~0.0</strong></td>
+<td><strong>DEPENDENT, J=0.857</strong></td>
+<td><strong>DEPENDENT</strong></td>
+</tr>
+<tr class="odd">
+<td>H5 independent derived replication</td>
+<td>DEPENDENT, 0.141</td>
+<td>CLEAN, J=0.571</td>
+<td>DEPENDENT</td>
+</tr>
+</tbody>
+</table>
+<p>H4 falsified portability of the combined blade. H1, H2, and H5
+support the token core within the registered holdout family. No stronger
+reading is admitted.</p>
+<h2 id="what-philosophia-has-established">What Philosophia has
+established</h2>
+<p>It has established infrastructure and provenance, not the programme
+claim.</p>
+<ul>
+<li>The Level -1 literature map marks grokking, Fourier mechanisms,
+replay, EWC, active learning, library learning, and open-ended curricula
+as known, partial, or open rather than relabeling precedents as
+novelty.</li>
+<li>The Level 0 implementation matches the companion training source at
+every traced trajectory-sensitive cell: initialization, split, warmup,
+and the 114-class training / 113-class reporting boundary.</li>
+<li>At outcome commit <code>2daec9b</code>, <strong>89 tests</strong>
+and both repository verifiers passed.</li>
+<li>At public-root commit <code>6008757</code>, <strong>133
+tests</strong> and both repository verifiers passed. This is engineering
+status, not programme evidence.</li>
+<li>The authorized v2 determinism prefix produced matching
+initialization, split, loss-sequence, and final-state hashes across two
+ten-step replays.</li>
+<li>The scientific specification was accepted and committed before the
+canonical lock; all nine fixed-budget runs then completed. The
+independent verifier reports <code>VALID</code> for <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/experiments/level_0_grokking/outcomes/decision.json"><code>outcomes/decision.json</code></a>.</li>
+<li>Arm A reproduced in 5/5 seeds; R-0 passed both control obligations;
+no platform violation occurred.</li>
+<li>The Level 1 scientific contract and panel amendment were signed
+before comparative data, and their implementation passed bounded
+external review.</li>
+<li>The one-shot Level 1 public-root transcript at commit
+<code>6008757</code> records one CSPRNG call, fixes six development
+pairs and 24 target/donor role assignments, defers <code>R_h</code>, and
+declares <code>scientific_outcome:false</code>.</li>
+<li>The authorized Level 1 feasibility-v2 fixture completed
+<code>B = 2,000</code> with finite losses and parameters but no complete
+qualifying window. Its pre-signed terminal is
+<code>BLOCKED_LEVEL1_FEASIBILITY</code>; C1 remains unrun and untested,
+and no programme inference is admitted.</li>
+</ul>
+<p>The permanent Level 0 statement is: <strong>REPRODUCED, PLATFORM ONLY
+– NO PROGRAMME INFERENCE.</strong></p>
+<h2 id="status-ledger">Status ledger</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Claim</th>
+<th>Status</th>
+<th>Artifact or kill</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Correlated wrong-value failures can expose shared derivation</td>
+<td><strong>EARNED, inherited and bounded</strong></td>
+<td>Line 12 primary decision + holdout token channel</td>
+</tr>
+<tr class="even">
+<td>Co-success identifies shared ancestry</td>
+<td><strong>REJECTED</strong></td>
+<td>correct agreement is the world’s credit; Amendment 1</td>
+</tr>
+<tr class="odd">
+<td>Random seed, provider, or clean room guarantees independence</td>
+<td><strong>REJECTED</strong></td>
+<td>24/12/0 and 0/1200 visibility boundary</td>
+</tr>
+<tr class="even">
+<td>The full token+journal blade transfers across worlds</td>
+<td><strong>FALSIFIED</strong></td>
+<td>H4 journal false positive; confirmation withheld</td>
+</tr>
+<tr class="odd">
+<td>The certified instrument flags the informal 24/24 common-prior pair
+as shared</td>
+<td><strong>NOT REPRODUCED in the locked run</strong></td>
+<td><code>C_C8</code> read CLEAN: token 0.034 below margin, journal
+0.565 below field floor 0.672 on the quorum edge</td>
+</tr>
+<tr class="even">
+<td>Companion-faithful Level 0 code is deterministic on the tested
+prefix</td>
+<td><strong>EARNED, platform only</strong></td>
+<td>matching v2 prefix report</td>
+</tr>
+<tr class="odd">
+<td>Modular-addition grokking is reproduced here</td>
+<td><strong>EARNED, platform only</strong></td>
+<td>VALID locked decision; Arm A 5/5, quorum 4/5</td>
+</tr>
+<tr class="even">
+<td>Random-label leakage control behaves correctly</td>
+<td><strong>EARNED, control only</strong></td>
+<td>R-0 FIT at 200 and does not GENERALIZE</td>
+</tr>
+<tr class="odd">
+<td>Artifact-fidelity arm changes the primary inference</td>
+<td><strong>REJECTED BY DESIGN</strong></td>
+<td>B 3/3; <code>NO_PRIMARY_INFERENCE</code> because Arm A
+reproduced</td>
+</tr>
+<tr class="even">
+<td>Level 1 design, implementation, and allocation root are fixed</td>
+<td><strong>PROCESS EARNED, NO PROGRAMME INFERENCE</strong></td>
+<td>signed specs + reviewed code + public-root transcript</td>
+</tr>
+<tr class="odd">
+<td>Level 1 feasibility floor</td>
+<td><strong>BLOCKED_LEVEL1_FEASIBILITY, PROCESS ONLY</strong></td>
+<td>valid v2 censor at B; C1 untested; no comparative scout</td>
+</tr>
+<tr class="even">
+<td>Chosen contact beats independently donated active geometry</td>
+<td><strong>UNRUN / UNTESTED</strong></td>
+<td>registered boundary not evaluated; no arm comparison exists</td>
+</tr>
+<tr class="odd">
+<td>Experience shortens work on new families</td>
+<td><strong>BLOCKED UPSTREAM / UNRUN</strong></td>
+<td>contact-mode selection <code>INSUFFICIENT</code>; no Level 2
+result</td>
+</tr>
+<tr class="even">
+<td>Experience survives algebra-to-geometry representation change</td>
+<td><strong>BLOCKED UPSTREAM / UNRUN</strong></td>
+<td>no Level 2 result</td>
+</tr>
+<tr class="odd">
+<td>Path credit adds transferable structure</td>
+<td><strong>BLOCKED UPSTREAM / UNRUN</strong></td>
+<td>no Level 2.5 result</td>
+</tr>
+<tr class="even">
+<td>A cross-world compression event marks earned experience</td>
+<td><strong>BLOCKED UPSTREAM / UNRUN DIAGNOSTIC</strong></td>
+<td>never decisive</td>
+</tr>
+<tr class="odd">
+<td>Hidden progress predicts transition before ordinary loss</td>
+<td><strong>BLOCKED UPSTREAM / UNRUN DIAGNOSTIC</strong></td>
+<td>never decisive</td>
+</tr>
+<tr class="even">
+<td>Continuation route</td>
+<td><strong>ROUTE B, GOVERNANCE ONLY</strong></td>
+<td>current record selected for stopped-open publication; successor not
+yet chartered</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-this-does-not-show">What this does not show</h2>
+<p>It does not show that algebra can substitute for embodiment. It does
+not show that a learner can generate its own truth. The oracle is
+contact, and removing it would repeat the category error measured in
+<em>proxylimen</em>.</p>
+<p>It does not show that multiple chains of thought are independent,
+that self-consistency is epistemic robustness, or that correlated errors
+identify a unique common cause.</p>
+<p>It does not show that Fourier structure is a universal signature of
+understanding. Within modular arithmetic it is a known mechanism and a
+replication anchor. Across worlds, compression remains a registered
+question.</p>
+<p>The Level 1 feasibility terminal does not show that ACTIVE, YOKED, or
+RANDOM-STATIC wins or loses, that the learner lacked <code>n</code>, or
+that full-history training is ineffective. It shows only that the
+amended frozen development fixture completed validly without clearing
+its signed floor. No comparative panel or outcome exists.</p>
+<p>It does not show that a harness-valid decision is true. The harness
+certifies declared procedure. The question, metrics, nulls,
+implementation, and interpretation can still share one author’s blind
+spot.</p>
+<p>And it does not show that the final sentence of the story is right.
+The signed route stopped before the experiments capable of choosing an
+ending. The sentence remains a hypothesis written in the author’s voice,
+not a result written by the world.</p>
+<hr />
+<p><em>This essay is the fourth panel of a quartet. <a
+href="https://kirill-kruglov.github.io/justitia/"><strong>justitia</strong></a>
+asks how a world remains livable when no one can read anyone’s soul –
+trust in identities replaced by consequences and structure. <a
+href="https://kirill-kruglov.github.io/proxylimen/"><strong>proxylimen</strong></a>
+asks where a mind’s world comes from – trust in inherited text replaced
+by calibrated contact. <a
+href="https://kirill-kruglov.github.io/fallacy-cutter/"><strong>fallacy-cutter</strong></a>
+asks how an experiment remains legible when the experimenter cannot
+trust their own intentions – promises replaced by a fail-closed
+instrument. <strong>philosophia</strong> asks whether the contact those
+projects require can itself be manufactured – not from nothing, but from
+a world small enough to answer and an instrument honest enough to
+publish where it goes blind. One thesis underneath all four: do not
+certify intentions; build contact, consequences, and constraints that
+can be checked.</em></p>
+<hr />
+<h2 id="acknowledgements-and-references">Acknowledgements and
+references</h2>
+<p>This project was developed in dialogue with Claude Fable 5, Claude
+Opus 4.8, Codex GPT-5.5, GPT-5.6 Sol, and clean-room systems from
+several model families. The philosophical questions, the decision to
+treat failures as results, and the final claims are mine; so are the
+errors that remain. The AI systems are named because hidden
+collaboration would violate the provenance standard the work asks of
+everything else.</p>
+<p>I would rather be corrected than admired. The nearest precedents
+include algorithmic information theory (Solomonoff, Kolmogorov,
+Martin-Lof, Chaitin), Wimsatt’s robustness by multiple means, Knight and
+Leveson on correlated failure in multiversion software,
+error-consistency work by Geirhos and colleagues, grokking and Fourier
+progress measures (Power et al.; Nanda et al.; Gromov), DreamCoder’s
+library learning, active learning, EWC and replay, process- versus
+outcome-based supervision (Uesato et al.; Lightman et al.), equivariant
+self-supervised learning, POET and PAIRED, AlphaGeometry and AlphaProof
+and the <em>Formal Conjectures</em> benchmark that continues that line,
+Agüera y Arcas on prediction and on structure emerging from bare
+interaction, and Silver and Sutton’s <em>Era of Experience</em>.</p>
+<p>The novelty claims are deliberately narrow. Grokking, Fourier
+circuits, active learning, replay, consolidation, library learning, and
+verifiable reward are not ours. Neither is the direction of the path
+axis: that process supervision beats outcome supervision is an
+established result, and so is the observation that invariance imposed
+too strongly suppresses the structure it was meant to expose. The
+inherited contribution is the same-wall instrument and its measured
+limits. The open contribution is narrower than “the road matters”: it is
+the attempt to earn path credit from invariance across the mind’s own
+resampled roads, with no oracle grading a step, to turn path-invariant
+failure into a training signal, and to test manufactured contact by
+forward work reduction and cross-representation transfer.</p>
+<p>Primary reading and exact links are collected in the repository’s <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/references/LITERATURE_MAP.md"><code>references/LITERATURE_MAP.md</code></a>.
+The canonical claim boundary is maintained in <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/canonical/RESULTS_CANONICAL.md"><code>canonical/RESULTS_CANONICAL.md</code></a>,
+<a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/canonical/CLAIM_LEDGER.md"><code>canonical/CLAIM_LEDGER.md</code></a>,
+and <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/canonical/KILL_MATRIX.md"><code>canonical/KILL_MATRIX.md</code></a>.
+The authorial continuation boundary is recorded separately in <a
+href="https://github.com/Kirill-Kruglov/philosophia/blob/main/canonical/AUTHOR_ROUTE_DECISION.md"><code>canonical/AUTHOR_ROUTE_DECISION.md</code></a>.</p>
 
-  <main>
-    <section class="hero-band" id="workshop" aria-labelledby="workshop-title">
-      <div class="section-inner hero-grid">
-        <div>
-          <p class="eyebrow">Canonical record · July 2026</p>
-          <h1 id="workshop-title">The Workshop stopped at its own gate before the experiment.</h1>
-          <p class="lead">
-            Line 12 earned a bounded instrument. Level 0 showed the platform can
-            grok. Level 1 completed one valid non-comparative feasibility run and
-            stopped. C1 was never tested; the programme remains open.
-          </p>
-        </div>
-        <div class="status-summary" aria-label="Current programme status">
-          <div><span class="status-dot earned"></span><b>Level 0</b><span>reproduced 5/5</span></div>
-          <div><span class="status-dot process"></span><b>Level 1</b><span>feasibility blocked</span></div>
-          <div><span class="status-dot unrun"></span><b>C1</b><span>unrun / untested</span></div>
-          <div><span class="status-dot open"></span><b>Programme</b><span>open</span></div>
-        </div>
-      </div>
-
-      <div class="section-inner wall-overview" aria-label="Workshop evidence flow">
-        <div class="wall-stage inherited">
-          <span class="stage-index">Line 12</span>
-          <strong>Instrument</strong>
-          <small>bounded support + a holdout failure</small>
-        </div>
-        <span class="wall-link" aria-hidden="true"></span>
-        <div class="wall-stage earned">
-          <span class="stage-index">Level 0</span>
-          <strong>Platform</strong>
-          <small>delayed generalization, 5/5</small>
-        </div>
-        <span class="wall-link" aria-hidden="true"></span>
-        <div class="wall-stage process">
-          <span class="stage-index">Level 1</span>
-          <strong>Feasibility gate</strong>
-          <small>valid censor at B = 2,000</small>
-        </div>
-        <span class="wall-link dashed" aria-hidden="true"></span>
-        <div class="wall-stage unrun">
-          <span class="stage-index">C1</span>
-          <strong>Contact choice</strong>
-          <small>comparison never run</small>
-        </div>
-        <span class="wall-link dashed" aria-hidden="true"></span>
-        <div class="wall-stage blocked">
-          <span class="stage-index">Level 2+</span>
-          <strong>Blocked upstream</strong>
-          <small>contact mode insufficient</small>
-        </div>
-      </div>
-      <div class="section-inner boundary-note">
-        <strong>What this overview does not say:</strong>
-        feasibility censoring is not a negative C1 result, not evidence that the
-        learner lacked the modulus, and not a falsification of manufactured
-        experience.
-      </div>
-    </section>
-
-    <section class="band light" id="instrument" aria-labelledby="instrument-title">
-      <div class="section-inner section-heading">
-        <div>
-          <p class="eyebrow">Inherited instrument · Line 12</p>
-          <h2 id="instrument-title">Independence is practiced, not inherited.</h2>
-        </div>
-        <p>
-          Shared wrong values followed the effective probe channel, while a
-          separate base class erased a true derivation trace completely.
-        </p>
-      </div>
-
-      <div class="section-inner figure-grid two">
-        <figure class="figure-shell">
-          <figcaption>
-            <span>Figure 1A</span>
-            <strong>Shared wrong values across 24 registered cells</strong>
-            <small>Same author path A, three independently commissioned implementations.</small>
-          </figcaption>
-          <div id="gradient-chart" class="chart" aria-live="polite"></div>
-          <p class="figure-reading">
-            The gradient is not a provider ranking. It locates coupling in the
-            converged channel plus validation discipline.
-          </p>
-          <a class="source-link" data-source="gradient">Source artifact</a>
-        </figure>
-
-        <figure class="figure-shell">
-          <figcaption>
-            <span>Figure 1B</span>
-            <strong>Visibility is a base-class property</strong>
-            <small>Power observations are shown with their own denominators.</small>
-          </figcaption>
-          <div class="visibility-stack" role="img" aria-label="Derived A visible 200 of 200; derived Gemini visible 198 of 200; derived GPT-A visible 0 of 1200 across all windows.">
-            <div class="visibility-row">
-              <div><b>derived-A</b><span>200 / 200</span></div>
-              <div class="track"><i style="width:100%"></i></div>
-            </div>
-            <div class="visibility-row">
-              <div><b>derived-gem</b><span>198 / 200</span></div>
-              <div class="track"><i style="width:99%"></i></div>
-            </div>
-            <div class="visibility-row blind">
-              <div><b>derived-gptA</b><span>0 / 1,200</span></div>
-              <div class="track"><i style="width:0%"></i></div>
-            </div>
-          </div>
-          <p class="figure-reading">
-            Zero here means the instrument was blind to this true derivation
-            class. It does not certify independence.
-          </p>
-          <a class="source-link" data-source="visibility">Source artifact</a>
-        </figure>
-      </div>
-
-      <div class="section-inner">
-        <figure class="figure-shell holdout-figure">
-          <figcaption>
-            <span>Figure 2</span>
-            <strong>The escrowed holdout kept the token core and broke the combined blade</strong>
-            <small>H4 is the load-bearing adverse result: a clean-room pair was flagged by the journal channel alone.</small>
-          </figcaption>
-          <div class="matrix-wrap">
-            <table class="holdout-matrix">
-              <thead>
-                <tr>
-                  <th scope="col">Holdout arm</th>
-                  <th scope="col">Token</th>
-                  <th scope="col">Journal</th>
-                  <th scope="col">Combined</th>
-                  <th scope="col">Reading</th>
-                </tr>
-              </thead>
-              <tbody id="holdout-body"></tbody>
-            </table>
-          </div>
-          <div class="matrix-legend" aria-label="Holdout matrix legend">
-            <span><i class="swatch dependent"></i>Dependent</span>
-            <span><i class="swatch clean"></i>Clean</span>
-            <span><i class="swatch inadmissible"></i>Inadmissible</span>
-            <span><i class="swatch adverse"></i>Adverse clean-room flag</span>
-          </div>
-          <a class="source-link" data-source="holdout">Source artifact</a>
-        </figure>
-      </div>
-    </section>
-
-    <section class="band white" id="platform" aria-labelledby="platform-title">
-      <div class="section-inner section-heading">
-        <div>
-          <p class="eyebrow">Level 0 · platform only</p>
-          <h2 id="platform-title">Memorization arrived first. Generalization arrived later.</h2>
-        </div>
-        <p>
-          Every primary seed reached persistent FIT at step 200, then persistent
-          GENERALIZE between steps 5,200 and 7,700.
-        </p>
-      </div>
-
-      <div class="section-inner">
-        <figure class="figure-shell">
-          <figcaption>
-            <span>Figure 3</span>
-            <strong>Persistent event map, paper-mainline Arm A</strong>
-            <small>The line between markers is the preregistered delay, not a loss curve.</small>
-          </figcaption>
-          <div id="grokking-chart" class="chart wide" aria-live="polite"></div>
-          <div class="control-row">
-            <div>
-              <span class="control-label">R-0 · random-label control</span>
-              <b>FIT at 200</b>
-            </div>
-            <span class="control-track" aria-hidden="true"><i></i></span>
-            <strong>no GENERALIZE through 40,000</strong>
-          </div>
-          <div class="metric-strip" aria-label="Level 0 summary">
-            <div><b>5 / 5</b><span>primary seeds reproduced</span></div>
-            <div><b>4 / 5</b><span>registered quorum</span></div>
-            <div><b>0</b><span>platform violations</span></div>
-            <div><b>platform only</b><span>no programme inference</span></div>
-          </div>
-          <a class="source-link" data-source="level0">Source artifact</a>
-        </figure>
-      </div>
-    </section>
-
-    <section class="band cool" id="gate" aria-labelledby="gate-title">
-      <div class="section-inner section-heading">
-        <div>
-          <p class="eyebrow">Level 1 · process terminal</p>
-          <h2 id="gate-title">The gate refused to spend the comparison.</h2>
-        </div>
-        <p>
-          This is a chronology of signed decisions and terminal states. It is
-          deliberately not a v1/v2 performance comparison.
-        </p>
-      </div>
-
-      <div class="section-inner">
-        <figure class="figure-shell gate-figure">
-          <figcaption>
-            <span>Figure 4</span>
-            <strong>Fail-closed route through the Workshop</strong>
-            <small>Every arrow represents an authorized procedural transition.</small>
-          </figcaption>
-          <ol class="gate-flow">
-            <li class="done"><span>1</span><b>Scientific contract</b><small>signed before learner data</small></li>
-            <li class="done"><span>2</span><b>Public root</b><small>allocation fixed; no outcome</small></li>
-            <li class="record"><span>3</span><b>V1 floor record</b><small>immutable non-outcome gate</small></li>
-            <li class="amended"><span>4</span><b>One signed amendment</b><small>full-history learner policy</small></li>
-            <li class="record"><span>5</span><b>V2 valid terminal</b><small>B reached; no qualifying window</small></li>
-            <li class="blocked"><span>6</span><b>BLOCKED_LEVEL1_FEASIBILITY</b><small>route 2, selected mechanically</small></li>
-            <li class="unrun"><span>7</span><b>C1 untested</b><small>Level 2 selector INSUFFICIENT</small></li>
-          </ol>
-          <a class="source-link" data-source="level1">Source artifact</a>
-        </figure>
-      </div>
-
-      <div class="section-inner resource-layout">
-        <div class="resource-copy">
-          <h3>Resource profile of the v2 terminal</h3>
-          <p>
-            These are engineering aggregates from one frozen fixture. There is
-            no persisted per-step series and no scientifically admissible
-            learning curve.
-          </p>
-        </div>
-        <div class="resource-metrics">
-          <div class="resource-metric">
-            <span>Aggregate trajectory time</span><b>35.820 h</b><small>36 h runtime cap</small>
-            <div class="cap-track" aria-label="35.82 hours of a 36 hour cap"><i style="width:99.5%"></i></div>
-          </div>
-          <div class="resource-metric"><span>Peak RSS</span><b>49.782 GiB</b><small>resource-only</small></div>
-          <div class="resource-metric"><span>Checkpoint</span><b>24.575 MiB</b><small>one artifact estimate</small></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="band white" id="claims" aria-labelledby="claims-title">
-      <div class="section-inner section-heading">
-        <div>
-          <p class="eyebrow">Canonical claim state</p>
-          <h2 id="claims-title">Blocked is not false. Unrun is not negative.</h2>
-        </div>
-        <p>
-          Filter the ledger by epistemic status. Every item remains attached to
-          the scope that earned it.
-        </p>
-      </div>
-
-      <div class="section-inner filter-bar" role="group" aria-label="Filter claim states">
-        <button type="button" class="filter-button active" data-filter="all" aria-pressed="true">All</button>
-        <button type="button" class="filter-button" data-filter="earned" aria-pressed="false">Earned</button>
-        <button type="button" class="filter-button" data-filter="limit" aria-pressed="false">Limits</button>
-        <button type="button" class="filter-button" data-filter="process" aria-pressed="false">Process</button>
-        <button type="button" class="filter-button" data-filter="unrun" aria-pressed="false">Unrun</button>
-      </div>
-
-      <div class="section-inner claim-grid" id="claim-grid"></div>
-
-      <div class="section-inner proof-layout">
-        <div>
-          <p class="eyebrow">Signed proof semantics</p>
-          <h3>What would have been required</h3>
-          <p>
-            The DAG remains a decision rule, not a result. Every scientific node
-            below is unrun or blocked upstream.
-          </p>
-        </div>
-        <div class="proof-dag" role="img" aria-label="Proof Core requires C2, C3, and C4. Proof Strong requires Proof Core, C1, and C5. C6 is annotation only. All current nodes are unrun or blocked.">
-          <div class="proof-row inputs">
-            <span>C2<small>blocked</small></span>
-            <span>C3<small>blocked</small></span>
-            <span>C4<small>blocked</small></span>
-          </div>
-          <div class="proof-join" aria-hidden="true">∧</div>
-          <div class="proof-node core">PROOF_CORE<small>unavailable, not false</small></div>
-          <div class="proof-row inputs lower">
-            <span>C1<small>untested</small></span>
-            <span class="core-ref">CORE</span>
-            <span>C5<small>blocked</small></span>
-          </div>
-          <div class="proof-join" aria-hidden="true">∧</div>
-          <div class="proof-node strong">PROOF_STRONG<small>unavailable</small></div>
-          <div class="annotation-node">C6 · annotation only · blocked upstream</div>
-        </div>
-      </div>
-      <div class="section-inner">
-        <a class="source-link" data-source="claims">Source artifacts</a>
-      </div>
-    </section>
-
-    <section class="band sources-band" id="sources" aria-labelledby="sources-title">
-      <div class="section-inner section-heading">
-        <div>
-          <p class="eyebrow">Audit trail</p>
-          <h2 id="sources-title">Every number has a committed address.</h2>
-        </div>
-        <p>
-          Visuals summarize the record; they do not replace it. Source links are
-          pinned to the evidence-atlas input commit.
-        </p>
-      </div>
-      <div class="section-inner source-list" id="source-list"></div>
-      <div class="section-inner atlas-note">
-        <b>Codex visual draft.</b>
-        Designed independently before Fable's programme and visualization review
-        so the two proposals can be compared.
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="section-inner">
-      <span>philosophia · evidence before narrative</span>
-      <a href="https://github.com/Kirill-Kruglov/philosophia">Repository</a>
-    </div>
-  </footer>
-
-  <script id="evidence-data" type="application/json">
-{
-  "sourceCommit": "c25bd652611d85133bfc924fa7c930c2f49226fa",
-  "gradient": [
-    {"label": "A ~ opus-A", "value": 24, "total": 24, "note": "common-prior, channel-convergent"},
-    {"label": "A ~ grok", "value": 12, "total": 24, "note": "intermediate channel convergence"},
-    {"label": "A ~ gemini", "value": 0, "total": 24, "note": "cross-prior, validated channel"}
-  ],
-  "holdout": [
-    {"id": "H1", "name": "forward derived", "token": "DEPENDENT", "journal": "DEPENDENT", "combined": "DEPENDENT", "reading": "registered positive"},
-    {"id": "H2", "name": "reverse derived", "token": "DEPENDENT", "journal": "DEPENDENT", "combined": "DEPENDENT", "reading": "direction invariant"},
-    {"id": "H3", "name": "same-prior / different mechanism", "token": "CLEAN", "journal": "INADMISSIBLE", "combined": "CLEAN", "reading": "registered negative"},
-    {"id": "H4", "name": "cross-prior clean room", "token": "CLEAN", "journal": "DEPENDENT", "combined": "DEPENDENT", "reading": "adverse: journal false positive", "adverse": true},
-    {"id": "H5", "name": "derived replication", "token": "DEPENDENT", "journal": "CLEAN", "combined": "DEPENDENT", "reading": "token core replicated"}
-  ],
-  "level0": [
-    {"run": "A-0", "fit": 200, "generalize": 6700, "delay": 6500},
-    {"run": "A-1", "fit": 200, "generalize": 5200, "delay": 5000},
-    {"run": "A-2", "fit": 200, "generalize": 6600, "delay": 6400},
-    {"run": "A-3", "fit": 200, "generalize": 7700, "delay": 7500},
-    {"run": "A-4", "fit": 200, "generalize": 6700, "delay": 6500}
-  ],
-  "claims": [
-    {"group": "earned", "kicker": "Inherited · bounded", "title": "Correlated wrong-value failures can expose shared derivation", "scope": "Line 12 registered development and holdout token channel."},
-    {"group": "earned", "kicker": "Level 0 · platform only", "title": "Canonical modular-addition grokking reproduced 5/5", "scope": "Locked paper-mainline seeds; no programme inference."},
-    {"group": "limit", "kicker": "Rejected inference", "title": "Co-success identifies ancestry", "scope": "Success may be forced by the world's one door."},
-    {"group": "limit", "kicker": "Holdout boundary", "title": "The combined token+journal blade is world-portable", "scope": "Falsified by H4; the token core remains bounded support."},
-    {"group": "process", "kicker": "Level 1 · process only", "title": "BLOCKED_LEVEL1_FEASIBILITY", "scope": "Valid v2 censor at B; C1 untested; no programme evidence."},
-    {"group": "unrun", "kicker": "C1 · untested", "title": "Chosen contact beats yoked geometry", "scope": "No arm comparison exists; registered boundary not evaluated."},
-    {"group": "unrun", "kicker": "Level 2 · blocked upstream", "title": "Experience shortens future work", "scope": "Contact-mode selection is INSUFFICIENT; no Level 2 result."},
-    {"group": "unrun", "kicker": "Level 2.5 / 3", "title": "Path credit, transfer, and compression", "scope": "Unrun diagnostic and scientific programme slots."}
-  ],
-  "sources": {
-    "gradient": {"label": "Line 12 first-contact gradient", "path": "inheritance/line12_same_wall/experiment_A/integration_first_contact.md"},
-    "visibility": {"label": "Line 12 Amendment 2 visibility limit", "path": "inheritance/line12_same_wall/experiment_A/PREREG_v4_DRAFT.md"},
-    "holdout": {"label": "Escrowed Line 12 holdout", "path": "inheritance/line12_same_wall/experiment_A/holdout_result.json"},
-    "level0": {"label": "Level 0 locked decision", "path": "experiments/level_0_grokking/outcomes/decision.json"},
-    "level1": {"label": "Level 1 reviewed terminal route", "path": "experiments/level_1_contact/FEASIBILITY_V2_GATE_DECISION_DRAFT.md"},
-    "claims": {"label": "Canonical claim ledger and kill matrix", "path": "canonical/CLAIM_LEDGER.md"}
-  }
-}
-  </script>
-  <script src="evidence.js"></script>
+</article>
+</main>
+<footer>
+  <p><strong>philosophia</strong> — essay, experiments, the self-checking gate
+  harness, and an honest ledger of what was withdrawn:
+  <a href="https://github.com/Kirill-Kruglov/philosophia">github.com/Kirill-Kruglov/philosophia</a>.
+  The fourth of a quartet — <a href="https://kirill-kruglov.github.io/justitia/">justitia</a>,
+  <a href="https://kirill-kruglov.github.io/proxylimen/">proxylimen</a>,
+  <a href="https://kirill-kruglov.github.io/fallacy-cutter/">fallacy-cutter</a> —
+  distilled from the forge at
+  <a href="https://github.com/Kirill-Kruglov/ascesis">ascesis</a>. Written against
+  the &ldquo;era of experience&rdquo;: everyone agrees a mind should learn from its
+  own contact with the world; this asks what that contact <em>is</em>, and how a
+  mind could tell a wall of the world from a wall of its own language.</p>
+</footer>
+<script>
+(function(){
+  var root=document.documentElement, KEY="philosophia-theme";
+  var saved=localStorage.getItem(KEY);
+  if(saved) root.setAttribute("data-theme",saved);
+  document.getElementById("theme").addEventListener("click",function(){
+    var cur=root.getAttribute("data-theme");
+    if(!cur) cur=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+    var next=cur==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    localStorage.setItem(KEY,next);
+  });
+})();
+</script>
 </body>
 </html>

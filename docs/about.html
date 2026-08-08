@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How this was made — philosophia</title>
+<meta name="description" content="How philosophia was built: one person in adversarial dialogue with Codex, Claude, and Fable, behind a harness that refuses to certify unprovenanced results — and an honest record of what was withdrawn.">
+<meta property="og:title" content="How this was made — philosophia">
+<meta property="og:description" content="How philosophia was built: one person in adversarial dialogue with Codex, Claude, and Fable, behind a harness that refuses to certify unprovenanced results — and an honest record of what was withdrawn.">
+<meta property="og:type" content="article">
+<style>
+:root{--bg:#fbfaf6;--ink:#1d1c1a;--muted:#6b6760;--line:#e4e0d6;--accent:#7a5b2e;--rule:#ece8de;--tablehead:#f3f0e8;--quote-bg:#f1ead9}
+:root[data-theme=dark]{--bg:#15171c;--ink:#dfdcd4;--muted:#9a958c;--line:#2a2d34;--accent:#cdb079;--rule:#23262d;--tablehead:#1c1f25;--quote-bg:#1e222a}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#15171c;--ink:#dfdcd4;--muted:#9a958c;--line:#2a2d34;--accent:#cdb079;--rule:#23262d;--tablehead:#1c1f25;--quote-bg:#1e222a}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:20px/1.7 Iowan Old Style,Palatino,Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.nav{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  gap:16px;padding:12px clamp(16px,5vw,40px);background:var(--bg);border-bottom:1px solid var(--line);
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:15px}
+.nav .brand{font-weight:700;letter-spacing:.02em;color:var(--ink);text-decoration:none}
+.nav .right{display:flex;align-items:center;gap:18px}
+.nav a{color:var(--muted);text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.nav button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;
+  width:34px;height:34px;cursor:pointer;font-size:15px;line-height:1}
+.nav button:hover{color:var(--ink)}
+main{max-width:680px;margin:0 auto;padding:0 22px 96px}
+.byline{margin:18px 0 0;font-family:system-ui,sans-serif;font-size:14px;color:var(--muted)}
+.byline a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.byline a:hover{color:var(--ink)}
+h1{font-size:clamp(34px,6vw,52px);line-height:1.08;letter-spacing:-.01em;margin:48px 0 8px}
+h2{font-size:26px;line-height:1.2;margin:52px 0 6px}
+h3{font-size:20px;line-height:1.25;margin:32px 0 4px;color:var(--muted);font-weight:600}
+p{margin:0 0 20px}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:.5px}
+strong{font-weight:700}
+hr{border:0;border-top:1px solid var(--rule);margin:44px 0}
+blockquote{margin:30px 0;padding:14px 22px;border-left:3px solid var(--accent);
+  background:var(--quote-bg);border-radius:0 8px 8px 0;color:var(--ink);font-size:20px;font-style:italic}
+blockquote p{margin:0 0 10px}
+blockquote p:last-child{margin:0}
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15.5px;font-family:system-ui,sans-serif}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+thead th{background:var(--tablehead);border-bottom:2px solid var(--line);font-weight:600}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
+  background:color-mix(in srgb,var(--ink) 7%,transparent);padding:.1em .35em;border-radius:4px}
+.contents{margin:34px 0 8px;border:1px solid var(--line);border-radius:10px;
+  font-family:system-ui,sans-serif;font-size:15px}
+.contents summary{cursor:pointer;padding:5px 18px;color:var(--muted);font-weight:600;list-style:none}
+.contents summary::-webkit-details-marker{display:none}
+.contents summary::before{content:"\203A";display:inline-block;padding-right:7px;transition:transform .15s}
+.contents[open] summary::before{transform:rotate(90deg)}
+.contents nav{display:flex;flex-direction:column;padding:0 16px 14px}
+.contents a{color:var(--muted);text-decoration:none;padding:4px 0}
+.contents a:hover{color:var(--ink)}
+.contents .toc-h1{color:var(--ink);font-weight:700;margin-top:10px}
+.contents .toc-h2{padding-left:16px}
+footer{max-width:680px;margin:0 auto;padding:28px 22px 64px;border-top:1px solid var(--rule);
+  color:var(--muted);font-family:system-ui,sans-serif;font-size:14px}
+footer a{color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem("philosophia-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="./">philosophia</a>
+  <div class="right">
+    <a href="./">Essay</a>
+    <a href="evidence.html">Evidence</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/Kirill-Kruglov/philosophia">GitHub</a>
+    <button id="theme" type="button" aria-label="Toggle light / dark">&#9682;</button>
+  </div>
+</nav>
+<main id="top">
+
+
+<article>
+<h1 id="how-this-was-made">How this was made</h1>
+<p>Philosophia was written by one person in adversarial dialogue with
+several AI systems — Codex (GPT-5.6 “Sol”), Claude (Opus), and Fable —
+behind a gate harness that refuses to certify a result whose provenance
+it cannot check. The final claims are the author’s; so are the errors
+that remain. The AI systems are named because hidden collaboration would
+violate the provenance standard the work asks of everything else.</p>
+<h2 id="the-discipline">The discipline</h2>
+<p>The essay practices what it argues. Every claim is pre-registered
+with the way it could die; the holdout that tested the instrument was
+encrypted before the author could read it, and opened only after the
+prediction was fixed; the one place the instrument cut its own maker — a
+pair the author had registered as independent — was published, not
+buried. Where the essay reaches a claim it has not earned, it says so
+and keeps the registered design instead of pretending to a result.
+Nothing harness-valid is upgraded to true.</p>
+<h2 id="honest-scope">Honest scope</h2>
+<p>This is register (б): a principle and the path to it, with the
+artifact secondary. Level 0 reproduced a known phenomenon on the
+canonical platform; the comparative programme is stopped-open and its
+central claim remains unproved. What the essay contributes is an
+instrument for telling a wall of the world from a wall of one’s own
+language, a precise limit on what contact can be manufactured, and an
+honest map of what is earned versus registered — not a new empirical
+result. Several directions were pursued and honestly withdrawn; those
+are recorded in public too.</p>
+<h2 id="the-quartet-and-its-forge">The quartet, and its forge</h2>
+<p>Philosophia is the fourth of four essays sharing one thesis — <em>do
+not certify intentions; build contact, consequences, and constraints
+that can be checked</em>:</p>
+<ul>
+<li><a
+href="https://kirill-kruglov.github.io/justitia/"><strong>justitia</strong></a>
+— governing a world of powerful agents when no one can read anyone’s
+soul.</li>
+<li><a
+href="https://kirill-kruglov.github.io/proxylimen/"><strong>proxylimen</strong></a>
+— where a mind’s world comes from, and where blind derivation measurably
+breaks.</li>
+<li><a
+href="https://kirill-kruglov.github.io/fallacy-cutter/"><strong>fallacy-cutter</strong></a>
+— the fail-closed instrument the others were cut with.</li>
+<li><strong>philosophia</strong> — whether the contact those three
+assume can itself be manufactured.</li>
+</ul>
+<p>All four were distilled from one research forge, whose full ledger —
+every direction tried, coloured by what survived — lives at <a
+href="https://github.com/Kirill-Kruglov/ascesis"><strong>ascesis</strong></a>,
+including the idea gate this line learned the hard way.</p>
+<p>Source, experiments, and the self-checking harness: <a
+href="https://github.com/Kirill-Kruglov/philosophia">github.com/Kirill-Kruglov/philosophia</a>.</p>
+
+</article>
+</main>
+<footer>
+  <p><strong>philosophia</strong> — essay, experiments, the self-checking gate
+  harness, and an honest ledger of what was withdrawn:
+  <a href="https://github.com/Kirill-Kruglov/philosophia">github.com/Kirill-Kruglov/philosophia</a>.
+  The fourth of a quartet — <a href="https://kirill-kruglov.github.io/justitia/">justitia</a>,
+  <a href="https://kirill-kruglov.github.io/proxylimen/">proxylimen</a>,
+  <a href="https://kirill-kruglov.github.io/fallacy-cutter/">fallacy-cutter</a> —
+  distilled from the forge at
+  <a href="https://github.com/Kirill-Kruglov/ascesis">ascesis</a>. Written against
+  the &ldquo;era of experience&rdquo;: everyone agrees a mind should learn from its
+  own contact with the world; this asks what that contact <em>is</em>, and how a
+  mind could tell a wall of the world from a wall of its own language.</p>
+</footer>
+<script>
+(function(){
+  var root=document.documentElement, KEY="philosophia-theme";
+  var saved=localStorage.getItem(KEY);
+  if(saved) root.setAttribute("data-theme",saved);
+  document.getElementById("theme").addEventListener("click",function(){
+    var cur=root.getAttribute("data-theme");
+    if(!cur) cur=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+    var next=cur==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next);
+    localStorage.setItem(KEY,next);
+  });
+})();
+</script>
+</body>
+</html>
