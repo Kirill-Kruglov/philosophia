@@ -443,6 +443,23 @@ LOC.
     each), with mechanical inclusion, a frozen usable-world predicate and a
     frozen prevalence/acceptance rule. Its exact size is an author choice, not
     selected from 12d. No world contract or learner arm is authorized by 12d.
+11. **AUDIT 13 PREREGISTERED:** commit `aa0754929767d988dd4ddc9fb373cb92bb00d781`
+    froze 40 fresh presentations, prospective panel disjointness, a fixed
+    per-world predicate independent of frame size and the minimum five-world
+    route before any fresh presentation or panel existed. Commit
+    `ff430bac695ccff85fd89a5fecdb4bc9226061ab` froze the implementation before
+    its first run.
+12. **AUDIT 13 OBSERVED / SPARSE:** all 40 attempted presentations were unique,
+    fresh and process-valid. Two qualified: `5b5be2933a1a` and
+    `c8376e9d9f74`; 38 did not. The joint generator-and-panel prevalence estimate
+    is 0.050 with Wilson 95% interval `[0.014,0.165]`. The terminal verdict is
+    `SPARSE_SELECTION_CONDITIONAL_FRAME_ONLY`; the preregistered five-world
+    multi-world gate did not open.
+13. **ROUTING:** no ACTIVE/YOKED run, world contract or family-wide claim is
+    authorized. Continuing on the two retained worlds requires a new explicit
+    author decision accepting a sparse, selection-conditional estimand. Closing
+    the equational cell as too sparse requires no further experiment.
 
-Nothing in this memo is a result. It is a design that can be killed cheaply, in
-the order that kills it cheapest.
+Nothing in this memo is a scientific ACTIVE/YOKED result. It records a design
+and the non-citable development gates that tested whether that design was worth
+running.
