@@ -2,18 +2,9 @@
 
 ### Can a mind earn a world from contact it manufactures itself?
 
-> **Programme status note, July 2026.** Drafted before the first Philosophia
-> outcome. Level 0 has since reproduced delayed generalization: locked, and
-> narrower than the programme claim -- it validates the workshop, not
-> manufactured experience. The one authorized Level 1 feasibility trajectory then
-> completed validly and was censored at its signed floor, so the comparative
-> detector never ran: C1 untested, no contact mode selected, Level 2 blocked,
-> programme claim open. I chose Route B: publish stopped-open; further science
-> becomes a separately signed successor line, its development permanently
-> non-citable. Governance, not a result. Active contact, cross-world transfer,
-> and path credit stay unrun designs, each keeping its registered way to die.
-> Evidence before the climb:
-> [**What the Instrument Has Shown -- and What the Small Mind Has Not**](#what-the-instrument-has-shown----and-what-the-small-mind-has-not).
+> **Status, August 2026.** The comparative experiment never ran. This publishes
+> stopped-open, and the programme claim stays open. Evidence before the climb:
+> [**What the Instrument Has Shown, and What the Small Mind Has Not**](#what-the-instrument-has-shown-and-what-the-small-mind-has-not).
 
 ---
 
@@ -771,7 +762,7 @@ enough to answer and names what would make the hope die.
 
 --- ---
 
-# What the Instrument Has Shown -- and What the Small Mind Has Not
+# What the Instrument Has Shown, and What the Small Mind Has Not
 
 *This section is the evidence ledger behind the story. Every inherited number
 links to a committed artifact. Level 0 moves platform replication from slot to
@@ -927,8 +918,9 @@ The permanent Level 0 statement is:
 | A standard single learner earns competence in that world without full history | **NO-COMPETENCE / PRE-MEMORIZATION** | [successor development sweep](../successor/dev/GROKKING_PROBE_09.md), non-citable: best held-out equality 58.8% against a 50% chance level, train fit never above 92.6% at any weight decay including 0.0, frozen floor never cleared at any checkpoint. Delayed generalization is defined after the training set is fitted; that window was never entered, so the sweep says nothing about whether a larger budget would enter it |
 | That competence block is localized to a named wall | **NOT ESTABLISHED** | three candidates -- reading the walk, binding the two words, the modular quotient -- are separated by no probe that was run; the strict [disjoint-displacement residue probe](../successor/dev/B2_PILOT_08.md) sits at chance, which places the modular factor among the candidates without electing it. Localization was not purchased |
 | A world intended to test path-manufactured structure needs a non-trivial compositional invariant | **DERIVED CONSTRAINT, UNRUN** | follows from the triviality limit in VI.4: a count is not enough, the mind's own transformations must compose. Path concatenation and comparison transitivity are candidate cells; none is built |
-| An equational Wall-B family supplies a multi-world frame for the chosen-contact test | **CLOSED AT DEVELOPMENT GATE / TOO SPARSE** | the preregistered [frame audit](../successor/dev/WALLB_FRAME_AUDIT_13.md) found 2/40 screen-qualified fresh presentations against a threshold of 5; this is non-citable development, not an ACTIVE/YOKED result |
-| Continuation route | **SUCCESSOR STOPPED AT DEVELOPMENT GATE** | Route B produced no locked successor scientific test: the walk-world path-manufacture axis was void by construction, the equational cell was closed as too sparse, and the Officina governance harness remains frozen rather than active |
+| Equational Wall-B library carrier | **CLOSED / SPARSE** | preregistered [frame audit 13](../successor/dev/WALLB_FRAME_AUDIT_13.md): 2/40 screen-qualified against threshold 5, Wilson 95% [0.014, 0.165]; [closure](../successor/dev/WALLB_EQUATIONAL_CELL_CLOSURE.md) preserved; non-citable development, not an ACTIVE/YOKED result |
+| Equational Wall-B policy carrier | **SCREEN-VIABLE; ACTIVE/YOKED UNRUN** | preregistered [policy-channel audit 14b](../successor/dev/WALLB_POLICY_CHANNEL_AUDIT_14B.md): hard-oracle sweep froze `best_first`; 12/40 screen-qualified, Wilson 95% [0.181, 0.454]; recorded beside the library kill; no design contract and no ACTIVE/YOKED run authorized |
+| Continuation route | **SUCCESSOR STOPPED AT DEVELOPMENT GATE** | Route B produced no locked successor scientific test: walk-world path-manufacture was void by construction; the equational cell is closed on both carriers with different verdicts (library sparse; policy screen-viable and left unrun); Officina remains frozen rather than active |
 
 ## What this does not show
 
@@ -963,16 +955,20 @@ optimizer, and one budget. What they carry forward is a constraint on any next
 world intended to test path-manufactured structure, not a verdict on chosen
 contact.
 
-The later equational development screen does not show that compositional
-libraries fail or that chosen contact earns nothing. It asked a prior question:
-whether library usefulness occurred often enough under one declared generator
-to support a multi-world experiment. Two of forty fresh presentations passed a
-fixed screen, below the preregistered minimum of five. The resulting estimate is
-about the joint generator-and-panel procedure, remains non-citable development,
-and cannot be promoted into a family claim. ACTIVE and YOKED were never built or
-compared. What survives is a method constraint: measure the prevalence of the
-mechanism an experiment needs before selecting a convenient world and mistaking
-it for a family.
+The later equational development screens do not show that compositional
+libraries fail, that ranking policies fail, or that chosen contact earns
+nothing. They asked prior questions about whether each experience carrier was
+common enough, under a frozen screen, to support a multi-world experiment. The
+library carrier was not: two of forty fresh presentations passed, below the
+preregistered minimum of five. The policy carrier, under a later
+preregistered `best_first` frame, was screen-viable at twelve of forty, with a
+Wilson interval that clears the same five-world engineering floor. Both
+estimates remain non-citable development. ACTIVE and YOKED were never built or
+compared; the author records the policy screen and does not spend the single
+experimental slot on this substrate. What survives is a method constraint:
+measure the prevalence of the mechanism an experiment needs before selecting a
+convenient world and mistaking it for a family, and do not rewrite a correctly
+earned sparse kill when a different carrier later screens.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and
