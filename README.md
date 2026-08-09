@@ -23,10 +23,12 @@ representations.
 > any further science in a separately chartered successor line. That governance
 > decision does not change the `OPEN` scientific status.
 
-> **Successor engineering status:** the `officina` successor charter and author
-> cells are signed. Only WP-1/WP-2 lineage/bootstrap and governance-library code
-> with dummy tests are authorized. No successor world, entropy, learner,
-> candidate, T/Q/C run, scientific lock, or claim exists.
+> **Successor status: stopped at development gates.** The `officina` governance
+> harness is frozen after terminal structural review; it is not an active route.
+> The walk-world learner branch closed without competence, and the later
+> equational Wall-B cell produced only 2/40 screen-qualified fresh
+> presentations against a preregistered minimum of 5. No successor ACTIVE/YOKED
+> comparison, scientific lock, outcome, or programme claim exists.
 
 ## The question
 
@@ -53,11 +55,13 @@ reason to silently redesign the question.
    hidden-progress measures remain diagnostic programme slots.
 
 The current route ends here. The signed
-[`Route B author decision`](canonical/AUTHOR_ROUTE_DECISION.md) led to the
-separately governed [`Officina successor`](successor/officina/README.md). Its
-charter is signed, but its current authorization stops at WP-1/WP-2 engineering
-and dummy tests. Before any real development world exists, WP-3 must separately
-freeze and pass review on the finite-frame population/construct contract.
+[`Route B author decision`](canonical/AUTHOR_ROUTE_DECISION.md) led first to the
+[`Officina successor`](successor/officina/README.md), whose governance harness
+is now [frozen](src/philosophia/officina/FROZEN.md). Two later non-citable
+development branches also stopped before a scientific lock: the walk-world
+path-manufacture axis was void by construction, and the equational Wall-B cell
+failed its preregistered five-world frame gate. The registered chosen-contact
+contrast remains unrun.
 
 See [`canonical/KILL_MATRIX.md`](canonical/KILL_MATRIX.md) for the current
 decision surface and [`canonical/RESULTS_CANONICAL.md`](canonical/RESULTS_CANONICAL.md)
@@ -77,8 +81,11 @@ for the only claims this repository presently permits.
 - [`canonical/`](canonical/) - claim ledger, kills, and citable results.
 - [`experiments/`](experiments/) - one independently locked directory per level.
 - [`references/`](references/) - literature map and clean-room protocol.
-- [`successor/officina/`](successor/officina/) - signed successor namespace,
-  inactive T ledger, quarantine policy, and WP-1/WP-2 implementation record.
+- [`successor/officina/`](successor/officina/) - frozen governance-harness
+  record; retained for provenance, not an active implementation route.
+- [`successor/dev/WALLB_EQUATIONAL_CELL_CLOSURE.md`](successor/dev/WALLB_EQUATIONAL_CELL_CLOSURE.md)
+  - author closure of the equational development cell after its preregistered
+  frame threshold was not met.
 
 ## Verification
 

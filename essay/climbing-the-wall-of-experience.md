@@ -927,7 +927,8 @@ The permanent Level 0 statement is:
 | A standard single learner earns competence in that world without full history | **NO-COMPETENCE / PRE-MEMORIZATION** | [successor development sweep](../successor/dev/GROKKING_PROBE_09.md), non-citable: best held-out equality 58.8% against a 50% chance level, train fit never above 92.6% at any weight decay including 0.0, frozen floor never cleared at any checkpoint. Delayed generalization is defined after the training set is fitted; that window was never entered, so the sweep says nothing about whether a larger budget would enter it |
 | That competence block is localized to a named wall | **NOT ESTABLISHED** | three candidates -- reading the walk, binding the two words, the modular quotient -- are separated by no probe that was run; the strict [disjoint-displacement residue probe](../successor/dev/B2_PILOT_08.md) sits at chance, which places the modular factor among the candidates without electing it. Localization was not purchased |
 | A world intended to test path-manufactured structure needs a non-trivial compositional invariant | **DERIVED CONSTRAINT, UNRUN** | follows from the triviality limit in VI.4: a count is not enough, the mind's own transformations must compose. Path concatenation and comparison transitivity are candidate cells; none is built |
-| Continuation route | **ROUTE B, GOVERNANCE ONLY** | current record selected for stopped-open publication; the successor line was chartered, its first development branch -- the walk world with a single standard learner -- closed on the four rows above, and no successor scientific test was locked |
+| An equational Wall-B family supplies a multi-world frame for the chosen-contact test | **CLOSED AT DEVELOPMENT GATE / TOO SPARSE** | the preregistered [frame audit](../successor/dev/WALLB_FRAME_AUDIT_13.md) found 2/40 screen-qualified fresh presentations against a threshold of 5; this is non-citable development, not an ACTIVE/YOKED result |
+| Continuation route | **SUCCESSOR STOPPED AT DEVELOPMENT GATE** | Route B produced no locked successor scientific test: the walk-world path-manufacture axis was void by construction, the equational cell was closed as too sparse, and the Officina governance harness remains frozen rather than active |
 
 ## What this does not show
 
@@ -961,6 +962,17 @@ and the negative they carry is bounded to one learner, one encoding, one
 optimizer, and one budget. What they carry forward is a constraint on any next
 world intended to test path-manufactured structure, not a verdict on chosen
 contact.
+
+The later equational development screen does not show that compositional
+libraries fail or that chosen contact earns nothing. It asked a prior question:
+whether library usefulness occurred often enough under one declared generator
+to support a multi-world experiment. Two of forty fresh presentations passed a
+fixed screen, below the preregistered minimum of five. The resulting estimate is
+about the joint generator-and-panel procedure, remains non-citable development,
+and cannot be promoted into a family claim. ACTIVE and YOKED were never built or
+compared. What survives is a method constraint: measure the prevalence of the
+mechanism an experiment needs before selecting a convenient world and mistaking
+it for a family.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and
