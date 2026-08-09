@@ -1441,8 +1441,8 @@ Author decision, 2026-08-09:
 
 The policy channel is not screenable inside a calibrating frame under the
 declared search operators and power gate. Together with audit 13, both tested
-experience carriers in this equational cell — additional library rules and
-candidate-ordering policy — failed to open a multi-world development frame.
+experience carriers in this equational cell - additional library rules and
+candidate-ordering policy - failed to open a multi-world development frame.
 
 Verdict: `POLICY_CHANNEL_NOT_SCREENABLE_IN_A_CALIBRATING_FRAME`.
 
@@ -1650,7 +1650,7 @@ def main() -> None:
         "prevalence_wilson_95": interval if presentations else [0.0, 1.0],
         "implementation_nonblank_lines": sum(
             bool(line.strip())
-            for line in Path(__file__).read_text(encoding="ascii").splitlines()
+            for line in Path(__file__).read_text(encoding="utf-8").splitlines()
         ),
         "constants": {
             "alphabet": ALPHABET,
