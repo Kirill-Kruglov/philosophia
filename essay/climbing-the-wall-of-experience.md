@@ -593,15 +593,15 @@ measured.
 One limit on that hope is definitional rather than empirical, so I record it as
 reasoning about the world's structure and not as anything measured here. A mind
 can manufacture only what is invariant under its own transformations. Take the
-walk behind these worlds: words over the two moves, the element reached
-being the displacement. Everything rearranging one's own moves preserves is a function of one
-quantity -- the displacement, right steps minus left -- a linear function of
-the move counts, already sitting in the input. The one structure that is not
-trivial, the modulus `n`, is exactly what no rearrangement can reveal -- and
-not because rearrangement disturbs it. Rearrangement leaves it perfectly
-intact whatever it is, and that is the difficulty: every modulus survives
-every road the mind can lay, so no road singles one out. Only the wall picks
-one. So where the manufacturable
+walk behind these worlds: words over the two moves, the element reached being
+the displacement. Under the road-equivalence this design meant to manufacture
+-- resampling a word while preserving its endpoint -- the retained quantity is
+the displacement, right steps minus left, a linear function of the move counts
+already sitting in the input. The one structure that is not trivial, the
+modulus `n`, is exactly what no such resampling can reveal -- and not because
+resampling disturbs it. Resampling leaves it perfectly intact whatever it is,
+and that is the difficulty: every modulus survives every road the mind can lay,
+so no road singles one out. Only the wall picks one. So where the manufacturable
 invariant is trivial, manufacturing is empty, and the content is precisely the
 wall that could not be manufactured. Self-supervised learning met this edge from
 the other side: invariance imposed too strongly suppresses the structure it was
@@ -923,10 +923,10 @@ The permanent Level 0 statement is:
 | Path credit adds transferable structure | **BLOCKED UPSTREAM / UNRUN** | no Level 2.5 result |
 | A cross-world compression event marks earned experience | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
 | Hidden progress predicts transition before ordinary loss | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
-| Manufactured contact is testable in the walk world | **VOID BY CONSTRUCTION** | the only self-manufacturable invariant, displacement, is a linear function of the move counts already in the input; the non-trivial factor, the modulus, is reachable only from oracle answers. Structural reasoning recorded in VI.4, not a measurement |
-| A standard single learner earns competence in that world without full history | **NO-COMPETENCE / PRE-MEMORIZATION** | successor development sweep, non-citable: best held-out equality 58.8% against a 50% chance level, train fit never above 92.6% at any weight decay including 0.0, frozen floor never cleared at any checkpoint. Delayed generalization is defined after the training set is fitted; that window was never entered, so the sweep says nothing about whether a larger budget would enter it |
-| That competence block is localized to a named wall | **NOT ESTABLISHED** | three candidates -- reading the walk, binding the two words, the modular quotient -- are separated by no probe that was run; the strict residue probe sits at chance, which places the modular factor among the candidates without electing it. Localization was not purchased |
-| A world that can host the manufactured-contact question needs a compositional self-manufacturable invariant | **DERIVED CONSTRAINT, UNRUN** | follows from the triviality limit in VI.4: a count is not enough, the mind's own transformations must compose. Path concatenation and comparison transitivity are candidate cells; none is built |
+| Path-derived structure can provide non-trivial manufactured experience in the walk world | **VOID BY CONSTRUCTION** | the path invariant targeted by this design, endpoint displacement, is a linear function of the move counts already in the input; the non-trivial factor, the modulus, is reachable only from oracle answers. Structural reasoning recorded in VI.4, not a measurement; the unrun ACTIVE/YOKED contact contrast is not voided by this argument |
+| A standard single learner earns competence in that world without full history | **NO-COMPETENCE / PRE-MEMORIZATION** | [successor development sweep](../successor/dev/GROKKING_PROBE_09.md), non-citable: best held-out equality 58.8% against a 50% chance level, train fit never above 92.6% at any weight decay including 0.0, frozen floor never cleared at any checkpoint. Delayed generalization is defined after the training set is fitted; that window was never entered, so the sweep says nothing about whether a larger budget would enter it |
+| That competence block is localized to a named wall | **NOT ESTABLISHED** | three candidates -- reading the walk, binding the two words, the modular quotient -- are separated by no probe that was run; the strict [disjoint-displacement residue probe](../successor/dev/B2_PILOT_08.md) sits at chance, which places the modular factor among the candidates without electing it. Localization was not purchased |
+| A world intended to test path-manufactured structure needs a non-trivial compositional invariant | **DERIVED CONSTRAINT, UNRUN** | follows from the triviality limit in VI.4: a count is not enough, the mind's own transformations must compose. Path concatenation and comparison transitivity are candidate cells; none is built |
 | Continuation route | **ROUTE B, GOVERNANCE ONLY** | current record selected for stopped-open publication; the successor line was chartered, its first development branch -- the walk world with a single standard learner -- closed on the four rows above, and no successor scientific test was locked |
 
 ## What this does not show
@@ -949,15 +949,18 @@ training is ineffective. It shows only that the amended frozen development
 fixture completed validly without clearing its signed floor. No comparative
 panel or outcome exists.
 
-The successor development runs do not show that manufactured contact fails. They
-show that the cell chosen to test it cannot host the test. Where the invariant a
-mind can manufacture is a linear function of its own move counts, there is
-nothing for manufacturing to earn, and a small learner failing to reach
-competence in that cell adds no evidence on either side of the question the
-essay asks. Nor do those runs show why the learner failed. They are non-citable
-development, and the negative they carry is bounded to one learner, one
-encoding, one optimizer, and one budget. What they do carry forward is a
-constraint on the next world rather than a verdict on this one.
+The successor development runs do not show that manufactured contact fails, nor
+that the walk world cannot host any test of chosen contact: ACTIVE and YOKED were
+never compared. The structural limit is narrower. This cell cannot host the
+path-manufacture axis in a non-trivial form: the path invariant targeted by the
+design is a linear function of the mind's own move counts, so there is nothing
+for that form of manufacturing to earn. A small learner failing to reach
+competence in the cell adds no evidence on either side of the question the essay
+asks, and the runs do not show why it failed. They are non-citable development,
+and the negative they carry is bounded to one learner, one encoding, one
+optimizer, and one budget. What they carry forward is a constraint on any next
+world intended to test path-manufactured structure, not a verdict on chosen
+contact.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and
