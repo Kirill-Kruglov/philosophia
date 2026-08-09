@@ -49,7 +49,7 @@ def test_canonical_surfaces_link_the_author_decision() -> None:
 
 
 def test_public_prose_calls_the_feasibility_stop_a_gate() -> None:
-    atlas = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+    atlas = (ROOT / "docs" / "evidence.html").read_text(encoding="utf-8")
     essay = (ROOT / "essay" / "climbing-the-wall-of-experience.md").read_text(
         encoding="utf-8"
     )

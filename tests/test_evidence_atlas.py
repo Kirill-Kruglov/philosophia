@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ATLAS = ROOT / "docs" / "index.html"
+ATLAS = ROOT / "docs" / "evidence.html"
 
 
 def atlas_data() -> dict:
