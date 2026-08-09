@@ -923,7 +923,11 @@ The permanent Level 0 statement is:
 | Path credit adds transferable structure | **BLOCKED UPSTREAM / UNRUN** | no Level 2.5 result |
 | A cross-world compression event marks earned experience | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
 | Hidden progress predicts transition before ordinary loss | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
-| Continuation route | **ROUTE B, GOVERNANCE ONLY** | current record selected for stopped-open publication; successor not yet chartered |
+| Manufactured contact is testable in the walk world | **VOID BY CONSTRUCTION** | the only self-manufacturable invariant, displacement, is a linear function of the move counts already in the input; the non-trivial factor, the modulus, is reachable only from oracle answers. Structural reasoning recorded in VI.4, not a measurement |
+| A standard single learner earns competence in that world without full history | **NO-COMPETENCE / PRE-MEMORIZATION** | successor development sweep, non-citable: best held-out equality 58.8% against a 50% chance level, train fit never above 92.6% at any weight decay including 0.0, frozen floor never cleared at any checkpoint. Delayed generalization is defined after the training set is fitted; that window was never entered, so the sweep says nothing about whether a larger budget would enter it |
+| That competence block is localized to a named wall | **NOT ESTABLISHED** | three candidates -- reading the walk, binding the two words, the modular quotient -- are separated by no probe that was run; the strict residue probe sits at chance, which places the modular factor among the candidates without electing it. Localization was not purchased |
+| A world that can host the manufactured-contact question needs a compositional self-manufacturable invariant | **DERIVED CONSTRAINT, UNRUN** | follows from the triviality limit in VI.4: a count is not enough, the mind's own transformations must compose. Path concatenation and comparison transitivity are candidate cells; none is built |
+| Continuation route | **ROUTE B, GOVERNANCE ONLY** | current record selected for stopped-open publication; the successor line was chartered, its first development branch -- the walk world with a single standard learner -- closed on the four rows above, and no successor scientific test was locked |
 
 ## What this does not show
 
@@ -944,6 +948,16 @@ RANDOM-STATIC wins or loses, that the learner lacked `n`, or that full-history
 training is ineffective. It shows only that the amended frozen development
 fixture completed validly without clearing its signed floor. No comparative
 panel or outcome exists.
+
+The successor development runs do not show that manufactured contact fails. They
+show that the cell chosen to test it cannot host the test. Where the invariant a
+mind can manufacture is a linear function of its own move counts, there is
+nothing for manufacturing to earn, and a small learner failing to reach
+competence in that cell adds no evidence on either side of the question the
+essay asks. Nor do those runs show why the learner failed. They are non-citable
+development, and the negative they carry is bounded to one learner, one
+encoding, one optimizer, and one budget. What they do carry forward is a
+constraint on the next world rather than a verdict on this one.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and
