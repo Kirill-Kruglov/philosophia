@@ -1,0 +1,890 @@
+{
+  "constants": {
+    "alphabet": "abcd",
+    "completion_rule_cap": 64,
+    "completion_seconds": 2.0,
+    "goals_per_stratum": 8,
+    "max_word_length": 18,
+    "presentations": 8,
+    "rules_per_presentation": 7,
+    "search_caps": [
+      500,
+      2000,
+      5000,
+      20000
+    ],
+    "witness_strata": [
+      6,
+      10,
+      14
+    ]
+  },
+  "presentations": [
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 377,
+          "solved_rate": 0.4166666666666667
+        },
+        "completion": {
+          "restricted_mean": 493.5416666666667,
+          "solved_rate": 0.041666666666666664
+        },
+        "surface": {
+          "restricted_mean": 385.0833333333333,
+          "solved_rate": 0.4166666666666667
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 405.75,
+            "solved_rate": 0.375
+          },
+          "completion": {
+            "restricted_mean": 500,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 405.75,
+            "solved_rate": 0.375
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 419,
+            "solved_rate": 0.25
+          },
+          "completion": {
+            "restricted_mean": 480.625,
+            "solved_rate": 0.125
+          },
+          "surface": {
+            "restricted_mean": 407.5,
+            "solved_rate": 0.375
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 306.25,
+            "solved_rate": 0.625
+          },
+          "completion": {
+            "restricted_mean": 500,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 342,
+            "solved_rate": 0.5
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.09034029999747872,
+        "skipped_long_pairs": 0,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.383203763398773,
+        "witness_vs_total_length": 0.4048380971352454
+      },
+      "decision": "DESK_CANDIDATE",
+      "equations": [
+        [
+          "ab",
+          "cadb"
+        ],
+        [
+          "abcc",
+          "da"
+        ],
+        [
+          "ba",
+          "bbb"
+        ],
+        [
+          "baaa",
+          "ccb"
+        ],
+        [
+          "bab",
+          "cb"
+        ],
+        [
+          "bca",
+          "cc"
+        ],
+        [
+          "da",
+          "dd"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "39cb46a5584e",
+      "reasons": [],
+      "selected_cap": 500
+    },
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 423.5,
+          "solved_rate": 0.3333333333333333
+        },
+        "completion": {
+          "restricted_mean": 487.7083333333333,
+          "solved_rate": 0.08333333333333333
+        },
+        "surface": {
+          "restricted_mean": 433.5833333333333,
+          "solved_rate": 0.2916666666666667
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 421.5,
+            "solved_rate": 0.25
+          },
+          "completion": {
+            "restricted_mean": 500,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 432.25,
+            "solved_rate": 0.25
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 500,
+            "solved_rate": 0.125
+          },
+          "completion": {
+            "restricted_mean": 500,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 484,
+            "solved_rate": 0.125
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 349,
+            "solved_rate": 0.625
+          },
+          "completion": {
+            "restricted_mean": 463.125,
+            "solved_rate": 0.25
+          },
+          "surface": {
+            "restricted_mean": 384.5,
+            "solved_rate": 0.5
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.04647855891380459,
+        "skipped_long_pairs": 0,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.5951798210688587,
+        "witness_vs_total_length": 0.467467132372717
+      },
+      "decision": "DESK_CANDIDATE",
+      "equations": [
+        [
+          "abad",
+          "caa"
+        ],
+        [
+          "acdc",
+          "bb"
+        ],
+        [
+          "ad",
+          "ccdc"
+        ],
+        [
+          "ad",
+          "ddcb"
+        ],
+        [
+          "bd",
+          "ca"
+        ],
+        [
+          "bdb",
+          "dca"
+        ],
+        [
+          "cdb",
+          "dc"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "a8948b29abc8",
+      "reasons": [],
+      "selected_cap": 500
+    },
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 431.4166666666667,
+          "solved_rate": 0.20833333333333334
+        },
+        "completion": {
+          "restricted_mean": 494.6666666666667,
+          "solved_rate": 0.041666666666666664
+        },
+        "surface": {
+          "restricted_mean": 430.8333333333333,
+          "solved_rate": 0.20833333333333334
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 453.25,
+            "solved_rate": 0.125
+          },
+          "completion": {
+            "restricted_mean": 500,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 451.5,
+            "solved_rate": 0.125
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 417,
+            "solved_rate": 0.25
+          },
+          "completion": {
+            "restricted_mean": 484,
+            "solved_rate": 0.125
+          },
+          "surface": {
+            "restricted_mean": 417,
+            "solved_rate": 0.25
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 424,
+            "solved_rate": 0.25
+          },
+          "completion": {
+            "restricted_mean": 500,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 424,
+            "solved_rate": 0.25
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.06566618592478335,
+        "skipped_long_pairs": 0,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.39728859128769184,
+        "witness_vs_total_length": 0.1383296561188505
+      },
+      "decision": "DESK_CANDIDATE",
+      "equations": [
+        [
+          "aaa",
+          "bad"
+        ],
+        [
+          "abc",
+          "dd"
+        ],
+        [
+          "bb",
+          "cc"
+        ],
+        [
+          "bcc",
+          "dbcd"
+        ],
+        [
+          "bcd",
+          "dbcd"
+        ],
+        [
+          "cda",
+          "dcdd"
+        ],
+        [
+          "dc",
+          "dcab"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "3ce31c0a0b4c",
+      "reasons": [],
+      "selected_cap": 500
+    },
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 2508.2083333333335,
+          "solved_rate": 0.9583333333333334
+        },
+        "completion": {
+          "restricted_mean": 5886.875,
+          "solved_rate": 0.75
+        },
+        "surface": {
+          "restricted_mean": 13003.208333333334,
+          "solved_rate": 0.5
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 4650.75,
+            "solved_rate": 0.875
+          },
+          "completion": {
+            "restricted_mean": 1167.5,
+            "solved_rate": 1.0
+          },
+          "surface": {
+            "restricted_mean": 11832.875,
+            "solved_rate": 0.5
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 1830.375,
+            "solved_rate": 1.0
+          },
+          "completion": {
+            "restricted_mean": 8191.625,
+            "solved_rate": 0.625
+          },
+          "surface": {
+            "restricted_mean": 14500,
+            "solved_rate": 0.375
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 1043.5,
+            "solved_rate": 1.0
+          },
+          "completion": {
+            "restricted_mean": 8301.5,
+            "solved_rate": 0.625
+          },
+          "surface": {
+            "restricted_mean": 12676.75,
+            "solved_rate": 0.625
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.07749136909842491,
+        "skipped_long_pairs": 18,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.14535047493345277,
+        "witness_vs_total_length": -0.08585035246793064
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aa",
+          "cbba"
+        ],
+        [
+          "aaaa",
+          "ca"
+        ],
+        [
+          "ba",
+          "dcb"
+        ],
+        [
+          "ca",
+          "cab"
+        ],
+        [
+          "cadc",
+          "dcc"
+        ],
+        [
+          "ccdc",
+          "cdaa"
+        ],
+        [
+          "dabb",
+          "dddb"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "6a89692d4f33",
+      "reasons": [
+        "NO_20_60_BFS_CAP"
+      ],
+      "selected_cap": null
+    },
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 1681.6666666666667,
+          "solved_rate": 0.2916666666666667
+        },
+        "completion": {
+          "restricted_mean": 1834.5833333333333,
+          "solved_rate": 0.20833333333333334
+        },
+        "surface": {
+          "restricted_mean": 1689.8333333333333,
+          "solved_rate": 0.2916666666666667
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 1910.875,
+            "solved_rate": 0.125
+          },
+          "completion": {
+            "restricted_mean": 2000,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 1834.5,
+            "solved_rate": 0.25
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 2000,
+            "solved_rate": 0.0
+          },
+          "completion": {
+            "restricted_mean": 2000,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 2000,
+            "solved_rate": 0.0
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 1134.125,
+            "solved_rate": 0.75
+          },
+          "completion": {
+            "restricted_mean": 1503.75,
+            "solved_rate": 0.625
+          },
+          "surface": {
+            "restricted_mean": 1235,
+            "solved_rate": 0.625
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.049535489990375936,
+        "skipped_long_pairs": 15,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.3912386467162683,
+        "witness_vs_total_length": 0.44642857142857145
+      },
+      "decision": "DESK_CANDIDATE",
+      "equations": [
+        [
+          "aaad",
+          "bb"
+        ],
+        [
+          "ac",
+          "cc"
+        ],
+        [
+          "ad",
+          "bbdc"
+        ],
+        [
+          "bb",
+          "dbcb"
+        ],
+        [
+          "cc",
+          "cdd"
+        ],
+        [
+          "ccd",
+          "dd"
+        ],
+        [
+          "da",
+          "dbd"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "f5b4899726d6",
+      "reasons": [],
+      "selected_cap": 2000
+    },
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 1558.875,
+          "solved_rate": 0.375
+        },
+        "completion": {
+          "restricted_mean": 1939.75,
+          "solved_rate": 0.08333333333333333
+        },
+        "surface": {
+          "restricted_mean": 1826.8333333333333,
+          "solved_rate": 0.16666666666666666
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 1469,
+            "solved_rate": 0.375
+          },
+          "completion": {
+            "restricted_mean": 2000,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 1882.875,
+            "solved_rate": 0.125
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 1696.625,
+            "solved_rate": 0.25
+          },
+          "completion": {
+            "restricted_mean": 2000,
+            "solved_rate": 0.0
+          },
+          "surface": {
+            "restricted_mean": 1630.5,
+            "solved_rate": 0.25
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 1511,
+            "solved_rate": 0.5
+          },
+          "completion": {
+            "restricted_mean": 1819.25,
+            "solved_rate": 0.25
+          },
+          "surface": {
+            "restricted_mean": 1967.125,
+            "solved_rate": 0.125
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.045574973919428885,
+        "skipped_long_pairs": 0,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.4447662145958627,
+        "witness_vs_total_length": 0.35859526498830757
+      },
+      "decision": "DESK_CANDIDATE",
+      "equations": [
+        [
+          "aa",
+          "cb"
+        ],
+        [
+          "aac",
+          "ba"
+        ],
+        [
+          "acac",
+          "dd"
+        ],
+        [
+          "ad",
+          "bbdb"
+        ],
+        [
+          "ca",
+          "ccc"
+        ],
+        [
+          "cba",
+          "cc"
+        ],
+        [
+          "cbc",
+          "ddd"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "3ac2b8840f14",
+      "reasons": [],
+      "selected_cap": 2000
+    },
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 3941.8333333333335,
+          "solved_rate": 0.9583333333333334
+        },
+        "completion": {
+          "restricted_mean": 10574.125,
+          "solved_rate": 0.5
+        },
+        "surface": {
+          "restricted_mean": 6245.666666666667,
+          "solved_rate": 0.7916666666666666
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 8780.75,
+            "solved_rate": 0.875
+          },
+          "completion": {
+            "restricted_mean": 12882.5,
+            "solved_rate": 0.375
+          },
+          "surface": {
+            "restricted_mean": 12368.5,
+            "solved_rate": 0.5
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 1790.5,
+            "solved_rate": 1.0
+          },
+          "completion": {
+            "restricted_mean": 5975.75,
+            "solved_rate": 0.75
+          },
+          "surface": {
+            "restricted_mean": 3028.75,
+            "solved_rate": 1.0
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 1254.25,
+            "solved_rate": 1.0
+          },
+          "completion": {
+            "restricted_mean": 12864.125,
+            "solved_rate": 0.375
+          },
+          "surface": {
+            "restricted_mean": 3339.75,
+            "solved_rate": 0.875
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.10189475503284484,
+        "skipped_long_pairs": 0,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": -0.26151146393658964,
+        "witness_vs_total_length": 0.09188458377475332
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aa",
+          "dac"
+        ],
+        [
+          "ab",
+          "bbbc"
+        ],
+        [
+          "ab",
+          "cabd"
+        ],
+        [
+          "abbd",
+          "add"
+        ],
+        [
+          "bccb",
+          "cbd"
+        ],
+        [
+          "cca",
+          "dccd"
+        ],
+        [
+          "ccc",
+          "dac"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "21b64bd46791",
+      "reasons": [
+        "NO_20_60_BFS_CAP"
+      ],
+      "selected_cap": null
+    },
+    {
+      "at_cap": {
+        "bfs": {
+          "restricted_mean": 548.8333333333334,
+          "solved_rate": 1.0
+        },
+        "completion": {
+          "restricted_mean": 7750.416666666667,
+          "solved_rate": 0.625
+        },
+        "surface": {
+          "restricted_mean": 932.6666666666666,
+          "solved_rate": 1.0
+        }
+      },
+      "by_witness_stratum": {
+        "10": {
+          "bfs": {
+            "restricted_mean": 770.75,
+            "solved_rate": 1.0
+          },
+          "completion": {
+            "restricted_mean": 7715.75,
+            "solved_rate": 0.625
+          },
+          "surface": {
+            "restricted_mean": 1748.75,
+            "solved_rate": 1.0
+          }
+        },
+        "14": {
+          "bfs": {
+            "restricted_mean": 589.75,
+            "solved_rate": 1.0
+          },
+          "completion": {
+            "restricted_mean": 7730.125,
+            "solved_rate": 0.625
+          },
+          "surface": {
+            "restricted_mean": 636,
+            "solved_rate": 1.0
+          }
+        },
+        "6": {
+          "bfs": {
+            "restricted_mean": 286,
+            "solved_rate": 1.0
+          },
+          "completion": {
+            "restricted_mean": 7805.375,
+            "solved_rate": 0.625
+          },
+          "surface": {
+            "restricted_mean": 413.25,
+            "solved_rate": 1.0
+          }
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "rule_cap_hit": true,
+        "rule_count": 64,
+        "seconds": 0.09068189095705748,
+        "skipped_long_pairs": 300,
+        "timed_out": false
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.29302853851054417,
+        "witness_vs_total_length": 0.1992816664179759
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aaab",
+          "dbbb"
+        ],
+        [
+          "aab",
+          "bcab"
+        ],
+        [
+          "aacd",
+          "abab"
+        ],
+        [
+          "acda",
+          "baa"
+        ],
+        [
+          "adbb",
+          "da"
+        ],
+        [
+          "bbbb",
+          "bdbd"
+        ],
+        [
+          "cd",
+          "dd"
+        ]
+      ],
+      "goal_count": 24,
+      "presentation_id": "95afdd10ecd2",
+      "reasons": [
+        "NO_20_60_BFS_CAP",
+        "SURFACE_SHORTCUT_SATURATES"
+      ],
+      "selected_cap": null
+    }
+  ],
+  "schema": "wallb-desk-audit-12.v1",
+  "scientific_outcome": false,
+  "seed": 20260809
+}

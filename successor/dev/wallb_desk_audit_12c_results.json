@@ -1,0 +1,6881 @@
+{
+  "constants": {
+    "alphabet": "abcd",
+    "completion_pair_scan_cap": 2000000,
+    "completion_rule_cap": 71,
+    "goals_per_stratum": 8,
+    "library_orderings": [
+      "completion",
+      "goal_relevant"
+    ],
+    "macro_counts": [
+      0,
+      8,
+      32,
+      64
+    ],
+    "max_word_length": 18,
+    "min_library_gain_fraction": 0.05,
+    "presentations": 8,
+    "rules_per_presentation": 7,
+    "search_caps": [
+      50,
+      100,
+      200,
+      500,
+      2000,
+      5000,
+      20000
+    ],
+    "tariffs": [
+      "reuse",
+      "expanded_match"
+    ],
+    "witness_strata": [
+      6,
+      10,
+      14
+    ]
+  },
+  "implementation_nonblank_lines": 748,
+  "presentations": [
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 4,
+          "restricted_mean": 48.375,
+          "solved_rate": 0.25
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 4,
+                "restricted_mean": 48.375,
+                "solved_rate": 0.25
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 5.0,
+                "restricted_mean": 49.75,
+                "solved_rate": 0.041666666666666664
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 5.0,
+                "restricted_mean": 49.75,
+                "solved_rate": 0.041666666666666664
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 49.25,
+                "solved_rate": 0.16666666666666666
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 4,
+                "restricted_mean": 48.375,
+                "solved_rate": 0.25
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 5.0,
+                "restricted_mean": 49.291666666666664,
+                "solved_rate": 0.16666666666666666
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 5.0,
+                "restricted_mean": 49.375,
+                "solved_rate": 0.16666666666666666
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 4,
+                "restricted_mean": 48.666666666666664,
+                "solved_rate": 0.20833333333333334
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 4,
+                "restricted_mean": 48.375,
+                "solved_rate": 0.25
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 5.0,
+                "restricted_mean": 49.375,
+                "solved_rate": 0.16666666666666666
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 5.0,
+                "restricted_mean": 49.375,
+                "solved_rate": 0.16666666666666666
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 48.833333333333336,
+                "solved_rate": 0.20833333333333334
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": -1.0,
+          "64": -1.0,
+          "8": -0.4583333333333357
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 4,
+          "restricted_mean": 48.375,
+          "solved_rate": 0.25
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 2680,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 22,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.383203763398773,
+        "witness_vs_total_length": 0.4048380971352454
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "ab",
+          "cadb"
+        ],
+        [
+          "abcc",
+          "da"
+        ],
+        [
+          "ba",
+          "bbb"
+        ],
+        [
+          "baaa",
+          "ccb"
+        ],
+        [
+          "bab",
+          "cb"
+        ],
+        [
+          "bca",
+          "cc"
+        ],
+        [
+          "da",
+          "dd"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "bba",
+          "cb",
+          146
+        ],
+        [
+          "bcb",
+          "baa",
+          37
+        ],
+        [
+          "cbb",
+          "baa",
+          37
+        ],
+        [
+          "baab",
+          "cba",
+          28
+        ],
+        [
+          "bacb",
+          "ccb",
+          24
+        ],
+        [
+          "bbcc",
+          "baca",
+          20
+        ],
+        [
+          "baaca",
+          "bda",
+          20
+        ],
+        [
+          "cbccb",
+          "bdab",
+          14
+        ],
+        [
+          "cadcc",
+          "acc",
+          13
+        ],
+        [
+          "bacc",
+          "ccc",
+          11
+        ],
+        [
+          "ccbaa",
+          "bdab",
+          11
+        ],
+        [
+          "bcccb",
+          "bdab",
+          11
+        ],
+        [
+          "bbcb",
+          "baab",
+          9
+        ],
+        [
+          "cadcb",
+          "acb",
+          8
+        ],
+        [
+          "cccc",
+          "bada",
+          7
+        ],
+        [
+          "ccbcc",
+          "bdac",
+          6
+        ],
+        [
+          "abbdac",
+          "daa",
+          6
+        ],
+        [
+          "abdab",
+          "dacb",
+          4
+        ],
+        [
+          "acbda",
+          "dacc",
+          3
+        ],
+        [
+          "daadb",
+          "accb",
+          2
+        ],
+        [
+          "cadccb",
+          "accb",
+          2
+        ],
+        [
+          "abcbaa",
+          "dabb",
+          2
+        ],
+        [
+          "accbda",
+          "daccc",
+          2
+        ],
+        [
+          "dacbaa",
+          "daab",
+          2
+        ],
+        [
+          "daadcb",
+          "acccb",
+          1
+        ],
+        [
+          "bbccb",
+          "ccba",
+          0
+        ],
+        [
+          "bccba",
+          "baccb",
+          0
+        ],
+        [
+          "ccbaca",
+          "baada",
+          0
+        ],
+        [
+          "abaccb",
+          "daba",
+          0
+        ],
+        [
+          "daadcc",
+          "acccc",
+          0
+        ],
+        [
+          "daadccb",
+          "accccb",
+          0
+        ],
+        [
+          "dabaca",
+          "acbada",
+          0
+        ],
+        [
+          "abbdab",
+          "dabaa",
+          0
+        ],
+        [
+          "bacac",
+          "baacc",
+          0
+        ],
+        [
+          "dacbaca",
+          "dabbda",
+          0
+        ],
+        [
+          "abaadab",
+          "dacbaa",
+          0
+        ],
+        [
+          "baacb",
+          "ccba",
+          0
+        ],
+        [
+          "baadabb",
+          "bdacba",
+          0
+        ],
+        [
+          "cbaadab",
+          "baadacb",
+          0
+        ],
+        [
+          "ccbdabb",
+          "badacba",
+          0
+        ],
+        [
+          "abaadac",
+          "dacbcc",
+          0
+        ],
+        [
+          "baadacc",
+          "bdabda",
+          0
+        ],
+        [
+          "baadaba",
+          "bdaccb",
+          0
+        ],
+        [
+          "baadabaa",
+          "cbadacb",
+          0
+        ],
+        [
+          "ccbdaba",
+          "badaccb",
+          0
+        ],
+        [
+          "cccba",
+          "bbdab",
+          0
+        ],
+        [
+          "abadab",
+          "dacba",
+          0
+        ],
+        [
+          "ccbdabaa",
+          "cbaadacb",
+          0
+        ],
+        [
+          "acbadab",
+          "daccba",
+          0
+        ],
+        [
+          "baadacba",
+          "cccbdab",
+          0
+        ],
+        [
+          "dabadacb",
+          "daaccba",
+          0
+        ],
+        [
+          "baadaccba",
+          "bdaacba",
+          0
+        ],
+        [
+          "bbdaacb",
+          "baadaab",
+          0
+        ],
+        [
+          "cbadaab",
+          "badaacb",
+          0
+        ],
+        [
+          "ccbdaab",
+          "cbdaacb",
+          0
+        ],
+        [
+          "abaadaacb",
+          "dabdaab",
+          0
+        ],
+        [
+          "dacccacb",
+          "dabadaab",
+          0
+        ],
+        [
+          "ccbdacba",
+          "baadaab",
+          0
+        ],
+        [
+          "cbadaccb",
+          "baadaab",
+          0
+        ],
+        [
+          "dabadaccb",
+          "dabbdaab",
+          0
+        ],
+        [
+          "abaadaab",
+          "daaab",
+          0
+        ],
+        [
+          "dabdacba",
+          "abadaacb",
+          0
+        ],
+        [
+          "ccbdaccba",
+          "badaacba",
+          0
+        ],
+        [
+          "abadaacb",
+          "daaccba",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [],
+      "presentation_id": "39cb46a5584e",
+      "reasons": [
+        "NO_HELPFUL_MACRO_REGION"
+      ],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "bcfefb336d4f6a0d08f0e8dc2168a2f353279259cad34e35357137c430f32a97",
+      "selected_cap": 50,
+      "verified_macro_witnesses": [
+        [
+          "cadccb",
+          "accb",
+          3,
+          "4e46e2b0d621c05a48fa47e9eed6ea22c4028154444c2fde875c9516d2f8aad1"
+        ],
+        [
+          "cadcb",
+          "acb",
+          3,
+          "82fbb3beb08f3defed3b4d71bd2e8606ee7a56a22fbcbf8c8268bb4c7d67976e"
+        ],
+        [
+          "cadcc",
+          "acc",
+          3,
+          "c1e9e22cd7238a0292762afe30bd23ca067348f5dffec1599b0fbf303f08988e"
+        ],
+        [
+          "daadb",
+          "accb",
+          3,
+          "01f1c6f503076157046af02ad7097ed332b632c8e12041846ee95de1e906c93a"
+        ],
+        [
+          "daadccb",
+          "accccb",
+          5,
+          "73c62574b4434cd08fcd24e51f3e2e59f72fa902523369734747d412f09a2e53"
+        ],
+        [
+          "daadcb",
+          "acccb",
+          5,
+          "6cf27d0dcadcafe08c4c6f9ace8c33148aecd9b9abde805293a4e5e187216800"
+        ],
+        [
+          "daadcc",
+          "acccc",
+          5,
+          "d2e213c6920e8bd901fa022033b8b7a5e6b0866420f2efc3992b1ed13bfb33f1"
+        ],
+        [
+          "bba",
+          "cb",
+          3,
+          "7158aeabf9c148ef3e58a651cafa35a70016c1a69251351376f72be8c65db77e"
+        ],
+        [
+          "cbb",
+          "baa",
+          4,
+          "b41269c520fafef556a290d8279666f27cfef2da424461e89ad8b37e60479fdb"
+        ],
+        [
+          "abcbaa",
+          "dabb",
+          5,
+          "675ca47641177309af8468ba9e7ba43f4e0953e088816269cd4a67ce710d0911"
+        ],
+        [
+          "bbccb",
+          "ccba",
+          3,
+          "914325e51cc1c7320fc675b73f9dea1ef354bf478a1ce08d31e3e8cc8e7afe3c"
+        ],
+        [
+          "bbcb",
+          "baab",
+          2,
+          "9618d5145b870992c1f64533cdbb1cb848afc270b624240af941294beb4aae81"
+        ],
+        [
+          "bbcc",
+          "baca",
+          2,
+          "de5cea4ffce13909eb3c88c01ddb7b5db8722336035d01021de314531f09715f"
+        ],
+        [
+          "bcb",
+          "baa",
+          4,
+          "b893ab81dabbc5b9560121ed92b2c127ec884a122c91f53b584f77851bc872a8"
+        ],
+        [
+          "baab",
+          "cba",
+          7,
+          "77cde7ef6a68cbf5c4fc9aa9e5125fd86c115e798aa57a60d22e9947fe726336"
+        ],
+        [
+          "ccbaa",
+          "bdab",
+          8,
+          "baa741748519f49a754aa059ce2a05338797d7e61d2fa0447814d8131f810740"
+        ],
+        [
+          "abbdab",
+          "dabaa",
+          9,
+          "8ac8c9dfbd87e51cf18b8c263429e3f283f49f5c4d2c16a8413e07799d67415a"
+        ],
+        [
+          "abaadab",
+          "dacbaa",
+          13,
+          "a7a6f73bf094f4da540bcf8e571c1d466f8cb1604442d7e9ab8f3fedcfa464f7"
+        ],
+        [
+          "bccba",
+          "baccb",
+          4,
+          "cf9f27290bd584cc3d32d0f8e9e74a70e45f26ce1897605761838882493ee817"
+        ],
+        [
+          "abaccb",
+          "daba",
+          5,
+          "3cd5bba02a61048555855a60e8edcb518eca5ae3582604d0a8c63107cb426c32"
+        ],
+        [
+          "cbccb",
+          "bdab",
+          12,
+          "e91c4258adf177397e68c78800fe538c8d8357523da66cf92a4327a41234ef4e"
+        ],
+        [
+          "dacbaa",
+          "daab",
+          32,
+          "bb27be9ddc7a23da2595c746bcca0cedd7924d7bf606b40db9f7b96cc5a77dc6"
+        ],
+        [
+          "bacb",
+          "ccb",
+          15,
+          "9f9003ef70ea4f53d59a876d06a96b9046c3af56fb73edc63cb0fb9206eaf1f3"
+        ],
+        [
+          "baaca",
+          "bda",
+          5,
+          "d47606b935b9c6bfa9a7c9c95a88b49b8e96460ba9750e6f1676192581824615"
+        ],
+        [
+          "bacc",
+          "ccc",
+          7,
+          "5dd924f9d95b156a6ed54c71fd944ab5335bcec742dbdd4387860bed848499fa"
+        ],
+        [
+          "bcccb",
+          "bdab",
+          16,
+          "5493711a099666720d5458d0989a17a970daab39958eef894c094b3adb51cdba"
+        ],
+        [
+          "abdab",
+          "dacb",
+          17,
+          "ef2b5352ad60a466e8df3ae0fc2e3f1b1a37d903a5440510db13766e50314ed3"
+        ],
+        [
+          "cccba",
+          "bbdab",
+          35,
+          "bb42a8ad33005500deaae13bd29e6cf90490b4ba527c55f3f40f39353126961a"
+        ],
+        [
+          "abadab",
+          "dacba",
+          37,
+          "23a29e9ef08be13b33397c08d736c18df3dbba9b23ef20f082b0c4baf760e82b"
+        ],
+        [
+          "acbadab",
+          "daccba",
+          43,
+          "dc64f48ed78b28600caa219fdaad3bfd6cfd5a7fabade134892065bb866f50a5"
+        ],
+        [
+          "baacb",
+          "ccba",
+          19,
+          "f474a95ddcf188b9b7636a277a4a0f5d8caa6595dd7148dfb65b2083ab582754"
+        ],
+        [
+          "cccc",
+          "bada",
+          9,
+          "8614d5c657438ebce52f56ec37a53c2b9d45e2f3228a63d03b5d1dcaff22fe2e"
+        ],
+        [
+          "acbda",
+          "dacc",
+          13,
+          "2dcd8ff6f09e9b180139c776d7a30c2670dea1e241016294b03b02e835ccce48"
+        ],
+        [
+          "accbda",
+          "daccc",
+          15,
+          "b86eff1f435a4f31a08a881bf3af95762df0ea479daeeb6bc46ea142101cf1c7"
+        ],
+        [
+          "bacac",
+          "baacc",
+          10,
+          "1196d1049a1e48d4e1c9522fdb01e0a694e1eb271a23fd3d672ab82cd642732f"
+        ],
+        [
+          "ccbcc",
+          "bdac",
+          18,
+          "16edc3542f60ef14f6259dcb01bd835042f3c8c0b0ab277b0fc3aad62065b51a"
+        ],
+        [
+          "abbdac",
+          "daa",
+          21,
+          "b876d53ca2d910ff433372af99c3c3e45e8f3a8770e6a38942d43ee16da85905"
+        ],
+        [
+          "abaadac",
+          "dacbcc",
+          23,
+          "20f418377e1942a607fbc91355351698347dd6fdab4e7917ac9f1928505fe85d"
+        ],
+        [
+          "ccbaca",
+          "baada",
+          4,
+          "0363169d5bad66b2abca8780e9b9d0257f4e20a2c3aa91c2ec8b6ec4e02762f2"
+        ],
+        [
+          "dabaca",
+          "acbada",
+          8,
+          "2ec4ad1e303b1641f2cca3405c46d322d2ee40e017d6a19e3214c532a91996c2"
+        ],
+        [
+          "dacbaca",
+          "dabbda",
+          10,
+          "90c35cb8d073bf2c25e091049e0a4e5db5696090db31c78ba5a066857af20f5e"
+        ],
+        [
+          "baadabb",
+          "bdacba",
+          19,
+          "06dd2932f66c28ba578aae9cfe9ab1848f03de19a4fb7ae58614bf4dd64f6e41"
+        ],
+        [
+          "ccbdabb",
+          "badacba",
+          22,
+          "14061c091eda4b215bd6a9c8d1a975e25606558d24794da8e3c1b2b0c9b514cc"
+        ],
+        [
+          "baadabaa",
+          "cbadacb",
+          31,
+          "9a9d3d18af9e92bf8639f565d9694cbaff67f81b7cbae07774e7a84c420662e7"
+        ],
+        [
+          "ccbdabaa",
+          "cbaadacb",
+          42,
+          "2a46a204c1e9061d44a2401e44a1f37cf8ee6682af378c9edcabf0a988243a39"
+        ],
+        [
+          "bbdaacb",
+          "baadaab",
+          104,
+          "ad32794eba69fe97b6b4b385dd2232693f47c37e7249da2bfc22da8177a55559"
+        ],
+        [
+          "ccbdaab",
+          "cbdaacb",
+          108,
+          "13e29a2acbb6b10bbc15e0bd6c77f2214651718e2b7863965172b0262d72f09a"
+        ],
+        [
+          "abaadaacb",
+          "dabdaab",
+          113,
+          "43a96da7e16072aa4dac6222d272c00e9e847b9d3eea2eddd92370b0bcbd2d8d"
+        ],
+        [
+          "cbadaab",
+          "badaacb",
+          108,
+          "0ddb8478f85bb5c5b4f18c5ce46675bfdfc550c610fef77bad111684725e119c"
+        ],
+        [
+          "dacccacb",
+          "dabadaab",
+          129,
+          "804794128b2d24059a61861d2f1ede0d5b46add27a9b2531e8d799fe94030dd3"
+        ],
+        [
+          "baadaba",
+          "bdaccb",
+          31,
+          "4e6f41bc96b8898b93336d05ac4ffbd0a3d4087505a72b56f97b8705bdbe2b50"
+        ],
+        [
+          "ccbdaba",
+          "badaccb",
+          34,
+          "e988e98aa2aeda45b85f095dfc9595dfc9e5dfdf5a4cb19c58e6e65d4a63b5bd"
+        ],
+        [
+          "dabadacb",
+          "daaccba",
+          78,
+          "2b30e0498ec2b7a963743b90079fc5122ecc64cb5e7adb45b3a8ea8a339ece0e"
+        ],
+        [
+          "cbaadab",
+          "baadacb",
+          22,
+          "3e5ecca4e67e13ea866867deabbb93f5aec87588194b49c8c1bb2150f61d407f"
+        ],
+        [
+          "baadacba",
+          "cccbdab",
+          43,
+          "4e6d36b2478b16d4bdedd19f3e96b5c75f6765ce8ad8b3971d233f2f9a544309"
+        ],
+        [
+          "ccbdacba",
+          "baadaab",
+          183,
+          "ec220eae528c2bdcddba08341f650d6c2343e88f065ceb21c562758914a1c515"
+        ],
+        [
+          "abaadaab",
+          "daaab",
+          261,
+          "5ff6f55434c0d579c9489d31e130a29b1c2b3f712d79666e704cc469ee792d13"
+        ],
+        [
+          "dabdacba",
+          "abadaacb",
+          295,
+          "6f86b5f58f97dd688aa6efd79d357f0e9da292fc38cb982b3a42e8f54720e84e"
+        ],
+        [
+          "cbadaccb",
+          "baadaab",
+          253,
+          "e3f47301200bcc7266d72ec6b9a940d6533b6ca2f5d689f43f5c08570e969fa2"
+        ],
+        [
+          "abadaacb",
+          "daaccba",
+          413,
+          "2dbb85feb0fa789dfde9d3c7a3567fa634a742c99bd9082f6c15e622c2de9763"
+        ],
+        [
+          "dabadaccb",
+          "dabbdaab",
+          259,
+          "582297da1fe9cabccd043a7bd0b141a049d08f559c393c3831997785fa1a6448"
+        ],
+        [
+          "baadaccba",
+          "bdaacba",
+          94,
+          "c25beac1c4680a8c6e79a2c1adb2dc1ef4da2814538fa91cf829b0f5df36a05d"
+        ],
+        [
+          "ccbdaccba",
+          "badaacba",
+          311,
+          "865401b9d9f303d96a9a55addfcc1f7894b83e83aced823386992885794629fa"
+        ],
+        [
+          "baadacc",
+          "bdabda",
+          26,
+          "ef63f60279e4bb1e73894df01cd09d21c8ec755de647e3c47511b9794c41f7fb"
+        ]
+      ]
+    },
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 88.375,
+          "solved_rate": 0.20833333333333334
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.375,
+                "solved_rate": 0.20833333333333334
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 91.5,
+                "solved_rate": 0.16666666666666666
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 91.58333333333333,
+                "solved_rate": 0.16666666666666666
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 90.58333333333333,
+                "solved_rate": 0.20833333333333334
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.375,
+                "solved_rate": 0.20833333333333334
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 89.91666666666667,
+                "solved_rate": 0.20833333333333334
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 90.20833333333333,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 88.79166666666667,
+                "solved_rate": 0.20833333333333334
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.375,
+                "solved_rate": 0.20833333333333334
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 90.125,
+                "solved_rate": 0.20833333333333334
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 90.20833333333333,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 89.45833333333333,
+                "solved_rate": 0.20833333333333334
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": -1.75,
+          "64": -1.8333333333333286,
+          "8": -1.0833333333333286
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 88.375,
+          "solved_rate": 0.20833333333333334
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 2029,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 227,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.5951798210688587,
+        "witness_vs_total_length": 0.467467132372717
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "abad",
+          "caa"
+        ],
+        [
+          "acdc",
+          "bb"
+        ],
+        [
+          "ad",
+          "ccdc"
+        ],
+        [
+          "ad",
+          "ddcb"
+        ],
+        [
+          "bd",
+          "ca"
+        ],
+        [
+          "bdb",
+          "dca"
+        ],
+        [
+          "cdb",
+          "dc"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "cdcd",
+          "ada",
+          29
+        ],
+        [
+          "aada",
+          "bbd",
+          29
+        ],
+        [
+          "adcd",
+          "bba",
+          24
+        ],
+        [
+          "bdcdc",
+          "cbb",
+          23
+        ],
+        [
+          "acbdb",
+          "bba",
+          21
+        ],
+        [
+          "acddc",
+          "bbdb",
+          15
+        ],
+        [
+          "bdda",
+          "add",
+          13
+        ],
+        [
+          "cdcbaad",
+          "bbdc",
+          11
+        ],
+        [
+          "ccbdb",
+          "ada",
+          10
+        ],
+        [
+          "bdacd",
+          "abbba",
+          9
+        ],
+        [
+          "ccdad",
+          "bbac",
+          8
+        ],
+        [
+          "cdcbdc",
+          "bbdad",
+          5
+        ],
+        [
+          "ccddc",
+          "addb",
+          4
+        ],
+        [
+          "acdada",
+          "bbdcd",
+          4
+        ],
+        [
+          "ababdb",
+          "bdabd",
+          3
+        ],
+        [
+          "bbcbdb",
+          "bbdcd",
+          3
+        ],
+        [
+          "adbaad",
+          "cbbdc",
+          2
+        ],
+        [
+          "ddadbac",
+          "cbbdc",
+          2
+        ],
+        [
+          "bbcdc",
+          "acdad",
+          1
+        ],
+        [
+          "dbdbdd",
+          "addda",
+          1
+        ],
+        [
+          "bbabd",
+          "addcd",
+          1
+        ],
+        [
+          "cdcbac",
+          "bbaad",
+          1
+        ],
+        [
+          "cbbaad",
+          "adbac",
+          1
+        ],
+        [
+          "bdabcbdb",
+          "bdabdcd",
+          1
+        ],
+        [
+          "adcbdb",
+          "addcd",
+          1
+        ],
+        [
+          "adddacd",
+          "adbabd",
+          1
+        ],
+        [
+          "bdaddacd",
+          "bdababd",
+          1
+        ],
+        [
+          "abbdad",
+          "bbbdc",
+          1
+        ],
+        [
+          "cbbdad",
+          "adbdc",
+          1
+        ],
+        [
+          "bdbad",
+          "cbda",
+          0
+        ],
+        [
+          "bdadcb",
+          "abaad",
+          0
+        ],
+        [
+          "ddccbb",
+          "addcdc",
+          0
+        ],
+        [
+          "acdaddb",
+          "bbcddc",
+          0
+        ],
+        [
+          "ddccbda",
+          "addbad",
+          0
+        ],
+        [
+          "dbdbcdad",
+          "adbcdc",
+          0
+        ],
+        [
+          "dbdbbaad",
+          "addadcb",
+          0
+        ],
+        [
+          "bdadccbda",
+          "abaaddbad",
+          0
+        ],
+        [
+          "bdabdbcdad",
+          "abaadbcdc",
+          0
+        ],
+        [
+          "bbcdad",
+          "adcbac",
+          0
+        ],
+        [
+          "dbdbbbba",
+          "addacd",
+          0
+        ],
+        [
+          "bdabdbbaad",
+          "abaaddadcb",
+          0
+        ],
+        [
+          "adbcbdb",
+          "adbdcd",
+          0
+        ],
+        [
+          "bdabdbdd",
+          "abaaddda",
+          0
+        ],
+        [
+          "dbdbdcbac",
+          "adbcdad",
+          0
+        ],
+        [
+          "bdabdbbbba",
+          "abaaddacd",
+          0
+        ],
+        [
+          "abbaad",
+          "bbbac",
+          0
+        ],
+        [
+          "bdabdbdcbac",
+          "abaadbcdad",
+          0
+        ],
+        [
+          "bbdcbac",
+          "adcbaad",
+          0
+        ],
+        [
+          "acdadbac",
+          "bbbbaad",
+          0
+        ],
+        [
+          "dbdbdcbaad",
+          "adbdcbac",
+          0
+        ],
+        [
+          "addabcbdb",
+          "addabdcd",
+          0
+        ],
+        [
+          "bbacbac",
+          "adbbaad",
+          0
+        ],
+        [
+          "bbbaad",
+          "abbdc",
+          0
+        ],
+        [
+          "bbdcbaad",
+          "adcbdc",
+          0
+        ],
+        [
+          "bdabaad",
+          "abcbbdc",
+          0
+        ],
+        [
+          "dbdbbbdc",
+          "adbbaad",
+          0
+        ],
+        [
+          "dbaddadcb",
+          "adbacbac",
+          0
+        ],
+        [
+          "addaddacd",
+          "addababd",
+          0
+        ],
+        [
+          "cbbdbcbdb",
+          "cbbdbdcd",
+          0
+        ],
+        [
+          "addaddcdad",
+          "addadccbda",
+          0
+        ],
+        [
+          "cbbddbac",
+          "abacbbdc",
+          0
+        ],
+        [
+          "cbbdddacd",
+          "cbbdbabd",
+          0
+        ],
+        [
+          "cbbdddcdad",
+          "cbbaddbad",
+          0
+        ],
+        [
+          "adbdddcdad",
+          "adbaddbad",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [],
+      "presentation_id": "a8948b29abc8",
+      "reasons": [
+        "NO_HELPFUL_MACRO_REGION"
+      ],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "392e720c404a74393dfdc75fc443ec89dc82266cdbc061f858d757edca3f4bc9",
+      "selected_cap": 100,
+      "verified_macro_witnesses": [
+        [
+          "bdadcb",
+          "abaad",
+          3,
+          "e469820a5b964097d9fdb53d4cd5450f7ccd21e199448006f3ed4f1696b00d51"
+        ],
+        [
+          "ababdb",
+          "bdabd",
+          4,
+          "73fb087ae64e79be9e4b050db17d2527d01bb27a211ffbd545c167d5c86bd476"
+        ],
+        [
+          "bbcdc",
+          "acdad",
+          2,
+          "e5d8cb6a66defdbe29305c94f0c7d7dfba9f03d94e27d9cc4d91eff57063bc07"
+        ],
+        [
+          "adcd",
+          "bba",
+          3,
+          "f6078399f78d332c56c2bfe4acb68d600ab6afa0c12b39f6391a19600304b4fa"
+        ],
+        [
+          "bdacd",
+          "abbba",
+          5,
+          "6b1768f54bb362923ce8beb6416b0bfe8d1aaaf778abaef64a0bb24dca202745"
+        ],
+        [
+          "acbdb",
+          "bba",
+          2,
+          "cabccbbc357778557167fc4a128127ee7f352f51c201542a8de480abbcc786f8"
+        ],
+        [
+          "acddc",
+          "bbdb",
+          2,
+          "b50c569386e493e3a170a142ba6195129db3d4c7ce9383affa04d02b049141f7"
+        ],
+        [
+          "ccdad",
+          "bbac",
+          5,
+          "100bdaedaa525832871c2b71577081cc44f4f2f791cba9208628f572f9542be5"
+        ],
+        [
+          "bbcdad",
+          "adcbac",
+          7,
+          "175b9e9327ad7b67f069dd52f3f15336c661a275e3536ad444919fa3c21e3eb2"
+        ],
+        [
+          "cdcd",
+          "ada",
+          3,
+          "80064896c849f3dd743716254ce17affc36032ed27b14729cf454a9a3d363f10"
+        ],
+        [
+          "aada",
+          "bbd",
+          4,
+          "a0f0d900b0be6071d8b3f2cca7e9dbc2c08182dcb866583422772978db21cb18"
+        ],
+        [
+          "acdada",
+          "bbdcd",
+          4,
+          "930e48ab160d995ca71e6a9a37dddab331202c31741fe5cac3d46d4287fb17dc"
+        ],
+        [
+          "ccbdb",
+          "ada",
+          2,
+          "24e9bd62dec0310a39bb81d7f6c08e5c6d69739c0d754c60cd3e92c9447dae14"
+        ],
+        [
+          "bbcbdb",
+          "bbdcd",
+          7,
+          "91fccc93411fad82e82daaf8cb4f57b02d3c00ae4ccd8a54880fd3e9af5716a2"
+        ],
+        [
+          "ccddc",
+          "addb",
+          2,
+          "48b528916181091c2c64320465c273fe34b48f58e4be7aa48a4913735f53b09d"
+        ],
+        [
+          "acdaddb",
+          "bbcddc",
+          3,
+          "9cab2865889f4bb22167798ed7334d85859b9ead8003193e8f487c8f07a08e30"
+        ],
+        [
+          "cdcbac",
+          "bbaad",
+          10,
+          "9c146ce0af5075a9eb8b66a1137682631d649af868e06cd20a04285c6d2fd272"
+        ],
+        [
+          "abbaad",
+          "bbbac",
+          11,
+          "58d10bf2be35ac48b226b875bab890b774d8467e3093fbc4f74832aecaa58116"
+        ],
+        [
+          "bbdcbac",
+          "adcbaad",
+          12,
+          "ffc5098157d1bac82fe6c6f1129416f1a95a02ae385148a49c46b5a939a008ca"
+        ],
+        [
+          "bdda",
+          "add",
+          5,
+          "ea6e5e83a304c21431f450d14698fd80ffb7139a85bd6e7f1af45f66c325e876"
+        ],
+        [
+          "bbabd",
+          "addcd",
+          10,
+          "561cb7335105e922af099de081a05fb10dc2a857d2da7deb8f6e33d94cf858c8"
+        ],
+        [
+          "adcbdb",
+          "addcd",
+          19,
+          "fb9fb90054392bda2217a95810b2e15a002ffa5ddb0e1137e7d29de32a584662"
+        ],
+        [
+          "cbbaad",
+          "adbac",
+          11,
+          "fc4bbd7dc5a08d7a411868e30621dab7fd94308092f40886dad268bb988fe5ff"
+        ],
+        [
+          "acdadbac",
+          "bbbbaad",
+          12,
+          "a504f37d442e62f661010e8f2462c32287cf51083dc5620e72384d389f168588"
+        ],
+        [
+          "cdcbaad",
+          "bbdc",
+          17,
+          "806faa2afd5a8460411944795be9606f3c1d93b2528185bd7bf0caa37a0c6605"
+        ],
+        [
+          "bbbaad",
+          "abbdc",
+          18,
+          "5fdd5ecc5eea7484aa921e7e6738ff99e7a89d9d4c2ae0a00677d445e1db5cc8"
+        ],
+        [
+          "bbdcbaad",
+          "adcbdc",
+          19,
+          "52342ffb32f8c9ae4eda5dcc9dabce83b778e6f52c256a1ee5e768f7643d5eaa"
+        ],
+        [
+          "bbacbac",
+          "adbbaad",
+          17,
+          "0b349d92f400d7d10162398f4bc188f92c1be60b93fad8dd15e291944c11701f"
+        ],
+        [
+          "adbaad",
+          "cbbdc",
+          18,
+          "0b6c2276ffc2a24372e34b71f0ecaf45279de35d64fad0fde7311906f7b708de"
+        ],
+        [
+          "bdabaad",
+          "abcbbdc",
+          20,
+          "86ae8d7c67e24fa161e666b23d4576031875a0be6ab0e6a84bdbad3eae90776a"
+        ],
+        [
+          "cdcbdc",
+          "bbdad",
+          24,
+          "ceb85b074d13960229ee268f0e4a21aedfad89977ac84a90f080ad4b1188d906"
+        ],
+        [
+          "abbdad",
+          "bbbdc",
+          25,
+          "af74cdf7ca5c3051a153698228dea4c368cfbb1e2bb880dee8d8b6daa2b565fb"
+        ],
+        [
+          "cbbdad",
+          "adbdc",
+          25,
+          "5813810f65e3abf6f1749e8687bdae2ff873b7391517a57813996cdf30f9daa1"
+        ],
+        [
+          "dbdbbaad",
+          "addadcb",
+          5,
+          "654672a37eccaef52c4f22222045f196cbe7e2c68476c163b778d8a47545f82b"
+        ],
+        [
+          "bdabdbbaad",
+          "abaaddadcb",
+          7,
+          "bb0f79c5c33935a04c31fc9cbf7b7b26d4a1f34c350ef133feb6a1f6babccd46"
+        ],
+        [
+          "dbdbcdad",
+          "adbcdc",
+          4,
+          "e83e840b50798dcd505be3a5a20d03cae725b30ef3ffa21bda373cd1ad5c717d"
+        ],
+        [
+          "bdabdbcdad",
+          "abaadbcdc",
+          6,
+          "e82af24628898f9ed7f4ea1183ad6c69e859abebd40ed478a45ee97ff729187e"
+        ],
+        [
+          "dbdbbbba",
+          "addacd",
+          7,
+          "6741f557c147b9dcca28a82f70c7ebfbc1f75a6c0a44a094d46bf22ea1084a62"
+        ],
+        [
+          "bdabdbbbba",
+          "abaaddacd",
+          9,
+          "78fde4ce90b369ccf5c140e48da9f69840f59ab27d7509ce490bc98713aecf06"
+        ],
+        [
+          "dbdbdcbac",
+          "adbcdad",
+          9,
+          "7540e2a97904a562c3d7563d8aa55b1089b9327a86936100bc5779080011f0c2"
+        ],
+        [
+          "bdabdbdcbac",
+          "abaadbcdad",
+          11,
+          "fca91f1d53248dc14ea8288b1f8ee1540195fe945738e7da300dab51e2a94d9c"
+        ],
+        [
+          "adbcbdb",
+          "adbdcd",
+          9,
+          "c72df83c0bbf2300fdbada859ab53822be64c202ae3353092ac31d08378739b4"
+        ],
+        [
+          "bdabcbdb",
+          "bdabdcd",
+          13,
+          "fece74f65c1307d97811dc706faa89d90994ee73702c45112396d482c813acda"
+        ],
+        [
+          "dbdbdcbaad",
+          "adbdcbac",
+          14,
+          "6da894c87647f92b8beafcb003913f5aa21e1052f47d4d23489fd7ea0b17dd4f"
+        ],
+        [
+          "dbdbdd",
+          "addda",
+          7,
+          "68e75acd1c9d745dea0811a28bbd916e78c4eaea7e92acdcefa33ebfbda370b2"
+        ],
+        [
+          "bdabdbdd",
+          "abaaddda",
+          9,
+          "7ffdb4900e98fffa402b1f0bbb5dd4ebabb146f75e9f860b1e01ddcbdff44900"
+        ],
+        [
+          "adddacd",
+          "adbabd",
+          19,
+          "5527314d1bc512e28656c05dda958f997d6c931fdcae2de2eafb5e4e4cb7f051"
+        ],
+        [
+          "bdaddacd",
+          "bdababd",
+          23,
+          "28579d18b66dbe39fa4823042e5d58b5b47edf04afd070ea1a0daf2d9237e75f"
+        ],
+        [
+          "ddadbac",
+          "cbbdc",
+          30,
+          "3e3f0a29fa1c58c43e660db50c592b1db2ba8c63f2762ddc8ea814fb7c69bb55"
+        ],
+        [
+          "cbbddbac",
+          "abacbbdc",
+          35,
+          "a0c55aee421bd1cc82d6f284554524b0aefbdb76796ad79c3aafba249884fd9c"
+        ],
+        [
+          "dbdbbbdc",
+          "adbbaad",
+          20,
+          "0b3e35e9d572724acf93d01af853443f050c369e1c36135e71835d9443777a07"
+        ],
+        [
+          "dbaddadcb",
+          "adbacbac",
+          24,
+          "e188a6c6f80734a2b414cae3531641dc08df2355f229935beafeba7adfee3a39"
+        ],
+        [
+          "addabcbdb",
+          "addabdcd",
+          15,
+          "625b840e391a37feaa3de424c5d8eba5e2bcfdfbff3212aa5aa80057ffe351c8"
+        ],
+        [
+          "cbbdbcbdb",
+          "cbbdbdcd",
+          25,
+          "af5f13971a58e2e7b44f03c1005930272f0117dbb6238c923d7646a9850e063e"
+        ],
+        [
+          "addaddacd",
+          "addababd",
+          25,
+          "74f7617774c06afb4694d802521886f3e2238fd78436a2da49baa8f0a9d5ec50"
+        ],
+        [
+          "cbbdddacd",
+          "cbbdbabd",
+          35,
+          "dba442f92ba3e68db55a8ba56b8e6e5c98b4520dc38f181fcf40bdfd8d17217e"
+        ],
+        [
+          "bdbad",
+          "cbda",
+          3,
+          "a7ca39d5b0238ce69e77d485bb01228f09254afded639b7c645d8ae847d1b474"
+        ],
+        [
+          "ddccbda",
+          "addbad",
+          4,
+          "44a6bc1c69bda70ec3d5947c72d2840a08bdc9dc5a8889e9b46b75c431e858ce"
+        ],
+        [
+          "bdadccbda",
+          "abaaddbad",
+          6,
+          "dc45f95c023fa3926005035af0e5a2a1cea36839f929743539fe7da7fd977d14"
+        ],
+        [
+          "addaddcdad",
+          "addadccbda",
+          32,
+          "ab0cb3c0d5890be990d95f6c40766f744e83410351e94b57353df48c7f26fd2d"
+        ],
+        [
+          "cbbdddcdad",
+          "cbbaddbad",
+          46,
+          "94323aaf7a80961690ba874b682a9c8c771798d29a6cabc50da5eb3d8eb79e2a"
+        ],
+        [
+          "adbdddcdad",
+          "adbaddbad",
+          48,
+          "1d085ef87afe13c67ca24537c257c5c261cf7cd82982d7373486de7c7ee78793"
+        ],
+        [
+          "bdcdc",
+          "cbb",
+          2,
+          "4bfe1ce9736ef0b2213d663571b55e6f7cf41640315cb632c6bf7d75b67b7456"
+        ],
+        [
+          "ddccbb",
+          "addcdc",
+          3,
+          "50640da301e9f19c96e4703d80cb85c5ff96e5ade65c8075d67eaccb861b875c"
+        ]
+      ]
+    },
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 88.375,
+          "solved_rate": 0.20833333333333334
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.375,
+                "solved_rate": 0.20833333333333334
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 90.66666666666667,
+                "solved_rate": 0.20833333333333334
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 90.79166666666667,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 89.54166666666667,
+                "solved_rate": 0.20833333333333334
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.375,
+                "solved_rate": 0.20833333333333334
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.45833333333333,
+                "solved_rate": 0.2916666666666667
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.66666666666667,
+                "solved_rate": 0.2916666666666667
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.45833333333333,
+                "solved_rate": 0.25
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.375,
+                "solved_rate": 0.20833333333333334
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.54166666666667,
+                "solved_rate": 0.2916666666666667
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.66666666666667,
+                "solved_rate": 0.2916666666666667
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 88.04166666666667,
+                "solved_rate": 0.2916666666666667
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": -0.1666666666666714,
+          "64": -0.2916666666666714,
+          "8": 0.3333333333333286
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 88.375,
+          "solved_rate": 0.20833333333333334
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 1798,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 0,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.39728859128769184,
+        "witness_vs_total_length": 0.1383296561188505
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aaa",
+          "bad"
+        ],
+        [
+          "abc",
+          "dd"
+        ],
+        [
+          "bb",
+          "cc"
+        ],
+        [
+          "bcc",
+          "dbcd"
+        ],
+        [
+          "bcd",
+          "dbcd"
+        ],
+        [
+          "cda",
+          "dcdd"
+        ],
+        [
+          "dc",
+          "dcab"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "bcd",
+          "bbb",
+          69
+        ],
+        [
+          "ddd",
+          "ddc",
+          50
+        ],
+        [
+          "cbb",
+          "bbc",
+          34
+        ],
+        [
+          "abbb",
+          "ddc",
+          34
+        ],
+        [
+          "dbbb",
+          "bbb",
+          16
+        ],
+        [
+          "bddd",
+          "bddc",
+          10
+        ],
+        [
+          "aaddc",
+          "bddc",
+          10
+        ],
+        [
+          "aaddd",
+          "bddc",
+          9
+        ],
+        [
+          "bbbac",
+          "bbaaa",
+          6
+        ],
+        [
+          "aaacab",
+          "aaac",
+          5
+        ],
+        [
+          "bbbcab",
+          "bbbc",
+          5
+        ],
+        [
+          "ddcacd",
+          "ddcb",
+          5
+        ],
+        [
+          "aaadd",
+          "aaadc",
+          4
+        ],
+        [
+          "dbbcb",
+          "cddbb",
+          4
+        ],
+        [
+          "ddcacab",
+          "ddcac",
+          3
+        ],
+        [
+          "ddcad",
+          "ddcac",
+          3
+        ],
+        [
+          "abbaaa",
+          "ddcac",
+          3
+        ],
+        [
+          "cdacab",
+          "cdac",
+          1
+        ],
+        [
+          "bbbacab",
+          "bbbac",
+          1
+        ],
+        [
+          "cdad",
+          "cdac",
+          1
+        ],
+        [
+          "aaacdd",
+          "bacda",
+          0
+        ],
+        [
+          "dcdcda",
+          "cdacdd",
+          0
+        ],
+        [
+          "bacdacdd",
+          "aaacdcda",
+          0
+        ],
+        [
+          "bbdacab",
+          "bbdac",
+          0
+        ],
+        [
+          "dbbbcb",
+          "bbbbcd",
+          0
+        ],
+        [
+          "dbbbda",
+          "bbbbbd",
+          0
+        ],
+        [
+          "bbbdd",
+          "bbbdc",
+          0
+        ],
+        [
+          "bbdad",
+          "bbdac",
+          0
+        ],
+        [
+          "bbbbbd",
+          "bbbda",
+          0
+        ],
+        [
+          "bddcbcd",
+          "aaddbbb",
+          0
+        ],
+        [
+          "cdacacab",
+          "cdacac",
+          0
+        ],
+        [
+          "aaadcacab",
+          "aaadcac",
+          0
+        ],
+        [
+          "bbbbbb",
+          "bbbcb",
+          0
+        ],
+        [
+          "bbbdcacab",
+          "bbbdcac",
+          0
+        ],
+        [
+          "bbdacacab",
+          "bbdacac",
+          0
+        ],
+        [
+          "aaadcad",
+          "aaadcac",
+          0
+        ],
+        [
+          "bacddbb",
+          "aaabbcb",
+          0
+        ],
+        [
+          "bbbdcad",
+          "bbbdcac",
+          0
+        ],
+        [
+          "bbbbbbbbd",
+          "bbbbbbda",
+          0
+        ],
+        [
+          "cdacd",
+          "cdabb",
+          0
+        ],
+        [
+          "bddbbbb",
+          "bddcda",
+          0
+        ],
+        [
+          "aaddbbb",
+          "bddbbb",
+          0
+        ],
+        [
+          "cdabbacab",
+          "cdabbac",
+          0
+        ],
+        [
+          "aaadcacd",
+          "aaadcb",
+          0
+        ],
+        [
+          "bbbabb",
+          "bbaaad",
+          0
+        ],
+        [
+          "bbbdcacd",
+          "bbbdcb",
+          0
+        ],
+        [
+          "bbbdbbc",
+          "bbbbbcb",
+          0
+        ],
+        [
+          "bbbdacdd",
+          "bbbbbca",
+          0
+        ],
+        [
+          "bbbcbda",
+          "bbbbdaa",
+          0
+        ],
+        [
+          "bbbcbcb",
+          "bbbdaa",
+          0
+        ],
+        [
+          "ddcacacab",
+          "ddcacac",
+          0
+        ],
+        [
+          "aaadcacacab",
+          "aaadcacac",
+          0
+        ],
+        [
+          "bbbdcacacab",
+          "bbbdcacac",
+          0
+        ],
+        [
+          "bbdabb",
+          "bbbbcb",
+          0
+        ],
+        [
+          "bbdacd",
+          "bbbbcb",
+          0
+        ],
+        [
+          "cdabbcb",
+          "bbbbcb",
+          0
+        ],
+        [
+          "ddcbcb",
+          "bbbbb",
+          0
+        ],
+        [
+          "aaadcbcb",
+          "bddbbc",
+          0
+        ],
+        [
+          "bbbbbcbd",
+          "bbbbbca",
+          0
+        ],
+        [
+          "bbaaadcb",
+          "bbbbbcb",
+          0
+        ],
+        [
+          "ddcbacab",
+          "ddcbac",
+          0
+        ],
+        [
+          "aaadcbacab",
+          "aaadcbac",
+          0
+        ],
+        [
+          "bbbdcbcb",
+          "bbbbbcb",
+          0
+        ],
+        [
+          "bbbbdaa",
+          "bbbbbc",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [],
+      "presentation_id": "3ce31c0a0b4c",
+      "reasons": [
+        "NO_HELPFUL_MACRO_REGION"
+      ],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "62fae1c6997da7e4c9f8a731a6c8b7d4de6499a645d2bbe3dc88b77be9a18fa4",
+      "selected_cap": 100,
+      "verified_macro_witnesses": [
+        [
+          "aaddd",
+          "bddc",
+          4,
+          "cb489fa4d33dd1580fbcf959440d94c9ff24532f1ce951b47999ff142d025ed0"
+        ],
+        [
+          "bddd",
+          "bddc",
+          8,
+          "6288f7ab793d1a1f3751d288bebb6b4a8ae33bd90d971ae5b7a2e486c233059c"
+        ],
+        [
+          "aaacdd",
+          "bacda",
+          2,
+          "888d1825ce6fd6113d56813d66f875ce1f01ae9db6f24f91fa5fb5d08ea8c5db"
+        ],
+        [
+          "aaacab",
+          "aaac",
+          3,
+          "6f0fec0c28c07b9e904e6ca1c799193cac54829dcef644b8c5b3c268671391b3"
+        ],
+        [
+          "abbb",
+          "ddc",
+          2,
+          "c5744ca8369eb4fc534b7ed8f9d6147334d5f79c11a4b8752bcfb400e6a2a56a"
+        ],
+        [
+          "cbb",
+          "bbc",
+          2,
+          "0be31319a3a32594d94797903c12cfa55cd90a622b098ddb881874c488373509"
+        ],
+        [
+          "dbbbcb",
+          "bbbbcd",
+          6,
+          "3175e7dab855e6b1192e4b9eedfa6f4c92229d8d9836f9305438a852043246fb"
+        ],
+        [
+          "bddcbcd",
+          "aaddbbb",
+          12,
+          "d8c66477750e0e2659342ae46ab01664b74032002a852200c24eb91a6e0ad660"
+        ],
+        [
+          "bcd",
+          "bbb",
+          3,
+          "0bb12a1ce351845a6f4f5fe646d6ecc0d966cab34c7068b34d2d3911c0b414d1"
+        ],
+        [
+          "aaddc",
+          "bddc",
+          8,
+          "bd948295cdfa59ec25405b183b48ef82e09660f840d1470f42af90209efa15d2"
+        ],
+        [
+          "aaddbbb",
+          "bddbbb",
+          32,
+          "6debe2a88ceeaad064ea8f76a9682c6113ae040c620d5e99614ed2826fbeec26"
+        ],
+        [
+          "ddd",
+          "ddc",
+          6,
+          "a6e5e597966bc8c6f3e439f70c8ad1be63f9a719012105f7e0e5b5d86f6faf6f"
+        ],
+        [
+          "aaadd",
+          "aaadc",
+          8,
+          "d9e0b9f1a7a02dfdd8ea688d8a3fcd2674c7adc6a486245fc772f3473d75c0ed"
+        ],
+        [
+          "dbbbda",
+          "bbbbbd",
+          7,
+          "f80d24babb00e3937051c7fd8febd96f0e0729944743c6dbe7db9281b73eef27"
+        ],
+        [
+          "bddbbbb",
+          "bddcda",
+          25,
+          "2fa14f2f80eb9d73e54c8a367ab286db4088000126daf4b851ad58b83a2dc430"
+        ],
+        [
+          "bbbcab",
+          "bbbc",
+          5,
+          "1e151fcdd28a94716b90bf076c5a2cd8bb85cb3bd0fe08cef13f6c9c97285abb"
+        ],
+        [
+          "dbbb",
+          "bbb",
+          5,
+          "0d8fae5ebebf52fef5f70bbff33bb1cb25f8d485731c87fa17861cbfd2730d5a"
+        ],
+        [
+          "bbbdd",
+          "bbbdc",
+          10,
+          "c2229d9a20a6aa6aae2af8a9c2b8da39a324357798804142c3895920656083ff"
+        ],
+        [
+          "bbbbbbbbd",
+          "bbbbbbda",
+          24,
+          "9ed0477b3c57569c3a3f43b77635b79051fedea402130e94e9b03bef4e09628f"
+        ],
+        [
+          "bbbbbb",
+          "bbbcb",
+          18,
+          "5b5dd5f477f64096aa54178c43fcc9ae9f2a6c6d91e29c86a35aab60795e270a"
+        ],
+        [
+          "bbbbbd",
+          "bbbda",
+          12,
+          "cc84c48d61b89c6231f1b28ef711f9736b4b6b7dc3d7f6c17f2e34123d2056c5"
+        ],
+        [
+          "bbbcbcb",
+          "bbbdaa",
+          72,
+          "653389b84d47ea49d5797fb93b50a30459b042c89b2de3deb2a09c2e268b8295"
+        ],
+        [
+          "bbbcbda",
+          "bbbbdaa",
+          64,
+          "49ce4921187f18be7f9748cc1175ba0b8b08bd72c7244a4372ceed0d7e363dde"
+        ],
+        [
+          "dbbcb",
+          "cddbb",
+          22,
+          "d04686e79b0bdb06d614d70608f01aa8187423c80cf0610879bb47b335c8d83c"
+        ],
+        [
+          "bacddbb",
+          "aaabbcb",
+          23,
+          "387aa9a7454d62fc54ed3e49d205e36ac4899817e6d6dcd68d3171c652e28a6e"
+        ],
+        [
+          "bbbdbbc",
+          "bbbbbcb",
+          46,
+          "1da02e7c4c27877e2d6ed9df90c75a102fcd1573e5568a65f2aaeacd9242457a"
+        ],
+        [
+          "dcdcda",
+          "cdacdd",
+          2,
+          "983b83e56c2aed96e5417830b8b565f6c8def314e07285515e12b02c8c159556"
+        ],
+        [
+          "bacdacdd",
+          "aaacdcda",
+          3,
+          "97c4adac32e141ee9f6ccd6a3ca37f5cf1a49c4990cd6f699a4ecb00f7ddadf4"
+        ],
+        [
+          "bbbdacdd",
+          "bbbbbca",
+          50,
+          "a041d3410027dcfca642f894c98184b0961fc3a70f66ea840253ee120fb680ea"
+        ],
+        [
+          "cdacab",
+          "cdac",
+          3,
+          "1e00c1efdc12c778a912060eb62a62d9a84a69800a54b960a07a2854c0f8fd7a"
+        ],
+        [
+          "ddcacab",
+          "ddcac",
+          15,
+          "5c7ca970b2013dbcd1204fc8e26acaa8bb8f3da43710ad07c477a100625655cb"
+        ],
+        [
+          "aaadcacab",
+          "aaadcac",
+          17,
+          "fe688bdf989478b3318f59754cda25d1cb9116511ca13aa303531811df356e49"
+        ],
+        [
+          "bbdacab",
+          "bbdac",
+          5,
+          "4bd45651ebf88bcf311faa821f3ae672ec05a622618851dec58b6380f7919cf3"
+        ],
+        [
+          "bbbacab",
+          "bbbac",
+          7,
+          "0ed4084547346da94cc9ea5c5493d25e2b3d0c8e6fb5b692992febe9d104e77d"
+        ],
+        [
+          "bbbdcacab",
+          "bbbdcac",
+          19,
+          "a836237bcf840399c172363613c18f2d7232a78cd5821b4d8572f5d26a46dd16"
+        ],
+        [
+          "bbdabb",
+          "bbbbcb",
+          86,
+          "e9f5ff5e0f4deebe527b5929c34a62ca76426832fd200e2a6f8a6afe204ed5bf"
+        ],
+        [
+          "cdad",
+          "cdac",
+          8,
+          "9dd26e76d9f9b223c7779788cb4853e4febd5a4810fe31c23f27929b95b76565"
+        ],
+        [
+          "ddcad",
+          "ddcac",
+          20,
+          "1d5a1ff20a5c535939e9aa68d159dd4b00eac37e2f1b635e40a48a038f0b840e"
+        ],
+        [
+          "aaadcad",
+          "aaadcac",
+          22,
+          "cc811b0f472155dc9b7c8a59b6c3948de54fa83329fcb92857d058f19d92226e"
+        ],
+        [
+          "bbdad",
+          "bbdac",
+          10,
+          "e4cb8bc969234bd15574670e1166b514c58ce5bd6e4a715e714aab6b899704ee"
+        ],
+        [
+          "bbbac",
+          "bbaaa",
+          13,
+          "ca270dc3a26ccb2e5d81303f3c2a1f4d100f694becf96e5b2c5c3ec9b488caa5"
+        ],
+        [
+          "abbaaa",
+          "ddcac",
+          41,
+          "fd834d0339add9f4c0eb862cb7490e5bfa13c2f4fef624dfbfdbd3b6e0642666"
+        ],
+        [
+          "bbbdcad",
+          "bbbdcac",
+          24,
+          "13b3ce9e503972b1edbc107feeb4888f6f8907866ec90c4006098d57b8c7cc8f"
+        ],
+        [
+          "cdacd",
+          "cdabb",
+          25,
+          "edf7369ad35ba54f6e87c543543d64ef16593e843579806bc82b0e866f9b311c"
+        ],
+        [
+          "ddcacd",
+          "ddcb",
+          38,
+          "4502dc40c2636547396ed86f94a37f79c9a2dba1ca10f8a9342f761331c8827c"
+        ],
+        [
+          "aaadcacd",
+          "aaadcb",
+          40,
+          "563dd41d7317b144004f312619a76189c3e37d970a924cda526be18748d5b0d7"
+        ],
+        [
+          "bbdacd",
+          "bbbbcb",
+          113,
+          "9bdeb25a22c5f462636236d7410022c68fa196c71794631c0f59ce3f4dcd863f"
+        ],
+        [
+          "bbbbbcbd",
+          "bbbbbca",
+          161,
+          "c0973932edd6a3595501e36c0fa67378761d731be5a0c202e9800a579b266979"
+        ],
+        [
+          "bbbabb",
+          "bbaaad",
+          42,
+          "f9dbc40094970402aefac48206219946d5b724dfed00d6a8018628acc8f252d6"
+        ],
+        [
+          "bbbdcacd",
+          "bbbdcb",
+          42,
+          "92609b8d06a6ce61098d4150f5e693b4c981b7977534570d4b5352e652d154f2"
+        ],
+        [
+          "cdabbcb",
+          "bbbbcb",
+          116,
+          "f75905095cf5dd697ad0e9ae8bd74f6bc0af933dc33570e05f18d5452f959261"
+        ],
+        [
+          "ddcbcb",
+          "bbbbb",
+          139,
+          "565d91f67bcef4ef689b82d315f9a70224d9bed2423b795e2f69f46f5926fa97"
+        ],
+        [
+          "aaadcbcb",
+          "bddbbc",
+          144,
+          "52027f2679226b5f098e44f06fa32b240d128fd05e20b2adc89ebb345dff5ac5"
+        ],
+        [
+          "bbbbdaa",
+          "bbbbbc",
+          300,
+          "5d70dfc2cfba4b41e20431bc829eb10663793fab225ef4d2f96ff0d3c29aa3e5"
+        ],
+        [
+          "bbaaadcb",
+          "bbbbbcb",
+          165,
+          "f3d5a281c6be60e260123358b34b209b3f823fab8e15104b9c2e3991af5fd2cc"
+        ],
+        [
+          "bbbdcbcb",
+          "bbbbbcb",
+          172,
+          "a4bd03776d300dbcfbb849ed5080185d949c64dbdd80fca27657349f9a5c7403"
+        ],
+        [
+          "cdacacab",
+          "cdacac",
+          17,
+          "3f6400208d6d6beb8dba4b681e94915a80c18e37c2d0feee5fea9e918b15a25f"
+        ],
+        [
+          "ddcacacab",
+          "ddcacac",
+          81,
+          "b50cdbea20c99cd3ac53f44d96e778ca927097250bbcf0af24ed2d6f5c93384f"
+        ],
+        [
+          "aaadcacacab",
+          "aaadcacac",
+          83,
+          "66a7d1228448a49c33e4be2b4eb8cc963c3a1eebafc904545cfa00120b63d3f7"
+        ],
+        [
+          "bbdacacab",
+          "bbdacac",
+          19,
+          "3e25f24e7fae10e60d26552e1ac825b7b97bd81c4f1a97b4171fd8b785dcd544"
+        ],
+        [
+          "bbbdcacacab",
+          "bbbdcacac",
+          85,
+          "8669534ee33ffad7e7c056bf82730da3b6c5abb5a9ab8eb1fe48ccabe678454c"
+        ],
+        [
+          "cdabbacab",
+          "cdabbac",
+          35,
+          "58ef40d870899068c0916f912e5b14f990967d9535ba2f71dde24defd3146c55"
+        ],
+        [
+          "ddcbacab",
+          "ddcbac",
+          167,
+          "bec9fac7e8a7709fcd4cf53aa02b478a7bc8ceb6c1fad051e30faa4d2d0e342d"
+        ],
+        [
+          "aaadcbacab",
+          "aaadcbac",
+          169,
+          "ee9146b92495b739c2246ded43c995d39523e85ea08ce6892d093ccb436423cc"
+        ]
+      ]
+    },
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 4.0,
+          "restricted_mean": 171.95833333333334,
+          "solved_rate": 0.2916666666666667
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 171.95833333333334,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 4,
+                "restricted_mean": 183.08333333333334,
+                "solved_rate": 0.16666666666666666
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 4,
+                "restricted_mean": 183.20833333333334,
+                "solved_rate": 0.16666666666666666
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 176.45833333333334,
+                "solved_rate": 0.20833333333333334
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 171.95833333333334,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 176.5,
+                "solved_rate": 0.20833333333333334
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 177.16666666666666,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 174.79166666666666,
+                "solved_rate": 0.2916666666666667
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 171.95833333333334,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 177,
+                "solved_rate": 0.20833333333333334
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 177.16666666666666,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 4.0,
+                "restricted_mean": 175.91666666666666,
+                "solved_rate": 0.20833333333333334
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": -5.041666666666657,
+          "64": -5.208333333333314,
+          "8": -3.9583333333333144
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 4.0,
+          "restricted_mean": 171.29166666666666,
+          "solved_rate": 0.375
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 2780,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 341,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.14535047493345277,
+        "witness_vs_total_length": -0.08585035246793064
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aa",
+          "cbba"
+        ],
+        [
+          "aaaa",
+          "ca"
+        ],
+        [
+          "ba",
+          "dcb"
+        ],
+        [
+          "ca",
+          "cab"
+        ],
+        [
+          "cadc",
+          "dcc"
+        ],
+        [
+          "ccdc",
+          "cdaa"
+        ],
+        [
+          "dabb",
+          "dddb"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "baba",
+          "daa",
+          41
+        ],
+        [
+          "caa",
+          "aca",
+          35
+        ],
+        [
+          "dccb",
+          "aca",
+          27
+        ],
+        [
+          "babca",
+          "daca",
+          12
+        ],
+        [
+          "daca",
+          "aaca",
+          12
+        ],
+        [
+          "aaaca",
+          "cca",
+          11
+        ],
+        [
+          "cbbca",
+          "caa",
+          11
+        ],
+        [
+          "dcccdc",
+          "cca",
+          11
+        ],
+        [
+          "baadaa",
+          "cca",
+          11
+        ],
+        [
+          "cdca",
+          "ccca",
+          11
+        ],
+        [
+          "cccca",
+          "ccca",
+          8
+        ],
+        [
+          "cbdaa",
+          "aaba",
+          5
+        ],
+        [
+          "aaacca",
+          "ccca",
+          5
+        ],
+        [
+          "daacca",
+          "ccca",
+          5
+        ],
+        [
+          "accca",
+          "ccca",
+          5
+        ],
+        [
+          "dccccdc",
+          "ccca",
+          5
+        ],
+        [
+          "dccccb",
+          "ccca",
+          5
+        ],
+        [
+          "dcccccdc",
+          "ccca",
+          5
+        ],
+        [
+          "aaaccca",
+          "cccca",
+          3
+        ],
+        [
+          "dccdc",
+          "baaba",
+          2
+        ],
+        [
+          "dcdaca",
+          "baabca",
+          2
+        ],
+        [
+          "caca",
+          "acca",
+          1
+        ],
+        [
+          "daaba",
+          "badaa",
+          1
+        ],
+        [
+          "acaca",
+          "aacca",
+          1
+        ],
+        [
+          "cbadaa",
+          "ccbaa",
+          1
+        ],
+        [
+          "aaacccca",
+          "ccccca",
+          1
+        ],
+        [
+          "baabaa",
+          "dccca",
+          1
+        ],
+        [
+          "caddcc",
+          "dcdcc",
+          0
+        ],
+        [
+          "cbbcca",
+          "acca",
+          0
+        ],
+        [
+          "cbdaca",
+          "aabca",
+          0
+        ],
+        [
+          "caddcdcc",
+          "dcdcdcc",
+          0
+        ],
+        [
+          "cacca",
+          "accca",
+          0
+        ],
+        [
+          "cadaa",
+          "aaca",
+          0
+        ],
+        [
+          "babcca",
+          "dacca",
+          0
+        ],
+        [
+          "daabca",
+          "badaca",
+          0
+        ],
+        [
+          "cbdacca",
+          "aabcca",
+          0
+        ],
+        [
+          "dcdacca",
+          "baabcca",
+          0
+        ],
+        [
+          "acacca",
+          "aaccca",
+          0
+        ],
+        [
+          "daabcca",
+          "badacca",
+          0
+        ],
+        [
+          "dcccb",
+          "aacca",
+          0
+        ],
+        [
+          "cbbccca",
+          "accca",
+          0
+        ],
+        [
+          "caddcdcdcc",
+          "dcdcdcdcc",
+          0
+        ],
+        [
+          "caccca",
+          "acccca",
+          0
+        ],
+        [
+          "cadaca",
+          "aacca",
+          0
+        ],
+        [
+          "babccca",
+          "daccca",
+          0
+        ],
+        [
+          "cbdaccca",
+          "aabccca",
+          0
+        ],
+        [
+          "dcdaccca",
+          "baabccca",
+          0
+        ],
+        [
+          "acaccca",
+          "aacccca",
+          0
+        ],
+        [
+          "daabccca",
+          "badaccca",
+          0
+        ],
+        [
+          "aaadaa",
+          "cbcca",
+          0
+        ],
+        [
+          "cadacca",
+          "aaccca",
+          0
+        ],
+        [
+          "dacca",
+          "aacca",
+          0
+        ],
+        [
+          "cbbcccca",
+          "acccca",
+          0
+        ],
+        [
+          "caddcdcdcdcc",
+          "dcdcdcdcdcc",
+          0
+        ],
+        [
+          "cacccca",
+          "accccca",
+          0
+        ],
+        [
+          "babcccca",
+          "dacccca",
+          0
+        ],
+        [
+          "acacccca",
+          "aaccccca",
+          0
+        ],
+        [
+          "cadaccca",
+          "aacccca",
+          0
+        ],
+        [
+          "aaacbcca",
+          "ccbcca",
+          0
+        ],
+        [
+          "cbbcbcca",
+          "acbcca",
+          0
+        ],
+        [
+          "daccca",
+          "aaccca",
+          0
+        ],
+        [
+          "cbbccbcca",
+          "accbcca",
+          0
+        ],
+        [
+          "dacccca",
+          "aacccca",
+          0
+        ],
+        [
+          "daccccca",
+          "cccccca",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [],
+      "presentation_id": "6a89692d4f33",
+      "reasons": [
+        "NO_HELPFUL_MACRO_REGION"
+      ],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "08d2f5c944db1dff9d7c253b5d45222b8e958a235fa4592ff462b2a7f012a532",
+      "selected_cap": 200,
+      "verified_macro_witnesses": [
+        [
+          "cbbca",
+          "caa",
+          3,
+          "0b13fca2f89a72b19f4ac02b2587449d125bc16f2ad173b31c7ee87c60ef1d5b"
+        ],
+        [
+          "caa",
+          "aca",
+          2,
+          "2fa8fb15b828155a4b090ddba30c8145cc1422a5ae4d73b487d956f9c661fe63"
+        ],
+        [
+          "aaaca",
+          "cca",
+          3,
+          "b1566a69d4fb8c7ffd0f5d209a8a608ba938da98b96a33e041c934f920aafc47"
+        ],
+        [
+          "cbbcca",
+          "acca",
+          7,
+          "0e3d7cd415444681d5f372fad701b7223f2c89d3c1f39e12d5813701172bda28"
+        ],
+        [
+          "aaacca",
+          "ccca",
+          7,
+          "797fa3defb3d10714aa33892745a9a2a8845c7399fa5bdb4a4906bfcdf09a093"
+        ],
+        [
+          "cbbccca",
+          "accca",
+          15,
+          "426f8124c0dc92cd75ec808a4c11ffca0f21e171449b028df2ab5e43e6d8ee62"
+        ],
+        [
+          "acaca",
+          "aacca",
+          6,
+          "30243ce61cb12f75ed6215eb33b49f7b620f0ffa81571503ebc12a6fe4cf36b0"
+        ],
+        [
+          "caca",
+          "acca",
+          4,
+          "f9a488fa5adac92470c3fb6804a6958775e99081b866165fe21bafbcb2acdaf5"
+        ],
+        [
+          "aaaccca",
+          "cccca",
+          15,
+          "9c0972c7f714a7e26345507e8661524c54a0a889d114d2d01d220ffbdffee36d"
+        ],
+        [
+          "cbbcccca",
+          "acccca",
+          31,
+          "cbfa4bb7e1e3facd26fd4be9f97e97f501d18a76f30ce205c94d3cf2893e9ec7"
+        ],
+        [
+          "acacca",
+          "aaccca",
+          10,
+          "9990c458267e2ce741a58496fed54a5da9853118313ec6a5d119c997e6e15a22"
+        ],
+        [
+          "cacca",
+          "accca",
+          8,
+          "d54fb64f7f8a3f12202f275aab43ec046816c1f5aaf5830aa459c1ef27a25caf"
+        ],
+        [
+          "aaacccca",
+          "ccccca",
+          31,
+          "4ea524ed9cc58d566de8ced6a0c3221b2a350b71573e43445612b3e0cadee1f1"
+        ],
+        [
+          "acaccca",
+          "aacccca",
+          18,
+          "86386672c30729ee040964b55c4137c12a2df044678814756214d092704db022"
+        ],
+        [
+          "caccca",
+          "acccca",
+          16,
+          "9bed6030c1a1f34258e6e63c99d9541ba5bca06f2511551127415b0eb3f23569"
+        ],
+        [
+          "acacccca",
+          "aaccccca",
+          34,
+          "5d8f34c860cc598e8dc1341aef362dc711fd9621bc40cda11c33077b44cf8904"
+        ],
+        [
+          "cacccca",
+          "accccca",
+          32,
+          "6ecc93d0837004c6155a49dc13378c1a6332eb5d17cae0ec30bd75c9d6174f66"
+        ],
+        [
+          "baba",
+          "daa",
+          2,
+          "450bc7941c44f4a8f1bd7d66971cd4327e3911a39e58e39f8f0c4964c55b0058"
+        ],
+        [
+          "cbdaa",
+          "aaba",
+          3,
+          "fb7c78bf2e3b64938394d9d07984667549ed107431c1c1171cb7a697ffbf421f"
+        ],
+        [
+          "babca",
+          "daca",
+          6,
+          "a87a01fcaafbc14b46f12a22bdd5e9178448458f8937499d1c38ca190e9eb49f"
+        ],
+        [
+          "cbdaca",
+          "aabca",
+          7,
+          "fcb98667a0ed8e3cb648ea7c7e8c58711cd46527c3c0fffb21b5f055eae00aaf"
+        ],
+        [
+          "babcca",
+          "dacca",
+          8,
+          "e8f287c27fbaa78c3df423b7b0de6cb5c727e267561772227dc4a192a136a6f6"
+        ],
+        [
+          "cbdacca",
+          "aabcca",
+          9,
+          "2a6cc5c1ea92a1950d47c9d5ea8603c9fa6eb26454083f60cc134fc63b50fbf1"
+        ],
+        [
+          "babccca",
+          "daccca",
+          16,
+          "bab8abafa0fbbdefb5db3c5669813ab962ec40c2e4d0ae849786afc072ed6ed8"
+        ],
+        [
+          "cbdaccca",
+          "aabccca",
+          17,
+          "8b29808560d3edfc3c6590b11f3476a34e0e9203934f15adb90eb479bae59020"
+        ],
+        [
+          "babcccca",
+          "dacccca",
+          32,
+          "321afe35bcc81850a1770aa4a10589024322c192967ffab60ffaa615fd61dd76"
+        ],
+        [
+          "dccdc",
+          "baaba",
+          4,
+          "5d0aaccd845ff8b421823c7b5411ac404c2f14d5ae067e447af443002dfd97e0"
+        ],
+        [
+          "daaba",
+          "badaa",
+          4,
+          "0b376cba039508a1aac3bd2dc960a9eb2bad8e7b3e562087598069951189e24d"
+        ],
+        [
+          "dcdaca",
+          "baabca",
+          7,
+          "af7dabe6b0c9bca9016fdcc2a8bf88814307f202a10d32735b0350776c09a6d7"
+        ],
+        [
+          "daabca",
+          "badaca",
+          8,
+          "2d7fe813ef2b4f3ccbfbe57d469712ffa075b62b808d91cf7361605316c7d478"
+        ],
+        [
+          "dcdacca",
+          "baabcca",
+          9,
+          "a1ca9aedf9b20e3e85d51a4746bae12d7242652f9443022b26b006955dbaac44"
+        ],
+        [
+          "daabcca",
+          "badacca",
+          10,
+          "6e978d6f3167592c0126655b3cb6252f4fddb14760f23c1afea69854f7a849bb"
+        ],
+        [
+          "dcdaccca",
+          "baabccca",
+          17,
+          "ad325edf337898e046d8841209fc08b6d70f3baf00a8d7f1da0ae8daffc625db"
+        ],
+        [
+          "daabccca",
+          "badaccca",
+          18,
+          "1be3aff882d33199e950ddfe7e674f2a3c8f11ce2ffa163c7b2b11da29bd92b6"
+        ],
+        [
+          "cadaa",
+          "aaca",
+          8,
+          "d6d2c417adf79a54e6f22f97e9f410da68a27c39f9baae0cd694b7ac0112327b"
+        ],
+        [
+          "cadaca",
+          "aacca",
+          16,
+          "ace35dc2019a30bcf3efcb40aa1d03fd311fb57bb9b8abcfe034772010ef3017"
+        ],
+        [
+          "cadacca",
+          "aaccca",
+          22,
+          "7a47bc31e3c989af7ac936508890d27233a4372ac7471259e568f31286a61a09"
+        ],
+        [
+          "cadaccca",
+          "aacccca",
+          38,
+          "d7dc54f7611ee1f204ec967777eacba02e2ce0cbba69afb828133f16cff65a5a"
+        ],
+        [
+          "daca",
+          "aaca",
+          13,
+          "87db70c5f6af71768c38e5a767a27b2fc73bb3d70d182cf06f6f2d4d17c5dadd"
+        ],
+        [
+          "dccb",
+          "aca",
+          5,
+          "d44a51e4c0f3497c5c0716db60ba40b92fb0270eb98c431de4dc3fd77a473a25"
+        ],
+        [
+          "caddcc",
+          "dcdcc",
+          3,
+          "43b409cec64aeb03c88f5e20cdafb56800db766e91a0eeb88133b4372f069b58"
+        ],
+        [
+          "dcccdc",
+          "cca",
+          18,
+          "4f53f6a765cc3841d85ce5b2a2defb5fd07b763eba8304ca1dd8d2a3a8097f2c"
+        ],
+        [
+          "dacca",
+          "aacca",
+          25,
+          "857e97419820b7761a9a1a0ecacac055977328ec82655b955b28f45dbfaf1966"
+        ],
+        [
+          "daccca",
+          "aaccca",
+          45,
+          "90b43080cd3906caf6082a6481efe6b8c890cd5e97b74a3c701c42d4a1a28f66"
+        ],
+        [
+          "dacccca",
+          "aacccca",
+          85,
+          "f536096ca2e20e61887746935aaa2093a2373018dc8fd0c383039d463e27334a"
+        ],
+        [
+          "daccccca",
+          "cccccca",
+          181,
+          "a89a71057e73647e5e3b325c7672f6e9d1df1d6abf97280ffcfa19e5bce0417f"
+        ],
+        [
+          "accca",
+          "ccca",
+          77,
+          "6a403fcc79f1ba519310799d10a9536e71040b1dc112f669044bbea4af789c54"
+        ],
+        [
+          "cccca",
+          "ccca",
+          282,
+          "9b111b523b2439edbd20e7f004b3c20eb95b418a08eea4a5dab315bdb013a2a6"
+        ],
+        [
+          "daacca",
+          "ccca",
+          46,
+          "8c6ffcba9f55b311780f1658d05c04999937387447d65d8617568cf9a49f0ff5"
+        ],
+        [
+          "dcccb",
+          "aacca",
+          14,
+          "132fa8ce98a8b1994add607182942e5df6ff25e05d303893ff174895207dbeb7"
+        ],
+        [
+          "caddcdcc",
+          "dcdcdcc",
+          7,
+          "a585750ef836da5210ff7eebb68405e05d97cb6f10370063c1aca7df5e0425ab"
+        ],
+        [
+          "dccccdc",
+          "ccca",
+          104,
+          "f3725880e708f5840f24e2389d4102dfaf1d21771def255c61e81de69425a2d3"
+        ],
+        [
+          "dccccb",
+          "ccca",
+          304,
+          "eb418601fc3aad60f8065446aa0739a9af7278400320da3a27cd01e687eaefc1"
+        ],
+        [
+          "caddcdcdcc",
+          "dcdcdcdcc",
+          15,
+          "c11b507b0e7419460a64e5a8b583523e43226206ab2add9ec19938bc91b94a60"
+        ],
+        [
+          "dcccccdc",
+          "ccca",
+          480,
+          "ba261c412d01506214ebfc040d4c4b9bd48bab4c3e0b3ae2cbd21f13353b6da0"
+        ],
+        [
+          "caddcdcdcdcc",
+          "dcdcdcdcdcc",
+          31,
+          "03c596ac65e4ad55a507ed201f61c1428cbad4783ece89bfdf97aef2dea6a82c"
+        ],
+        [
+          "cdca",
+          "ccca",
+          191,
+          "57c52441de5641a6b572c7ddcc9b915407d915cf3800f6ac6f91323a9baad865"
+        ],
+        [
+          "baabaa",
+          "dccca",
+          479,
+          "fa123b00ee34f5b80b4f2db29528eca2cbe69654581ead658b03c5216d42ca3c"
+        ],
+        [
+          "cbadaa",
+          "ccbaa",
+          6,
+          "105f2da16bc6e4d8f7d1725302f44287bc1a3a6b204895da627d3d9495de488a"
+        ],
+        [
+          "baadaa",
+          "cca",
+          19,
+          "431bd5b505f0ceb92f56095b27f7026c7b3dcaa00822fb8f1164d55f36b1afef"
+        ],
+        [
+          "aaadaa",
+          "cbcca",
+          20,
+          "736a42fa56c90a0aa7636c84f92594dbe498443a2fc54e5821017b36778e122e"
+        ],
+        [
+          "cbbcbcca",
+          "acbcca",
+          41,
+          "7563e1e4cceb8b3e1cfbf08efbc9f8f446de328d8d081b6010e64eb3d270958d"
+        ],
+        [
+          "aaacbcca",
+          "ccbcca",
+          41,
+          "90cd0190d6dc2cbe61c9a8f6ff9fd96b4b877adde1aad3a0ddbfe6cedd619392"
+        ],
+        [
+          "cbbccbcca",
+          "accbcca",
+          83,
+          "66c4fa4c075150d5f30cf9fb2ec8a425ecb0361e41b00b1dcc6e536dc9582414"
+        ]
+      ]
+    },
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 6,
+          "restricted_mean": 421.6666666666667,
+          "solved_rate": 0.2916666666666667
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 421.6666666666667,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 485.0416666666667,
+                "solved_rate": 0.08333333333333333
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 485.2916666666667,
+                "solved_rate": 0.08333333333333333
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 475.4583333333333,
+                "solved_rate": 0.16666666666666666
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 421.6666666666667,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 459.125,
+                "solved_rate": 0.16666666666666666
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 462.4583333333333,
+                "solved_rate": 0.16666666666666666
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 452.8333333333333,
+                "solved_rate": 0.20833333333333334
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 421.6666666666667,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 462.0833333333333,
+                "solved_rate": 0.16666666666666666
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 462.4583333333333,
+                "solved_rate": 0.16666666666666666
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 453.9583333333333,
+                "solved_rate": 0.25
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": -40.41666666666663,
+          "64": -40.79166666666663,
+          "8": -32.29166666666663
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 6,
+          "restricted_mean": 415.5833333333333,
+          "solved_rate": 0.3333333333333333
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 2306,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 193,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.3912386467162683,
+        "witness_vs_total_length": 0.44642857142857145
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aaad",
+          "bb"
+        ],
+        [
+          "ac",
+          "cc"
+        ],
+        [
+          "ad",
+          "bbdc"
+        ],
+        [
+          "bb",
+          "dbcb"
+        ],
+        [
+          "cc",
+          "cdd"
+        ],
+        [
+          "ccd",
+          "dd"
+        ],
+        [
+          "da",
+          "dbd"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "acd",
+          "dd",
+          182
+        ],
+        [
+          "adc",
+          "dd",
+          164
+        ],
+        [
+          "add",
+          "ac",
+          150
+        ],
+        [
+          "aaac",
+          "bbd",
+          83
+        ],
+        [
+          "caac",
+          "bbd",
+          81
+        ],
+        [
+          "cbbd",
+          "abbd",
+          56
+        ],
+        [
+          "acbd",
+          "aca",
+          43
+        ],
+        [
+          "cac",
+          "aac",
+          42
+        ],
+        [
+          "cabbd",
+          "aabbd",
+          36
+        ],
+        [
+          "bbddd",
+          "ddd",
+          23
+        ],
+        [
+          "dbcdad",
+          "ddd",
+          23
+        ],
+        [
+          "caabbd",
+          "aaabbd",
+          23
+        ],
+        [
+          "acbb",
+          "dbb",
+          18
+        ],
+        [
+          "bddd",
+          "dad",
+          18
+        ],
+        [
+          "bbbcb",
+          "aaabb",
+          17
+        ],
+        [
+          "bbc",
+          "aac",
+          16
+        ],
+        [
+          "acbcdad",
+          "aac",
+          15
+        ],
+        [
+          "bbdac",
+          "adc",
+          14
+        ],
+        [
+          "bbbd",
+          "bba",
+          11
+        ],
+        [
+          "bbdaac",
+          "adac",
+          11
+        ],
+        [
+          "caaabbd",
+          "aaaabbd",
+          7
+        ],
+        [
+          "dbcad",
+          "bad",
+          6
+        ],
+        [
+          "acbcb",
+          "cdbb",
+          4
+        ],
+        [
+          "acbcad",
+          "cdbad",
+          4
+        ],
+        [
+          "dbabbd",
+          "bba",
+          4
+        ],
+        [
+          "caaaabbd",
+          "aaaaabbd",
+          4
+        ],
+        [
+          "bacad",
+          "bbdd",
+          3
+        ],
+        [
+          "dbba",
+          "baac",
+          2
+        ],
+        [
+          "cdbaac",
+          "acbba",
+          2
+        ],
+        [
+          "acbaac",
+          "dbaac",
+          2
+        ],
+        [
+          "cabaac",
+          "dbaac",
+          2
+        ],
+        [
+          "adbaac",
+          "baac",
+          2
+        ],
+        [
+          "bbdabaac",
+          "baac",
+          2
+        ],
+        [
+          "bbdbbd",
+          "adaac",
+          1
+        ],
+        [
+          "bbdabbd",
+          "adbbd",
+          1
+        ],
+        [
+          "dbcaaabb",
+          "baaabb",
+          0
+        ],
+        [
+          "acbcaaabb",
+          "cdbaaabb",
+          0
+        ],
+        [
+          "baacad",
+          "aaabad",
+          0
+        ],
+        [
+          "baacaaabb",
+          "aaabaaabb",
+          0
+        ],
+        [
+          "bbbabbd",
+          "aaabba",
+          0
+        ],
+        [
+          "dbcaaabad",
+          "baaabad",
+          0
+        ],
+        [
+          "acbcaaabad",
+          "cdbaaabad",
+          0
+        ],
+        [
+          "dbcaaabaaabb",
+          "baaabaaabb",
+          0
+        ],
+        [
+          "aaabaac",
+          "bbbba",
+          0
+        ],
+        [
+          "bbdaabbd",
+          "adabbd",
+          0
+        ],
+        [
+          "baacaaabad",
+          "aaabaaabad",
+          0
+        ],
+        [
+          "acbabbd",
+          "cbaac",
+          0
+        ],
+        [
+          "bbdaaabbd",
+          "adaabbd",
+          0
+        ],
+        [
+          "cbaac",
+          "abaac",
+          0
+        ],
+        [
+          "dbabaac",
+          "bbaac",
+          0
+        ],
+        [
+          "bbdaaaabbd",
+          "adaaabbd",
+          0
+        ],
+        [
+          "bbdaaaaabbd",
+          "adaaaabbd",
+          0
+        ],
+        [
+          "acbabaac",
+          "ababbd",
+          0
+        ],
+        [
+          "caaaaabbd",
+          "aaaaaabbd",
+          0
+        ],
+        [
+          "bbdaaaaaabbd",
+          "adaaaaabbd",
+          0
+        ],
+        [
+          "caaaaaabbd",
+          "aaaaaaabbd",
+          0
+        ],
+        [
+          "bbdaaaaaaabbd",
+          "adaaaaaabbd",
+          0
+        ],
+        [
+          "caaaaaaabbd",
+          "aaaaaaaabbd",
+          0
+        ],
+        [
+          "bbdaaaaaaaabbd",
+          "adaaaaaaabbd",
+          0
+        ],
+        [
+          "caaaaaaaabbd",
+          "aaaaaaaaabbd",
+          0
+        ],
+        [
+          "bbdaaaaaaaaabbd",
+          "adaaaaaaaabbd",
+          0
+        ],
+        [
+          "caaaaaaaaabbd",
+          "aaaaaaaaaabbd",
+          0
+        ],
+        [
+          "caaaaaaaaaabbd",
+          "aaaaaaaaaaabbd",
+          0
+        ],
+        [
+          "caaaaaaaaaaabbd",
+          "aaaaaaaaaaaabbd",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [],
+      "presentation_id": "f5b4899726d6",
+      "reasons": [
+        "NO_HELPFUL_MACRO_REGION"
+      ],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "29f99f227e61b9aa739dd57298d9a353e4c22d470447234ef94ab1c67f92cab2",
+      "selected_cap": 500,
+      "verified_macro_witnesses": [
+        [
+          "bbbcb",
+          "aaabb",
+          2,
+          "50e5bc919a84d1100bb17cd17ce36d2389c981bb26fab5134935a587dc013f6b"
+        ],
+        [
+          "bbbd",
+          "bba",
+          3,
+          "3bc3253233b1c18a3f42d46238467a91df66a41916d59c19775a447ba4ae02e0"
+        ],
+        [
+          "cac",
+          "aac",
+          3,
+          "8b3b5b8d8743c6e02d0b5e7b8ae773c2625749d3d0b5bfc8400f08193620bf9c"
+        ],
+        [
+          "add",
+          "ac",
+          5,
+          "ba671f4b2beabb0c063643b9787190fb847412cd507fe688822d8da784b6662e"
+        ],
+        [
+          "aaac",
+          "bbd",
+          6,
+          "3f981a3dcc99844956438def41681d8464304aa42f102f8400e516bd1f2b4871"
+        ],
+        [
+          "acd",
+          "dd",
+          2,
+          "c17a040d205bfbee67c36798ef6bc64e18ffca414927009b1f0260d959f86e6f"
+        ],
+        [
+          "caac",
+          "bbd",
+          13,
+          "dab92cc5a2f8ff1e27266d02bfc355a082eb46df7b73cd7d9b7b8d7d54dc322e"
+        ],
+        [
+          "cbbd",
+          "abbd",
+          27,
+          "a0a9e56307db8d015e73aca2c13d706e2eb4fbefe602d1b20c58e460b161f7fe"
+        ],
+        [
+          "cabbd",
+          "aabbd",
+          55,
+          "5b43234a7cabd794947f8961807977338b8799a7178bc156ff67ea52e1265911"
+        ],
+        [
+          "caabbd",
+          "aaabbd",
+          111,
+          "6242e43af746e9dea1c3b82420f5711601fa805da5c1f28d48be03d295f3cb74"
+        ],
+        [
+          "caaabbd",
+          "aaaabbd",
+          223,
+          "86fca1ac52d15c16a1d7ac7c21a41ab0349ca9c60ced30f3cf540ea9397cd8d2"
+        ],
+        [
+          "caaaabbd",
+          "aaaaabbd",
+          447,
+          "8687eab36b8fa5c3af37a809cb259f576decbaf3b6cff3db34fab61bf2b8beb9"
+        ],
+        [
+          "caaaaabbd",
+          "aaaaaabbd",
+          895,
+          "2a56021420c81e725c398bc653dc68d66f29a7b9d4cd697de25bd81dec6721c1"
+        ],
+        [
+          "caaaaaabbd",
+          "aaaaaaabbd",
+          1791,
+          "487183a5be59c8ca8ecee3928bcb150b1b5f1258c6def4a47d7fd409fe5eaad9"
+        ],
+        [
+          "caaaaaaabbd",
+          "aaaaaaaabbd",
+          3583,
+          "025aab1aecde10c3e4c43e827a3cf5bcc7ab119e28d730d2d24f1871ef35608c"
+        ],
+        [
+          "caaaaaaaabbd",
+          "aaaaaaaaabbd",
+          7167,
+          "ed2a0cf015d5d7adfe58d2f59eee7890bad9b690e5c5a73a5ae51984fb949931"
+        ],
+        [
+          "caaaaaaaaabbd",
+          "aaaaaaaaaabbd",
+          14335,
+          "8bf30fed0074e7efe5507459bfb388b0685fe5c6aee7909ddf4f29dabfc01448"
+        ],
+        [
+          "caaaaaaaaaabbd",
+          "aaaaaaaaaaabbd",
+          28671,
+          "3fe88b7f307893c1b2cc652527257553b09dd24d1335f458522360d13c022f34"
+        ],
+        [
+          "caaaaaaaaaaabbd",
+          "aaaaaaaaaaaabbd",
+          57343,
+          "49be5f982acadbd2f74e137ca397e762cb88a4b111a03dabdeffe87c5a98e09c"
+        ],
+        [
+          "bbdac",
+          "adc",
+          2,
+          "92aa8ddf5e59fb7adf5b767771a94191f0ce51ff5e293d653b46500a390b20bb"
+        ],
+        [
+          "adc",
+          "dd",
+          10,
+          "185f1de7f546e2c9de51b83786f070e873a946ab95a2c4288084a58a91285e1c"
+        ],
+        [
+          "bbc",
+          "aac",
+          16,
+          "9c25aad7d05a801ba3c7ca06407f906078630774f5044e3e7c6df8f1f87e5887"
+        ],
+        [
+          "bbddd",
+          "ddd",
+          12,
+          "302bdcb6751e19b6ecf8b6aa66d234d56e1d75e3f279035a65da6e5399a08f85"
+        ],
+        [
+          "bbdaac",
+          "adac",
+          4,
+          "ed88ab06800f8e4dd3dcefdf51d394759713b42e6a65968245e2b1e0146ae999"
+        ],
+        [
+          "bbdbbd",
+          "adaac",
+          14,
+          "fd4e527df739a793e2122a8c1e43401e6efc00b4a628dcabee0896af2957d165"
+        ],
+        [
+          "bbdabbd",
+          "adbbd",
+          28,
+          "f77e23058be1f5feb83a043d6f5f6023dbd3112a18354693d691175946042836"
+        ],
+        [
+          "bbdaabbd",
+          "adabbd",
+          56,
+          "22839e171f135ceb9b17ccd4fe4651dd314dcc85f097d409dd4a79bc7cec135f"
+        ],
+        [
+          "bbdaaabbd",
+          "adaabbd",
+          112,
+          "bda611dae54a1abc9c6e325aacf7aef5ec081955ead3e75f1430293c8c799ddb"
+        ],
+        [
+          "bbdaaaabbd",
+          "adaaabbd",
+          224,
+          "7d8876fd75a5198d00e161f1966822d1de4a200ceb3b0025d3f34837632c34f3"
+        ],
+        [
+          "bbdaaaaabbd",
+          "adaaaabbd",
+          448,
+          "21424dd24a8d612e447aff88afc366d8f996aa130bbab55eb98cb316d09d1bfb"
+        ],
+        [
+          "bbdaaaaaabbd",
+          "adaaaaabbd",
+          896,
+          "6cfb29f4340d8969b82a67d89efcd64980fa6b29e527cc64cf2454fadd0aa8e5"
+        ],
+        [
+          "bbdaaaaaaabbd",
+          "adaaaaaabbd",
+          1792,
+          "99191f6ecbaa5cde761b6d27e2e75a657a827c406ad876bd3023a2f37036fba2"
+        ],
+        [
+          "bbdaaaaaaaabbd",
+          "adaaaaaaabbd",
+          3584,
+          "14a7c58147f945c5cb1d83d5e737fb217380ec88b78ebe373d2d5e06c8d04118"
+        ],
+        [
+          "bbdaaaaaaaaabbd",
+          "adaaaaaaaabbd",
+          7168,
+          "11085b8a1575272668bd24179be1e70e0a9b98bd6c2ed3761f9f4669b3241f25"
+        ],
+        [
+          "dbcad",
+          "bad",
+          3,
+          "8fb4a32c4d7509e85152f94898b134c36d1bdac34f97927db4426d633f7befcf"
+        ],
+        [
+          "baacad",
+          "aaabad",
+          20,
+          "84ca5decdf79f6119f720c85a5665475c3a0eab8e61a7f51ac4d3bfed39f7dd8"
+        ],
+        [
+          "dbcaaabb",
+          "baaabb",
+          5,
+          "ddbf22be75af926bfd6a36c5e7c479640107c6c59879b34aaa1b8182cb632bab"
+        ],
+        [
+          "baacaaabb",
+          "aaabaaabb",
+          22,
+          "153ab303a57bcb16e94d0a7c48540ae46211bedb42325e6bab3563d3d321a0b7"
+        ],
+        [
+          "dbabbd",
+          "bba",
+          31,
+          "0206d36dd631de2ebf14a891730a4b53729f5f6f0ae1710b6b5bfc84271f7bf6"
+        ],
+        [
+          "bbbabbd",
+          "aaabba",
+          32,
+          "21db1ddc2d1ff098613cb2b72f07d36ea2a93061a562c74754d2918db294776a"
+        ],
+        [
+          "dbba",
+          "baac",
+          49,
+          "a3fe5f048453b2b4ed37b8d26d2c3b03874f8a74f40d67adc127c0ae2dbacd0c"
+        ],
+        [
+          "aaabaac",
+          "bbbba",
+          50,
+          "5758889ad12c86c37f98a2a19e879484d7270442c3483eec8a7100ecd0e91bed"
+        ],
+        [
+          "bddd",
+          "dad",
+          28,
+          "72b0a7e6d8445a559562d6dd1d3d42c41e18596c1f8a3f70154a2c95aa19af96"
+        ],
+        [
+          "dbcaaabad",
+          "baaabad",
+          41,
+          "235fad32352d66d2e0884fa07f52ce6950b5a67df185595a5996c9f0f7ac1125"
+        ],
+        [
+          "baacaaabad",
+          "aaabaaabad",
+          58,
+          "31ecd544d31ef75e2cb6f03b2d9044fbfc7f83eec38ef15acd01fdd43bc4e3e9"
+        ],
+        [
+          "dbcaaabaaabb",
+          "baaabaaabb",
+          45,
+          "bc9cee0030559df48fc162e149cf7893a946ec909b202dabf5a4e4f343652a00"
+        ],
+        [
+          "dbcdad",
+          "ddd",
+          41,
+          "4398e7e7604ade5c5b3f916bee26319528e842c6dcd8380918bf769011e4ccbb"
+        ],
+        [
+          "bacad",
+          "bbdd",
+          66,
+          "3e51785e959c3d6445b091316ffbbbb2208bdc6acda805fc3be8447b65d2f5da"
+        ],
+        [
+          "acbcb",
+          "cdbb",
+          3,
+          "2154f731915ae1cac0ec6a856d615689305843bd88a6e7304ba8382243bfea60"
+        ],
+        [
+          "acbd",
+          "aca",
+          5,
+          "340dca6c8b730ac99d20ab6af87d550628822f14cc7652b02c327955df940c3e"
+        ],
+        [
+          "acbcad",
+          "cdbad",
+          5,
+          "145d7ac5747da52c773596278eeca737ee0070bc2f104ef088131ee77f7d72d9"
+        ],
+        [
+          "acbcaaabb",
+          "cdbaaabb",
+          7,
+          "4707699e116a1082494eb61d3ecf4f36dac5c1de6d9c46b6c48529127b50b814"
+        ],
+        [
+          "acbabbd",
+          "cbaac",
+          82,
+          "7196de19e673f39f59a9f192bee2730dc7c90084674d29b6848dd4b02f3449cd"
+        ],
+        [
+          "cdbaac",
+          "acbba",
+          51,
+          "e65bd05d6e3196667f107b5d1936c8207ca7e2e8e0b9e5ae6675164fd34592a3"
+        ],
+        [
+          "acbaac",
+          "dbaac",
+          118,
+          "fa72dacbeafbfedfc142de8b0d91561561e9e49de38aac5ec6c6b309feb394e4"
+        ],
+        [
+          "acbcaaabad",
+          "cdbaaabad",
+          43,
+          "d4c0b8342d2fc2eabadee1c0dde5e2d3a10a6abce8e2231b774f506cf273e408"
+        ],
+        [
+          "acbcdad",
+          "aac",
+          47,
+          "cd089a8eed97ffcad2cc3e0e00d79ceb4fcea47f0f50bb4257e98010727c4d0c"
+        ],
+        [
+          "acbb",
+          "dbb",
+          4,
+          "fd380d2e2fefcaca93f822e234695e6827ea84d283751e6c91aecc1f36091e49"
+        ],
+        [
+          "cbaac",
+          "abaac",
+          209,
+          "51efc07d35ffb4b7aae0f222a4949c057b9dad792e774b0c2c4568623b73278c"
+        ],
+        [
+          "cabaac",
+          "dbaac",
+          328,
+          "66fc6850d5a396168619f1b679f1ee16f57c50f053219ed25f7ced6aa7f45532"
+        ],
+        [
+          "adbaac",
+          "baac",
+          761,
+          "e80bd9faedf2ff8fcb7cc6093ba17855ed7445521036845819cf5e2dba9749d2"
+        ],
+        [
+          "bbdabaac",
+          "baac",
+          971,
+          "38c0e56a188ddeb1ad7d7331e1f77b60932a293624b8bdca617b96c48634ad44"
+        ],
+        [
+          "dbabaac",
+          "bbaac",
+          210,
+          "c734159bc9c4878a257bd65b8d1f84a0e2585fd92475d410f50cd64231fe2557"
+        ],
+        [
+          "acbabaac",
+          "ababbd",
+          479,
+          "d6505978a83aa677b103f80ed014ec838e49419afb56e95e2583716888329ca8"
+        ]
+      ]
+    },
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 397.7083333333333,
+          "solved_rate": 0.375
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 397.7083333333333,
+                "solved_rate": 0.375
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 62.0,
+                "restricted_mean": 483.0833333333333,
+                "solved_rate": 0.08333333333333333
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 483.125,
+                "solved_rate": 0.08333333333333333
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 477.375,
+                "solved_rate": 0.125
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 397.7083333333333,
+                "solved_rate": 0.375
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 400.5416666666667,
+                "solved_rate": 0.3333333333333333
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 11.5,
+                "restricted_mean": 400.5,
+                "solved_rate": 0.3333333333333333
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 391.4583333333333,
+                "solved_rate": 0.3333333333333333
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 397.7083333333333,
+                "solved_rate": 0.375
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 11.5,
+                "restricted_mean": 397,
+                "solved_rate": 0.3333333333333333
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 11.5,
+                "restricted_mean": 400.4166666666667,
+                "solved_rate": 0.3333333333333333
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6,
+                "restricted_mean": 407.7083333333333,
+                "solved_rate": 0.375
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": 0.7083333333333144,
+          "64": -2.7083333333333712,
+          "8": -10.0
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 392.5,
+          "solved_rate": 0.375
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 1778,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 12,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.4447662145958627,
+        "witness_vs_total_length": 0.35859526498830757
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aa",
+          "cb"
+        ],
+        [
+          "aac",
+          "ba"
+        ],
+        [
+          "acac",
+          "dd"
+        ],
+        [
+          "ad",
+          "bbdb"
+        ],
+        [
+          "ca",
+          "ccc"
+        ],
+        [
+          "cba",
+          "cc"
+        ],
+        [
+          "cbc",
+          "ddd"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "aaa",
+          "cc",
+          361
+        ],
+        [
+          "abcc",
+          "ca",
+          148
+        ],
+        [
+          "caa",
+          "bcc",
+          104
+        ],
+        [
+          "cca",
+          "bab",
+          83
+        ],
+        [
+          "cab",
+          "bac",
+          82
+        ],
+        [
+          "cac",
+          "bab",
+          78
+        ],
+        [
+          "baba",
+          "bac",
+          73
+        ],
+        [
+          "bacc",
+          "baa",
+          66
+        ],
+        [
+          "abaa",
+          "bcc",
+          52
+        ],
+        [
+          "babb",
+          "baa",
+          51
+        ],
+        [
+          "ddb",
+          "aca",
+          48
+        ],
+        [
+          "aaba",
+          "bcc",
+          47
+        ],
+        [
+          "addc",
+          "bcc",
+          46
+        ],
+        [
+          "baadd",
+          "bcc",
+          46
+        ],
+        [
+          "aabcc",
+          "bcc",
+          46
+        ],
+        [
+          "ddca",
+          "aca",
+          44
+        ],
+        [
+          "acabab",
+          "aca",
+          44
+        ],
+        [
+          "ddaab",
+          "aca",
+          44
+        ],
+        [
+          "badd",
+          "baa",
+          40
+        ],
+        [
+          "bba",
+          "add",
+          39
+        ],
+        [
+          "abac",
+          "bab",
+          37
+        ],
+        [
+          "caab",
+          "bab",
+          37
+        ],
+        [
+          "acaa",
+          "ddc",
+          26
+        ],
+        [
+          "baca",
+          "add",
+          25
+        ],
+        [
+          "aabdb",
+          "cad",
+          19
+        ],
+        [
+          "bcaa",
+          "baca",
+          18
+        ],
+        [
+          "ddab",
+          "ddc",
+          16
+        ],
+        [
+          "aabab",
+          "baca",
+          14
+        ],
+        [
+          "acddaa",
+          "badc",
+          14
+        ],
+        [
+          "adaadd",
+          "adcc",
+          13
+        ],
+        [
+          "ddcc",
+          "dda",
+          10
+        ],
+        [
+          "ddabab",
+          "dda",
+          10
+        ],
+        [
+          "bacdaa",
+          "bccdc",
+          8
+        ],
+        [
+          "ddac",
+          "acdd",
+          6
+        ],
+        [
+          "baab",
+          "abab",
+          6
+        ],
+        [
+          "ccdaa",
+          "bcad",
+          6
+        ],
+        [
+          "badaa",
+          "accdc",
+          5
+        ],
+        [
+          "adbdbd",
+          "adba",
+          4
+        ],
+        [
+          "addaa",
+          "bbcc",
+          4
+        ],
+        [
+          "ddaa",
+          "aadd",
+          4
+        ],
+        [
+          "babcd",
+          "accdc",
+          4
+        ],
+        [
+          "cadd",
+          "aaba",
+          3
+        ],
+        [
+          "adacc",
+          "adaa",
+          3
+        ],
+        [
+          "caccdc",
+          "ccdaa",
+          3
+        ],
+        [
+          "accdaa",
+          "ddcdc",
+          3
+        ],
+        [
+          "adabb",
+          "adaa",
+          3
+        ],
+        [
+          "adbcc",
+          "adaca",
+          3
+        ],
+        [
+          "acddc",
+          "ddaa",
+          2
+        ],
+        [
+          "bbdabab",
+          "adaab",
+          2
+        ],
+        [
+          "adaba",
+          "adac",
+          1
+        ],
+        [
+          "aabdabab",
+          "cadaab",
+          1
+        ],
+        [
+          "cabadc",
+          "aabbcc",
+          1
+        ],
+        [
+          "bbdad",
+          "adbdb",
+          0
+        ],
+        [
+          "cadbdb",
+          "aabdad",
+          0
+        ],
+        [
+          "bbdaccdc",
+          "adadaa",
+          0
+        ],
+        [
+          "aabdaccdc",
+          "cadadaa",
+          0
+        ],
+        [
+          "ddadbdb",
+          "acabdad",
+          0
+        ],
+        [
+          "ddadd",
+          "acaba",
+          0
+        ],
+        [
+          "ddcdaa",
+          "ddaadc",
+          0
+        ],
+        [
+          "bbbcc",
+          "abadc",
+          0
+        ],
+        [
+          "bbdabadc",
+          "adbbcc",
+          0
+        ],
+        [
+          "aabdabadc",
+          "cadbbcc",
+          0
+        ],
+        [
+          "adacdaa",
+          "adccdc",
+          0
+        ],
+        [
+          "ddabadc",
+          "acabbcc",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [],
+      "presentation_id": "3ac2b8840f14",
+      "reasons": [
+        "NO_HELPFUL_MACRO_REGION"
+      ],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "8210e4d9b53338bf1ff734c0d6a7f33440dcd253607cdfaaba09befa89086c85",
+      "selected_cap": 500,
+      "verified_macro_witnesses": [
+        [
+          "aabdb",
+          "cad",
+          2,
+          "aff13ea0c93ddee49b3ec799243ed7599cbe3d3248560aad615ac0fe3279ac11"
+        ],
+        [
+          "aaa",
+          "cc",
+          2,
+          "dfa2c8d4c294def36c50a50b98479ac01cebead2a85aa406d06bd2b6b6fe1181"
+        ],
+        [
+          "cca",
+          "bab",
+          4,
+          "03b9d6947126612c8c2a09e3c097658919a0d8843384ef98c6f48e2004ae4f85"
+        ],
+        [
+          "bba",
+          "add",
+          3,
+          "1152df08df6049d650d480aaaaeb13b9222d58b50963c460f6a93d3e3fe20c2d"
+        ],
+        [
+          "cadd",
+          "aaba",
+          4,
+          "029383d6c9e444c812486c2ec5f42c82a6e1af5bc9edba0086136849054bedf5"
+        ],
+        [
+          "bacc",
+          "baa",
+          3,
+          "37bf3a16ce4c00847686c5e3f1b32ba71879113b7344c55ef6a7ecfa4c7e13c2"
+        ],
+        [
+          "abac",
+          "bab",
+          10,
+          "d752318a0d7aa7ccfdbef666af91354062ac4c5f411d686fa6b3a9b5272452de"
+        ],
+        [
+          "baba",
+          "bac",
+          3,
+          "4ff4714665c7e713db4026bf127eec5b1a8f92373457cc4bf6dc0629ae06e295"
+        ],
+        [
+          "aabab",
+          "baca",
+          5,
+          "ec167b902ad05678904efa4ff230fe59dd770a72568cfb990b6545da6fde5d80"
+        ],
+        [
+          "ddb",
+          "aca",
+          5,
+          "b8d66c5edef79bfc05d59a4d646007a01a0da4daa2f155b6318ee04f3b5d704e"
+        ],
+        [
+          "ddac",
+          "acdd",
+          2,
+          "d696ce0e40066c448b110efb2b4f9264bd30306167dd979cf2512d22e3a9a49a"
+        ],
+        [
+          "ddcc",
+          "dda",
+          3,
+          "4a12ea69ecf6d12fb2f20ff7d699177b0dd5eb229efb06085a2e3616fe3a7eb7"
+        ],
+        [
+          "acaa",
+          "ddc",
+          8,
+          "f43ed82aba09927e42f4ada3e83d5833cb14f15029b4130998458c40de9c43b5"
+        ],
+        [
+          "addc",
+          "bcc",
+          11,
+          "6a6b5aaf927e064722ec87aefa816886adffc50336a0d4cd861af537d8db77dd"
+        ],
+        [
+          "ddca",
+          "aca",
+          15,
+          "2eed11487b4cedac3c6f35c5cc83e6c237747f9521001a016bd2b7c36aa7abd9"
+        ],
+        [
+          "acabab",
+          "aca",
+          20,
+          "644b1d89e729aa4d867e1482d31e238b06fa4ad349e707fc8775999ef84dc470"
+        ],
+        [
+          "ddadd",
+          "acaba",
+          28,
+          "ff72ddfbbb7d863affc2717102f2489ad14fe722471e7f0e6e5d303dae6eb66a"
+        ],
+        [
+          "acddc",
+          "ddaa",
+          9,
+          "349d360b1cfe428762fc5f18a706a6450501ee4cfb7aacfb2193043627033ac3"
+        ],
+        [
+          "addaa",
+          "bbcc",
+          21,
+          "c66e3299b03f857b0210af0b2a2b049ab433387f5b2b4d7cfac0a9bbae182048"
+        ],
+        [
+          "ddabab",
+          "dda",
+          22,
+          "d22adb8f676302732e24b829313cf98095d571bd153dabad4ba9e136c9f53479"
+        ],
+        [
+          "acddaa",
+          "badc",
+          13,
+          "f5e0600af1bb4a6e2210cfd8f334ec6de5e03eac934463807f2d9b8528f20f12"
+        ],
+        [
+          "bbbcc",
+          "abadc",
+          35,
+          "9c7c14055c3a89583fd859f8328634463e75d3df2bf1bb0239970b8207716e93"
+        ],
+        [
+          "cabadc",
+          "aabbcc",
+          36,
+          "2fcd9abd6814e9552a46afee2cc3618e011f9b0bd27e938dd4b4e1831694befa"
+        ],
+        [
+          "badaa",
+          "accdc",
+          18,
+          "3eae913dbcf49a46013de1a3c835e6ba1b017297e39883c0220780a6857661f7"
+        ],
+        [
+          "caccdc",
+          "ccdaa",
+          21,
+          "c44a8693ac342fc656c1353b6475c8a7813a364d5695740704b9626157fafff4"
+        ],
+        [
+          "bacdaa",
+          "bccdc",
+          38,
+          "2ff87ede9b2b01f69ad33c07f3a0a7440e5806f66022cc007a2827758374df5c"
+        ],
+        [
+          "ddabadc",
+          "acabbcc",
+          60,
+          "ba4f0f3de545c2d7c1a90bd4bb9b9019216163068ba4645a4c74a6a7c927c2e5"
+        ],
+        [
+          "ddcdaa",
+          "ddaadc",
+          34,
+          "0060e8ba93227895cfa25591067002ff286272ac59c02dce93d3fa0c7bee96b1"
+        ],
+        [
+          "accdaa",
+          "ddcdc",
+          22,
+          "1c531a1f82787fe340b421c32a44ecd8fbb0111a2d3bca16ca0664316fe67821"
+        ],
+        [
+          "bbdad",
+          "adbdb",
+          2,
+          "c69dcb3545bd4e563bea4bd03ba42ed3037279e83aa85bdd7e4b9834b4782543"
+        ],
+        [
+          "cadbdb",
+          "aabdad",
+          3,
+          "ff176117e328338d9b586a806b37dad4c2e664edcd0e151be9d665e6a971e580"
+        ],
+        [
+          "ddadbdb",
+          "acabdad",
+          27,
+          "9e5adce951d173b45d392cb6e683b72272ca989e0e7bc961cdc0757b303340a8"
+        ],
+        [
+          "adbdbd",
+          "adba",
+          6,
+          "a464017cd89d327498c576e80dc17abdc2c2ad4378b7004c055a632cd3d1295a"
+        ],
+        [
+          "adacc",
+          "adaa",
+          5,
+          "67ecd8b49fff452dd70f92e84da40626bfe0af9333bbdb32a75e6de555296260"
+        ],
+        [
+          "adaba",
+          "adac",
+          5,
+          "c1950660b7f7308f6be50e921326432a2db871bf0295db66aea3478ca77401b7"
+        ],
+        [
+          "bbdabadc",
+          "adbbcc",
+          36,
+          "71fc73c2484ab1f9e489a110e2b4279bd148b1b8b9d32964514a8a63843a807c"
+        ],
+        [
+          "aabdabadc",
+          "cadbbcc",
+          37,
+          "2043bcfd4085103eb6bfdc36bebd7cac218b0302b8b57f309743db9bd3d0c8e4"
+        ],
+        [
+          "bbdaccdc",
+          "adadaa",
+          19,
+          "80f8ab8688acbc281e792998a99cef48e48c84c087b7128b15e96fca24ca3823"
+        ],
+        [
+          "aabdaccdc",
+          "cadadaa",
+          20,
+          "d513327d65e65d8d1a5299ef13add6d120ad71f8a9764efbc0aebd178b16fb63"
+        ],
+        [
+          "adacdaa",
+          "adccdc",
+          40,
+          "8a16efc14d615900e82c69e8fd63d46daddbda1d2621dfdaf67249d34d6ae33e"
+        ],
+        [
+          "cab",
+          "bac",
+          9,
+          "894504cf4064cadf007fd2c57fa506c15c516bce56a0332ec53709469bdd0314"
+        ],
+        [
+          "baab",
+          "abab",
+          20,
+          "e54f5a75a89bc8edb651870cfaadce00ea5e082f64d4b908b76fe927c4e01add"
+        ],
+        [
+          "babb",
+          "baa",
+          51,
+          "f913dcd5009e4d46c2781f92dbca4a8687420e99d3d2b38e6626840c54336093"
+        ],
+        [
+          "caab",
+          "bab",
+          60,
+          "08d4d54a9e6e37152e833b7e061a37a882c7dbe0c3e992232098dd8cf26719ae"
+        ],
+        [
+          "baadd",
+          "bcc",
+          64,
+          "30d778aa4630610dafdedd9f4cb492bb518f4d95677b3dcac92cedb72b8c2306"
+        ],
+        [
+          "bcaa",
+          "baca",
+          69,
+          "2e1c75fb77bbb55cdc0e58efd6c43b4732933115b4e7a66f245b68f8f65d4b1b"
+        ],
+        [
+          "caa",
+          "bcc",
+          91,
+          "4e8bdf5a96763cc142105d6dc4f8b779d7b76d12e71d1e05b900e4c65152d50a"
+        ],
+        [
+          "aabcc",
+          "bcc",
+          94,
+          "91888d68c53b076e9541cdce2234484588a5fa982d3617c36d889fee5d0401a8"
+        ],
+        [
+          "ddab",
+          "ddc",
+          30,
+          "44047e2eef8b098f27fdd6481c353cc25779390570508eadf6c5080ff7d5c2fb"
+        ],
+        [
+          "ddaab",
+          "aca",
+          81,
+          "afbdeab04c7feb8a5535a0f6b191ea69f0375c81baf2d14aed2cd571dab1becb"
+        ],
+        [
+          "ddaa",
+          "aadd",
+          108,
+          "88907b36a3b279e554bd2f558ae1ca743edab91c6947963e48faef6aeaaa2263"
+        ],
+        [
+          "babcd",
+          "accdc",
+          233,
+          "ba7bcd0c7f79a4e5891986fc11dc11c982040b9fabf5b3e6e151ff0e07c51aa2"
+        ],
+        [
+          "ccdaa",
+          "bcad",
+          350,
+          "1737229e7320fd80a2ba4d4a5c95e3696b7de26b5fae8885e0aa09a8b43abd97"
+        ],
+        [
+          "bbdabab",
+          "adaab",
+          21,
+          "bf8f191a57c7e51dfd61ecf3d3d88b3f4be764e645271f14ef55c09132d41370"
+        ],
+        [
+          "aabdabab",
+          "cadaab",
+          22,
+          "6484541fefdc43f7cbe8c5dd37386301c503f80655cade1085d915e3223596eb"
+        ],
+        [
+          "adabb",
+          "adaa",
+          53,
+          "abe52ad96e2908252a0bfd67dd5cc549c0ec93b1693a1e1ed276881740d14c9c"
+        ],
+        [
+          "adaadd",
+          "adcc",
+          66,
+          "0be770539465f517dd230a292b9cdfbc3ee86803fe0d0b6b8f33e55c5da92bf0"
+        ],
+        [
+          "adbcc",
+          "adaca",
+          162,
+          "bcee455c7cf4aaa27d32f4af952cbb862137c250a0a97de99bea2a6dfa45319c"
+        ],
+        [
+          "cac",
+          "bab",
+          6,
+          "e6c92bccda29c5db4e136d1f0c3a129e676cb4f5dc2e53f425f2dc4289819a92"
+        ],
+        [
+          "baca",
+          "add",
+          16,
+          "0abc6e91c40f810398bb712dc5056e0a2f2254b3833e9c57d875355a728929da"
+        ],
+        [
+          "aaba",
+          "bcc",
+          109,
+          "17c37b91990c20988fe049d491de509db6864ae1e6c797295fe81e866a9093c0"
+        ],
+        [
+          "abcc",
+          "ca",
+          115,
+          "44bd8ebf3039a0e8526b2ad82f06f538ad63af1aed8c74c998a619a0f9f3fc6a"
+        ],
+        [
+          "abaa",
+          "bcc",
+          131,
+          "530517f78a482ce38afa621223e27a508b362c3194e998a3eefd5af06d4d5042"
+        ],
+        [
+          "badd",
+          "baa",
+          43,
+          "2c3160a0233396960e0d48509a718167fc188214e065bc5eea0fab08da152c39"
+        ]
+      ]
+    },
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 182.25,
+          "solved_rate": 0.25
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 182.25,
+                "solved_rate": 0.25
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 162.33333333333334,
+                "solved_rate": 0.4166666666666667
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 162.83333333333334,
+                "solved_rate": 0.4166666666666667
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 160.91666666666666,
+                "solved_rate": 0.4166666666666667
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 182.25,
+                "solved_rate": 0.25
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 158.75,
+                "solved_rate": 0.4166666666666667
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 158.95833333333334,
+                "solved_rate": 0.4166666666666667
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 157.20833333333334,
+                "solved_rate": 0.4166666666666667
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 182.25,
+                "solved_rate": 0.25
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 158.45833333333334,
+                "solved_rate": 0.4166666666666667
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 158.95833333333334,
+                "solved_rate": 0.4166666666666667
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 6.0,
+                "restricted_mean": 157.25,
+                "solved_rate": 0.4166666666666667
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": 23.791666666666657,
+          "64": 23.291666666666657,
+          "8": 25.0
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 6.0,
+          "restricted_mean": 182.25,
+          "solved_rate": 0.25
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 3588,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 130,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": -0.26151146393658964,
+        "witness_vs_total_length": 0.09188458377475332
+      },
+      "decision": "FRAME_MEMBER",
+      "equations": [
+        [
+          "aa",
+          "dac"
+        ],
+        [
+          "ab",
+          "bbbc"
+        ],
+        [
+          "ab",
+          "cabd"
+        ],
+        [
+          "abbd",
+          "add"
+        ],
+        [
+          "bccb",
+          "cbd"
+        ],
+        [
+          "cca",
+          "dccd"
+        ],
+        [
+          "ccc",
+          "dac"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "ccc",
+          "aa",
+          176
+        ],
+        [
+          "babcb",
+          "add",
+          14
+        ],
+        [
+          "cbdbbc",
+          "bccab",
+          13
+        ],
+        [
+          "bbcbd",
+          "abcb",
+          10
+        ],
+        [
+          "daaa",
+          "aacc",
+          10
+        ],
+        [
+          "bbbaa",
+          "abcc",
+          9
+        ],
+        [
+          "aaabd",
+          "daab",
+          7
+        ],
+        [
+          "abbaa",
+          "adaa",
+          4
+        ],
+        [
+          "cbdccb",
+          "baabd",
+          4
+        ],
+        [
+          "dabccab",
+          "aabdbbc",
+          3
+        ],
+        [
+          "babcab",
+          "addbbc",
+          3
+        ],
+        [
+          "cabaa",
+          "abac",
+          2
+        ],
+        [
+          "bbbab",
+          "ababd",
+          0
+        ],
+        [
+          "cabcca",
+          "abccd",
+          0
+        ],
+        [
+          "abbcca",
+          "adcca",
+          0
+        ],
+        [
+          "daabac",
+          "aaabaa",
+          0
+        ],
+        [
+          "cbdbcbd",
+          "bccabcb",
+          0
+        ],
+        [
+          "cbddbbc",
+          "bcbccab",
+          0
+        ],
+        [
+          "daabccd",
+          "aaabcca",
+          0
+        ],
+        [
+          "bccababd",
+          "cbdbbab",
+          0
+        ],
+        [
+          "cbdbbaa",
+          "bccabcc",
+          0
+        ],
+        [
+          "bcbcbccab",
+          "cbdddbbc",
+          0
+        ],
+        [
+          "bcbccabcb",
+          "cbddbcbd",
+          0
+        ],
+        [
+          "dabcbccab",
+          "aabddbbc",
+          0
+        ],
+        [
+          "cbdabcb",
+          "bccadd",
+          0
+        ],
+        [
+          "cbddccb",
+          "bcbaabd",
+          0
+        ],
+        [
+          "dabaabd",
+          "aabdccb",
+          0
+        ],
+        [
+          "bcbccabcc",
+          "cbddbbaa",
+          0
+        ],
+        [
+          "cbddabcb",
+          "bcbccadd",
+          0
+        ],
+        [
+          "dabccadd",
+          "aabdabcb",
+          0
+        ],
+        [
+          "bcbcbaabd",
+          "cbdddccb",
+          0
+        ],
+        [
+          "bccaddbbc",
+          "cbdabcab",
+          0
+        ],
+        [
+          "dabcbaabd",
+          "aabddccb",
+          0
+        ],
+        [
+          "cbdccababd",
+          "baabdbbab",
+          0
+        ],
+        [
+          "bcbcbccadd",
+          "cbdddabcb",
+          0
+        ],
+        [
+          "dabcbccadd",
+          "aabddabcb",
+          0
+        ],
+        [
+          "cbdcbcbccab",
+          "baabdddbbc",
+          0
+        ],
+        [
+          "cbdcbccabcb",
+          "baabddbcbd",
+          0
+        ],
+        [
+          "cbddccababd",
+          "bcbaabdbbab",
+          0
+        ],
+        [
+          "babcadd",
+          "addabcb",
+          0
+        ],
+        [
+          "cbdcbccabcc",
+          "baabddbbaa",
+          0
+        ],
+        [
+          "cbddcbcbccab",
+          "bcbaabdddbbc",
+          0
+        ],
+        [
+          "cbddcbccabcb",
+          "bcbaabddbcbd",
+          0
+        ],
+        [
+          "badccab",
+          "adddbbc",
+          0
+        ],
+        [
+          "bccaddabcb",
+          "cbdabcadd",
+          0
+        ],
+        [
+          "cbdcbcbaabd",
+          "baabdddccb",
+          0
+        ],
+        [
+          "cbdccaddbbc",
+          "baabdabcab",
+          0
+        ],
+        [
+          "cbddcbccabcc",
+          "bcbaabddbbaa",
+          0
+        ],
+        [
+          "bacbdd",
+          "addccb",
+          0
+        ],
+        [
+          "bccadddbbc",
+          "cbdadccab",
+          0
+        ],
+        [
+          "cbdcbcbccadd",
+          "baabdddabcb",
+          0
+        ],
+        [
+          "cbddccaddbbc",
+          "bcbaabdabcab",
+          0
+        ],
+        [
+          "badaabd",
+          "adddccb",
+          0
+        ],
+        [
+          "badccadd",
+          "adddabcb",
+          0
+        ],
+        [
+          "bccaddccb",
+          "cbaabdd",
+          0
+        ],
+        [
+          "bccadddccb",
+          "cbdadaabd",
+          0
+        ],
+        [
+          "bbcbaabdd",
+          "abcaddccb",
+          0
+        ],
+        [
+          "bccadddabcb",
+          "cbdadccadd",
+          0
+        ],
+        [
+          "cbdccadddbbc",
+          "baabdadccab",
+          0
+        ],
+        [
+          "bccabcaddccb",
+          "cbdbcbaabdd",
+          0
+        ],
+        [
+          "cbdccaddccb",
+          "baabaabdd",
+          0
+        ],
+        [
+          "cbdccadddccb",
+          "baabdadaabd",
+          0
+        ],
+        [
+          "aabdccaddccb",
+          "dabaabaabdd",
+          0
+        ],
+        [
+          "cbddccaddccb",
+          "bcbaabaabdd",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [
+        8,
+        32,
+        64
+      ],
+      "presentation_id": "21b64bd46791",
+      "reasons": [],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "a2f4aa879b1fca749dd59a481136085ef39a9b994ef89e518389d5ff787cbe1b",
+      "selected_cap": 200,
+      "verified_macro_witnesses": [
+        [
+          "aaabd",
+          "daab",
+          2,
+          "3ecd1cf1c5944d6c48b0a238bd9b1943c9f241624b6a5bff8fb4812172029883"
+        ],
+        [
+          "ccc",
+          "aa",
+          2,
+          "c8a420a5770ffbff44841667d1b8ee634b2730be6a26ec649889f8bba3bce0e7"
+        ],
+        [
+          "daaa",
+          "aacc",
+          3,
+          "019bc8202c073cbe80784f928833dd9b83283ced97704bd2b95529734847c14e"
+        ],
+        [
+          "bbbab",
+          "ababd",
+          2,
+          "d4181a759039149c62a26b78b455d594f5d3c865241dd32e667c551522a43953"
+        ],
+        [
+          "bbcbd",
+          "abcb",
+          2,
+          "e509660a3049b20b29c757ba495c6da0b695e43447c9c1dcc350d795227877d3"
+        ],
+        [
+          "bbbaa",
+          "abcc",
+          3,
+          "85f9b61a84611634cf945813029946d906ae50226fd211b97679312a40afb799"
+        ],
+        [
+          "babcb",
+          "add",
+          4,
+          "27d02c987b0c6866fec64a3a690600179a993b2641ae8a937d123b3175c30b88"
+        ],
+        [
+          "cabaa",
+          "abac",
+          2,
+          "cca18650ce18b59af0680adee84735e602aa0a6a5859f86158a0d23532ed0113"
+        ],
+        [
+          "daabac",
+          "aaabaa",
+          3,
+          "155b7817a7301722e4c337a2942d2116dc9c644094be1ec25900fbdcb208e7e5"
+        ],
+        [
+          "cabcca",
+          "abccd",
+          2,
+          "0c88ea36aa76b9385c3cf1e0b911db1c3d77e9f35de9e4369ae4046ef0f658ba"
+        ],
+        [
+          "daabccd",
+          "aaabcca",
+          3,
+          "d70c3f2429883f84e3ccf63e4e07aa1798460e69d562e23af09ebba05c4119ed"
+        ],
+        [
+          "abbaa",
+          "adaa",
+          3,
+          "049dd7d3282a9a751fd87b22c445856c940e1e47d4f8a7bc85b5b079a66ecab0"
+        ],
+        [
+          "abbcca",
+          "adcca",
+          3,
+          "288796d9fde87072615db5ec753a8dea8815a00ae256bd7f650d0999b7f9e289"
+        ],
+        [
+          "cbdbbc",
+          "bccab",
+          2,
+          "80fc82afb5567b144a7b83d21e724a53530789ad0be55c6645a9fcd46e7ff3f4"
+        ],
+        [
+          "dabccab",
+          "aabdbbc",
+          3,
+          "ffd0a10570cfcdcb151cbae6c014a50dccc66c897e3f4868a551044f637d6755"
+        ],
+        [
+          "babcab",
+          "addbbc",
+          5,
+          "2a450e6bc5ddaa49da7339a716af30fb5c0f58a203f4cd6173db0acfaa38b6ed"
+        ],
+        [
+          "cbdccb",
+          "baabd",
+          4,
+          "1247b6b90b4adc15914fb88e91421857d36f6345d8c4035137ff8ce8a098379d"
+        ],
+        [
+          "dabaabd",
+          "aabdccb",
+          5,
+          "c8e1255c8f4a51057e423dcbe2612f469dbde8275af7b93b081fab0668a70f6d"
+        ],
+        [
+          "bacbdd",
+          "addccb",
+          10,
+          "eae001c0ce8671b6c01cba72bcb448e83ac47f4395ca54dc0c81dc5870501d3c"
+        ],
+        [
+          "bccababd",
+          "cbdbbab",
+          3,
+          "3f892d1da88df18a04e65d58aac30c3226418e7021c7a9b450d962e0826b73f2"
+        ],
+        [
+          "cbdbcbd",
+          "bccabcb",
+          3,
+          "52cba3d91d749bdc904f5714448b75976d0344fc19c55d051d5e92adcebef9b3"
+        ],
+        [
+          "cbdbbaa",
+          "bccabcc",
+          4,
+          "19586c711a014a4d7afa27266ca0ebb431c1b915f14b002e3d6d71044201c144"
+        ],
+        [
+          "cbdabcb",
+          "bccadd",
+          5,
+          "6b4b0ad22b5e66fd394f93702b08440b149280655b1645d0cb933034d51db04f"
+        ],
+        [
+          "dabccadd",
+          "aabdabcb",
+          6,
+          "89da755e2a725901753837f13075d2fd04fdd55482d29f50dd1aefa0c547af8b"
+        ],
+        [
+          "babcadd",
+          "addabcb",
+          8,
+          "193dcbe4da2d3ab771eea2214104292293f33b3044c36bb548b02760d8cf507c"
+        ],
+        [
+          "cbddbbc",
+          "bcbccab",
+          3,
+          "d556b3a7875d923c25295cb412c99982582ecbcd979066561d10e0535bf5d085"
+        ],
+        [
+          "dabcbccab",
+          "aabddbbc",
+          4,
+          "8228d1cf32a38c92e5a846ee4a1688ad82ca10e4ad9869b503daf75e0b5e3b6d"
+        ],
+        [
+          "badccab",
+          "adddbbc",
+          9,
+          "0f1304385c86e4ca2d447c74a92e5b789aecb9066416f2e439900ddc1fd09980"
+        ],
+        [
+          "bccaddbbc",
+          "cbdabcab",
+          6,
+          "ee6cb332eec358e115958fb575a41a7019b3316b6dc4972d0e651e2a41a587c8"
+        ],
+        [
+          "cbddccb",
+          "bcbaabd",
+          5,
+          "3263d4d4e2e7249a8cecf49138b6fc150de35b4c4c8b90c55c66e9990c8c2300"
+        ],
+        [
+          "dabcbaabd",
+          "aabddccb",
+          6,
+          "2009860d0e0cc06c869ba4cc0adac77341db25b52dbb952e31fe2f16d4c40cc0"
+        ],
+        [
+          "badaabd",
+          "adddccb",
+          11,
+          "b638deb32abab96a12204cd4bac349071790210bd0a856ea7288aa81e83d14ee"
+        ],
+        [
+          "bccaddccb",
+          "cbaabdd",
+          12,
+          "5479ae49ef90019102abda6daba9526a90d9d6f094bcd977f418d5e794414c98"
+        ],
+        [
+          "bbcbaabdd",
+          "abcaddccb",
+          13,
+          "9a2bf93c99eb7633eb910fdc2a4c76c1d7192df3cd609c6f0acd5619746ef679"
+        ],
+        [
+          "cbdccababd",
+          "baabdbbab",
+          6,
+          "a047822c2eca86d6ccfb30fc4b11df8ee16102a0a09619c9d52367d49d257243"
+        ],
+        [
+          "bcbccabcb",
+          "cbddbcbd",
+          4,
+          "b120460648f4170f30139df3045e527ac6db407e930bb4f056f9b0b7122bd216"
+        ],
+        [
+          "bcbccabcc",
+          "cbddbbaa",
+          5,
+          "4a30e08aea61322f642af3a11ed01eb78c1fc3640df331f83a5ea0fc3f1c18f1"
+        ],
+        [
+          "cbddabcb",
+          "bcbccadd",
+          6,
+          "9ec7c384932e1763feea306fbcb50801e00ade44c20b49cd0cc19a9596d5e3e5"
+        ],
+        [
+          "dabcbccadd",
+          "aabddabcb",
+          7,
+          "1d52acbb351b13228461d6e9c827f9c281dd28e60b7601cace770d16dd48a097"
+        ],
+        [
+          "badccadd",
+          "adddabcb",
+          12,
+          "a1337454c430bb418cc29d2b18f1fcf5c33b31c2cd16305ea1a458764314c366"
+        ],
+        [
+          "bccaddabcb",
+          "cbdabcadd",
+          9,
+          "2bb14b83537def97708800f487c726b49622b862746ad00803507cfdc1d9c230"
+        ],
+        [
+          "bcbcbccab",
+          "cbdddbbc",
+          4,
+          "647f390b474da2b771fa51d1015308daadcf98d638cbae16e99779a613ac52c6"
+        ],
+        [
+          "bccadddbbc",
+          "cbdadccab",
+          10,
+          "78212358e4b6abc9d66f6e08c7559c21d40c126790e811f60786d464aa6975c4"
+        ],
+        [
+          "cbdccaddbbc",
+          "baabdabcab",
+          9,
+          "e8705c8ca8c07440c2cafd5df548eb745cfee49e98ca8b122ef7ba774ee16b61"
+        ],
+        [
+          "bcbcbaabd",
+          "cbdddccb",
+          6,
+          "951c3ccc020c0c76b3ff0154c2f992582255b47cc0771dc8a75b566202a1b724"
+        ],
+        [
+          "bccadddccb",
+          "cbdadaabd",
+          12,
+          "4984848e110aad778d8ae459cf40a4aba81a0292f0265da34a9968b82b5bd831"
+        ],
+        [
+          "cbdccaddccb",
+          "baabaabdd",
+          15,
+          "85c3b500f2d23c1f48297f30409061271272e28a44f3f6a8c69f5feeb13d4b73"
+        ],
+        [
+          "aabdccaddccb",
+          "dabaabaabdd",
+          16,
+          "388b1d498f51da61f030fde6601ad906ff56beb8bce7138935c0c9b5e54adfa3"
+        ],
+        [
+          "bccabcaddccb",
+          "cbdbcbaabdd",
+          14,
+          "ee2acb59fab7e098fd35149bd14cb16300c6b235197ab18f650a526bcc51108f"
+        ],
+        [
+          "cbddccababd",
+          "bcbaabdbbab",
+          7,
+          "1068a42bf939522c09ec95370903a024b71be516ba721a80d6717d124d862517"
+        ],
+        [
+          "cbdcbccabcb",
+          "baabddbcbd",
+          7,
+          "049184897c64cea0e098fc42824f7debeb7f52ac475cca6873e34f2cead633b2"
+        ],
+        [
+          "cbdcbccabcc",
+          "baabddbbaa",
+          8,
+          "5a1d9b8212846bc40ca80b9b42a3a4089b674914267c392ad7397b1e4cb99a85"
+        ],
+        [
+          "bcbcbccadd",
+          "cbdddabcb",
+          7,
+          "e09ed21da71fc83c7a1e2ef74563f8d50ed6d72763830c83cb811a2732da682d"
+        ],
+        [
+          "bccadddabcb",
+          "cbdadccadd",
+          13,
+          "5cc2e86444c4a7dc3957071d43cd2b52d260e142bc3f7e125a49814b067897ea"
+        ],
+        [
+          "cbdcbcbccab",
+          "baabdddbbc",
+          7,
+          "96b1f0352d12f4ffe0d414783c49ac6bbfadacb80d7c8fa20370725d87db5108"
+        ],
+        [
+          "cbdccadddbbc",
+          "baabdadccab",
+          13,
+          "479defbe93b64ab945ace5decf354520570c497cdc4bdbefe2a6d6552118b13d"
+        ],
+        [
+          "cbddccaddbbc",
+          "bcbaabdabcab",
+          10,
+          "48e772d5e6a53143b53ea5ebaac8e8919d88dbc1f88d37e98e3193f50c74a41f"
+        ],
+        [
+          "cbdcbcbaabd",
+          "baabdddccb",
+          9,
+          "9a6505c49d28465121a08d985b5efcdc7bd49171fa0658462be76ed052595599"
+        ],
+        [
+          "cbdccadddccb",
+          "baabdadaabd",
+          15,
+          "a7048be280fdce36cf0218aebbc001afb8dbe89a6e1c102b97ecc6461ba03153"
+        ],
+        [
+          "cbddccaddccb",
+          "bcbaabaabdd",
+          16,
+          "717d30c731e1830000a6617f29a4cc5134b6a99ff51f75edaf18f7c4914c2495"
+        ],
+        [
+          "cbddcbccabcb",
+          "bcbaabddbcbd",
+          8,
+          "8294d7ae9d241a9eef06a1551deb3b14e4bea5022a02cc47f4ef189a9895fca4"
+        ],
+        [
+          "cbddcbccabcc",
+          "bcbaabddbbaa",
+          9,
+          "66ff9668c7e0aa2d71add638143a3d78bf3ff5a3cd500a8ac99ca617df003efe"
+        ],
+        [
+          "cbdcbcbccadd",
+          "baabdddabcb",
+          10,
+          "0e17829b77866078bcb321fca5a9e59651a8336a3cab7ccf6c4771c362c35cc5"
+        ],
+        [
+          "cbddcbcbccab",
+          "bcbaabdddbbc",
+          8,
+          "87b35701e809e2302964a1dca5833224da35ce496f9663c9e1d903855fe3c1ef"
+        ]
+      ]
+    },
+    {
+      "at_cap": {
+        "base": {
+          "median_expanded_proof_length_solved": 2.0,
+          "restricted_mean": 47.666666666666664,
+          "solved_rate": 0.2916666666666667
+        },
+        "curves": {
+          "expanded_match": {
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.666666666666664,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.833333333333336,
+                "solved_rate": 0.20833333333333334
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.833333333333336,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.708333333333336,
+                "solved_rate": 0.2916666666666667
+              }
+            }
+          },
+          "reuse": {
+            "completion": {
+              "0": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.666666666666664,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.666666666666664,
+                "solved_rate": 0.2916666666666667
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.833333333333336,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.666666666666664,
+                "solved_rate": 0.2916666666666667
+              }
+            },
+            "goal_relevant": {
+              "0": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.666666666666664,
+                "solved_rate": 0.2916666666666667
+              },
+              "32": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.833333333333336,
+                "solved_rate": 0.20833333333333334
+              },
+              "64": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.833333333333336,
+                "solved_rate": 0.20833333333333334
+              },
+              "8": {
+                "median_expanded_proof_length_solved": 2.0,
+                "restricted_mean": 47.708333333333336,
+                "solved_rate": 0.2916666666666667
+              }
+            }
+          }
+        },
+        "goal_relevant_reuse_gain_iswu": {
+          "32": -0.1666666666666714,
+          "64": -0.1666666666666714,
+          "8": -0.041666666666671404
+        },
+        "surface": {
+          "median_expanded_proof_length_solved": 2.0,
+          "restricted_mean": 47.666666666666664,
+          "solved_rate": 0.2916666666666667
+        }
+      },
+      "completion": {
+        "bounded_complete": false,
+        "derived_rule_count": 64,
+        "pair_scans": 3080,
+        "rule_cap_hit": true,
+        "scan_cap_hit": false,
+        "skipped_long_pairs": 455,
+        "total_rule_count": 71,
+        "verified_macro_count": 64
+      },
+      "correlations": {
+        "witness_vs_surface_distance": 0.29302853851054417,
+        "witness_vs_total_length": 0.1992816664179759
+      },
+      "decision": "REJECT",
+      "equations": [
+        [
+          "aaab",
+          "dbbb"
+        ],
+        [
+          "aab",
+          "bcab"
+        ],
+        [
+          "aacd",
+          "abab"
+        ],
+        [
+          "acda",
+          "baa"
+        ],
+        [
+          "adbb",
+          "da"
+        ],
+        [
+          "bbbb",
+          "bdbd"
+        ],
+        [
+          "cd",
+          "dd"
+        ]
+      ],
+      "goal_count": 24,
+      "goal_relevant_order": [
+        [
+          "aaaab",
+          "dab",
+          42
+        ],
+        [
+          "bcaaab",
+          "aaaab",
+          19
+        ],
+        [
+          "acdbaa",
+          "babaa",
+          8
+        ],
+        [
+          "daaab",
+          "aadab",
+          8
+        ],
+        [
+          "acaadab",
+          "bdab",
+          8
+        ],
+        [
+          "dadbd",
+          "dabbb",
+          7
+        ],
+        [
+          "acdbabaa",
+          "babaaa",
+          6
+        ],
+        [
+          "abaaaacd",
+          "abaaaab",
+          5
+        ],
+        [
+          "aacaadab",
+          "abdab",
+          5
+        ],
+        [
+          "acdbdab",
+          "babdab",
+          5
+        ],
+        [
+          "dbbaab",
+          "aaaaab",
+          3
+        ],
+        [
+          "abaacd",
+          "abaab",
+          2
+        ],
+        [
+          "aaaadab",
+          "dadab",
+          2
+        ],
+        [
+          "aacdcab",
+          "abaaab",
+          1
+        ],
+        [
+          "bcaacd",
+          "aaacd",
+          1
+        ],
+        [
+          "abaaacd",
+          "abaaab",
+          1
+        ],
+        [
+          "bcaaaaab",
+          "aaaaaab",
+          1
+        ],
+        [
+          "bcaaaacd",
+          "aaaaacd",
+          1
+        ],
+        [
+          "dbbaaaab",
+          "aaaaaaab",
+          1
+        ],
+        [
+          "adbaab",
+          "dacab",
+          0
+        ],
+        [
+          "accda",
+          "bada",
+          0
+        ],
+        [
+          "adbaaacd",
+          "dacaacd",
+          0
+        ],
+        [
+          "aacdcaaab",
+          "abaaaaab",
+          0
+        ],
+        [
+          "aacdcaacd",
+          "abaaaacd",
+          0
+        ],
+        [
+          "aaccdbd",
+          "aacaaab",
+          0
+        ],
+        [
+          "dacaaab",
+          "adbdab",
+          0
+        ],
+        [
+          "baadbd",
+          "baabbb",
+          0
+        ],
+        [
+          "baacaaab",
+          "acadbdab",
+          0
+        ],
+        [
+          "dbbaaacd",
+          "aaaaaacd",
+          0
+        ],
+        [
+          "aaaaaaacd",
+          "daaaacd",
+          0
+        ],
+        [
+          "aacdcaaaaab",
+          "abaaaaaaab",
+          0
+        ],
+        [
+          "aacdcaaaacd",
+          "abaaaaaacd",
+          0
+        ],
+        [
+          "acdbada",
+          "babada",
+          0
+        ],
+        [
+          "abaacadbdab",
+          "abaaacaaab",
+          0
+        ],
+        [
+          "abaaadbd",
+          "abaaabbb",
+          0
+        ],
+        [
+          "abaaacadbdab",
+          "abaaaacaaab",
+          0
+        ],
+        [
+          "abaaaaacd",
+          "abaaaaab",
+          0
+        ],
+        [
+          "bcaaaaaaab",
+          "aaaaaaaab",
+          0
+        ],
+        [
+          "bcaaaaaacd",
+          "aaaaaaacd",
+          0
+        ],
+        [
+          "dbbaaaaaab",
+          "aaaaaaaaab",
+          0
+        ],
+        [
+          "dbbaaaaacd",
+          "aaaaaaaacd",
+          0
+        ],
+        [
+          "bcaacadbdab",
+          "aaacadbdab",
+          0
+        ],
+        [
+          "dbbacadbdab",
+          "aaaacadbdab",
+          0
+        ],
+        [
+          "aacdcaaaaaaab",
+          "abaaaaaaaaab",
+          0
+        ],
+        [
+          "aacdcaaaaaacd",
+          "abaaaaaaaacd",
+          0
+        ],
+        [
+          "aacdcaacadbdab",
+          "abaaaacadbdab",
+          0
+        ],
+        [
+          "abaaaadbd",
+          "abdabbb",
+          0
+        ],
+        [
+          "abaaaaaacd",
+          "abaaaaaab",
+          0
+        ],
+        [
+          "acdbabada",
+          "babaada",
+          0
+        ],
+        [
+          "abaaaaaaacd",
+          "abaaaaaaab",
+          0
+        ],
+        [
+          "abaaaaadbd",
+          "abadabbb",
+          0
+        ],
+        [
+          "abaaaaaaaacd",
+          "abaaaaaaaab",
+          0
+        ],
+        [
+          "abaaaaaadbd",
+          "abaadabbb",
+          0
+        ],
+        [
+          "bcaaaaaaaaab",
+          "aaaaaaaaaab",
+          0
+        ],
+        [
+          "bcaaaaaaaacd",
+          "aaaaaaaaacd",
+          0
+        ],
+        [
+          "dbbaaaaaaaab",
+          "aaaaaaaaaaab",
+          0
+        ],
+        [
+          "dbbaaaaaaacd",
+          "aaaaaaaaaacd",
+          0
+        ],
+        [
+          "bcaaaacadbdab",
+          "aaaaacadbdab",
+          0
+        ],
+        [
+          "dbbaaacadbdab",
+          "aaaaaacadbdab",
+          0
+        ],
+        [
+          "aacdcaaaaaaaacd",
+          "abaaaaaaaaaacd",
+          0
+        ],
+        [
+          "abadaaaacd",
+          "abdadab",
+          0
+        ],
+        [
+          "bcaaaaaaaaaacd",
+          "aaaaaaaaaaacd",
+          0
+        ],
+        [
+          "dbbaaaaaaaaacd",
+          "aaaaaaaaaaaacd",
+          0
+        ],
+        [
+          "acdbabdab",
+          "babadab",
+          0
+        ]
+      ],
+      "helpful_macro_counts": [],
+      "presentation_id": "95afdd10ecd2",
+      "reasons": [
+        "NO_HELPFUL_MACRO_REGION"
+      ],
+      "relevance_evaluation_goal_overlap": 0,
+      "relevance_panel_count": 24,
+      "relevance_panel_sha256": "5e52139a4d4c1a456749fd4aaf5fa780f6185007e20e5c3c43fe0e1ef47e15dc",
+      "selected_cap": 50,
+      "verified_macro_witnesses": [
+        [
+          "dbbaab",
+          "aaaaab",
+          3,
+          "860341bda68dc01995da36dd31a89289db0df7457febe17ddf6a5643baddc5d4"
+        ],
+        [
+          "bcaaab",
+          "aaaab",
+          3,
+          "a9632347fc7b30d3869cdf356a30d5116db638be830ac95f3e41357afd630723"
+        ],
+        [
+          "dbbaaaab",
+          "aaaaaaab",
+          7,
+          "9301c6d0ff01aa3d71e83b7254487ad3f35b656a1ecb72d38234417fdaefffd3"
+        ],
+        [
+          "bcaacd",
+          "aaacd",
+          3,
+          "cc348cde531b491ed322e7f9d17635f03f286432f9b1f93a19446ee1b005d4e7"
+        ],
+        [
+          "dbbaaacd",
+          "aaaaaacd",
+          7,
+          "7eabdd912ba4f753ccf796a25e0701b40ca634903a05d9c769af6c06c81cd880"
+        ],
+        [
+          "bcaaaaab",
+          "aaaaaab",
+          7,
+          "e5da128ff97b9dbe49e806060f728316709f6cd582216da735c854741e137a1d"
+        ],
+        [
+          "dbbaaaaaab",
+          "aaaaaaaaab",
+          15,
+          "0b7124f0ddc638e8e645f28f4dca507b870c9c78255c14a6adb3dd25530cf548"
+        ],
+        [
+          "bcaaaacd",
+          "aaaaacd",
+          7,
+          "7269ec2aedfbb22e50cdc0e22e2a0386c37e76b64d85d461772ac616f9e975ab"
+        ],
+        [
+          "dbbaaaaacd",
+          "aaaaaaaacd",
+          15,
+          "ccf25a95b3db8dc0b13292f44ae436edf3e96866619be28c31b6d29cac849f4e"
+        ],
+        [
+          "bcaaaaaaab",
+          "aaaaaaaab",
+          15,
+          "ee5315f8d5c8882477ff68887ebe6a8393919c98073d0d973fec025a3449096a"
+        ],
+        [
+          "dbbaaaaaaaab",
+          "aaaaaaaaaaab",
+          31,
+          "7ff7890d7cec5cb355d26c7daafcd2d2f3f21edc4d924ef1c1884f8be5f373a2"
+        ],
+        [
+          "bcaaaaaacd",
+          "aaaaaaacd",
+          15,
+          "79add95d8034cd1dba0a689dc38d60fac495b33d70bcf0c34bf59fec2ed24d22"
+        ],
+        [
+          "dbbaaaaaaacd",
+          "aaaaaaaaaacd",
+          31,
+          "a7db05a47c8d95e293009c6b9bf447a34c045d8460f5978b7e862b6fed34a225"
+        ],
+        [
+          "bcaaaaaaaaab",
+          "aaaaaaaaaab",
+          31,
+          "3254a2c8de63a659a6fa1e6a8e8561b943b2610ccf3db5fa09b12dd3ca1bc4c9"
+        ],
+        [
+          "bcaaaaaaaacd",
+          "aaaaaaaaacd",
+          31,
+          "3579356cc16d2d77f29e890deb93ecd135217851872ec7f0fb0589add4a94763"
+        ],
+        [
+          "dbbaaaaaaaaacd",
+          "aaaaaaaaaaaacd",
+          63,
+          "6cd7a9bf75bb82abdb94132884383daca15e10f06d2e691ed0af1ae0207c1004"
+        ],
+        [
+          "bcaaaaaaaaaacd",
+          "aaaaaaaaaaacd",
+          63,
+          "fc8d3f8e031d594c3765e9ce2d84891355a489003cca438ca83da53aa1179706"
+        ],
+        [
+          "aacdcab",
+          "abaaab",
+          2,
+          "29b077a77bbaadc8e7fc8bc18bdb3eb7d06b2331c99411f6c4e2cf02370cc39a"
+        ],
+        [
+          "abaacd",
+          "abaab",
+          3,
+          "78f6a4f514376cd689c59b42b9a95cda5550b9a6538337c9dc18e7df17d2ade6"
+        ],
+        [
+          "aaccdbd",
+          "aacaaab",
+          5,
+          "6a37ca606ffa349c7c8ae27fd8903febc0ca2985c9303f59a268a4e377f90a45"
+        ],
+        [
+          "aacdcaaab",
+          "abaaaaab",
+          4,
+          "bd49d0211bfb51acafd025f60618b9acff3dde26ca8aa7f1a8ca18d62f8e6202"
+        ],
+        [
+          "aacdcaacd",
+          "abaaaacd",
+          4,
+          "f45413567b12588a3cfcbe68b69a72a46b41220370e2a0c5c35e4b4dacaa5474"
+        ],
+        [
+          "aacdcaaaaab",
+          "abaaaaaaab",
+          8,
+          "a7365c6fc1bc7e9c4f378ad5f05462259c334a3c99cf7cd446a69bda4259266e"
+        ],
+        [
+          "aacdcaaaacd",
+          "abaaaaaacd",
+          8,
+          "b993256f708528deaa7a6d3343eb1d5ac63330ca40fe60a83ec58812012e2dbe"
+        ],
+        [
+          "aacdcaaaaaaab",
+          "abaaaaaaaaab",
+          16,
+          "9590d211dd95778a9fa0dd2183ada72f3e9dd78e5177d4490f989cb39f3ca8cd"
+        ],
+        [
+          "aacdcaaaaaacd",
+          "abaaaaaaaacd",
+          16,
+          "a334ca2069a97e5bda3bf3dc427fee62db7812f84abd3023a74ce7b09e825984"
+        ],
+        [
+          "aacdcaaaaaaaacd",
+          "abaaaaaaaaaacd",
+          32,
+          "f00c9587611cf825970826bcc44fe4968dee6d1a66d103e2d68b2daccaffdced"
+        ],
+        [
+          "abaaacd",
+          "abaaab",
+          7,
+          "39a1bdcd737f069ba2637d0ff38789ee389f400d25e120573c2f8ccadd4e27ca"
+        ],
+        [
+          "abaaaacd",
+          "abaaaab",
+          11,
+          "54dd355ecaea66553c59a6c9912a018d15633cecdea7c3c5d4736b1a2c20ffe3"
+        ],
+        [
+          "abaaaaacd",
+          "abaaaaab",
+          15,
+          "4440fd741126af613013f426aa189dc19257d3c0d7acc5ab9ab5b615ff44b613"
+        ],
+        [
+          "abaaaaaacd",
+          "abaaaaaab",
+          19,
+          "aca64fd27fe9c44bf0f360eff1a85a170eaaf66369153f5c6409a28647ddf525"
+        ],
+        [
+          "abaaaaaaacd",
+          "abaaaaaaab",
+          23,
+          "d6cdbf9d3318b35c03ae0b4865dd63893b376d374736d31e86459b1ce392ee8e"
+        ],
+        [
+          "abaaaaaaaacd",
+          "abaaaaaaaab",
+          27,
+          "1a2d114c685d68574bd04b1eeefbb6af42b90f11ccb7d10eac3e7f3fb1ed92d3"
+        ],
+        [
+          "acdbaa",
+          "babaa",
+          3,
+          "a08f38c27ff23e2184914ff326846cb468489d21abed45a7c8511e03373f0b18"
+        ],
+        [
+          "accda",
+          "bada",
+          4,
+          "289a5d908c033634bd1574259e90155fc74dcd12614c0dd69a52f22c1099a182"
+        ],
+        [
+          "acdbabaa",
+          "babaaa",
+          9,
+          "51d82b3647f389c6c39664db967239ce365ba5372a02a394ec6fc09cfa7de3ae"
+        ],
+        [
+          "acdbada",
+          "babada",
+          9,
+          "dac8d2dd4cc71d094963ee3bec74cab21a58c34b4a27d5694352a6ff37fa4799"
+        ],
+        [
+          "acdbabada",
+          "babaada",
+          21,
+          "dc3bb77124838ed4788bd6a886c7586d5b82a8fb7f02ecb3bb8240372b49b5cc"
+        ],
+        [
+          "aaaab",
+          "dab",
+          2,
+          "1ce6a0b871a71d2e0b9784d79086f25cfe78c4a8a4a527cb713d752693944db5"
+        ],
+        [
+          "adbaab",
+          "dacab",
+          2,
+          "7df6a481aa1962f3b47a758b0f5516d410f93f23964601bcef0576f3cc7148fd"
+        ],
+        [
+          "dadbd",
+          "dabbb",
+          5,
+          "f97ea9f76d1bb4bdcf65baa3a74b212a4f14346a7b3a61ceee7f4a1fe157848d"
+        ],
+        [
+          "baadbd",
+          "baabbb",
+          7,
+          "0603bcb9731a02d47a5a54427f71730cbe99295ce96f7ed4f6e284ea44f81ffe"
+        ],
+        [
+          "abaaadbd",
+          "abaaabbb",
+          11,
+          "5212476f43c5e079c2e0bac18bc03f31dd9dee232a4626187b5b3d27352453f6"
+        ],
+        [
+          "abaaaadbd",
+          "abdabbb",
+          17,
+          "2db7c365ffe47cdf19cb8be7009e73b9dcb0f0e53abdd0d91bd7d0210d4852d0"
+        ],
+        [
+          "abaaaaadbd",
+          "abadabbb",
+          25,
+          "224a57f18d3541aa6659258d8815db52a0815fad5ea3871982e6142c991dc286"
+        ],
+        [
+          "abaaaaaadbd",
+          "abaadabbb",
+          29,
+          "d173dae55ae89dff6464c9d7d42129dbb9daa0d1323646cc980fa6ec943fd909"
+        ],
+        [
+          "daaab",
+          "aadab",
+          6,
+          "3c4054ddeebb589b0c687787a48b6f49b2c56554f5d880ec7b738bc1c0f96e05"
+        ],
+        [
+          "aacaadab",
+          "abdab",
+          29,
+          "b34a1b732fd305f66d71637514fd53afb418f92fdf6fd0f324565c2cee490c04"
+        ],
+        [
+          "acaadab",
+          "bdab",
+          9,
+          "98b7eb7c034267be8485e28e424c99041565687125ee6a17e7c3234ad57e17cf"
+        ],
+        [
+          "acdbdab",
+          "babdab",
+          39,
+          "71a7394980f215f0cbebbe15655154ae33cfc39036a7916e4e5545fca5687938"
+        ],
+        [
+          "acdbabdab",
+          "babadab",
+          85,
+          "ceafbfe6e5b2dac12a6544852a2ec36a5f092baf93a03cd35c8501bdb957af18"
+        ],
+        [
+          "dacaaab",
+          "adbdab",
+          6,
+          "06bdcce315ed8fd9d42413d06420c1535fd6f960062e2708d89877b4edced866"
+        ],
+        [
+          "baacaaab",
+          "acadbdab",
+          7,
+          "c2567ca140c4c50de1b8e3f654f27d1ae33bfcc2c7e1c52fecd7e6ee9adc6f46"
+        ],
+        [
+          "dbbacadbdab",
+          "aaaacadbdab",
+          15,
+          "4b9405c4a81a675b4fbcd6e6df706e4d6eac54c7c7beb9bfe0f95b755c34d183"
+        ],
+        [
+          "bcaacadbdab",
+          "aaacadbdab",
+          15,
+          "b662c6df0ccf27a0a39e4fa7699333cc16538b7de7ad4cc4458b7415a50e8ff7"
+        ],
+        [
+          "dbbaaacadbdab",
+          "aaaaaacadbdab",
+          31,
+          "0d748a001d91795fd9563a81168b977db68092baa628db00bbdd45dbd64f4e1e"
+        ],
+        [
+          "bcaaaacadbdab",
+          "aaaaacadbdab",
+          31,
+          "2bfaae35835fa84cba3dcedab1fefd0e6ac6764cc8564b505446be44348fa35e"
+        ],
+        [
+          "abaacadbdab",
+          "abaaacaaab",
+          9,
+          "028d2298bacfedb48fdbb3f95b179d97fc927bddec8090fbf101c02a0190a85c"
+        ],
+        [
+          "aacdcaacadbdab",
+          "abaaaacadbdab",
+          16,
+          "f596e70d18fe8ff8fe474d5818592dd240910cb67c927b9f7e17a1d648cc0e81"
+        ],
+        [
+          "abaaacadbdab",
+          "abaaaacaaab",
+          13,
+          "e770f91e187007f61a8c16040b5c848da70243d791b31626e1958439087bb8a5"
+        ],
+        [
+          "aaaadab",
+          "dadab",
+          12,
+          "1e90724145735abb3d6ba0f76aa2c0c3c05729d26f6bda371fc853a11009e077"
+        ],
+        [
+          "adbaaacd",
+          "dacaacd",
+          4,
+          "28280b6736988dcce3c364ed607c552d95a16acd976548a2d3316ace684e9f51"
+        ],
+        [
+          "aaaaaaacd",
+          "daaaacd",
+          8,
+          "21d66db2f70cb766640333b25383a0177ec64e61d4f2454f72f7ca5d913f89a7"
+        ],
+        [
+          "abadaaaacd",
+          "abdadab",
+          53,
+          "e84a1577c12da661d465cadd26cc5824fa0f83ce7870b2d8335719eb89263ec9"
+        ]
+      ]
+    }
+  ],
+  "schema": "wallb-desk-audit-12c.v1",
+  "scientific_outcome": false,
+  "seed": 20260809,
+  "supersedes_gate_credit_of": "wallb-desk-audit-12b.v1"
+}
