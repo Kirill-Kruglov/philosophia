@@ -1125,6 +1125,33 @@ def render_report(payload: dict[str, object]) -> str:
     interval = payload["prevalence_wilson_95"]
     pc = payload["positive_control"]
 
+    if payload["verdict"] == "POSITIVE_CONTROL_FAIL":
+        return f"""# WALLB_POLICY_CHANNEL_AUDIT_14
+
+NON-CITABLE preregistered policy-channel audit. No ACTIVE/YOKED learner was
+instantiated. Library macros are absent from both arms; only beam order differs.
+
+## VERDICT: POSITIVE_CONTROL_FAIL
+
+Positive control on `{pc['presentation_id']}` (leaking oracle trained on
+evaluation witness paths): FAIL. gains/losses=
+{pc['primary']['solve_gains']}/{pc['primary']['solve_losses']},
+solve-rate delta={pc['primary']['solve_rate_difference']:.3f},
+CONTROL rate/RM={metric(pc['at_cap']['control'])},
+TREATMENT rate/RM={metric(pc['at_cap']['treatment'])},
+raw McNemar p={pc['primary']['mcnemar_one_sided_raw_p']:.4g},
+RM gain={pc['primary']['restricted_mean_gain']:.2f} at B={pc['selected_cap']}.
+Reasons: {', '.join(pc.get('qualification_reasons') or []) or '-'}.
+
+Under frozen beam width W={payload['beam_width']}, CONTROL and TREATMENT produced
+identical paired evaluation outcomes. The forty-world frame was not drawn.
+Implementation size: {payload['implementation_nonblank_lines']} nonblank lines.
+Preregistration commit: `{payload['preregistration_commit']}`.
+
+This is an instrument-power failure, not a prevalence estimate. No world
+contract, ACTIVE/YOKED arm or scientific claim is authorized.
+"""
+
     header = f"""# WALLB_POLICY_CHANNEL_AUDIT_14
 
 NON-CITABLE preregistered policy-channel audit. No ACTIVE/YOKED learner was
