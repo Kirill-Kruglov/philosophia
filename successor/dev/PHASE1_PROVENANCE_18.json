@@ -1,0 +1,284 @@
+{
+  "architecture": {
+    "checkpoints": [
+      {
+        "checkpoint": 0,
+        "device": "cpu",
+        "embedding": 128,
+        "heads": 2,
+        "inner_optimizer_state_entries": 0,
+        "layers": 2,
+        "max_searches": 1,
+        "model_parameters": 478720,
+        "outer_optimizer_state_entries": 0,
+        "positions": 512,
+        "training_iteration_field": 0
+      },
+      {
+        "checkpoint": 1,
+        "device": "cpu",
+        "embedding": 128,
+        "heads": 2,
+        "inner_optimizer_state_entries": 28,
+        "layers": 2,
+        "max_searches": 1,
+        "model_parameters": 478720,
+        "outer_optimizer_state_entries": 0,
+        "positions": 512,
+        "training_iteration_field": 1
+      },
+      {
+        "checkpoint": 2,
+        "device": "cpu",
+        "embedding": 128,
+        "heads": 2,
+        "inner_optimizer_state_entries": 28,
+        "layers": 2,
+        "max_searches": 1,
+        "model_parameters": 478720,
+        "outer_optimizer_state_entries": 0,
+        "positions": 512,
+        "training_iteration_field": 2
+      },
+      {
+        "checkpoint": 3,
+        "device": "cpu",
+        "embedding": 128,
+        "heads": 2,
+        "inner_optimizer_state_entries": 28,
+        "layers": 2,
+        "max_searches": 1,
+        "model_parameters": 478720,
+        "outer_optimizer_state_entries": 0,
+        "positions": 512,
+        "training_iteration_field": 3
+      },
+      {
+        "checkpoint": 4,
+        "device": "cpu",
+        "embedding": 128,
+        "heads": 2,
+        "inner_optimizer_state_entries": 28,
+        "layers": 2,
+        "max_searches": 1,
+        "model_parameters": 478720,
+        "outer_optimizer_state_entries": 0,
+        "positions": 512,
+        "training_iteration_field": 4
+      }
+    ],
+    "source_rule": {
+      "cpu_branch": "comment-labelled debug code fixed at 2 layers / 2 heads / embedding 128, n_positions=512",
+      "cuda_branch": "defaults to 8 layers / 8 heads / embedding 512, n_positions=1024",
+      "file": "minimo/learning/policy.py",
+      "transformer_lm_policy_init": "TransformerLMPolicy.__init__"
+    },
+    "verified_anchor": {
+      "checkpoints": "0..4",
+      "embedding": 128,
+      "heads": 2,
+      "layers": 2,
+      "model_parameters": 478720,
+      "optimizer_state_entries": {
+        "ck0": 0,
+        "ck1_to_ck4": 28
+      },
+      "positions": 512
+    }
+  },
+  "bounded_action_order_probe": {
+    "artifact": {
+      "bytes": 12008,
+      "path": "/home/master/llm_projects/philosophia/successor/dev/PHASE1_ACTION_ORDER_PROBE_18_results.json",
+      "sha256": "8e0be257aabea68229523b3ba446d6bf9cab1b52dbeaed81aa5a82dfb09f839e"
+    },
+    "distinct_order_count": 8,
+    "sole_cause_claim": false,
+    "status": "ORDER_VARIATION_OBSERVED",
+    "worker_count": 8
+  },
+  "conjecture_grammar_limitation": {
+    "causal_explanation_of_ck1": false,
+    "kind": "instrument-scope limitation",
+    "source_anchor": {
+      "decl_parse": "minimo/learning/conjecture.py::Decl.parse",
+      "value_parse": "minimo/learning/conjecture.py::Value.parse",
+      "value_parse_with_target_type_options": "minimo/learning/conjecture.py::Value.parse_with_target_type_options",
+      "value_type_union": "Value.value: Union[Atom, App] (no Arrow)"
+    },
+    "statement": "current learning/conjecture.py::Decl.parse delegates a declaration type to Value.parse_with_target_type_options, while Value does not parse Arrow. The self-conjecture grammar therefore cannot place an implication/function type in a hypothesis declaration. Phase 1 must not be described as having tested a rich compositional implication curriculum."
+  },
+  "excluded_runs": [
+    {
+      "classification": "STOPPED_PERFORMANCE_FEASIBILITY",
+      "gpu_model": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "gpu_model_source": "philosophia/successor/dev/PHASE1_MINIMO_REPRO_15.md",
+      "inference_forbidden": [
+        "do not infer that the GPU was intrinsically slower",
+        "do not infer that 8 GB VRAM was the sole cause"
+      ],
+      "machine_name": "Lenovo Legion",
+      "not_equal_architecture_hardware_benchmark": true,
+      "not_phase16_17_checkpoint_source": true,
+      "reason": "ended because the observed end-to-end performance did not provide the expected operational gain",
+      "run_id": "2026-08-09/23-57-05",
+      "vram": "8 GB VRAM"
+    },
+    {
+      "classification": "STOPPED_PERFORMANCE_FEASIBILITY",
+      "gpu_model": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "gpu_model_source": "philosophia/successor/dev/PHASE1_MINIMO_REPRO_15.md (same named Lenovo Legion host as the cost-adapted continuation recorded in PHASE1B_MINIMO_COST_ADAPTED.md)",
+      "inference_forbidden": [
+        "do not infer that the GPU was intrinsically slower",
+        "do not infer that 8 GB VRAM was the sole cause"
+      ],
+      "machine_name": "Lenovo Legion",
+      "not_equal_architecture_hardware_benchmark": true,
+      "not_phase16_17_checkpoint_source": true,
+      "reason": "ended because the observed end-to-end performance did not provide the expected operational gain",
+      "run_id": "2026-08-10/07-27-05",
+      "vram": "8 GB VRAM"
+    }
+  ],
+  "forward_boundary": "Phase 2 must pin architecture explicitly, may not let CUDA availability choose the scientific learner, and must canonicalize unique action identities before constructing children. This package does not implement Phase 2.",
+  "hashes": {
+    "checkpoints_pt": [
+      {
+        "bytes": 1946691,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/0.pt",
+        "sha256": "c0776153f60408b57465af89b599273c38f085441be092a8848a05bde8beac73"
+      },
+      {
+        "bytes": 5794267,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/1.pt",
+        "sha256": "1a6b2fbe77da802b5144fbbb7e688f1011501785aa1b99919a646a3fba382f49"
+      },
+      {
+        "bytes": 5794267,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/2.pt",
+        "sha256": "eedfe1b9b6d8312a93bd02fb65d9e3ef46e8b74284e3a6723dfd345f76d0fab4"
+      },
+      {
+        "bytes": 5794267,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/3.pt",
+        "sha256": "7044ef7f893e52e87eefa5f1b21796c28e83d53d109eb217f453f5fdfe92bbc6"
+      },
+      {
+        "bytes": 5794267,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/4.pt",
+        "sha256": "10014b04735cbc4a25a00715a816e781ad4044e490a7f44e797af06cb2353fff"
+      }
+    ],
+    "config_yaml": {
+      "bytes": 671,
+      "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/.hydra/config.yaml",
+      "sha256": "107c5feac3fd7095f343485394f03e2cf2079300b9fb572d52ec910eb6c7ea61"
+    },
+    "full_run_log": {
+      "bytes": 18803279,
+      "path": "/home/master/minimo_prop_full.log",
+      "sha256": "e7ebe941abca83f7f750a83d5ddf777d03035d5b192fc94ccb907ce54f394fce"
+    },
+    "log_jsonl": {
+      "bytes": 98244,
+      "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/log.jsonl",
+      "sha256": "02ba0d79cfdcf5956ab6ae660be58ad1e9b739d9d3db172b75c3c31c9d812710"
+    },
+    "outcomes_json": [
+      {
+        "bytes": 1478313,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/outcomes_0.json",
+        "sha256": "7999f55c19fc3fc464d560089e7d043bc000716b2dec5ffe6795527615f860cf"
+      },
+      {
+        "bytes": 2724976,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/outcomes_1.json",
+        "sha256": "f21996b2bcc4396fee432315c9f30900d61bfabfd6b06369ab5a5a2e5069144a"
+      },
+      {
+        "bytes": 4057416,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/outcomes_2.json",
+        "sha256": "232b0149b7e07cf476e87528809e61586878ec6c92c224b186492e41a3642ca2"
+      },
+      {
+        "bytes": 5939408,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/outcomes_3.json",
+        "sha256": "71788e762c2bf39d9a01cccb26bdeda737974250823209ea0fa7ebba5c55e24f"
+      },
+      {
+        "bytes": 8029231,
+        "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/outcomes_4.json",
+        "sha256": "3c7aafa54ba05cd7d13ef1aa279cc90710ac9b2e18b118e19accbca0dc5b5a2b"
+      }
+    ],
+    "overrides_yaml": {
+      "bytes": 54,
+      "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/.hydra/overrides.yaml",
+      "sha256": "d20c335331d3f14901a158d5463ba8fc6c87d717cac4602dbca9b0bc5b509814"
+    },
+    "phase17_json": [
+      {
+        "bytes": 6275,
+        "path": "/home/master/llm_projects/philosophia/successor/dev/phase1_extrinsic_17/checkpoint_0.json",
+        "sha256": "8c264cc2b1e219b02fca5d2c79d6bef3bdcdc9667e7a47cb16c98d0035bdffe3"
+      },
+      {
+        "bytes": 6431,
+        "path": "/home/master/llm_projects/philosophia/successor/dev/phase1_extrinsic_17/checkpoint_1.json",
+        "sha256": "92ec290830544939f3aba49910e1ecace96bf43745328aa041093440f82189a1"
+      },
+      {
+        "bytes": 6285,
+        "path": "/home/master/llm_projects/philosophia/successor/dev/phase1_extrinsic_17/checkpoint_2.json",
+        "sha256": "c0dc9c23b8dbb9854d0484d049a163d0743ce599261d585ac311e31153bc56a2"
+      },
+      {
+        "bytes": 6286,
+        "path": "/home/master/llm_projects/philosophia/successor/dev/phase1_extrinsic_17/checkpoint_3.json",
+        "sha256": "c6eb9ee658aecdfd421b4fdde677c6e476bb0099aa054b3369cb617df834839c"
+      },
+      {
+        "bytes": 6309,
+        "path": "/home/master/llm_projects/philosophia/successor/dev/phase1_extrinsic_17/checkpoint_4.json",
+        "sha256": "1d60aca077999bf67135fd8adfe32af660d364fe2c00b2a2ad3dde200278262c"
+      }
+    ]
+  },
+  "minimo_git": {
+    "commit": "6066f482c6752915ad21119f93dc162f4cb9db72",
+    "status_short": " M learning/problems.py\n M learning/proofsearch.py\n?? .venv/\n?? learning/__pycache__/\n?? learning/outputs/\n?? learning/test_mcts_expansion_counter.py\n"
+  },
+  "no_public_archive": true,
+  "no_public_archive_statement": "No public archive currently exists for this Phase-1 realization.",
+  "not_equal_architecture_reproduction": true,
+  "not_paper_scale": true,
+  "realization": "repository-default CPU-debug MINIMO realization",
+  "run": {
+    "end_evidence": [
+      "outcomes_4.json mtime 2026-08-10T18:49:59.327684942+03:00",
+      "log.jsonl mtime 2026-08-10T18:49:59.627687111+03:00 last record iteration 4 training",
+      "minimo_prop_full.log mtime 2026-08-10T18:49:59.695687602+03:00"
+    ],
+    "execution_route": "single-process CPU",
+    "execution_route_evidence": [
+      "minimo_prop_full.log: Running in single-process mode.",
+      "bootstrap.py submit_task uses worker.try_prove.run when DISTRIBUTED is unset",
+      "hydra launcher: hydra._internal.core_plugins.basic_launcher.BasicLauncher",
+      "TransformerLMPolicy CPU debug branch; checkpoints load on cpu"
+    ],
+    "path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33",
+    "start_evidence": [
+      "hydra output_dir /home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33",
+      "config.yaml mtime 2026-08-10T00:14:33.452666286+03:00",
+      "0.pt mtime 2026-08-10T00:14:34.302903289+03:00",
+      "minimo_prop_full.log first timestamp [2026-08-10T00:14:34.303900] Iteration #0"
+    ]
+  },
+  "schema": "phase1-provenance-18.v1",
+  "scientific_claim": false,
+  "training_rng": {
+    "reason": "bootstrap.py did not initialize and persist Python/NumPy/Torch launch RNG state",
+    "status": "UNSEEDED"
+  },
+  "verdict": "EXPLORATORY_FEASIBILITY_OBSERVED__NO_PHILOSOPHIA_CLAIM"
+}

@@ -1,0 +1,446 @@
+diff --git a/learning/problems.py b/learning/problems.py
+index ea36a05..7ef8e45 100644
+--- a/learning/problems.py
++++ b/learning/problems.py
+@@ -1,10 +1,13 @@
+ #!/usr/bin/env python3
+ 
+ import collections
++from pathlib import Path
+ 
+ import peano
+ 
+ 
++_LEARNING_DIR = Path(__file__).resolve().parent
++
+ TheoremStatement = collections.namedtuple('TheoremStatement', ['name', 'statement', 'premises'])
+ 
+ 
+@@ -367,9 +370,72 @@ empty : type.
+     )
+ 
+ 
++def _normalize_kleene_statement(statement: str) -> str:
++    """Peano surface fix for two Kleene encodings that do not parse as written.
++
++    Double-negation of an implication written as (not (not ['A -> 'B])) is
++    rejected by the current Peano parser. The equivalent encoding
++    [[[...] -> false] -> false] parses. Same Kleene proposition; loader-only.
++    """
++    exact = {
++        (
++            "[('A : prop) -> ('B : prop) -> [(not (not ['A -> 'B']))] -> "
++            "[(not (not 'A)) -> (not (not 'B))]]"
++        ).replace("['A -> 'B']", "['A -> 'B]"): (
++            "[('A : prop) -> ('B : prop) -> [[['A -> 'B] -> false] -> false] -> "
++            "[(not (not 'A)) -> (not (not 'B))]]"
++        ),
++        (
++            "[('A : prop) -> ('B : prop) -> ('C : prop) -> [(not (not ['A -> 'B']))] -> "
++            "[(not (not ['B -> 'C']))] -> [(not (not ['A -> 'C']))]]"
++        ).replace("['A -> 'B']", "['A -> 'B]").replace(
++            "['B -> 'C']", "['B -> 'C]"
++        ).replace("['A -> 'C']", "['A -> 'C]"): (
++            "[('A : prop) -> ('B : prop) -> ('C : prop) -> "
++            "[[['A -> 'B] -> false] -> false] -> "
++            "[[['B -> 'C] -> false] -> false] -> "
++            "[[['A -> 'C] -> false] -> false]]"
++        ),
++    }
++    return exact.get(statement, statement)
++
++
++def load_kleene_propositional_logic_extrinsic():
++    """Kleene Theorem-41 statements on the training propositional-logic theory.
++
++    Uses learning/theories/propositional-logic.p (same axiom names the agent
++    trained on) and learning/extrinsic/propositional-logic.p. This is not the
++    Lean-library logic problemset, whose action names differ.
++    """
++    theory = (_LEARNING_DIR / 'theories' / 'propositional-logic.p').read_text(encoding='utf-8')
++    premises = [
++        'and_i', 'and_el', 'and_er', 'or_il', 'or_ir', 'or_e', 'not_i', 'not_e',
++        'exfalso', 'iff_i', 'iff_el', 'iff_er', 'em',
++    ]
++    statements: list[TheoremStatement] = []
++    for line in (_LEARNING_DIR / 'extrinsic' / 'propositional-logic.p').read_text(
++        encoding='utf-8'
++    ).splitlines():
++        line = line.strip()
++        if not line or '. ' not in line:
++            continue
++        label, statement = line.split('. ', 1)
++        statement = _normalize_kleene_statement(statement)
++        statements.append(TheoremStatement(f'kleene_{label}', statement, []))
++    if not statements:
++        raise RuntimeError('no Kleene extrinsic statements loaded')
++    return ProblemSet(theory, premises, statements)
++
++
+ def load_problemset(problemset_id) -> ProblemSet:
+     if problemset_id in ('lean-library-logic', 'logic'):
+         return load_lean_library_logic_problemset()
+     elif problemset_id in ('natural-number-game', 'nng'):
+         return load_natural_number_game_problemset()
++    elif problemset_id in (
++        'kleene',
++        'propositional-logic-extrinsic',
++        'kleene-propositional-logic',
++    ):
++        return load_kleene_propositional_logic_extrinsic()
+     raise ValueError(f'Unknown problem set {problemset_id}')
+diff --git a/learning/proofsearch.py b/learning/proofsearch.py
+index d405156..e15da1d 100644
+--- a/learning/proofsearch.py
++++ b/learning/proofsearch.py
+@@ -820,10 +820,15 @@ class MonteCarloTreeSearch(Policy):
+ 
+     def evaluate(self, root: TreeSearchNode, start_index=0,
+                  on_expand=None, verbose=True) -> np.array:
++        # Count iterations actually entered after the pre-iteration solved check.
++        # `i` remains the zero-based loop index for leaf._index.
++        n_entered = 0
+         for i in tqdm_if(verbose)(range(self._budget)):
+             if root.is_solved():
+                 break
+ 
++            n_entered += 1
++
+             leaf = self._tree_policy(root)
+ 
+             if leaf is None:
+@@ -855,7 +860,7 @@ class MonteCarloTreeSearch(Policy):
+         value = max(p * (c._reward / max(1, c._visits))
+                     for p, c in zip(pi, root.children()))
+ 
+-        return root.is_solved(), pi, value, i
++        return root.is_solved(), pi, value, n_entered
+ 
+     def _tree_policy(self, node):
+         prefix = list(self._exploration_prefix or [])
+@@ -963,6 +968,11 @@ class ProofSearchResult:
+     root: TreeSearchNode
+     examples: list[str]
+     iterations: int
++    # philosophia Phase-1 instrumentation: MCTS loop iterations entered,
++    # summed over the outer search loop. The historical field name is retained;
++    # this is not necessarily the count of newly expanded leaves. `iterations`
++    # counts outer agent actions (0 on success, 1 on exhaustion), not search work.
++    mcts_expansions: int = 0
+ 
+ 
+ class ProofSearchAgent:
+@@ -985,6 +995,7 @@ class ProofSearchAgent:
+ 
+         node = root
+         iterations = 0
++        mcts_expansions = 0
+         examples = []
+ 
+         while not (node.is_terminal() or node.is_dead()):
+@@ -992,6 +1003,7 @@ class ProofSearchAgent:
+ 
+             mcts = MonteCarloTreeSearch(self._policy, self._max_mcts_nodes, use_policy=True)
+             solved, pi, _, it = mcts.evaluate(node)
++            mcts_expansions += it
+ 
+             if solved:
+                 break
+@@ -1018,7 +1030,7 @@ class ProofSearchAgent:
+         self._examples.extend(examples)
+         self._examples = self._examples[-self._max_examples:]
+ 
+-        return ProofSearchResult(problem, solved, root, examples, iterations)
++        return ProofSearchResult(problem, solved, root, examples, iterations, mcts_expansions)
+ 
+     def train(self, examples=None):
+         examples = examples or self._examples
+@@ -1321,13 +1333,29 @@ def evaluate_agent(config: DictConfig, agent=None):
+     if agent is None:
+         agent = make_agent(config)
+ 
++    # Extrinsic budgets: checkpoints are trained at 1000; override from config.
++    if config.agent.get('max_mcts_nodes') is not None:
++        agent._max_mcts_nodes = int(config.agent.max_mcts_nodes)
++    elif config.agent.get('expansions') is not None:
++        agent._max_mcts_nodes = int(config.agent.expansions)
++
++    if hasattr(agent, '_policy') and hasattr(agent._policy, '_lm'):
++        agent._policy._lm.eval()
++
++    seed = int(config.get('seed', 0))
++    random.seed(seed)
++    np.random.seed(seed)
++    torch.manual_seed(seed)
++
+     problemset = problems.load_problemset(config.problemset)
+ 
+     begin = config.get('begin', 0)
+     end = config.get('end', len(problemset))
++    records = []
+ 
+     for problem in problemset.problem_names()[begin:end]:
+         print('Attempting problem:', problem)
++        t0 = time.time()
+         try:
+             result = agent.proof_search(problem, problemset.initialize_problem(problem))
+         except KeyboardInterrupt:
+@@ -1336,13 +1364,46 @@ def evaluate_agent(config: DictConfig, agent=None):
+             print('Error!')
+             import traceback; traceback.print_exc()
+             result = ProofSearchResult(problem, False, None, [], 0)
++        elapsed = time.time() - t0
+         print('Success?', result.success)
++        print('Elapsed_s', round(elapsed, 3))
++
++        records.append({
++            'problem': problem,
++            'success': bool(result.success),
++            'agent_iterations': int(result.iterations),
++            'mcts_expansions': int(getattr(result, 'mcts_expansions', 0)),
++            'elapsed_s': elapsed,
++            'mcts_budget': int(agent._max_mcts_nodes),
++        })
+ 
+         if result.success:
+-            problemset.mark_as_solved(problem, add_to_library=False)
++            problemset.mark_as_solved(problem, add_to_library=bool(config.get('accumulate_library', False)))
+ 
+     print(f'Solved {len(problemset._solved)}/{len(problemset)}')
+-    print(f'Solved problems: {", ".join(problemset._solved)}')
++    print(f'Solved problems: {", ".join(problemset.solved())}')
++
++    results_path = config.get('results_path')
++    if results_path:
++        payload = {
++            'problemset': str(config.problemset),
++            'agent_path': str(config.get('agent_path')),
++            'seed': seed,
++            'mcts_budget': int(agent._max_mcts_nodes),
++            'accumulate_library': bool(config.get('accumulate_library', False)),
++            'begin': int(begin),
++            'end': int(end),
++            'n_problems': len(records),
++            'n_solved': len(problemset._solved),
++            'success_rate': len(problemset._solved) / max(1, len(records)),
++            'mean_elapsed_s': float(np.mean([r['elapsed_s'] for r in records])) if records else 0.0,
++            'records': records,
++            'solved': problemset.solved(),
++        }
++        with open(results_path, 'w', encoding='ascii') as out:
++            json.dump(payload, out, indent=2, sort_keys=True)
++            out.write('\n')
++        print('Wrote results to', results_path)
+ 
+ 
+ def test_preconditions():
+diff --git a/learning/test_mcts_expansion_counter.py b/learning/test_mcts_expansion_counter.py
+new file mode 100644
+index 0000000..932b82c
+--- /dev/null
++++ b/learning/test_mcts_expansion_counter.py
+@@ -0,0 +1,204 @@
++#!/usr/bin/env python3
++"""Regression tests for MonteCarloTreeSearch.evaluate entered-iteration counts.
++
++The pre-repair implementation returned the zero-based loop index `i`, so
++exhaustion of budget B and success on the final allowed iteration both
++reported B-1. These tests must fail against that old return.
++"""
++
++from __future__ import annotations
++
++import sys
++import unittest
++from pathlib import Path
++
++import numpy as np
++
++LEARNING_DIR = Path(__file__).resolve().parent
++if str(LEARNING_DIR) not in sys.path:
++    sys.path.insert(0, str(LEARNING_DIR))
++
++from proofsearch import MonteCarloTreeSearch  # noqa: E402
++
++
++class DummyPolicy:
++    def initialize(self, leaf):
++        children = leaf.children() or []
++        n = max(1, len(children))
++        for child in children:
++            child._prior_policy = 1.0 / n
++            child._value_estimate = 0.0
++
++    def evaluate(self, leaf):
++        children = leaf.children() or []
++        if not children:
++            return np.array([1.0]), 0.0
++        n = len(children)
++        return np.ones(n) / n, 0.0
++
++
++class FakeNode:
++    """Minimal duck-typed search node for counter tests. Not a real proof tree."""
++
++    def __init__(
++            self,
++            terminal=False,
++            solved=False,
++            parent=(None, None),
++            action_name='a0',
++            terminal_at_depth=None,
++            depth=0,
++    ):
++        self._terminal = bool(terminal)
++        self._solved = bool(solved)
++        self._parent = parent
++        self._action_name = action_name
++        self._children = None
++        self._visits = 0
++        self._reward = 0
++        self._prior_policy = 1.0
++        self._value_estimate = 0.0
++        self._index = None
++        self._is_dead = False
++        self._terminal_at_depth = terminal_at_depth
++        self._depth = depth
++        self.state_node = self
++
++    def is_conjunctive(self):
++        return False
++
++    def is_terminal(self):
++        return self._terminal
++
++    def is_solved(self):
++        if self._solved or self._terminal:
++            return True
++        if self._children:
++            return any(c.is_solved() for c in self._children)
++        return False
++
++    def is_leaf(self):
++        return (not self._terminal) and self._children is None
++
++    def is_dead(self):
++        return self._is_dead
++
++    def mark_dead(self):
++        self._is_dead = True
++
++    def mark_solved(self, action=None):
++        self._solved = True
++        parent, parent_action = self._parent
++        if parent is not None:
++            parent.mark_solved(parent_action)
++
++    def children(self):
++        return self._children
++
++    def expand(self, only_if_leaf=True):
++        if only_if_leaf:
++            assert self.is_leaf()
++        child_depth = self._depth + 1
++        child_terminal = (
++            self._terminal_at_depth is not None
++            and child_depth >= self._terminal_at_depth
++        )
++        child = FakeNode(
++            terminal=child_terminal,
++            parent=(self, self._action_name),
++            action_name=self._action_name,
++            terminal_at_depth=self._terminal_at_depth,
++            depth=child_depth,
++        )
++        self._children = [child]
++        return
++
++    def get_path_from_root(self, root=None):
++        if self is root or self._parent[0] is None:
++            return []
++        parent, action = self._parent
++        return parent.get_path_from_root(root) + [action]
++
++
++def _attach_dummy_child(root):
++    child = FakeNode(parent=(root, 'dummy'), action_name='dummy', depth=1)
++    child._visits = 1
++    child._reward = 0.0
++    child._prior_policy = 1.0
++    root._children = [child]
++    root._visits = 1
++    return child
++
++
++def _run(root, budget, start_index=0):
++    mcts = MonteCarloTreeSearch(DummyPolicy(), budget=budget, use_policy=True)
++    solved, pi, value, n_entered = mcts.evaluate(
++        root, start_index=start_index, verbose=False)
++    return solved, pi, value, n_entered
++
++
++class TestMctsExpansionCounter(unittest.TestCase):
++    def test_zero_work_already_solved_returns_0(self):
++        root = FakeNode(solved=True)
++        _attach_dummy_child(root)
++        solved, _, _, n_entered = _run(root, budget=8)
++        self.assertTrue(solved)
++        self.assertEqual(n_entered, 0)
++
++    def test_zero_budget_returns_0(self):
++        root = FakeNode(solved=True)
++        _attach_dummy_child(root)
++        solved, _, _, n_entered = _run(root, budget=0)
++        self.assertTrue(solved)
++        self.assertEqual(n_entered, 0)
++
++    def test_one_entered_iteration_returns_1(self):
++        root = FakeNode(terminal_at_depth=1)
++        solved, _, _, n_entered = _run(root, budget=8)
++        self.assertTrue(solved)
++        self.assertEqual(n_entered, 1)
++        self.assertEqual(root._index, 0)
++
++    def test_early_success_not_on_final_iteration(self):
++        root = FakeNode(terminal_at_depth=3)
++        solved, _, _, n_entered = _run(root, budget=8)
++        self.assertTrue(solved)
++        self.assertEqual(n_entered, 3)
++        self.assertLess(n_entered, 8)
++
++    def test_exhaustion_returns_budget_not_b_minus_one(self):
++        budget = 5
++        root = FakeNode()
++        solved, _, _, n_entered = _run(root, budget=budget)
++        self.assertFalse(solved)
++        self.assertEqual(n_entered, budget)
++        self.assertNotEqual(n_entered, budget - 1)
++
++    def test_success_on_final_allowed_iteration_returns_budget(self):
++        budget = 4
++        root = FakeNode(terminal_at_depth=budget)
++        solved, _, _, n_entered = _run(root, budget=budget)
++        self.assertTrue(solved)
++        self.assertEqual(n_entered, budget)
++        self.assertNotEqual(n_entered, budget - 1)
++
++    def test_leaf_index_keeps_zero_based_loop_index(self):
++        start_index = 10
++        budget = 3
++        root = FakeNode()
++        solved, _, _, n_entered = _run(root, budget=budget, start_index=start_index)
++        self.assertFalse(solved)
++        self.assertEqual(n_entered, budget)
++        self.assertEqual(root._index, start_index + 0)
++        node = root
++        expected_i = 0
++        while node.children():
++            self.assertEqual(node._index, start_index + expected_i)
++            node = node.children()[0]
++            expected_i += 1
++            if expected_i >= budget:
++                break
++
++
++if __name__ == '__main__':
++    unittest.main()

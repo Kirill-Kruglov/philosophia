@@ -1,0 +1,270 @@
+{
+  "accumulate_library": false,
+  "agent_path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/4.pt",
+  "begin": 0,
+  "end": 30,
+  "mcts_budget": 8000,
+  "mean_elapsed_s": 158.10276006857555,
+  "n_problems": 30,
+  "n_solved": 13,
+  "problemset": "kleene",
+  "records": [
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.0873875617980957,
+      "mcts_budget": 8000,
+      "mcts_expansions": 5,
+      "problem": "kleene_1",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 259.933580160141,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_2",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 53.71319627761841,
+      "mcts_budget": 8000,
+      "mcts_expansions": 1832,
+      "problem": "kleene_3",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 240.676593542099,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_4",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 236.20401644706726,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_5",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 70.68621492385864,
+      "mcts_budget": 8000,
+      "mcts_expansions": 2394,
+      "problem": "kleene_6",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 98.72783041000366,
+      "mcts_budget": 8000,
+      "mcts_expansions": 3387,
+      "problem": "kleene_7",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 228.8372926712036,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_8a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 228.4857702255249,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_8b",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 230.23690843582153,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_9a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 222.36451029777527,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_9b",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 7.8441901206970215,
+      "mcts_budget": 8000,
+      "mcts_expansions": 327,
+      "problem": "kleene_10a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 10.18267011642456,
+      "mcts_budget": 8000,
+      "mcts_expansions": 396,
+      "problem": "kleene_10b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.7682325839996338,
+      "mcts_budget": 8000,
+      "mcts_expansions": 41,
+      "problem": "kleene_11",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 304.51385712623596,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_12",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 291.65864276885986,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_13",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 294.9315252304077,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_14",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 298.5677924156189,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_15",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 3.727501392364502,
+      "mcts_budget": 8000,
+      "mcts_expansions": 166,
+      "problem": "kleene_16",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 11.290168046951294,
+      "mcts_budget": 8000,
+      "mcts_expansions": 486,
+      "problem": "kleene_17a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 48.047558546066284,
+      "mcts_budget": 8000,
+      "mcts_expansions": 1714,
+      "problem": "kleene_17b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 6.377341270446777,
+      "mcts_budget": 8000,
+      "mcts_expansions": 276,
+      "problem": "kleene_18a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 9.288483619689941,
+      "mcts_budget": 8000,
+      "mcts_expansions": 409,
+      "problem": "kleene_18b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.6672663688659668,
+      "mcts_budget": 8000,
+      "mcts_expansions": 38,
+      "problem": "kleene_19",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 227.22529888153076,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_20",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 224.08651161193848,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_21",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 242.7012915611267,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_22",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 390.0355603694916,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_23",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 254.54837846755981,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_24",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 246.6672306060791,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7999,
+      "problem": "kleene_25",
+      "success": false
+    }
+  ],
+  "seed": 0,
+  "solved": [
+    "kleene_1",
+    "kleene_3",
+    "kleene_6",
+    "kleene_7",
+    "kleene_10a",
+    "kleene_10b",
+    "kleene_11",
+    "kleene_16",
+    "kleene_17a",
+    "kleene_17b",
+    "kleene_18a",
+    "kleene_18b",
+    "kleene_19"
+  ],
+  "success_rate": 0.43333333333333335
+}

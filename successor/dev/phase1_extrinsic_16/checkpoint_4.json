@@ -1,0 +1,238 @@
+{
+  "accumulate_library": false,
+  "agent_path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/4.pt",
+  "begin": 0,
+  "end": 30,
+  "mcts_budget": 2000,
+  "mean_elapsed_s": 40.69220896561941,
+  "n_problems": 30,
+  "n_solved": 11,
+  "problemset": "kleene",
+  "records": [
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.08562469482421875,
+      "mcts_budget": 2000,
+      "problem": "kleene_1",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 58.18045163154602,
+      "mcts_budget": 2000,
+      "problem": "kleene_2",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 57.34362506866455,
+      "mcts_budget": 2000,
+      "problem": "kleene_3",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 56.12972593307495,
+      "mcts_budget": 2000,
+      "problem": "kleene_4",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 57.737292766571045,
+      "mcts_budget": 2000,
+      "problem": "kleene_5",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 54.18911576271057,
+      "mcts_budget": 2000,
+      "problem": "kleene_6",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 56.1093316078186,
+      "mcts_budget": 2000,
+      "problem": "kleene_7",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 51.3650004863739,
+      "mcts_budget": 2000,
+      "problem": "kleene_8a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 51.35363054275513,
+      "mcts_budget": 2000,
+      "problem": "kleene_8b",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 50.580485343933105,
+      "mcts_budget": 2000,
+      "problem": "kleene_9a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 52.4024932384491,
+      "mcts_budget": 2000,
+      "problem": "kleene_9b",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 9.180790901184082,
+      "mcts_budget": 2000,
+      "problem": "kleene_10a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 10.179132223129272,
+      "mcts_budget": 2000,
+      "problem": "kleene_10b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.7733962535858154,
+      "mcts_budget": 2000,
+      "problem": "kleene_11",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 56.456374645233154,
+      "mcts_budget": 2000,
+      "problem": "kleene_12",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 56.88404631614685,
+      "mcts_budget": 2000,
+      "problem": "kleene_13",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 59.356271743774414,
+      "mcts_budget": 2000,
+      "problem": "kleene_14",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 60.499754667282104,
+      "mcts_budget": 2000,
+      "problem": "kleene_15",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 3.905863046646118,
+      "mcts_budget": 2000,
+      "problem": "kleene_16",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 11.55556607246399,
+      "mcts_budget": 2000,
+      "problem": "kleene_17a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 48.149643898010254,
+      "mcts_budget": 2000,
+      "problem": "kleene_17b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 6.610451698303223,
+      "mcts_budget": 2000,
+      "problem": "kleene_18a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 8.12764835357666,
+      "mcts_budget": 2000,
+      "problem": "kleene_18b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.632673978805542,
+      "mcts_budget": 2000,
+      "problem": "kleene_19",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 49.13699674606323,
+      "mcts_budget": 2000,
+      "problem": "kleene_20",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 50.945624589920044,
+      "mcts_budget": 2000,
+      "problem": "kleene_21",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 56.152395248413086,
+      "mcts_budget": 2000,
+      "problem": "kleene_22",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 70.63247990608215,
+      "mcts_budget": 2000,
+      "problem": "kleene_23",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 58.34826374053955,
+      "mcts_budget": 2000,
+      "problem": "kleene_24",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 57.762117862701416,
+      "mcts_budget": 2000,
+      "problem": "kleene_25",
+      "success": false
+    }
+  ],
+  "seed": 0,
+  "solved": [
+    "kleene_1",
+    "kleene_3",
+    "kleene_10a",
+    "kleene_10b",
+    "kleene_11",
+    "kleene_16",
+    "kleene_17a",
+    "kleene_17b",
+    "kleene_18a",
+    "kleene_18b",
+    "kleene_19"
+  ],
+  "success_rate": 0.36666666666666664
+}
