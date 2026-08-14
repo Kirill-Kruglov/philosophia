@@ -1,0 +1,236 @@
+{
+  "artifact": "PHASE2_STAGE_A_ACCEPTANCE_19",
+  "verdict": "STAGE_A_V4_3_2_READY_FOR_TARGETED_XY_CONFIRMATION",
+  "stage": "V4.3.2 bounded seed-domain correction",
+  "supersedes": {
+    "verdict": "STAGE_A_V4_3_1_READY_FOR_BOUNDED_XY_CONFIRMATION",
+    "patch_sha256": "38afd4233e94fb479954ae2f4902188b72732e9f293c640094d8de69a1c2e571",
+    "driver_status": "STAGE_A_SEED_DOMAIN_CORRECTION_REQUIRED_V4_3_1",
+    "independent_reviews": [
+      "REVISE_STAGE_A_V4_3_1_X",
+      "CONFIRM_STAGE_A_V4_3_1_Y"
+    ],
+    "unhidden_findings": [
+      "accepted init_seed values 0, 2**32, and 2**62 produced distinct spec hashes but identical CPU RNG streams and learner state hashes"
+    ],
+    "prior_v431": {
+      "verdict": "STAGE_A_V4_3_1_READY_FOR_BOUNDED_XY_CONFIRMATION",
+      "patch_sha256": "38afd4233e94fb479954ae2f4902188b72732e9f293c640094d8de69a1c2e571",
+      "driver_status": "STAGE_A_SEED_DOMAIN_CORRECTION_REQUIRED_V4_3_1"
+    },
+    "prior_v43": {
+      "verdict": "STAGE_A_V4_3_READY_FOR_BOUNDED_XY_CONFIRMATION",
+      "patch_sha256": "b4ee258ab8c55a1c772569ba4086c05bb1088c9f62c654ab59ec79c7f4696a79",
+      "driver_status": "STAGE_A_PRE_CONFIRMATION_CORRECTION_REQUIRED_V4_3"
+    },
+    "prior_v42": {
+      "verdict": "STAGE_A_READY_FOR_XY_REVIEW_V4_2",
+      "patch_sha256": "8eba7e14651c7604b72ce3f447462359b74d38119782c29541005b8136dc2bf7",
+      "driver_status": "STAGE_A_POST_XY_REPAIR_REQUIRED_V4_2"
+    },
+    "prior_v41": {
+      "verdict": "STAGE_A_READY_FOR_XY_REVIEW_V4_1",
+      "patch_sha256": "66874e9bc35fe60f4dffe3fd3ed7a7cb4cbbba5af73a1bcd833a748f2065d195",
+      "driver_status": "STAGE_A_BOUNDARY_COMPLETENESS_REQUIRED_V4_1"
+    },
+    "prior_v4": {
+      "verdict": "STAGE_A_READY_FOR_XY_REVIEW_V4",
+      "patch_sha256": "034506296b6cddbb10558c412f9597680fd7c1184889f533164ce35b50edb888",
+      "driver_status": "STAGE_A_BOUNDARY_HARDENING_REQUIRED_V4"
+    },
+    "prior_v3": {
+      "verdict": "STAGE_A_READY_FOR_INDEPENDENT_REVIEW_V3",
+      "patch_sha256": "c2d29cdf252b8ce49344462a186c93970f56499bed09f6d583f6c3c5b18b68a7",
+      "driver_status": "STAGE_A_REPAIR_REQUIRED_V3"
+    },
+    "prior_v2": {
+      "verdict": "STAGE_A_READY_FOR_INDEPENDENT_REVIEW_V2",
+      "patch_sha256": "0c30f614a37a09144a8ca836535e3258dee9876db2b94efc95c770073ce8900c",
+      "driver_status": "STAGE_A_REPAIR_REQUIRED_V2"
+    },
+    "prior_v1": {
+      "verdict": "STAGE_A_READY_FOR_INDEPENDENT_REVIEW",
+      "patch_sha256": "419e001539b3f01d0cc315774015b9e54b4a94eb24a1d6c0746da70d6dbd38aa",
+      "driver_status": "STAGE_A_REPAIR_REQUIRED"
+    }
+  },
+  "pinned": {
+    "philosophia": "b0b9adf4eaeee45b86291ce4f4510b3f0242862d",
+    "minimo": "6066f482c6752915ad21119f93dc162f4cb9db72"
+  },
+  "patch": {
+    "path": "successor/dev/minimo_phase2_stage_a_19.patch",
+    "sha256": "e08a8d29d67d82297216722b3e13e6c1a3f4bd354962a2865b1cfc57a9980bbd",
+    "format": "ordinary_unified_git_diff",
+    "includes_phase1_delta": true
+  },
+  "cpu_debug_scientific_spec_hash": "b2fd8e4887909dfdf269123dc484a876d6a826c650a7098f6abdc852215c6b09",
+  "cpu_debug_parameter_count": 478720,
+  "scientific_spec_key_count": 26,
+  "init_seed_range": [
+    0,
+    4294967295
+  ],
+  "init_seed_range_note": "exact non-bool int in [0, 2**32-1]; 2**32 aliases 0 on the pinned Torch CPU generator (s aliases s+2**32)",
+  "driver_findings": {
+    "init_seed_canonical_domain_2_pow_32": "repaired"
+  },
+  "commands": [
+    {
+      "id": "git_apply_check_fresh_tree",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify",
+      "command": "git checkout 6066f482c6752915ad21119f93dc162f4cb9db72 && git apply --check <patch> && git apply <patch> && git diff --check",
+      "result": "pass",
+      "git_diff_check_exit": 0
+    },
+    {
+      "id": "py_compile_fresh_tree",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m py_compile bootstrap.py policy.py problems.py proofsearch.py phase2_*.py test_mcts_expansion_counter.py test_phase2_*.py",
+      "result": "pass"
+    },
+    {
+      "id": "all_stage_a_tests_fresh_tree",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_mcts_expansion_counter test_phase2_spec test_phase2_codec test_phase2_search test_phase2_actions test_phase2_hindsight test_phase2_config test_phase2_exclusions test_phase2_root",
+      "result": "pass",
+      "prior_v431_tests": 125,
+      "new_v432_tests": 1,
+      "ran": 126,
+      "ok": 126,
+      "failed": 0
+    },
+    {
+      "id": "seed_domain_2_pow_32_rejection_and_alias",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_phase2_spec.TestScientificSpec.test_init_seed_rejects_2_pow_32_because_it_aliases_zero",
+      "result": "pass"
+    },
+    {
+      "id": "public_init_seed_2_pow_32_pre_spawn",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_phase2_root.TestProductionScientificRoot.test_public_init_seed_2_pow_32_does_not_spawn",
+      "result": "pass"
+    },
+    {
+      "id": "two_default_dtype_identity_restoration",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_phase2_spec.TestScientificSpec.test_construction_independent_of_ambient_default_dtype",
+      "result": "pass"
+    },
+    {
+      "id": "valid_and_forged_peano_panic_routes",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_phase2_root.TestProductionScientificRoot.test_valid_peano_panic_envelope_reconstructs_named_type test_phase2_root.TestProductionScientificRoot.test_forged_peano_panic_envelope_is_isolated_job_error test_phase2_root.TestProductionScientificRoot.test_free_variable_nat_add_is_typed_peano_panic",
+      "result": "pass"
+    },
+    {
+      "id": "zero_budget_real_nat_add",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_phase2_root.TestProductionScientificRoot.test_zero_budget_real_nat_add_is_valid_empty_evidence",
+      "result": "pass"
+    },
+    {
+      "id": "real_budget4_two_process_replay",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_phase2_root.TestProductionScientificRoot.test_isolated_real_nat_add_fresh_process_replay",
+      "result": "pass"
+    },
+    {
+      "id": "real_nat_add_isolated_smoke",
+      "cwd": "/tmp/minimo_phase2_stage_a_v432_verify/learning",
+      "command": "python -m unittest test_phase2_root.TestProductionScientificRoot.test_isolated_real_nat_add_expansion_primitive_evidence",
+      "result": "pass"
+    },
+    {
+      "id": "philosophia_full_pytest",
+      "cwd": "/home/master/llm_projects/philosophia",
+      "command": ".venv/bin/python -m pytest -q --tb=no",
+      "result": "pass",
+      "ran": 416,
+      "ok": 416,
+      "failed": 0
+    }
+  ],
+  "test_counts": {
+    "phase1_counter": {
+      "module": "test_mcts_expansion_counter",
+      "ok": 8
+    },
+    "stage_a": {
+      "test_phase2_spec": 24,
+      "test_phase2_codec": 12,
+      "test_phase2_search": 10,
+      "test_phase2_actions": 8,
+      "test_phase2_hindsight": 2,
+      "test_phase2_config": 6,
+      "test_phase2_exclusions": 7,
+      "test_phase2_root": 49
+    },
+    "combined_stage_a_gate": {
+      "ran": 126,
+      "ok": 126,
+      "failed": 0
+    },
+    "prior_v431_tests": 125,
+    "new_v432_tests": 1
+  },
+  "changed_paths": [
+    "learning/bootstrap.py",
+    "learning/phase2_actions.py",
+    "learning/phase2_codec.py",
+    "learning/phase2_config.py",
+    "learning/phase2_hindsight.py",
+    "learning/phase2_isolated.py",
+    "learning/phase2_policy.py",
+    "learning/phase2_root.py",
+    "learning/phase2_search.py",
+    "learning/phase2_spec.py",
+    "learning/phase2_timeout.py",
+    "learning/policy.py",
+    "learning/problems.py",
+    "learning/proofsearch.py",
+    "learning/test_mcts_expansion_counter.py",
+    "learning/test_phase2_actions.py",
+    "learning/test_phase2_codec.py",
+    "learning/test_phase2_config.py",
+    "learning/test_phase2_exclusions.py",
+    "learning/test_phase2_hindsight.py",
+    "learning/test_phase2_root.py",
+    "learning/test_phase2_search.py",
+    "learning/test_phase2_spec.py"
+  ],
+  "surface_widened": false,
+  "yaml_changed": false,
+  "util_py_changed": false,
+  "envelope_codes": [
+    "QUERY_OVERFLOW",
+    "DUPLICATE_ACTION_SERIALIZATION",
+    "ACTION_HANDLING_REFUSAL",
+    "INVALID_DESCRIPTOR",
+    "INVALID_SPEC",
+    "INTERNAL_ERROR",
+    "ARTIFACT_ID_LIMIT",
+    "PEANO_PANIC"
+  ],
+  "later_obligations": [
+    "byte-identical optimizer / full training-branch replay",
+    "deterministic keyed batch sampling",
+    "trained checkpoint transport with manifest verification before Peano reconstruction",
+    "underscore capability token is not a sandbox against malicious Python"
+  ],
+  "future_checkpoint_requirement": {
+    "implemented_now": false,
+    "requirement": "A frozen trained branch will supply a content-addressed checkpoint verified by the existing manifest API before Peano state reconstruction; carrier Stage B does not need an LM."
+  },
+  "negative_authorization": {
+    "no_training_job": true,
+    "no_scientific_carrier": true,
+    "no_phase2_outcome": true,
+    "no_self_yoked_branches": true,
+    "no_phase1_checkpoint_rerun": true,
+    "no_commit": true,
+    "no_push": true,
+    "synthetic_optimizer_step_in_unit_test_only": true
+  }
+}
