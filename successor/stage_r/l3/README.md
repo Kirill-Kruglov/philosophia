@@ -1,6 +1,6 @@
 # Stage-R L3 — projection-only boundary
 
-Status: `L3_CANDIDATE_V1_BOUNDED_REPAIR_REQUIRED`
+Status: `L3_REPAIRED_CANDIDATE_AWAITING_ONE_CODE_REVIEW`
 
 This directory contains the minimum L3 contract activated by
 `../STAGE_R_L3_PROJECTION_ONLY_ACTIVATION_V1.md`. The executable annex and its
@@ -23,3 +23,7 @@ gate seams. The findings are closed in `STAGE_R_L3_DRIVER_CODE_AUDIT_V1.md`.
 The only next task is
 `PROMPT_STAGE_R_L3_PROJECTION_ONLY_BOUNDED_REPAIR_V2.md`; the frozen exclusion
 JSON may not change.
+
+Candidate V2 closes those findings; the driver's independent reproduction is
+`STAGE_R_L3_DRIVER_CODE_REAUDIT_V2.md`. Exactly one independent bounded code
+review remains. L4 and every execution stage remain unauthorized.

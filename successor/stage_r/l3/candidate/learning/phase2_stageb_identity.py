@@ -357,6 +357,12 @@ def public_projection(canon_theorem: Mapping) -> dict:
     for index in range(1, len(encoded)):
         if not encoded[index - 1] < encoded[index]:
             _raise(code)
+    # Canonical atom spelling and sorted hypotheses are necessary but not
+    # sufficient. The input must also be the byte minimum of its own renaming
+    # orbit, or one alpha-equivalence class could receive two public names.
+    if canonical_bytes(canon_theorem) != canonical_bytes(
+            canonical_theorem(canon_theorem)):
+        _raise(code)
     return {
         'schema': PUBLIC_ITEM_SCHEMA_NAME,
         'theory_sha256': THEORY_SHA256,

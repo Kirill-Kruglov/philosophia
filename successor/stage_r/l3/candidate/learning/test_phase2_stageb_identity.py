@@ -68,8 +68,8 @@ from test_phase2_stageb_checker import (
     or_intro_right,
 )
 
-# Governing pins. The two artifacts this gate consumes are hash-verified from
-# disk; the remaining three are the recorded documentary pins of the annex.
+# Governing pins. Every one of these is hash-verified from disk before any
+# fixture can be reconstructed. None is a documentary constant.
 CONTRACT_SHA256 = (
     '1c3cec3aa6bd7094e2d37b062a8f349df5b226e91bbdc4a7b21e80fb785172f3'
 )
@@ -85,6 +85,45 @@ SOURCE_V3_SHA256 = (
 L2_CODE_GATE_SHA256 = (
     '8961b5a97ee0972d83a071e1b1c82869a9841f5f01c45add12a88dbfee1010f0'
 )
+ANNEX_SHA256 = (
+    'a6848dd2a64b81783f59ef7aafcebe66bf1fb109aad2f2cb183f9d4d646829a0'
+)
+ANNEX_CLOSURE_SHA256 = (
+    '4d37b1fb648de442ebe484704b8e309d93c5b755aab04da4949f185401193811'
+)
+ACCEPTED_L2_ANNEX_SHA256 = (
+    '3a78a53ecb8e5275f433bc03c50b7b93746c597e3d2d1fcf0bedd4249f102da8'
+)
+ACCEPTED_L2_CUMULATIVE_PATCH_SHA256 = (
+    '3a570b2e35b15dc796d86cd8a997230c00bbf5aed3b5c06f3b14dca78b46b683'
+)
+
+# Relative to the Philosophia project root.
+PROJECT_GOVERNING_SHA256 = {
+    'successor/stage_r/PHILOSOPHIA_MINIMUM_CAUSAL_CONTRACT_R_V2_1.md':
+        CONTRACT_SHA256,
+    'successor/stage_r/STAGE_R_L3_PROJECTION_ONLY_ACTIVATION_V1.md':
+        ACTIVATION_SHA256,
+    'successor/stage_r/l3/STAGE_R_L3_PROJECTION_ONLY_EXECUTABLE_ANNEX_V1.md':
+        ANNEX_SHA256,
+    'successor/stage_r/l3/STAGE_R_L3_PROJECTION_ONLY_ANNEX_DRIVER_CLOSURE_V1.md':
+        ANNEX_CLOSURE_SHA256,
+}
+
+# Relative to the recovery checkpoint root.
+RECOVERY_GOVERNING_SHA256 = {
+    'accepted_authority/'
+    'PHASE2_STAGE_B_DEV_CORE_CHARTER_V1_1_1_BOUNDARY_CORRECTION.md':
+        CHARTER_SHA256,
+    'accepted_l2/PHASE2_STAGE_B_L2_GENERATOR_ANNEX_FINAL_XY_REVIEW.md':
+        ACCEPTED_L2_ANNEX_SHA256,
+    'patches/minimo_phase2_stagea_stageb_l01_l2_v5_cumulative.patch':
+        ACCEPTED_L2_CUMULATIVE_PATCH_SHA256,
+    'accepted_l2/PHASE2_STAGE_B_L2_RAW_FIXTURE_EXCLUSIONS_V3.json':
+        SOURCE_V3_SHA256,
+    'accepted_l2/PHASE2_STAGE_B_L2_CODE_GATE_V1.json':
+        L2_CODE_GATE_SHA256,
+}
 
 IN_TREE_SOURCE_SHA256 = {
     'phase2_stageb_canonical.py':
@@ -101,15 +140,16 @@ IN_TREE_SOURCE_SHA256 = {
         'de9b05d6732dfe07c5303439a1fd533f9d6053a62a04480db0659075b16d2a34',
     'test_phase2_stageb_checker.py':
         'f107d87c687efa119a92d12cce93f23a9de51a863b0f68ab71acfc6f065dc03c',
+    'test_phase2_stageb_generator.py':
+        '01adece50de5dc4cece3acfed80b21725ca7400e5d375204d5010eaae0dca4e8',
     'theories/propositional-logic-intuitionistic-fragment.p':
         '2056deaf9c12a81dcb047e60154e8a473ffe235b5e48bb9433eb1d9f70afb507',
 }
 
+PROJECT_ROOT_ENV = 'PHILOSOPHIA_PROJECT_ROOT'
+DEFAULT_PROJECT_ROOT = '/home/master/llm_projects/philosophia'
 RECOVERY_DIR_ENV = 'PHILOSOPHIA_RECOVERY_DIR'
-DEFAULT_RECOVERY_DIR = (
-    '/home/master/llm_projects/philosophia/successor/recovery/'
-    'phase2_stage_b_20260815'
-)
+DEFAULT_RECOVERY_SUBPATH = 'successor/recovery/phase2_stage_b_20260815'
 V3_BASENAME = 'accepted_l2/PHASE2_STAGE_B_L2_RAW_FIXTURE_EXCLUSIONS_V3.json'
 L2_GATE_BASENAME = 'accepted_l2/PHASE2_STAGE_B_L2_CODE_GATE_V1.json'
 
@@ -142,25 +182,59 @@ FORBIDDEN_CALL_NAMES = frozenset((
 ))
 
 
+def _project_root() -> Path:
+    return Path(os.environ.get(PROJECT_ROOT_ENV, DEFAULT_PROJECT_ROOT))
+
+
 def _recovery_dir() -> Path:
-    return Path(os.environ.get(RECOVERY_DIR_ENV, DEFAULT_RECOVERY_DIR))
+    override = os.environ.get(RECOVERY_DIR_ENV)
+    if override:
+        return Path(override)
+    return _project_root() / DEFAULT_RECOVERY_SUBPATH
 
 
 def _file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def authority_bindings() -> list:
+    """Every governing file this gate binds, as (label, path, sha256)."""
+    project = _project_root()
+    recovery = _recovery_dir()
+    bindings = []
+    for relative in sorted(PROJECT_GOVERNING_SHA256):
+        bindings.append(
+            ('project:' + relative, project / relative,
+             PROJECT_GOVERNING_SHA256[relative]))
+    for relative in sorted(RECOVERY_GOVERNING_SHA256):
+        bindings.append(
+            ('recovery:' + relative, recovery / relative,
+             RECOVERY_GOVERNING_SHA256[relative]))
+    for relative in sorted(IN_TREE_SOURCE_SHA256):
+        bindings.append(
+            ('in-tree:' + relative, LEARNING_DIR / relative,
+             IN_TREE_SOURCE_SHA256[relative]))
+    return bindings
+
+
+def verify_authority() -> None:
+    """Fail closed on any missing or differing governing file."""
+    for label, path, expected in authority_bindings():
+        if not path.is_file():
+            raise AssertionError('governing file missing: ' + label)
+        actual = _file_sha256(path)
+        if actual != expected:
+            raise AssertionError(
+                'governing file hash mismatch: ' + label
+                + ' expected ' + expected + ' got ' + actual)
+
+
 def _load_governing() -> tuple:
+    verify_authority()
     root = _recovery_dir()
-    v3_path = root / V3_BASENAME
-    gate_path = root / L2_GATE_BASENAME
-    if _file_sha256(v3_path) != SOURCE_V3_SHA256:
-        raise AssertionError('V3 exclusion ledger hash mismatch')
-    if _file_sha256(gate_path) != L2_CODE_GATE_SHA256:
-        raise AssertionError('L2 code-gate JSON hash mismatch')
     return (
-        json.loads(v3_path.read_text(encoding='ascii')),
-        json.loads(gate_path.read_text(encoding='ascii')),
+        json.loads((root / V3_BASENAME).read_text(encoding='ascii')),
+        json.loads((root / L2_GATE_BASENAME).read_text(encoding='ascii')),
     )
 
 
@@ -391,11 +465,104 @@ def deep_not(depth):
 
 
 def canonical_three_atom_theorem():
+    """A hard-coded theorem that IS the byte minimum of its renaming orbit.
+
+    Minimality is not assumed: CanonicalPreconditionTest proves it against an
+    independent full-orbit sweep computed inside the gate.
+    """
+    return {
+        'atoms': ['a0', 'a1', 'a2'],
+        'hypotheses': [and_(atom('a0'), atom('a1')), or_(atom('a1'), atom('a2'))],
+        'goal': and_(atom('a0'), atom('a1')),
+    }
+
+
+def driver_counterexample_theorem():
+    """Canonical-looking but NOT orbit-minimal; the V1 driver counterexample.
+
+    Atom names are exactly a0..a2 and the hypotheses are strictly sorted, so
+    every structural check passes, yet a different bijection yields smaller
+    canonical bytes. V1 accepted this and could therefore emit two public names
+    for one alpha-equivalence class.
+    """
     return {
         'atoms': ['a0', 'a1', 'a2'],
         'hypotheses': [and_(atom('a0'), atom('a1')), or_(atom('a1'), atom('a2'))],
         'goal': and_(atom('a2'), atom('a0')),
     }
+
+
+def orbit_minimum_bytes(theorem):
+    """Independent full-orbit sweep, written without calling production."""
+    source = list(theorem['atoms'])
+    count = len(source)
+    best = None
+    for permutation in itertools.permutations(range(count)):
+        renaming = {
+            source[index]: 'a' + str(permutation[index])
+            for index in range(count)
+        }
+        hypotheses = [
+            substitute_formula(formula, renaming)
+            for formula in theorem['hypotheses']
+        ]
+        hypotheses.sort(key=canonical_bytes)
+        candidate = canonical_bytes({
+            'atoms': ['a' + str(index) for index in range(count)],
+            'hypotheses': hypotheses,
+            'goal': substitute_formula(theorem['goal'], renaming),
+        })
+        if best is None or candidate < best:
+            best = candidate
+    return best
+
+
+# Sealed categories enumerated by annex section 5. None may enter a public item,
+# and each must be refused at the public_projection input boundary.
+SEALED_FIELD_CATEGORIES = (
+    'root', 'root_id', 'draw', 'draw_index', 'band', 'target_band',
+    'node_count', 'plan', 'trace', 'skeleton', 'skeleton_identity',
+    'scaffold', 'direction', 'source', 'branch', 'held_out', 'certificate',
+    'rejection', 'subcause', 'fixture_name',
+)
+
+# V1 outputs for the eleven already excluded valid plans. The bounded repair may
+# not move any of these, and the frozen exclusion JSON is built from them.
+V1_FIXTURE_OUTPUTS = {
+    'l2_gate_00': ('1568fef3a314272ecadd17e65cc1437db9acd2557e8c1155b8686f983e2bc9e7',
+        'ea8bad95c92bb494b4dbcc1eec2479a849bfadec3af68e3f4a04a00eddb721f2',
+        'd0d86c48989b314155ca8960b75da5b8109122895975f673d369d152f06e55c8'),
+    'l2_gate_01': ('5283159499f4f00bf66d6208eb4d9e0dd42d22f8e62280f99aa221d2e87d0d82',
+        '1aa5eea39ba15fed550839333d896ff9cec23a8f2c094c55aea965fe6bb5c95a',
+        'cda8fe63b3b5613610aa9cd01eb7d307cb88734793d442a2860bb0d0c279373d'),
+    'l2_gate_02': ('e901d1e5cb08f47f24f13e2ef1b4a5e25b10e0fd231b644eab452e53b0d850f9',
+        'fab56edc2707d8525b6139791c1c05f7031910ab03736ad3d5d3a9cdffe57038',
+        'a533cdc21fcb0c637db54f4383e004a9bbdb63d51393dc136c1d4bfc9543c787'),
+    'l2_gate_03': ('810d90f98a0843ec32c452a16349036a351bda824b0958821a0a7d22687102e5',
+        '8b91224f6bff5da59c0d4a15467d2b87b3f0743ca1192b2da164edd0f86c345a',
+        'fcc6a14d6ede85664b30da138a4e1c537e52a851365fc6c67b9742d106f598d7'),
+    'l2_gate_04': ('d7855be5aa341422481be34d6186292740f3055dc8725ebcdd22a5c67e6590ad',
+        '106c84e0db6ffa1f2619fc1a0fe8297a67de3328066aa60192a81d80a95608f2',
+        '3cd422f451962596e3d095ac4bf826023fe2a589227c6e5f99c6b66fe33e3ec4'),
+    'l2_gate_05': ('59a9592d1c0dcaf72de9d722142fb9514e9fe8f125a0e2b36729e978ecb7a061',
+        '205a158b149ea905edd13449dd9423cf9df7052edda8ee94ed2beec14d8eab35',
+        'a9b4ee631fd6624a8ad4f93f9730b3f679c6e148d858bc477f9df9a37d1195fc'),
+    'valid_s1_not': ('331798cd07e8a067de86bccfbbdb5e7a770faf727da4ffe2c14aa0a11226fd92',
+        'da0d8f7db3a3efb7c5fdba9469f9d37eadfcd51bfbf1fcde7b76f9de8fd410c4',
+        '4f2832ac0aa7fc48ac1ff383067e7f463395f85a10860a2695649769011cd095'),
+    'valid_s1_or_and': ('3605bf813c88b65a2a413fb133f2ccba9480f2d8ddb7ac8263d19ab97f6cc3a8',
+        '34c32b988bff8afc0c5558b22491a901075bd3d34433b99f5921a2c47b1af02d',
+        'd98aabaa3f23c7c27255aca92858f448e9565e3de8fa6f5cfbfad76bad770378'),
+    'valid_s2_exfalso': ('eee2166eb644c57ca364be954a405a3c23c87a408f39d1d581e22e93c6c9868f',
+        '312c7a289e9db5cb399b3869245d4b311dbae9a3662f5532a259363ea77d2bb4',
+        'c0fb8c2fe9bb107b14eab987ead986c74e6ac6598d928cfacda102f7dee7126a'),
+    'valid_s3_pair': ('5568dcaf18ba8fa6359d44b884bfe008ae36a16d8f453c7519af01c5af034a1e',
+        '2acd3470e485dc89be6df6357b8df753b4e34098e84cce4cac8ba9b6aeaf6d34',
+        '268b83e8fccb7dc11ab2412ddb2b6026dd9f539d4a2ea60c33a4cb74b59cc00f'),
+    'valid_s4_exfalso_chain': ('98b918a887c9c8e42be7927891b53431ef5135227864503a873d0a9ec28dadbb',
+        '4158336b1fbf0d27ca7d4695648a7b038ff7cf7048d77db45a840187e80dc72d',
+        '8833ee01cfcaf439c717383fe5bc90e59e3027df00eee4a6999a2ecf5a47ee17'),
+}
 
 
 class GoverningPinsTest(unittest.TestCase):
@@ -413,11 +580,83 @@ class GoverningPinsTest(unittest.TestCase):
         self.assertEqual(
             _file_sha256(root / L2_GATE_BASENAME), L2_CODE_GATE_SHA256)
 
-    def test_recorded_documentary_pins_are_64_hex(self):
-        for pin in (CONTRACT_SHA256, ACTIVATION_SHA256, CHARTER_SHA256):
-            self.assertEqual(len(pin), 64)
-            self.assertEqual(pin, pin.lower())
-            int(pin, 16)
+    def test_every_governing_file_is_hash_checked_from_disk(self):
+        bindings = authority_bindings()
+        labels = [label for label, _path, _sha in bindings]
+        self.assertEqual(len(labels), len(set(labels)))
+        self.assertEqual(
+            len(bindings),
+            len(PROJECT_GOVERNING_SHA256) + len(RECOVERY_GOVERNING_SHA256)
+            + len(IN_TREE_SOURCE_SHA256))
+        for label, path, expected in bindings:
+            self.assertTrue(path.is_file(), label)
+            self.assertEqual(_file_sha256(path), expected, label)
+        verify_authority()
+
+    def test_contract_activation_annex_and_charter_are_bound(self):
+        by_label = {
+            label: (path, sha) for label, path, sha in authority_bindings()
+        }
+        required = (
+            'project:successor/stage_r/'
+            'PHILOSOPHIA_MINIMUM_CAUSAL_CONTRACT_R_V2_1.md',
+            'project:successor/stage_r/'
+            'STAGE_R_L3_PROJECTION_ONLY_ACTIVATION_V1.md',
+            'project:successor/stage_r/l3/'
+            'STAGE_R_L3_PROJECTION_ONLY_EXECUTABLE_ANNEX_V1.md',
+            'project:successor/stage_r/l3/'
+            'STAGE_R_L3_PROJECTION_ONLY_ANNEX_DRIVER_CLOSURE_V1.md',
+            'recovery:accepted_authority/'
+            'PHASE2_STAGE_B_DEV_CORE_CHARTER_V1_1_1_BOUNDARY_CORRECTION.md',
+            'recovery:accepted_l2/'
+            'PHASE2_STAGE_B_L2_GENERATOR_ANNEX_FINAL_XY_REVIEW.md',
+            'recovery:patches/'
+            'minimo_phase2_stagea_stageb_l01_l2_v5_cumulative.patch',
+            'in-tree:test_phase2_stageb_generator.py',
+        )
+        for label in required:
+            self.assertIn(label, by_label, label)
+            path, expected = by_label[label]
+            self.assertEqual(_file_sha256(path), expected, label)
+
+    def test_authority_verification_fails_closed(self):
+        with tempfile.TemporaryDirectory() as empty:
+            previous = os.environ.get(PROJECT_ROOT_ENV)
+            previous_recovery = os.environ.get(RECOVERY_DIR_ENV)
+            os.environ[PROJECT_ROOT_ENV] = empty
+            os.environ.pop(RECOVERY_DIR_ENV, None)
+            try:
+                with self.assertRaises(AssertionError) as caught:
+                    verify_authority()
+                self.assertIn('missing', str(caught.exception))
+            finally:
+                if previous is None:
+                    os.environ.pop(PROJECT_ROOT_ENV, None)
+                else:
+                    os.environ[PROJECT_ROOT_ENV] = previous
+                if previous_recovery is not None:
+                    os.environ[RECOVERY_DIR_ENV] = previous_recovery
+        verify_authority()
+
+    def test_authority_is_bound_before_fixtures_exist(self):
+        source = ast.parse(Path(__file__).read_text(encoding='ascii'))
+        loader = [
+            node for node in source.body
+            if isinstance(node, ast.FunctionDef) and node.name == '_load_governing'
+        ][0]
+        first = loader.body[0]
+        self.assertIsInstance(first, ast.Expr)
+        self.assertIsInstance(first.value, ast.Call)
+        self.assertEqual(first.value.func.id, 'verify_authority')
+        builder = [
+            node for node in source.body
+            if isinstance(node, ast.FunctionDef) and node.name == '_build_fixtures'
+        ][0]
+        calls = [
+            node.func.id for node in ast.walk(builder)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        ]
+        self.assertIn('_load_governing', calls)
 
     def test_gate_runs_inside_the_tree_under_test(self):
         self.assertTrue((LEARNING_DIR / 'phase2_stageb_identity.py').is_file())
@@ -774,6 +1013,38 @@ class SkeletonErasureAndRetentionTest(unittest.TestCase):
             canonical_bytes(rule_skeleton(self.or_elim_node())),
             canonical_bytes(rule_skeleton(self.or_elim_node(swap_pair=True))))
 
+    def test_or_elim_assumption_record_is_erased(self):
+        node = self.or_elim_node()
+        mutated = copy.deepcopy(node)
+        # Change only the left assumption record's formula. Branch proof shapes,
+        # identifiers and every child node are untouched.
+        mutated['left_assumption']['formula'] = and_(
+            atom('a2'), not_(atom('a0')))
+        self.assertNotEqual(
+            canonical_bytes(node['left_assumption']),
+            canonical_bytes(mutated['left_assumption']))
+        for field in ('major', 'left_branch', 'right_branch'):
+            self.assertEqual(canonical_bytes(node[field]),
+                             canonical_bytes(mutated[field]))
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(node)),
+            canonical_bytes(rule_skeleton(mutated)))
+
+    def test_not_intro_assumption_record_is_erased(self):
+        node = not_intro(
+            hyp('l0', atom('a0')),
+            not_elim(assume('h0', not_(atom('a0'))), assume('l0', atom('a0'))))
+        mutated = copy.deepcopy(node)
+        mutated['assumption']['formula'] = or_(atom('a1'), atom('a2'))
+        self.assertNotEqual(
+            canonical_bytes(node['assumption']),
+            canonical_bytes(mutated['assumption']))
+        self.assertEqual(canonical_bytes(node['body']),
+                         canonical_bytes(mutated['body']))
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(node)),
+            canonical_bytes(rule_skeleton(mutated)))
+
     def test_global_versus_local_leaf_is_retained(self):
         self.assertEqual(
             rule_skeleton(assume('h0', atom('a0')))['kind'], 'ASSUME_GLOBAL')
@@ -887,6 +1158,21 @@ class PublicProjectionTest(unittest.TestCase):
                     canonical_bytes(result['public_item']),
                     canonical_bytes(base['public_item']))
 
+    def test_rejects_every_sealed_field_category(self):
+        base = canonical_three_atom_theorem()
+        self.assertTrue(public_projection(base))
+        self.assertEqual(len(SEALED_FIELD_CATEGORIES), 20)
+        self.assertEqual(len(set(SEALED_FIELD_CATEGORIES)), 20)
+        for field in SEALED_FIELD_CATEGORIES:
+            leaked = canonical_three_atom_theorem()
+            self.assertNotIn(field, leaked)
+            leaked[field] = 'sealed-value'
+            with self.assertRaises(L3InvariantError) as caught:
+                public_projection(leaked)
+            self.assertEqual(
+                caught.exception.code,
+                'CANONICAL_THEOREM_PRECONDITION_VIOLATED', field)
+
     def test_rejects_every_sealed_field_mutation(self):
         base = canonical_three_atom_theorem()
         self.assertTrue(public_projection(base))
@@ -898,12 +1184,6 @@ class PublicProjectionTest(unittest.TestCase):
                 caught.exception.code,
                 'CANONICAL_THEOREM_PRECONDITION_VIOLATED')
 
-        extra = copy.deepcopy(base)
-        extra['root_id'] = 'x'
-        rejects(extra)
-        extra = copy.deepcopy(base)
-        extra['band'] = 'S1'
-        rejects(extra)
         missing = copy.deepcopy(base)
         del missing['goal']
         rejects(missing)
@@ -953,6 +1233,111 @@ class PublicProjectionTest(unittest.TestCase):
                            b'node_count', b'words_consumed', b'proof',
                            b'l2_gate', b'valid_s', b'S1', b'S4', b'plan'):
                 self.assertNotIn(banned, encoded, record['name'])
+
+
+class CanonicalPreconditionTest(unittest.TestCase):
+    """Driver audit Major 1: public_projection must enforce alpha-minimality."""
+
+    def test_baseline_helper_is_genuinely_orbit_minimal(self):
+        base = canonical_three_atom_theorem()
+        self.assertEqual(base['atoms'], ['a0', 'a1', 'a2'])
+        encoded = [canonical_bytes(f) for f in base['hypotheses']]
+        self.assertEqual(encoded, sorted(encoded))
+        self.assertEqual(len(set(encoded)), len(encoded))
+        # Independent sweep, then the production canonicaliser, must agree.
+        self.assertEqual(canonical_bytes(base), orbit_minimum_bytes(base))
+        self.assertEqual(
+            canonical_bytes(base), canonical_bytes(canonical_theorem(base)))
+        self.assertTrue(public_projection(base))
+
+    def test_driver_counterexample_is_canonical_looking_but_not_minimal(self):
+        bad = driver_counterexample_theorem()
+        # Every V1 structural check passes on it.
+        self.assertEqual(bad['atoms'], ['a0', 'a1', 'a2'])
+        encoded = [canonical_bytes(f) for f in bad['hypotheses']]
+        self.assertEqual(encoded, sorted(encoded))
+        self.assertEqual(len(set(encoded)), len(encoded))
+        # Yet it is not the byte minimum of its own renaming orbit.
+        self.assertNotEqual(canonical_bytes(bad), orbit_minimum_bytes(bad))
+        self.assertNotEqual(
+            canonical_bytes(bad), canonical_bytes(canonical_theorem(bad)))
+        self.assertEqual(
+            orbit_minimum_bytes(bad), canonical_bytes(canonical_theorem(bad)))
+
+    def test_unmodified_public_projection_refuses_the_counterexample(self):
+        bad = driver_counterexample_theorem()
+        with self.assertRaises(L3InvariantError) as caught:
+            public_projection(bad)
+        self.assertEqual(
+            caught.exception.code, 'CANONICAL_THEOREM_PRECONDITION_VIOLATED')
+
+    def test_two_names_for_one_class_is_no_longer_reachable(self):
+        bad = driver_counterexample_theorem()
+        canon = canonical_theorem(bad)
+        accepted = public_projection(canon)
+        self.assertEqual(
+            accepted['theorem_name'], 't_' + canonical_hash(canon))
+        with self.assertRaises(L3InvariantError):
+            public_projection(bad)
+        # The whole orbit collapses onto exactly one accepted public name.
+        source = list(bad['atoms'])
+        names = set()
+        for permutation in itertools.permutations(range(len(source))):
+            renaming = {
+                source[index]: 'a' + str(permutation[index])
+                for index in range(len(source))
+            }
+            moved = {
+                'atoms': sorted(renaming[name] for name in bad['atoms']),
+                'hypotheses': [
+                    substitute_formula(f, renaming) for f in bad['hypotheses']],
+                'goal': substitute_formula(bad['goal'], renaming),
+            }
+            names.add(public_projection(canonical_theorem(moved))['theorem_name'])
+        self.assertEqual(len(names), 1)
+        self.assertEqual(names, {accepted['theorem_name']})
+
+    def test_precondition_is_not_weakened_to_spelling_or_sorting(self):
+        source = ast.parse(PRODUCTION_PATH.read_text(encoding='ascii'))
+        function = [
+            node for node in source.body
+            if isinstance(node, ast.FunctionDef)
+            and node.name == 'public_projection'
+        ][0]
+        calls = [
+            node.func.id for node in ast.walk(function)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        ]
+        self.assertIn('canonical_theorem', calls)
+        self.assertIn('canonical_bytes', calls)
+
+    def test_all_eleven_fixture_outputs_are_unchanged_from_v1(self):
+        self.assertEqual(len(V1_FIXTURE_OUTPUTS), 11)
+        seen = set()
+        for record in fixtures():
+            result = identify(record['plan'], record['checked']['theorem'])
+            self.assertTrue(result['ok'], record['name'])
+            expected = V1_FIXTURE_OUTPUTS[record['name']]
+            self.assertEqual(result['theorem_identity'], expected[0],
+                             record['name'])
+            self.assertEqual(result['theorem_name'], 't_' + expected[0],
+                             record['name'])
+            self.assertEqual(canonical_hash(result['public_item']), expected[1],
+                             record['name'])
+            self.assertEqual(result['skeleton_identity'], expected[2],
+                             record['name'])
+            seen.add(record['name'])
+        self.assertEqual(seen, set(V1_FIXTURE_OUTPUTS))
+
+    def test_every_fixture_canonical_theorem_survives_its_own_projection(self):
+        for record in fixtures():
+            canon = canonical_theorem(record['checked']['theorem'])
+            self.assertEqual(canonical_bytes(canon),
+                             orbit_minimum_bytes(record['checked']['theorem']))
+            self.assertTrue(public_projection(canon), record['name'])
+            self.assertEqual(
+                canonical_bytes(canonical_theorem(canon)),
+                canonical_bytes(canon), record['name'])
 
 
 class FreshnessAndAliasTest(unittest.TestCase):
