@@ -1,6 +1,6 @@
 # Stage R — bounded reciprocal-selection route
 
-Status: `CONTRACT_V2_1_CONFIRMED_AWAITING_AUTHOR_L3_ACTIVATION`
+Status: `CONTRACT_V2_1_ACCEPTED_L3_PROJECTION_ONLY_AUTHORIZED`
 
 The accepted route is the thin MINIMO reciprocal slice described by
 `successor/dev/PHASE2_POST_REVIEW_DRIVER_DECISION_19.md`. Stage H is demoted from
@@ -41,8 +41,15 @@ The response is preserved as
 the exact confirmation token. Its pins and the remaining authorization boundary
 are recorded in `STAGE_R_CONTRACT_V2_1_X_CONFIRMATION_RECEIPT.md`. No review
 pass remains. The only next decision is explicit author acceptance of the exact
-contract and activation of projection-only L3; until then the L3 focused-work
-budget has not started.
+contract and activation of projection-only L3. That decision is now recorded
+below.
 
-No file in this directory authorizes implementation, fixture generation, root
-minting, selector execution, learner training or a scientific run.
+The author supplied the exact acceptance token on 2026-08-15. Its scope and
+remaining prohibitions are preserved in
+`STAGE_R_L3_PROJECTION_ONLY_ACTIVATION_V1.md`. Only the minimum projection-only
+L3 paper closure and code gate are now authorized; L4 and every execution stage
+remain unauthorized.
+
+No file in this directory authorizes implementation beyond projection-only L3,
+fixture or frame generation, root minting, selector execution, learner
+training, L4 work or a scientific run.
