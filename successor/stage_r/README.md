@@ -1,6 +1,6 @@
 # Stage R — bounded reciprocal-selection route
 
-Status: `CONTRACT_V2_1_AWAITING_BOUNDED_CONFIRMATION`
+Status: `CONTRACT_V2_1_CONFIRMED_AWAITING_AUTHOR_L3_ACTIVATION`
 
 The accepted route is the thin MINIMO reciprocal slice described by
 `successor/dev/PHASE2_POST_REVIEW_DRIVER_DECISION_19.md`. Stage H is demoted from
@@ -35,6 +35,14 @@ the exact authorization and terminal-reason precedence are preserved in
 operation is the independent paper-only confirmation requested by
 `PROMPT_STAGE_R_CONTRACT_V2_1_FINAL_BOUNDED_CONFIRMATION_X.md`. It may confirm
 or reject the closed corrections; it may not start another open-ended review.
+
+The response is preserved as
+`STAGE_R_CONTRACT_V2_1_FINAL_BOUNDED_CONFIRMATION_X_RESPONSE.md` and passes with
+the exact confirmation token. Its pins and the remaining authorization boundary
+are recorded in `STAGE_R_CONTRACT_V2_1_X_CONFIRMATION_RECEIPT.md`. No review
+pass remains. The only next decision is explicit author acceptance of the exact
+contract and activation of projection-only L3; until then the L3 focused-work
+budget has not started.
 
 No file in this directory authorizes implementation, fixture generation, root
 minting, selector execution, learner training or a scientific run.
