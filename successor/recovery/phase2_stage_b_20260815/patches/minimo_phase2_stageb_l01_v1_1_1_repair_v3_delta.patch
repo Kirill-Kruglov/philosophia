@@ -1,0 +1,2553 @@
+diff --git a/learning/phase2_stageb_canonical.py b/learning/phase2_stageb_canonical.py
+new file mode 100644
+index 0000000..738b846
+--- /dev/null
++++ b/learning/phase2_stageb_canonical.py
+@@ -0,0 +1,20 @@
++#!/usr/bin/env python3
++"""Single Stage-A canonical JSON serializer and SHA-256 helper."""
++
++from __future__ import annotations
++
++import hashlib
++import json
++from typing import Any
++
++
++def canonical_dumps(obj: Any) -> str:
++    return json.dumps(obj, sort_keys=True, separators=(',', ':'), ensure_ascii=True)
++
++
++def canonical_bytes(obj: Any) -> bytes:
++    return canonical_dumps(obj).encode('ascii')
++
++
++def canonical_hash(obj: Any) -> str:
++    return hashlib.sha256(canonical_bytes(obj)).hexdigest()
+diff --git a/learning/phase2_stageb_causes.py b/learning/phase2_stageb_causes.py
+new file mode 100644
+index 0000000..05f2c74
+--- /dev/null
++++ b/learning/phase2_stageb_causes.py
+@@ -0,0 +1,76 @@
++#!/usr/bin/env python3
++"""Closed L0 enums, L1 causes and frozen mutation-to-cause mapping."""
++
++from __future__ import annotations
++
++
++CAUSE_PLAN_SCHEMA_INVALID = 'PLAN_SCHEMA_INVALID'
++CAUSE_PLAN_TYPE_INVALID = 'PLAN_TYPE_INVALID'
++CAUSE_PLAN_CONSTRAINT_INVALID = 'PLAN_CONSTRAINT_INVALID'
++CAUSE_PLAN_NON_NORMAL = 'PLAN_NON_NORMAL'
++
++L1_CAUSES = (
++    CAUSE_PLAN_SCHEMA_INVALID,
++    CAUSE_PLAN_TYPE_INVALID,
++    CAUSE_PLAN_CONSTRAINT_INVALID,
++    CAUSE_PLAN_NON_NORMAL,
++)
++
++# Unreachable at L1; first exercised at L3.
++CAUSE_SEQUENT_REDERIVATION_MISMATCH = 'SEQUENT_REDERIVATION_MISMATCH'
++
++CAUSE_QUERY_MEASUREMENT_OVERFLOW = 'QUERY_MEASUREMENT_OVERFLOW'
++
++TOP_LEVEL_TERMINALS = (
++    'DEV_CORE_FEASIBILITY_STOP',
++    'DEV_CORE_FEASIBLE_FOR_AUDIT_CONTRACT',
++)
++
++DEV_CORE_FEASIBILITY_STOP_REASONS = (
++    'PREMISE_ENUMERABILITY_FAILED',
++    'DAG_ENUMERABILITY_FAILED',
++    'DAG_REPLAY_FAILED',
++    'CHECKER_UNSOUND',
++    'COMPILER_UNSOUND',
++    'MUTATION_ESCAPE',
++    'PUBLIC_PROJECTION_LEAK',
++    'COLLISION_ACCOUNTING_ERROR',
++    'NONDETERMINISM',
++    'COMPILER_FAMILY_UNREACHABLE',
++    CAUSE_QUERY_MEASUREMENT_OVERFLOW,
++    'ROOT_QUOTA_UNFILLED',
++    'RESOURCE_CEILING_EXHAUSTED',
++)
++
++DRAW_CAUSES = (
++    'PLAN_CONSTRUCTION_FAILED',
++    CAUSE_PLAN_SCHEMA_INVALID,
++    CAUSE_PLAN_TYPE_INVALID,
++    CAUSE_PLAN_CONSTRAINT_INVALID,
++    CAUSE_PLAN_NON_NORMAL,
++    CAUSE_SEQUENT_REDERIVATION_MISMATCH,
++    'CLASSICAL_COUNTEREXAMPLE',
++    'THEOREM_ID_COLLISION',
++    'SKELETON_ID_COLLISION',
++    'COMPILER_NO_MATCH',
++    'COMPILER_AMBIGUOUS_MATCH',
++    'PEANO_REPLAY_REFUSAL',
++    'PEANO_REPLAY_NONTERMINAL',
++    CAUSE_QUERY_MEASUREMENT_OVERFLOW,
++    'TARGET_BAND_ALREADY_FULL',
++)
++
++MUTATION_TO_CAUSE = (
++    ('wrong kind/key/type/string/atom-name/ID/atom-list', CAUSE_PLAN_SCHEMA_INVALID),
++    ('duplicate or shadowed hypothesis ID', CAUSE_PLAN_SCHEMA_INVALID),
++    ('missing or out-of-scope hypothesis reference', CAUSE_PLAN_TYPE_INVALID),
++    ('wrong child/conclusion/root goal', CAUSE_PLAN_TYPE_INVALID),
++    ('wrong discharge formula', CAUSE_PLAN_TYPE_INVALID),
++    ('undeclared or unused declared atom', CAUSE_PLAN_CONSTRAINT_INVALID),
++    ('unused global/local hypothesis', CAUSE_PLAN_CONSTRAINT_INVALID),
++    ('duplicate global hypothesis formula', CAUSE_PLAN_CONSTRAINT_INVALID),
++    ('formula bound', CAUSE_PLAN_CONSTRAINT_INVALID),
++    ('node-count/band/expectation mismatch', CAUSE_PLAN_CONSTRAINT_INVALID),
++    ('shallow dependency/too few families/no branching', CAUSE_PLAN_CONSTRAINT_INVALID),
++    ('each section-2.3 beta-redex', CAUSE_PLAN_NON_NORMAL),
++)
+diff --git a/learning/phase2_stageb_checker.py b/learning/phase2_stageb_checker.py
+new file mode 100644
+index 0000000..bf3a0f3
+--- /dev/null
++++ b/learning/phase2_stageb_checker.py
+@@ -0,0 +1,538 @@
++#!/usr/bin/env python3
++"""Independent L1 ND-plan checker. Imports only L0 modules and the stdlib."""
++
++from __future__ import annotations
++
++from typing import Any, Mapping
++
++from phase2_stageb_canonical import canonical_bytes
++from phase2_stageb_causes import (
++    CAUSE_PLAN_CONSTRAINT_INVALID,
++    CAUSE_PLAN_NON_NORMAL,
++    CAUSE_PLAN_SCHEMA_INVALID,
++    CAUSE_PLAN_TYPE_INVALID,
++)
++from phase2_stageb_render import render_sequent
++from phase2_stageb_schema import (
++    BAND_NAMES,
++    BRANCHING_FAMILIES,
++    EXPECTATION_KEYS,
++    EXPECTATION_SCHEMA_NAME,
++    FAMILY_ORDER,
++    FORMULA_KEYS,
++    FORMULA_KINDS,
++    HYPOTHESIS_KEYS,
++    KIND_TO_FAMILY,
++    MAX_DECLARED_ATOMS,
++    MAX_FORMULA_NODES,
++    MIN_DECLARED_ATOMS,
++    MIN_DEPENDENCY_DEPTH,
++    MIN_FAMILY_COUNT,
++    PLAN_KEYS,
++    PLAN_SCHEMA_NAME,
++    PROOF_CHILD_FIELDS,
++    PROOF_NODE_KEYS,
++    RULE_KINDS,
++    band_of_node_count,
++    is_atom_name,
++    is_exact_int,
++    is_global_id,
++    is_local_id,
++    is_printable_ascii,
++)
++
++
++def _fail(cause: str) -> dict:
++    return {'ok': False, 'cause': cause}
++
++
++def _keys_of(mapping: Mapping) -> tuple:
++    return tuple(mapping.keys())
++
++
++def _exact_keys(mapping: object, expected: tuple) -> bool:
++    if type(mapping) is not dict:
++        return False
++    return _keys_of(mapping) == expected or set(mapping.keys()) == set(expected)
++
++
++def formulas_equal(left: Mapping, right: Mapping) -> bool:
++    return canonical_bytes(left) == canonical_bytes(right)
++
++
++def formula_node_count(formula: Mapping) -> int:
++    kind = formula['kind']
++    if kind in ('ATOM', 'FALSE'):
++        return 1
++    if kind == 'NOT':
++        return 1 + formula_node_count(formula['arg'])
++    return 1 + formula_node_count(formula['left']) + formula_node_count(formula['right'])
++
++
++def collect_atom_names(formula: Mapping, acc: set) -> None:
++    kind = formula['kind']
++    if kind == 'ATOM':
++        acc.add(formula['name'])
++        return
++    if kind == 'FALSE':
++        return
++    if kind == 'NOT':
++        collect_atom_names(formula['arg'], acc)
++        return
++    collect_atom_names(formula['left'], acc)
++    collect_atom_names(formula['right'], acc)
++
++
++def proof_children(node: Mapping) -> tuple:
++    return tuple(node[field] for field in PROOF_CHILD_FIELDS[node['kind']])
++
++
++def _schema_formula(formula: object) -> str | None:
++    if type(formula) is not dict:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    kind = formula.get('kind')
++    if kind not in FORMULA_KINDS:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if set(formula.keys()) != set(FORMULA_KEYS[kind]):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if kind == 'ATOM':
++        if not is_printable_ascii(formula['name']) or not is_atom_name(formula['name']):
++            return CAUSE_PLAN_SCHEMA_INVALID
++        return None
++    if kind == 'FALSE':
++        return None
++    if kind == 'NOT':
++        return _schema_formula(formula['arg'])
++    err = _schema_formula(formula['left'])
++    if err:
++        return err
++    return _schema_formula(formula['right'])
++
++
++def _schema_hypothesis(hyp: object, *, local: bool) -> str | None:
++    if type(hyp) is not dict or set(hyp.keys()) != set(HYPOTHESIS_KEYS):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    ident = hyp['id']
++    if not is_printable_ascii(ident):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if local:
++        if not is_local_id(ident):
++            return CAUSE_PLAN_SCHEMA_INVALID
++    elif not is_global_id(ident):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    return _schema_formula(hyp['formula'])
++
++
++def _schema_proof(node: object, local_ids: list, global_ids: set) -> str | None:
++    if type(node) is not dict:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    kind = node.get('kind')
++    if kind not in RULE_KINDS:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if set(node.keys()) != set(PROOF_NODE_KEYS[kind]):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    err = _schema_formula(node['conclusion'])
++    if err:
++        return err
++    if kind == 'ASSUME':
++        hid = node['hypothesis_id']
++        if not is_printable_ascii(hid):
++            return CAUSE_PLAN_SCHEMA_INVALID
++        if not (is_global_id(hid) or is_local_id(hid)):
++            return CAUSE_PLAN_SCHEMA_INVALID
++        return None
++    if kind == 'OR_ELIM':
++        err = _schema_hypothesis(node['left_assumption'], local=True)
++        if err:
++            return err
++        err = _schema_hypothesis(node['right_assumption'], local=True)
++        if err:
++            return err
++        for ident in (
++                node['left_assumption']['id'], node['right_assumption']['id']):
++            if ident in global_ids or ident in local_ids:
++                return CAUSE_PLAN_SCHEMA_INVALID
++            local_ids.append(ident)
++        if node['left_assumption']['id'] == node['right_assumption']['id']:
++            return CAUSE_PLAN_SCHEMA_INVALID
++    if kind == 'NOT_INTRO':
++        err = _schema_hypothesis(node['assumption'], local=True)
++        if err:
++            return err
++        ident = node['assumption']['id']
++        if ident in global_ids or ident in local_ids:
++            return CAUSE_PLAN_SCHEMA_INVALID
++        local_ids.append(ident)
++    for child in proof_children(node):
++        err = _schema_proof(child, local_ids, global_ids)
++        if err:
++            return err
++    return None
++
++
++def _schema_plan(plan: object) -> str | None:
++    if type(plan) is not dict or set(plan.keys()) != set(PLAN_KEYS):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if plan['schema'] != PLAN_SCHEMA_NAME:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    atoms = plan['atoms']
++    if type(atoms) is not list or not atoms:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    for name in atoms:
++        if not is_printable_ascii(name) or not is_atom_name(name):
++            return CAUSE_PLAN_SCHEMA_INVALID
++    if len(atoms) != len(set(atoms)):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if atoms != sorted(atoms):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    hyps = plan['hypotheses']
++    if type(hyps) is not list:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    global_ids = []
++    for hyp in hyps:
++        err = _schema_hypothesis(hyp, local=False)
++        if err:
++            return err
++        if hyp['id'] in global_ids:
++            return CAUSE_PLAN_SCHEMA_INVALID
++        global_ids.append(hyp['id'])
++    err = _schema_formula(plan['goal'])
++    if err:
++        return err
++    return _schema_proof(plan['proof'], [], set(global_ids))
++
++
++def _schema_expectation(expectation: object) -> str | None:
++    if type(expectation) is not dict or set(expectation.keys()) != set(EXPECTATION_KEYS):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if expectation['schema'] != EXPECTATION_SCHEMA_NAME:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if not is_exact_int(expectation['node_count']):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if expectation['band'] not in BAND_NAMES:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    if not is_exact_int(expectation['max_dependency_depth']):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    families = expectation['families']
++    if type(families) is not list:
++        return CAUSE_PLAN_SCHEMA_INVALID
++    for family in families:
++        if family not in FAMILY_ORDER:
++            return CAUSE_PLAN_SCHEMA_INVALID
++    if len(families) != len(set(families)):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    ranked = tuple(FAMILY_ORDER.index(family) for family in families)
++    if ranked != tuple(sorted(ranked)):
++        return CAUSE_PLAN_SCHEMA_INVALID
++    return None
++
++
++def _constraint_expectation_bounds(expectation: Mapping) -> str | None:
++    if expectation['node_count'] < 0:
++        return CAUSE_PLAN_CONSTRAINT_INVALID
++    if expectation['max_dependency_depth'] < 0:
++        return CAUSE_PLAN_CONSTRAINT_INVALID
++    if band_of_node_count(expectation['node_count']) != expectation['band']:
++        return CAUSE_PLAN_CONSTRAINT_INVALID
++    return None
++
++
++def public_atom_names(plan: Mapping) -> set:
++    occurring: set = set()
++    for hyp in plan['hypotheses']:
++        collect_atom_names(hyp['formula'], occurring)
++    collect_atom_names(plan['goal'], occurring)
++    return occurring
++
++
++def _type_proof(node: Mapping, env: dict) -> tuple[str | None, Mapping | None]:
++    kind = node['kind']
++    stated = node['conclusion']
++    if kind == 'ASSUME':
++        hid = node['hypothesis_id']
++        if hid not in env:
++            return CAUSE_PLAN_TYPE_INVALID, None
++        if not formulas_equal(stated, env[hid]):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    if kind == 'AND_INTRO':
++        err, left = _type_proof(node['left'], env)
++        if err:
++            return err, None
++        err, right = _type_proof(node['right'], env)
++        if err:
++            return err, None
++        derived = {'kind': 'AND', 'left': left, 'right': right}
++        if not formulas_equal(stated, derived):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    if kind in ('AND_ELIM_LEFT', 'AND_ELIM_RIGHT'):
++        err, source = _type_proof(node['source'], env)
++        if err:
++            return err, None
++        if source['kind'] != 'AND':
++            return CAUSE_PLAN_TYPE_INVALID, None
++        derived = source['left'] if kind == 'AND_ELIM_LEFT' else source['right']
++        if not formulas_equal(stated, derived):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    if kind in ('OR_INTRO_LEFT', 'OR_INTRO_RIGHT'):
++        err, source = _type_proof(node['source'], env)
++        if err:
++            return err, None
++        if stated['kind'] != 'OR':
++            return CAUSE_PLAN_TYPE_INVALID, None
++        expected = stated['left'] if kind == 'OR_INTRO_LEFT' else stated['right']
++        if not formulas_equal(source, expected):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    if kind == 'OR_ELIM':
++        err, major = _type_proof(node['major'], env)
++        if err:
++            return err, None
++        if major['kind'] != 'OR':
++            return CAUSE_PLAN_TYPE_INVALID, None
++        left_ass = node['left_assumption']
++        right_ass = node['right_assumption']
++        if not formulas_equal(left_ass['formula'], major['left']):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        if not formulas_equal(right_ass['formula'], major['right']):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        left_env = dict(env)
++        left_env[left_ass['id']] = left_ass['formula']
++        right_env = dict(env)
++        right_env[right_ass['id']] = right_ass['formula']
++        err, left_conc = _type_proof(node['left_branch'], left_env)
++        if err:
++            return err, None
++        err, right_conc = _type_proof(node['right_branch'], right_env)
++        if err:
++            return err, None
++        if not formulas_equal(left_conc, stated):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        if not formulas_equal(right_conc, stated):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    if kind == 'NOT_INTRO':
++        assumption = node['assumption']
++        body_env = dict(env)
++        body_env[assumption['id']] = assumption['formula']
++        err, body = _type_proof(node['body'], body_env)
++        if err:
++            return err, None
++        if body['kind'] != 'FALSE':
++            return CAUSE_PLAN_TYPE_INVALID, None
++        derived = {'kind': 'NOT', 'arg': assumption['formula']}
++        if not formulas_equal(stated, derived):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    if kind == 'NOT_ELIM':
++        err, negative = _type_proof(node['negative'], env)
++        if err:
++            return err, None
++        err, positive = _type_proof(node['positive'], env)
++        if err:
++            return err, None
++        if negative['kind'] != 'NOT':
++            return CAUSE_PLAN_TYPE_INVALID, None
++        if not formulas_equal(negative['arg'], positive):
++            return CAUSE_PLAN_TYPE_INVALID, None
++        if stated['kind'] != 'FALSE':
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    if kind == 'EXFALSO':
++        err, source = _type_proof(node['source'], env)
++        if err:
++            return err, None
++        if source['kind'] != 'FALSE':
++            return CAUSE_PLAN_TYPE_INVALID, None
++        return None, stated
++    return CAUSE_PLAN_TYPE_INVALID, None
++
++
++def _walk_formulas(plan: Mapping) -> list:
++    formulas = []
++    for hyp in plan['hypotheses']:
++        formulas.append(hyp['formula'])
++    formulas.append(plan['goal'])
++
++    def walk(node: Mapping) -> None:
++        formulas.append(node['conclusion'])
++        kind = node['kind']
++        if kind == 'OR_ELIM':
++            formulas.append(node['left_assumption']['formula'])
++            formulas.append(node['right_assumption']['formula'])
++        if kind == 'NOT_INTRO':
++            formulas.append(node['assumption']['formula'])
++        if kind in ('OR_INTRO_LEFT', 'OR_INTRO_RIGHT') and node['conclusion']['kind'] == 'OR':
++            formulas.append(node['conclusion']['left'])
++            formulas.append(node['conclusion']['right'])
++        for child in proof_children(node):
++            walk(child)
++
++    walk(plan['proof'])
++    return formulas
++
++
++def _collect_assume_ids(node: Mapping, acc: set, scoped: dict) -> None:
++    kind = node['kind']
++    if kind == 'ASSUME':
++        acc.add(node['hypothesis_id'])
++        return
++    if kind == 'OR_ELIM':
++        _collect_assume_ids(node['major'], acc, scoped)
++        left_acc: set = set()
++        right_acc: set = set()
++        _collect_assume_ids(node['left_branch'], left_acc, scoped)
++        _collect_assume_ids(node['right_branch'], right_acc, scoped)
++        acc.update(left_acc)
++        acc.update(right_acc)
++        scoped[node['left_assumption']['id']] = left_acc
++        scoped[node['right_assumption']['id']] = right_acc
++        return
++    if kind == 'NOT_INTRO':
++        body_acc: set = set()
++        _collect_assume_ids(node['body'], body_acc, scoped)
++        acc.update(body_acc)
++        scoped[node['assumption']['id']] = body_acc
++        return
++    for child in proof_children(node):
++        _collect_assume_ids(child, acc, scoped)
++
++
++def inference_node_count(node: Mapping) -> int:
++    if node['kind'] == 'ASSUME':
++        return 0
++    return 1 + sum(inference_node_count(child) for child in proof_children(node))
++
++
++def inference_depth(node: Mapping) -> int:
++    if node['kind'] == 'ASSUME':
++        return 0
++    depths = [
++        inference_depth(child)
++        for child in proof_children(node)
++        if child['kind'] != 'ASSUME'
++    ]
++    if not depths:
++        return 0
++    return 1 + max(depths)
++
++
++def used_families(node: Mapping) -> list:
++    found = set()
++
++    def walk(cur: Mapping) -> None:
++        if cur['kind'] == 'ASSUME':
++            return
++        found.add(KIND_TO_FAMILY[cur['kind']])
++        for child in proof_children(cur):
++            walk(child)
++
++    walk(node)
++    return [family for family in FAMILY_ORDER if family in found]
++
++
++def _has_beta_redex(node: Mapping) -> bool:
++    kind = node['kind']
++    if kind in ('AND_ELIM_LEFT', 'AND_ELIM_RIGHT'):
++        if node['source']['kind'] == 'AND_INTRO':
++            return True
++    if kind == 'OR_ELIM':
++        if node['major']['kind'] in ('OR_INTRO_LEFT', 'OR_INTRO_RIGHT'):
++            return True
++    if kind == 'NOT_ELIM':
++        if node['negative']['kind'] == 'NOT_INTRO':
++            return True
++    return any(_has_beta_redex(child) for child in proof_children(node))
++
++
++def rederived_theorem(plan: Mapping, goal: Mapping) -> dict:
++    return {
++        'atoms': list(plan['atoms']),
++        'hypotheses': [hyp['formula'] for hyp in plan['hypotheses']],
++        'goal': goal,
++    }
++
++
++def check_plan(plan: object, expectation: object) -> dict:
++    err = _schema_plan(plan)
++    if err:
++        return _fail(err)
++    err = _schema_expectation(expectation)
++    if err:
++        return _fail(err)
++    env = {hyp['id']: hyp['formula'] for hyp in plan['hypotheses']}
++    err, derived = _type_proof(plan['proof'], env)
++    if err:
++        return _fail(err)
++    if not formulas_equal(derived, plan['goal']):
++        return _fail(CAUSE_PLAN_TYPE_INVALID)
++
++    atoms = list(plan['atoms'])
++    if not (MIN_DECLARED_ATOMS <= len(atoms) <= MAX_DECLARED_ATOMS):
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    occurring: set = set()
++    for formula in _walk_formulas(plan):
++        if formula_node_count(formula) > MAX_FORMULA_NODES:
++            return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++        collect_atom_names(formula, occurring)
++    declared = set(atoms)
++    if not occurring <= declared:
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    if not declared <= public_atom_names(plan):
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    global_formulas = [canonical_bytes(hyp['formula']) for hyp in plan['hypotheses']]
++    if len(global_formulas) != len(set(global_formulas)):
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    referenced: set = set()
++    scoped_uses: dict = {}
++    _collect_assume_ids(plan['proof'], referenced, scoped_uses)
++    for hyp in plan['hypotheses']:
++        if hyp['id'] not in referenced:
++            return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    for local_id, uses in scoped_uses.items():
++        if local_id not in uses:
++            return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    node_count = inference_node_count(plan['proof'])
++    depth = inference_depth(plan['proof'])
++    families = used_families(plan['proof'])
++    band = band_of_node_count(node_count)
++    if band is None:
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    err = _constraint_expectation_bounds(expectation)
++    if err:
++        return _fail(err)
++    if node_count != expectation['node_count']:
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    if band != expectation['band']:
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    if depth != expectation['max_dependency_depth']:
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    if families != list(expectation['families']):
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    if depth < MIN_DEPENDENCY_DEPTH:
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    if len(families) < MIN_FAMILY_COUNT:
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++    if not any(family in families for family in BRANCHING_FAMILIES):
++        return _fail(CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    if _has_beta_redex(plan['proof']):
++        return _fail(CAUSE_PLAN_NON_NORMAL)
++
++    theorem = rederived_theorem(plan, derived)
++    return {
++        'ok': True,
++        'cause': None,
++        'node_count': node_count,
++        'band': band,
++        'families': families,
++        'max_dependency_depth': depth,
++        'theorem': theorem,
++        'rendered_sequent': render_sequent(
++            theorem['atoms'], theorem['hypotheses'], theorem['goal']),
++    }
+diff --git a/learning/phase2_stageb_render.py b/learning/phase2_stageb_render.py
+new file mode 100644
+index 0000000..a2c43c0
+--- /dev/null
++++ b/learning/phase2_stageb_render.py
+@@ -0,0 +1,48 @@
++#!/usr/bin/env python3
++"""Pure Peano-surface renderer. No cardinality or canonicalization validation."""
++
++from __future__ import annotations
++
++from typing import Mapping, Sequence
++
++
++def render_formula(formula: Mapping) -> str:
++    kind = formula['kind']
++    if kind == 'ATOM':
++        return "'" + formula['name']
++    if kind == 'FALSE':
++        return 'false'
++    if kind == 'NOT':
++        return '(not ' + render_formula(formula['arg']) + ')'
++    if kind == 'AND':
++        return (
++            '(and '
++            + render_formula(formula['left'])
++            + ' '
++            + render_formula(formula['right'])
++            + ')'
++        )
++    if kind == 'OR':
++        return (
++            '(or '
++            + render_formula(formula['left'])
++            + ' '
++            + render_formula(formula['right'])
++            + ')'
++        )
++    raise ValueError('unrenderable formula kind')
++
++
++def render_declaration(atom_name: str) -> str:
++    return "('" + atom_name + ' : prop)'
++
++
++def render_sequent(
++        atoms: Sequence[str],
++        hypotheses: Sequence[Mapping],
++        goal: Mapping,
++) -> str:
++    parts = [render_declaration(name) for name in atoms]
++    parts.extend(render_formula(formula) for formula in hypotheses)
++    parts.append(render_formula(goal))
++    return '[' + ' -> '.join(parts) + ']'
+diff --git a/learning/phase2_stageb_schema.py b/learning/phase2_stageb_schema.py
+new file mode 100644
+index 0000000..93e287b
+--- /dev/null
++++ b/learning/phase2_stageb_schema.py
+@@ -0,0 +1,159 @@
++#!/usr/bin/env python3
++"""L0 Stage-B schema constants. No generator, identity or checker logic."""
++
++from __future__ import annotations
++
++import re
++
++
++MAX_FORMULA_NODES = 24
++DEV_QUERY_MEASUREMENT_N_POSITIONS = 4096
++
++PLAN_SCHEMA_NAME = 'philosophia.stageb.nd-plan.v1'
++EXPECTATION_SCHEMA_NAME = 'philosophia.stageb.plan-expectation.v1'
++
++FORMULA_KINDS = ('ATOM', 'FALSE', 'NOT', 'AND', 'OR')
++RULE_KINDS = (
++    'ASSUME',
++    'AND_INTRO',
++    'AND_ELIM_LEFT',
++    'AND_ELIM_RIGHT',
++    'OR_INTRO_LEFT',
++    'OR_INTRO_RIGHT',
++    'OR_ELIM',
++    'NOT_INTRO',
++    'NOT_ELIM',
++    'EXFALSO',
++)
++FAMILY_ORDER = (
++    'AND_INTRO',
++    'AND_ELIM',
++    'OR_INTRO',
++    'OR_ELIM',
++    'NOT_INTRO',
++    'NOT_ELIM',
++    'EXFALSO',
++)
++KIND_TO_FAMILY = {
++    'AND_INTRO': 'AND_INTRO',
++    'AND_ELIM_LEFT': 'AND_ELIM',
++    'AND_ELIM_RIGHT': 'AND_ELIM',
++    'OR_INTRO_LEFT': 'OR_INTRO',
++    'OR_INTRO_RIGHT': 'OR_INTRO',
++    'OR_ELIM': 'OR_ELIM',
++    'NOT_INTRO': 'NOT_INTRO',
++    'NOT_ELIM': 'NOT_ELIM',
++    'EXFALSO': 'EXFALSO',
++}
++BAND_EDGES = (
++    ('S1', 8, 11),
++    ('S2', 12, 17),
++    ('S3', 18, 25),
++    ('S4', 26, 37),
++)
++BAND_NAMES = ('S1', 'S2', 'S3', 'S4')
++
++PLAN_KEYS = ('schema', 'atoms', 'hypotheses', 'goal', 'proof')
++EXPECTATION_KEYS = (
++    'schema', 'node_count', 'band', 'families', 'max_dependency_depth',
++)
++HYPOTHESIS_KEYS = ('id', 'formula')
++FORMULA_KEYS = {
++    'ATOM': ('kind', 'name'),
++    'FALSE': ('kind',),
++    'NOT': ('kind', 'arg'),
++    'AND': ('kind', 'left', 'right'),
++    'OR': ('kind', 'left', 'right'),
++}
++PROOF_NODE_KEYS = {
++    'ASSUME': ('kind', 'conclusion', 'hypothesis_id'),
++    'AND_INTRO': ('kind', 'conclusion', 'left', 'right'),
++    'AND_ELIM_LEFT': ('kind', 'conclusion', 'source'),
++    'AND_ELIM_RIGHT': ('kind', 'conclusion', 'source'),
++    'OR_INTRO_LEFT': ('kind', 'conclusion', 'source'),
++    'OR_INTRO_RIGHT': ('kind', 'conclusion', 'source'),
++    'OR_ELIM': (
++        'kind', 'conclusion', 'major', 'left_assumption', 'left_branch',
++        'right_assumption', 'right_branch',
++    ),
++    'NOT_INTRO': ('kind', 'conclusion', 'assumption', 'body'),
++    'NOT_ELIM': ('kind', 'conclusion', 'negative', 'positive'),
++    'EXFALSO': ('kind', 'conclusion', 'source'),
++}
++PROOF_CHILD_FIELDS = {
++    'ASSUME': (),
++    'AND_INTRO': ('left', 'right'),
++    'AND_ELIM_LEFT': ('source',),
++    'AND_ELIM_RIGHT': ('source',),
++    'OR_INTRO_LEFT': ('source',),
++    'OR_INTRO_RIGHT': ('source',),
++    'OR_ELIM': ('major', 'left_branch', 'right_branch'),
++    'NOT_INTRO': ('body',),
++    'NOT_ELIM': ('negative', 'positive'),
++    'EXFALSO': ('source',),
++}
++
++ATOM_NAME_RE = re.compile(r'^a(0|[1-9][0-9]*)$')
++GLOBAL_ID_RE = re.compile(r'^h(0|[1-9][0-9]*)$')
++LOCAL_ID_RE = re.compile(r'^l(0|[1-9][0-9]*)$')
++
++MIN_DECLARED_ATOMS = 3
++MAX_DECLARED_ATOMS = 6
++MIN_DEPENDENCY_DEPTH = 2
++MIN_FAMILY_COUNT = 3
++BRANCHING_FAMILIES = ('AND_INTRO', 'OR_ELIM')
++
++THEORY_FILENAME = 'propositional-logic-intuitionistic-fragment.p'
++THEORY_SHA256 = (
++    '2056deaf9c12a81dcb047e60154e8a473ffe235b5e48bb9433eb1d9f70afb507'
++)
++THEORY_PREMISES = (
++    'and_i', 'and_el', 'and_er', 'or_il', 'or_ir', 'or_e',
++    'not_i', 'not_e', 'exfalso',
++)
++DIRECTION_BACKWARD = 'BACKWARD_ON_GOAL'
++DIRECTION_FORWARD = 'FORWARD_FROM_HYPOTHESIS'
++REQUIRED_DIRECTIONS = {
++    'and_i': DIRECTION_BACKWARD,
++    'and_el': DIRECTION_FORWARD,
++    'and_er': DIRECTION_FORWARD,
++    'or_il': DIRECTION_BACKWARD,
++    'or_ir': DIRECTION_BACKWARD,
++    'or_e': DIRECTION_BACKWARD,
++    'not_i': DIRECTION_BACKWARD,
++    'not_e': DIRECTION_BACKWARD,
++    'exfalso': DIRECTION_BACKWARD,
++}
++
++
++def is_printable_ascii(value: object) -> bool:
++    if type(value) is not str or value == '':
++        return False
++    return all(0x20 <= ord(ch) <= 0x7e for ch in value)
++
++
++def is_exact_int(value: object) -> bool:
++    return type(value) is int
++
++
++def is_atom_name(value: object) -> bool:
++    return type(value) is str and ATOM_NAME_RE.fullmatch(value) is not None
++
++
++def is_global_id(value: object) -> bool:
++    return type(value) is str and GLOBAL_ID_RE.fullmatch(value) is not None
++
++
++def is_local_id(value: object) -> bool:
++    return type(value) is str and LOCAL_ID_RE.fullmatch(value) is not None
++
++
++def band_of_node_count(node_count: int):
++    for name, lo, hi in BAND_EDGES:
++        if lo <= node_count <= hi:
++            return name
++    return None
++
++
++def family_of_kind(kind: str):
++    return KIND_TO_FAMILY.get(kind)
+diff --git a/learning/test_phase2_stageb_checker.py b/learning/test_phase2_stageb_checker.py
+new file mode 100644
+index 0000000..8c12e8a
+--- /dev/null
++++ b/learning/test_phase2_stageb_checker.py
+@@ -0,0 +1,1070 @@
++#!/usr/bin/env python3
++"""L1 independent checker regressions. Hand-written fixtures only."""
++
++from __future__ import annotations
++
++import ast
++import copy
++import sys
++import unittest
++from pathlib import Path
++
++LEARNING_DIR = Path(__file__).resolve().parent
++if str(LEARNING_DIR) not in sys.path:
++    sys.path.insert(0, str(LEARNING_DIR))
++
++from phase2_stageb_canonical import canonical_bytes, canonical_hash
++from phase2_stageb_causes import (
++    CAUSE_PLAN_CONSTRAINT_INVALID,
++    CAUSE_PLAN_NON_NORMAL,
++    CAUSE_PLAN_SCHEMA_INVALID,
++    CAUSE_PLAN_TYPE_INVALID,
++    MUTATION_TO_CAUSE,
++)
++from phase2_stageb_checker import (
++    _collect_assume_ids,
++    _has_beta_redex,
++    _type_proof,
++    _walk_formulas,
++    check_plan,
++    collect_atom_names,
++    formulas_equal,
++    inference_depth,
++    inference_node_count,
++    public_atom_names,
++    used_families,
++)
++from phase2_stageb_render import render_sequent
++from phase2_stageb_schema import (
++    EXPECTATION_SCHEMA_NAME,
++    PLAN_SCHEMA_NAME,
++    band_of_node_count,
++)
++
++
++def atom(name):
++    return {'kind': 'ATOM', 'name': name}
++
++
++def false_():
++    return {'kind': 'FALSE'}
++
++
++def not_(arg):
++    return {'kind': 'NOT', 'arg': copy.deepcopy(arg)}
++
++
++def and_(left, right):
++    return {'kind': 'AND', 'left': copy.deepcopy(left), 'right': copy.deepcopy(right)}
++
++
++def or_(left, right):
++    return {'kind': 'OR', 'left': copy.deepcopy(left), 'right': copy.deepcopy(right)}
++
++
++def hyp(ident, formula):
++    return {'id': ident, 'formula': formula}
++
++
++def assume(hid, conclusion):
++    return {
++        'kind': 'ASSUME',
++        'hypothesis_id': hid,
++        'conclusion': copy.deepcopy(conclusion),
++    }
++
++
++def and_intro(left, right):
++    return {
++        'kind': 'AND_INTRO',
++        'left': left,
++        'right': right,
++        'conclusion': and_(left['conclusion'], right['conclusion']),
++    }
++
++
++def and_elim_left(source):
++    return {
++        'kind': 'AND_ELIM_LEFT',
++        'source': source,
++        'conclusion': copy.deepcopy(source['conclusion']['left']),
++    }
++
++
++def and_elim_right(source):
++    return {
++        'kind': 'AND_ELIM_RIGHT',
++        'source': source,
++        'conclusion': copy.deepcopy(source['conclusion']['right']),
++    }
++
++
++def or_intro_left(source, other):
++    return {
++        'kind': 'OR_INTRO_LEFT',
++        'source': source,
++        'conclusion': or_(copy.deepcopy(source['conclusion']), copy.deepcopy(other)),
++    }
++
++
++def or_intro_right(source, other):
++    return {
++        'kind': 'OR_INTRO_RIGHT',
++        'source': source,
++        'conclusion': or_(copy.deepcopy(other), copy.deepcopy(source['conclusion'])),
++    }
++
++
++def or_elim(major, left_ass, left_branch, right_ass, right_branch, conclusion):
++    return {
++        'kind': 'OR_ELIM',
++        'major': major,
++        'left_assumption': left_ass,
++        'left_branch': left_branch,
++        'right_assumption': right_ass,
++        'right_branch': right_branch,
++        'conclusion': copy.deepcopy(conclusion),
++    }
++
++
++def not_intro(assumption, body):
++    return {
++        'kind': 'NOT_INTRO',
++        'assumption': assumption,
++        'body': body,
++        'conclusion': not_(copy.deepcopy(assumption['formula'])),
++    }
++
++
++def not_elim(negative, positive):
++    return {
++        'kind': 'NOT_ELIM',
++        'negative': negative,
++        'positive': positive,
++        'conclusion': false_(),
++    }
++
++
++def exfalso(source, conclusion):
++    return {
++        'kind': 'EXFALSO',
++        'source': source,
++        'conclusion': copy.deepcopy(conclusion),
++    }
++
++
++def or_commute(hid, p, q, left_id, right_id):
++    swapped = or_(copy.deepcopy(q), copy.deepcopy(p))
++    return or_elim(
++        assume(hid, or_(copy.deepcopy(p), copy.deepcopy(q))),
++        hyp(left_id, copy.deepcopy(p)),
++        or_intro_right(assume(left_id, p), q),
++        hyp(right_id, copy.deepcopy(q)),
++        or_intro_left(assume(right_id, q), p),
++        swapped,
++    )
++
++
++def not_contra(local_id):
++    payload = and_(atom('a0'), not_(atom('a0')))
++    assumed = assume(local_id, payload)
++    return not_intro(
++        hyp(local_id, payload),
++        not_elim(and_elim_right(assumed), and_elim_left(copy.deepcopy(assumed))),
++    )
++
++
++def plan(atoms, hypotheses, goal, proof):
++    return {
++        'schema': PLAN_SCHEMA_NAME,
++        'atoms': list(atoms),
++        'hypotheses': hypotheses,
++        'goal': goal,
++        'proof': proof,
++    }
++
++
++def expectation_for(proof, families=None, depth=None, node_count=None):
++    count = inference_node_count(proof) if node_count is None else node_count
++    fams = used_families(proof) if families is None else list(families)
++    dep = inference_depth(proof) if depth is None else depth
++    return {
++        'schema': EXPECTATION_SCHEMA_NAME,
++        'node_count': count,
++        'band': band_of_node_count(count),
++        'families': fams,
++        'max_dependency_depth': dep,
++    }
++
++
++A0 = atom('a0')
++A1 = atom('a1')
++A2 = atom('a2')
++A3 = atom('a3')
++A4 = atom('a4')
++A5 = atom('a5')
++A6 = atom('a6')
++
++
++def valid_s1_or_and():
++    h0 = or_(A0, A1)
++    h1 = and_(A2, A2)
++    inner = and_intro(
++        and_elim_left(assume('h1', h1)),
++        or_commute('h0', A0, A1, 'l0', 'l1'),
++    )
++    proof = and_intro(inner, or_commute('h0', A0, A1, 'l2', 'l3'))
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h0), hyp('h1', h1)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def valid_s1_not():
++    h0 = and_(A1, A2)
++    proof = and_intro(
++        not_contra('l0'),
++        and_intro(not_contra('l1'), assume('h0', h0)),
++    )
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h0)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def valid_s2_exfalso():
++    h0 = not_(A0)
++    h1 = A0
++    h2 = or_(A1, A2)
++    false_src = not_elim(assume('h0', h0), assume('h1', h1))
++    proof = and_intro(
++        exfalso(false_src, and_(A1, A2)),
++        and_intro(
++            or_commute('h2', A1, A2, 'l0', 'l1'),
++            and_intro(
++                or_commute('h2', A1, A2, 'l2', 'l3'),
++                or_commute('h2', A1, A2, 'l4', 'l5'),
++            ),
++        ),
++    )
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h0), hyp('h1', h1), hyp('h2', h2)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def valid_s3_pair():
++    left = valid_s1_or_and()
++    right = valid_s1_or_and()
++
++    def relabel_locals(node, offset):
++        kind = node['kind']
++        if kind == 'ASSUME':
++            hid = node['hypothesis_id']
++            if hid.startswith('l'):
++                node['hypothesis_id'] = 'l' + str(int(hid[1:]) + offset)
++            return
++        if kind == 'OR_ELIM':
++            for key in ('left_assumption', 'right_assumption'):
++                ident = node[key]['id']
++                node[key]['id'] = 'l' + str(int(ident[1:]) + offset)
++        if kind == 'NOT_INTRO':
++            ident = node['assumption']['id']
++            node['assumption']['id'] = 'l' + str(int(ident[1:]) + offset)
++        from phase2_stageb_schema import PROOF_CHILD_FIELDS
++        for field in PROOF_CHILD_FIELDS[kind]:
++            relabel_locals(node[field], offset)
++
++    relabel_locals(right['proof'], 4)
++    proof = and_intro(left['proof'], right['proof'])
++    return plan(
++        ['a0', 'a1', 'a2'],
++        copy.deepcopy(left['hypotheses']),
++        proof['conclusion'],
++        proof,
++    )
++
++
++def valid_s4_exfalso_chain():
++    source = assume('h0', false_())
++    node = source
++    for _ in range(22):
++        node = exfalso(node, false_())
++    proof = and_intro(
++        node,
++        and_intro(
++            or_commute('h1', A0, A1, 'l0', 'l1'),
++            and_elim_left(assume('h2', and_(A2, A2))),
++        ),
++    )
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', false_()), hyp('h1', or_(A0, A1)), hyp('h2', and_(A2, A2))],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def too_few_families_with_branching():
++    h0 = and_(A0, A1)
++    h1 = and_(A1, A2)
++    h2 = and_(A2, A0)
++    p1 = and_intro(
++        and_elim_left(assume('h0', h0)),
++        and_elim_right(assume('h0', h0)),
++    )
++    p2 = and_intro(
++        and_elim_left(assume('h1', h1)),
++        and_elim_right(assume('h1', h1)),
++    )
++    p3 = and_intro(
++        and_elim_left(assume('h2', h2)),
++        and_elim_right(assume('h2', h2)),
++    )
++    proof = and_intro(and_intro(p1, p2), p3)
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h0), hyp('h1', h1), hyp('h2', h2)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def three_families_without_branching():
++    h0 = not_(A2)
++    h1 = A2
++    node = not_elim(assume('h0', h0), assume('h1', h1))
++    for _ in range(5):
++        node = exfalso(node, false_())
++    node = exfalso(node, A0)
++    proof = or_intro_left(node, A1)
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h0), hyp('h1', h1)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def hidden_only_declared_atom():
++    h0 = not_(A0)
++    h1 = A0
++    h2 = or_(A1, A2)
++    extracted = and_elim_right(
++        exfalso(
++            not_elim(assume('h0', h0), assume('h1', h1)),
++            and_(A3, A0),
++        )
++    )
++    proof = and_intro(
++        extracted,
++        and_intro(
++            or_commute('h2', A1, A2, 'l0', 'l1'),
++            or_commute('h2', A1, A2, 'l2', 'l3'),
++        ),
++    )
++    return plan(
++        ['a0', 'a1', 'a2', 'a3'],
++        [hyp('h0', h0), hyp('h1', h1), hyp('h2', h2)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def two_atom_otherwise_valid():
++    h0 = or_(A0, A1)
++    h1 = and_(A0, A1)
++    proof = and_intro(
++        or_commute('h0', A0, A1, 'l0', 'l1'),
++        and_intro(
++            and_elim_left(assume('h1', h1)),
++            and_intro(
++                or_commute('h0', A0, A1, 'l2', 'l3'),
++                and_elim_right(assume('h1', h1)),
++            ),
++        ),
++    )
++    return plan(
++        ['a0', 'a1'],
++        [hyp('h0', h0), hyp('h1', h1)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def seven_atom_otherwise_valid():
++    h0 = or_(A0, A1)
++    h1 = and_(A2, A2)
++    h2 = A3
++    h3 = A4
++    h4 = A5
++    h5 = A6
++    proof = and_intro(
++        and_elim_left(assume('h1', h1)),
++        and_intro(
++            or_commute('h0', A0, A1, 'l0', 'l1'),
++            and_intro(
++                assume('h2', h2),
++                and_intro(
++                    assume('h3', h3),
++                    and_intro(assume('h4', h4), assume('h5', h5)),
++                ),
++            ),
++        ),
++    )
++    return plan(
++        ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'],
++        [
++            hyp('h0', h0), hyp('h1', h1), hyp('h2', h2),
++            hyp('h3', h3), hyp('h4', h4), hyp('h5', h5),
++        ],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def beta_and_elim_of_intro():
++    h0 = or_(A0, A1)
++    h1 = and_(A2, A2)
++    inner = and_elim_left(
++        and_intro(
++            or_commute('h0', A0, A1, 'l0', 'l1'),
++            and_elim_left(assume('h1', h1)),
++        )
++    )
++    proof = and_intro(copy.deepcopy(inner), copy.deepcopy(inner))
++    # deepcopy shares local ids; relabel right copy
++    def relabel(node, offset):
++        kind = node['kind']
++        if kind == 'ASSUME':
++            hid = node['hypothesis_id']
++            if hid.startswith('l'):
++                node['hypothesis_id'] = 'l' + str(int(hid[1:]) + offset)
++            return
++        if kind == 'OR_ELIM':
++            for key in ('left_assumption', 'right_assumption'):
++                ident = node[key]['id']
++                node[key]['id'] = 'l' + str(int(ident[1:]) + offset)
++        from phase2_stageb_schema import PROOF_CHILD_FIELDS
++        for field in PROOF_CHILD_FIELDS[kind]:
++            relabel(node[field], offset)
++
++    relabel(proof['right'], 2)
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h0), hyp('h1', h1)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def beta_or_elim_of_intro():
++    h0 = A0
++    h1 = or_(A1, A2)
++    major = or_intro_left(assume('h0', A0), or_(A1, A2))
++    payload = or_(or_(A1, A2), A0)
++    node = or_elim(
++        major,
++        hyp('l0', A0),
++        or_intro_right(assume('l0', A0), or_(A1, A2)),
++        hyp('l1', or_(A1, A2)),
++        assume('l1', or_(A1, A2)),
++        payload,
++    )
++    # too small / maybe ill-typed: right branch assume l1 concludes or(A1,A2) not payload
++    # skip this shape; pad a well-typed redex below
++    proof = and_intro(
++        or_elim(
++            or_intro_left(assume('h0', A0), A1),
++            hyp('l0', A0),
++            or_intro_right(assume('l0', A0), A1),
++            hyp('l1', A1),
++            or_intro_left(assume('l1', A1), A0),
++            or_(A1, A0),
++        ),
++        and_intro(
++            or_commute('h1', A1, A2, 'l2', 'l3'),
++            or_commute('h1', A1, A2, 'l4', 'l5'),
++        ),
++    )
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h0), hyp('h1', h1)],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def beta_not_elim_of_intro():
++    h0 = and_(A1, A2)
++    redex = not_elim(not_contra('l0'), assume('h0', A0))
++    # not_contra concludes not(and(a0,not a0)), not not(a0); this would be TYPE
++    # Build NOT_INTRO of a0 from hyp a0 -> false, then NOT_ELIM it with a0.
++    # We have h1: a0 and h2: not needed if NOT_INTRO derives not a0 from
++    # assuming a0 and using h_false.
++    # Simpler: hyp h_false false, NOT_INTRO assume a0, body EXFALSO? EXFALSO needs false
++    # from ASSUME h_false. Then NOT_ELIM(that NOT_INTRO, assume a0) is the redex.
++    h_not = not_(A0)
++    h_a0 = A0
++    intro = not_intro(
++        hyp('l0', A0),
++        not_elim(assume('h0', h_not), assume('l0', A0)),
++    )
++    redex = not_elim(intro, assume('h1', h_a0))
++    proof = and_intro(
++        exfalso(redex, and_(A1, A2)),
++        and_intro(
++            or_commute('h2', A1, A2, 'l1', 'l2'),
++            or_commute('h2', A1, A2, 'l3', 'l4'),
++        ),
++    )
++    return plan(
++        ['a0', 'a1', 'a2'],
++        [hyp('h0', h_not), hyp('h1', h_a0), hyp('h2', or_(A1, A2))],
++        proof['conclusion'],
++        proof,
++    )
++
++
++def deep_not(n):
++    formula = false_()
++    for _ in range(n):
++        formula = not_(formula)
++    return formula
++
++
++VALID_PLAN_BUILDERS = (
++    ('valid_s1_or_and', valid_s1_or_and),
++    ('valid_s1_not', valid_s1_not),
++    ('valid_s2_exfalso', valid_s2_exfalso),
++    ('valid_s3_pair', valid_s3_pair),
++    ('valid_s4_exfalso_chain', valid_s4_exfalso_chain),
++)
++
++
++class TestStageBChecker(unittest.TestCase):
++    def test_checker_imports_only_l0_and_stdlib(self):
++        source = (LEARNING_DIR / 'phase2_stageb_checker.py').read_text(encoding='utf-8')
++        tree = ast.parse(source)
++        imported = set()
++        for node in ast.walk(tree):
++            if isinstance(node, ast.Import):
++                for alias in node.names:
++                    imported.add(alias.name.split('.')[0])
++            elif isinstance(node, ast.ImportFrom):
++                if node.module:
++                    imported.add(node.module.split('.')[0])
++        allowed = {
++            'phase2_stageb_canonical',
++            'phase2_stageb_causes',
++            'phase2_stageb_render',
++            'phase2_stageb_schema',
++            'typing',
++            'annotations',
++            '__future__',
++        }
++        self.assertTrue(imported <= allowed, imported)
++        forbidden = {
++            'peano', 'torch', 'proofsearch', 'policy', 'phase2_policy',
++            'phase2_search', 'phase2_root', 'phase2_isolated', 'phase2_actions',
++            'phase2_spec', 'transformers', 'numpy', 'random',
++        }
++        self.assertTrue(imported.isdisjoint(forbidden))
++        self.assertNotIn('generator', source)
++        self.assertNotIn('compiler', source)
++        self.assertNotIn('public_projection', source)
++        self.assertNotIn('skeleton', source.lower())
++        self.assertNotIn('bijection', source)
++
++    def test_valid_plans_cover_rules_and_bands(self):
++        seen_kinds = set()
++        seen_bands = set()
++
++        def walk_kinds(node):
++            seen_kinds.add(node['kind'])
++            from phase2_stageb_schema import PROOF_CHILD_FIELDS
++            for field in PROOF_CHILD_FIELDS[node['kind']]:
++                walk_kinds(node[field])
++
++        for name, builder in VALID_PLAN_BUILDERS:
++            with self.subTest(name=name):
++                item = builder()
++                walk_kinds(item['proof'])
++                exp = expectation_for(item['proof'])
++                result = check_plan(item, exp)
++                self.assertTrue(result['ok'], result)
++                self.assertIsNone(result['cause'])
++                seen_bands.add(result['band'])
++                rendered = render_sequent(
++                    result['theorem']['atoms'],
++                    result['theorem']['hypotheses'],
++                    result['theorem']['goal'],
++                )
++                self.assertEqual(result['rendered_sequent'], rendered)
++                self.assertEqual(result['theorem']['atoms'], item['atoms'])
++                self.assertEqual(
++                    result['theorem']['hypotheses'],
++                    [h['formula'] for h in item['hypotheses']],
++                )
++        self.assertEqual(
++            seen_kinds,
++            {
++                'ASSUME', 'AND_INTRO', 'AND_ELIM_LEFT', 'AND_ELIM_RIGHT',
++                'OR_INTRO_LEFT', 'OR_INTRO_RIGHT', 'OR_ELIM',
++                'NOT_INTRO', 'NOT_ELIM', 'EXFALSO',
++            },
++        )
++        self.assertEqual(seen_bands, {'S1', 'S2', 'S3', 'S4'})
++
++    def test_frozen_mutation_mapping_is_exact(self):
++        self.assertEqual(len(MUTATION_TO_CAUSE), 12)
++        self.assertEqual(MUTATION_TO_CAUSE[0][1], CAUSE_PLAN_SCHEMA_INVALID)
++        self.assertEqual(MUTATION_TO_CAUSE[-1][1], CAUSE_PLAN_NON_NORMAL)
++
++    def _mutate_cause(self, item, exp, cause):
++        result = check_plan(item, exp)
++        self.assertFalse(result['ok'], result)
++        self.assertEqual(result['cause'], cause)
++        return result
++
++    def test_mutation_wrong_kind_key_type_string_atom_id_list(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['proof']['kind'] = 'UNKNOWN'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++        bad = copy.deepcopy(item)
++        bad['extra'] = 'x'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++        bad = copy.deepcopy(item)
++        bad['atoms'] = ['a0', True, 'a2']
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++        bad = copy.deepcopy(item)
++        bad['goal']['kind'] = 'ATOM'
++        bad['goal']['name'] = 'a0\n'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++        bad = copy.deepcopy(item)
++        bad['atoms'] = ['a0', 'a2', 'a1']
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++        bad = copy.deepcopy(item)
++        bad['hypotheses'][0]['id'] = 'H0'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++        bad = copy.deepcopy(item)
++        bad['atoms'][0] = 'b0'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++
++    def test_mutation_duplicate_or_shadowed_id(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['hypotheses'][1]['id'] = 'h0'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++        bad = copy.deepcopy(item)
++        bad['proof']['right']['left_assumption']['id'] = 'l0'
++        bad['proof']['right']['left_branch']['source']['hypothesis_id'] = 'l0'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++
++    def test_mutation_missing_or_out_of_scope_hypothesis(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['proof']['left']['left']['source']['hypothesis_id'] = 'h9'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_TYPE_INVALID)
++        bad = copy.deepcopy(item)
++        bad['proof']['left']['left']['source']['hypothesis_id'] = 'l0'
++        self._mutate_cause(bad, exp, CAUSE_PLAN_TYPE_INVALID)
++
++    def test_mutation_wrong_child_conclusion_or_root_goal(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['proof']['conclusion'] = atom('a0')
++        self._mutate_cause(bad, exp, CAUSE_PLAN_TYPE_INVALID)
++        bad = copy.deepcopy(item)
++        bad['goal'] = atom('a0')
++        self._mutate_cause(bad, exp, CAUSE_PLAN_TYPE_INVALID)
++
++    def test_mutation_wrong_discharge_formula(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['proof']['right']['left_assumption']['formula'] = atom('a2')
++        self._mutate_cause(bad, exp, CAUSE_PLAN_TYPE_INVALID)
++
++    def test_mutation_undeclared_or_unused_atom(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['atoms'] = ['a0', 'a1', 'a2', 'a3']
++        self._mutate_cause(bad, exp, CAUSE_PLAN_CONSTRAINT_INVALID)
++        xf = copy.deepcopy(valid_s2_exfalso())
++        xf['proof']['left']['conclusion'] = atom('a3')
++        xf['proof']['conclusion'] = and_(atom('a3'), xf['proof']['right']['conclusion'])
++        xf['goal'] = copy.deepcopy(xf['proof']['conclusion'])
++        self._mutate_cause(
++            xf, expectation_for(xf['proof']), CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    def test_mutation_unused_global_or_local_hypothesis(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['hypotheses'].append(hyp('h2', atom('a0')))
++        self._mutate_cause(bad, exp, CAUSE_PLAN_CONSTRAINT_INVALID)
++        not_item = valid_s1_not()
++        not_exp = expectation_for(not_item['proof'])
++        bad = copy.deepcopy(not_item)
++        bad['proof']['left']['body'] = assume('h0', and_(A1, A2))
++        bad['proof']['left']['conclusion'] = not_(and_(A0, not_(A0)))
++        # body no longer references l0; also type-invalid because body not false.
++        # Force a type-valid unused local: NOT_INTRO body EXFALSO from global false.
++        # Use a dedicated fixture:
++        h_false = false_()
++        intro = not_intro(hyp('l0', A0), assume('h0', h_false))
++        proof = and_intro(
++            intro,
++            and_intro(
++                or_commute('h1', A1, A2, 'l1', 'l2'),
++                or_commute('h1', A1, A2, 'l3', 'l4'),
++            ),
++        )
++        unused_local = plan(
++            ['a0', 'a1', 'a2'],
++            [hyp('h0', h_false), hyp('h1', or_(A1, A2))],
++            proof['conclusion'],
++            proof,
++        )
++        self._mutate_cause(
++            unused_local,
++            expectation_for(unused_local['proof']),
++            CAUSE_PLAN_CONSTRAINT_INVALID,
++        )
++
++    def test_mutation_duplicate_global_formula(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['hypotheses'][1]['formula'] = copy.deepcopy(bad['hypotheses'][0]['formula'])
++        # h1 unused shape now differs; still referenced by and_elim which needs AND
++        # so this is TYPE. Make a type-valid duplicate: two AND hyps equal.
++        h0 = and_(A0, A1)
++        proof = and_intro(
++            and_elim_left(assume('h0', h0)),
++            and_intro(
++                or_commute('h2', A1, A2, 'l0', 'l1'),
++                or_commute('h2', A1, A2, 'l2', 'l3'),
++            ),
++        )
++        dup = plan(
++            ['a0', 'a1', 'a2'],
++            [hyp('h0', h0), hyp('h1', copy.deepcopy(h0)), hyp('h2', or_(A1, A2))],
++            proof['conclusion'],
++            proof,
++        )
++        # h1 unused AND duplicate formula. First cause: unused vs duplicate.
++        # Mapping: unused global -> CONSTRAINT, duplicate formula -> CONSTRAINT.
++        # Check unused first in checker... we check duplicate formulas before unused.
++        result = check_plan(dup, expectation_for(dup['proof']))
++        self.assertFalse(result['ok'])
++        self.assertEqual(result['cause'], CAUSE_PLAN_CONSTRAINT_INVALID)
++        # Reference both copies so unused does not fire; only duplicate remains.
++        proof2 = and_intro(
++            and_elim_left(assume('h0', h0)),
++            and_intro(
++                and_elim_right(assume('h1', copy.deepcopy(h0))),
++                and_intro(
++                    or_commute('h2', A1, A2, 'l0', 'l1'),
++                    or_commute('h2', A1, A2, 'l2', 'l3'),
++                ),
++            ),
++        )
++        dup2 = plan(
++            ['a0', 'a1', 'a2'],
++            [hyp('h0', h0), hyp('h1', copy.deepcopy(h0)), hyp('h2', or_(A1, A2))],
++            proof2['conclusion'],
++            proof2,
++        )
++        self._mutate_cause(
++            dup2, expectation_for(dup2['proof']), CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    def test_mutation_formula_bound_including_free_payloads(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        huge = deep_not(24)
++        src = assume('h0', A0)
++        or_node = or_intro_left(src, huge)
++        padded = and_intro(
++            or_node,
++            and_intro(
++                or_commute('h1', A1, A2, 'l0', 'l1'),
++                or_commute('h1', A1, A2, 'l2', 'l3'),
++            ),
++        )
++        free_or = plan(
++            ['a0', 'a1', 'a2'],
++            [hyp('h0', A0), hyp('h1', or_(A1, A2))],
++            padded['conclusion'],
++            padded,
++        )
++        self._mutate_cause(
++            free_or, expectation_for(free_or['proof']), CAUSE_PLAN_CONSTRAINT_INVALID)
++        # EXFALSO payload.
++        false_src = not_elim(assume('h0', not_(A0)), assume('h1', A0))
++        xf = exfalso(false_src, huge)
++        padded_x = and_intro(
++            xf,
++            and_intro(
++                or_commute('h2', A1, A2, 'l0', 'l1'),
++                or_commute('h2', A1, A2, 'l2', 'l3'),
++            ),
++        )
++        free_x = plan(
++            ['a0', 'a1', 'a2'],
++            [hyp('h0', not_(A0)), hyp('h1', A0), hyp('h2', or_(A1, A2))],
++            padded_x['conclusion'],
++            padded_x,
++        )
++        self._mutate_cause(
++            free_x, expectation_for(free_x['proof']), CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    def test_mutation_node_count_band_expectation_mismatch(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad_exp = copy.deepcopy(exp)
++        bad_exp['node_count'] = exp['node_count'] + 1
++        bad_exp['band'] = band_of_node_count(bad_exp['node_count'])
++        self._mutate_cause(item, bad_exp, CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    def test_mutation_shallow_or_too_few_families_or_no_branching(self):
++        h0 = and_(A0, A1)
++        shallow = plan(
++            ['a0', 'a1', 'a2'],
++            [hyp('h0', h0), hyp('h1', A2)],
++            A0,
++            and_elim_left(assume('h0', h0)),
++        )
++        # 1 node, not in band
++        exp = {
++            'schema': EXPECTATION_SCHEMA_NAME,
++            'node_count': 8,
++            'band': 'S1',
++            'families': ['AND_ELIM'],
++            'max_dependency_depth': 2,
++        }
++        self._mutate_cause(shallow, exp, CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    def test_beta_redexes_are_plan_non_normal(self):
++        and_beta = beta_and_elim_of_intro()
++        self._mutate_cause(
++            and_beta,
++            expectation_for(and_beta['proof']),
++            CAUSE_PLAN_NON_NORMAL,
++        )
++        or_beta = beta_or_elim_of_intro()
++        self._mutate_cause(
++            or_beta,
++            expectation_for(or_beta['proof']),
++            CAUSE_PLAN_NON_NORMAL,
++        )
++        not_beta = beta_not_elim_of_intro()
++        self._mutate_cause(
++            not_beta,
++            expectation_for(not_beta['proof']),
++            CAUSE_PLAN_NON_NORMAL,
++        )
++
++    def test_inference_depth_ignores_assume_edges(self):
++        item = valid_s1_or_and()
++        self.assertGreaterEqual(inference_depth(item['proof']), 2)
++        only_assumes = and_intro(assume('h0', A0), assume('h1', A1))
++        self.assertEqual(inference_depth(only_assumes), 0)
++        self.assertEqual(inference_node_count(only_assumes), 1)
++
++    def test_plan_wide_local_id_uniqueness_across_siblings(self):
++        item = valid_s3_pair()
++        ids = []
++
++        def walk(node):
++            kind = node['kind']
++            if kind == 'OR_ELIM':
++                ids.append(node['left_assumption']['id'])
++                ids.append(node['right_assumption']['id'])
++            if kind == 'NOT_INTRO':
++                ids.append(node['assumption']['id'])
++            from phase2_stageb_schema import PROOF_CHILD_FIELDS
++            for field in PROOF_CHILD_FIELDS[kind]:
++                walk(node[field])
++
++        walk(item['proof'])
++        self.assertEqual(len(ids), len(set(ids)))
++        result = check_plan(item, expectation_for(item['proof']))
++        self.assertTrue(result['ok'], result)
++
++    def test_first_cause_schema_before_type(self):
++        item = valid_s1_or_and()
++        exp = expectation_for(item['proof'])
++        bad = copy.deepcopy(item)
++        bad['proof']['kind'] = 'NOT_A_RULE'
++        bad['goal'] = atom('a0')
++        self._mutate_cause(bad, exp, CAUSE_PLAN_SCHEMA_INVALID)
++
++    def test_valid_plan_raw_hashes_are_stable(self):
++        item = valid_s1_or_and()
++        result = check_plan(item, expectation_for(item['proof']))
++        self.assertTrue(result['ok'])
++        self.assertEqual(len(canonical_hash(item)), 64)
++        self.assertEqual(len(canonical_hash(result['theorem'])), 64)
++
++    def test_isolated_too_few_families_with_branching(self):
++        item = too_few_families_with_branching()
++        families = used_families(item['proof'])
++        self.assertEqual(families, ['AND_INTRO', 'AND_ELIM'])
++        self.assertIn('AND_INTRO', families)
++        self.assertEqual(inference_node_count(item['proof']), 11)
++        self.assertGreaterEqual(inference_depth(item['proof']), 2)
++        self._mutate_cause(
++            item,
++            expectation_for(item['proof']),
++            CAUSE_PLAN_CONSTRAINT_INVALID,
++        )
++
++    def test_isolated_three_families_without_branching(self):
++        item = three_families_without_branching()
++        families = used_families(item['proof'])
++        self.assertGreaterEqual(len(families), 3)
++        self.assertNotIn('AND_INTRO', families)
++        self.assertNotIn('OR_ELIM', families)
++        self.assertEqual(inference_node_count(item['proof']), 8)
++        self.assertGreaterEqual(inference_depth(item['proof']), 2)
++        self._mutate_cause(
++            item,
++            expectation_for(item['proof']),
++            CAUSE_PLAN_CONSTRAINT_INVALID,
++        )
++
++    def test_isolated_hidden_only_declared_atom(self):
++        item = hidden_only_declared_atom()
++        self.assertEqual(item['atoms'], ['a0', 'a1', 'a2', 'a3'])
++        self.assertEqual(public_atom_names(item), {'a0', 'a1', 'a2'})
++        exp = expectation_for(item['proof'])
++        self.assertIn(exp['band'], {'S1', 'S2', 'S3', 'S4'})
++        self.assertGreaterEqual(len(exp['families']), 3)
++        self.assertTrue(
++            'AND_INTRO' in exp['families'] or 'OR_ELIM' in exp['families']
++        )
++        self._mutate_cause(item, exp, CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    def test_malformed_expectation_is_schema_invalid(self):
++        item = valid_s1_or_and()
++        good = expectation_for(item['proof'])
++        extra = copy.deepcopy(good)
++        extra['extra'] = 1
++        self._mutate_cause(item, extra, CAUSE_PLAN_SCHEMA_INVALID)
++        missing = copy.deepcopy(good)
++        del missing['families']
++        self._mutate_cause(item, missing, CAUSE_PLAN_SCHEMA_INVALID)
++        wrong_schema = copy.deepcopy(good)
++        wrong_schema['schema'] = 'philosophia.stageb.plan-expectation.v0'
++        self._mutate_cause(item, wrong_schema, CAUSE_PLAN_SCHEMA_INVALID)
++        bad_band = copy.deepcopy(good)
++        bad_band['band'] = 'S9'
++        self._mutate_cause(item, bad_band, CAUSE_PLAN_SCHEMA_INVALID)
++        bad_family = copy.deepcopy(good)
++        bad_family['families'] = ['AND_INTRO', 'NOT_A_FAMILY']
++        self._mutate_cause(item, bad_family, CAUSE_PLAN_SCHEMA_INVALID)
++        duplicate = copy.deepcopy(good)
++        duplicate['families'] = ['AND_INTRO', 'AND_INTRO']
++        self._mutate_cause(item, duplicate, CAUSE_PLAN_SCHEMA_INVALID)
++        unsorted = copy.deepcopy(good)
++        unsorted['families'] = list(reversed(good['families']))
++        if unsorted['families'] != good['families']:
++            self._mutate_cause(item, unsorted, CAUSE_PLAN_SCHEMA_INVALID)
++        else:
++            unsorted['families'] = ['OR_ELIM', 'AND_INTRO']
++            self._mutate_cause(item, unsorted, CAUSE_PLAN_SCHEMA_INVALID)
++        bad_type = copy.deepcopy(good)
++        bad_type['node_count'] = True
++        self._mutate_cause(item, bad_type, CAUSE_PLAN_SCHEMA_INVALID)
++        bad_list = copy.deepcopy(good)
++        bad_list['families'] = tuple(good['families'])
++        self._mutate_cause(item, bad_list, CAUSE_PLAN_SCHEMA_INVALID)
++
++    def test_valid_expectation_mismatch_is_constraint_invalid(self):
++        item = valid_s1_or_and()
++        good = expectation_for(item['proof'])
++        wrong_count = copy.deepcopy(good)
++        wrong_count['node_count'] = good['node_count'] + 1
++        wrong_count['band'] = band_of_node_count(wrong_count['node_count'])
++        self._mutate_cause(item, wrong_count, CAUSE_PLAN_CONSTRAINT_INVALID)
++        wrong_depth = copy.deepcopy(good)
++        wrong_depth['max_dependency_depth'] = good['max_dependency_depth'] + 1
++        self._mutate_cause(item, wrong_depth, CAUSE_PLAN_CONSTRAINT_INVALID)
++        wrong_families = copy.deepcopy(good)
++        wrong_families['families'] = ['AND_INTRO', 'AND_ELIM', 'EXFALSO']
++        self._mutate_cause(item, wrong_families, CAUSE_PLAN_CONSTRAINT_INVALID)
++        negative = copy.deepcopy(good)
++        negative['max_dependency_depth'] = -1
++        self._mutate_cause(item, negative, CAUSE_PLAN_CONSTRAINT_INVALID)
++        unbanded = copy.deepcopy(good)
++        unbanded['node_count'] = 7
++        unbanded['band'] = 'S1'
++        self._mutate_cause(item, unbanded, CAUSE_PLAN_CONSTRAINT_INVALID)
++
++    def _assert_otherwise_valid_except_cardinality(self, item, declared_count):
++        self.assertEqual(len(item['atoms']), declared_count)
++        self.assertEqual(item['atoms'], sorted(item['atoms']))
++        declared = set(item['atoms'])
++        self.assertEqual(public_atom_names(item), declared)
++        occurring = set()
++        for formula in _walk_formulas(item):
++            collect_atom_names(formula, occurring)
++        self.assertTrue(occurring <= declared)
++        env = {hyp_row['id']: hyp_row['formula'] for hyp_row in item['hypotheses']}
++        err, derived = _type_proof(item['proof'], env)
++        self.assertIsNone(err)
++        self.assertTrue(formulas_equal(derived, item['goal']))
++        global_formulas = [
++            canonical_bytes(hyp_row['formula']) for hyp_row in item['hypotheses']
++        ]
++        self.assertEqual(len(global_formulas), len(set(global_formulas)))
++        referenced = set()
++        scoped = {}
++        _collect_assume_ids(item['proof'], referenced, scoped)
++        for hyp_row in item['hypotheses']:
++            self.assertIn(hyp_row['id'], referenced)
++        for local_id, uses in scoped.items():
++            self.assertIn(local_id, uses)
++        node_count = inference_node_count(item['proof'])
++        self.assertIsNotNone(band_of_node_count(node_count))
++        self.assertGreaterEqual(inference_depth(item['proof']), 2)
++        families = used_families(item['proof'])
++        self.assertGreaterEqual(len(families), 3)
++        self.assertTrue('AND_INTRO' in families or 'OR_ELIM' in families)
++        self.assertFalse(_has_beta_redex(item['proof']))
++
++    def test_two_atom_cardinality_is_constraint_invalid(self):
++        item = two_atom_otherwise_valid()
++        self._assert_otherwise_valid_except_cardinality(item, 2)
++        self._mutate_cause(
++            item,
++            expectation_for(item['proof']),
++            CAUSE_PLAN_CONSTRAINT_INVALID,
++        )
++
++    def test_seven_atom_cardinality_is_constraint_invalid(self):
++        item = seven_atom_otherwise_valid()
++        self._assert_otherwise_valid_except_cardinality(item, 7)
++        self._mutate_cause(
++            item,
++            expectation_for(item['proof']),
++            CAUSE_PLAN_CONSTRAINT_INVALID,
++        )
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/learning/test_phase2_stageb_l0.py b/learning/test_phase2_stageb_l0.py
+new file mode 100644
+index 0000000..444faa8
+--- /dev/null
++++ b/learning/test_phase2_stageb_l0.py
+@@ -0,0 +1,235 @@
++#!/usr/bin/env python3
++"""L0 Stage-B schema, canonical bytes, causes and renderer regressions."""
++
++from __future__ import annotations
++
++import ast
++import hashlib
++import json
++import sys
++import unittest
++from pathlib import Path
++
++LEARNING_DIR = Path(__file__).resolve().parent
++if str(LEARNING_DIR) not in sys.path:
++    sys.path.insert(0, str(LEARNING_DIR))
++
++from phase2_stageb_canonical import canonical_bytes, canonical_dumps, canonical_hash
++from phase2_stageb_causes import (
++    CAUSE_PLAN_CONSTRAINT_INVALID,
++    CAUSE_PLAN_NON_NORMAL,
++    CAUSE_PLAN_SCHEMA_INVALID,
++    CAUSE_PLAN_TYPE_INVALID,
++    CAUSE_QUERY_MEASUREMENT_OVERFLOW,
++    CAUSE_SEQUENT_REDERIVATION_MISMATCH,
++    DEV_CORE_FEASIBILITY_STOP_REASONS,
++    DRAW_CAUSES,
++    L1_CAUSES,
++    MUTATION_TO_CAUSE,
++    TOP_LEVEL_TERMINALS,
++)
++from phase2_stageb_render import render_sequent
++from phase2_stageb_schema import (
++    BAND_EDGES,
++    DEV_QUERY_MEASUREMENT_N_POSITIONS,
++    FAMILY_ORDER,
++    MAX_FORMULA_NODES,
++    THEORY_SHA256,
++    band_of_node_count,
++)
++
++
++def _atom(name):
++    return {'kind': 'ATOM', 'name': name}
++
++
++def _and(left, right):
++    return {'kind': 'AND', 'left': left, 'right': right}
++
++
++def _or(left, right):
++    return {'kind': 'OR', 'left': left, 'right': right}
++
++
++RENDERER_AND_COMMUTE = (
++    "[('a0 : prop) -> ('a1 : prop) -> (and 'a0 'a1) -> (and 'a1 'a0)]"
++)
++RENDERER_OR_COMMUTE = (
++    "[('a0 : prop) -> ('a1 : prop) -> (or 'a0 'a1) -> (or 'a1 'a0)]"
++)
++
++
++class TestStageBL0(unittest.TestCase):
++    def test_schema_constants(self):
++        self.assertEqual(MAX_FORMULA_NODES, 24)
++        self.assertEqual(DEV_QUERY_MEASUREMENT_N_POSITIONS, 4096)
++        self.assertEqual(
++            BAND_EDGES,
++            (('S1', 8, 11), ('S2', 12, 17), ('S3', 18, 25), ('S4', 26, 37)),
++        )
++        self.assertEqual(
++            FAMILY_ORDER,
++            (
++                'AND_INTRO', 'AND_ELIM', 'OR_INTRO', 'OR_ELIM',
++                'NOT_INTRO', 'NOT_ELIM', 'EXFALSO',
++            ),
++        )
++        self.assertEqual(band_of_node_count(8), 'S1')
++        self.assertEqual(band_of_node_count(11), 'S1')
++        self.assertEqual(band_of_node_count(12), 'S2')
++        self.assertEqual(band_of_node_count(17), 'S2')
++        self.assertEqual(band_of_node_count(18), 'S3')
++        self.assertEqual(band_of_node_count(25), 'S3')
++        self.assertEqual(band_of_node_count(26), 'S4')
++        self.assertEqual(band_of_node_count(37), 'S4')
++        self.assertIsNone(band_of_node_count(7))
++        self.assertIsNone(band_of_node_count(38))
++        self.assertEqual(
++            THEORY_SHA256,
++            '2056deaf9c12a81dcb047e60154e8a473ffe235b5e48bb9433eb1d9f70afb507',
++        )
++
++    def test_constants_live_only_in_schema_module(self):
++        names = (
++            'MAX_FORMULA_NODES',
++            'DEV_QUERY_MEASUREMENT_N_POSITIONS',
++            'BAND_EDGES',
++            'FAMILY_ORDER',
++        )
++        for filename in (
++                'phase2_stageb_canonical.py',
++                'phase2_stageb_causes.py',
++                'phase2_stageb_render.py',
++                'phase2_stageb_checker.py',
++        ):
++            tree = ast.parse((LEARNING_DIR / filename).read_text(encoding='utf-8'))
++            assigned = set()
++            for node in ast.walk(tree):
++                if isinstance(node, ast.Assign):
++                    for target in node.targets:
++                        if isinstance(target, ast.Name):
++                            assigned.add(target.id)
++            for name in names:
++                with self.subTest(filename=filename, name=name):
++                    self.assertNotIn(name, assigned)
++
++    def test_canonical_ascii_json_and_hash(self):
++        obj = {'b': 1, 'a': {'z': True, 'm': 'x'}}
++        dumped = canonical_dumps(obj)
++        self.assertEqual(dumped, '{"a":{"m":"x","z":true},"b":1}')
++        self.assertEqual(canonical_bytes(obj), dumped.encode('ascii'))
++        self.assertEqual(
++            canonical_hash(obj),
++            hashlib.sha256(dumped.encode('ascii')).hexdigest(),
++        )
++        self.assertEqual(canonical_hash(obj), canonical_hash(obj).lower())
++        self.assertNotIn('\\u', dumped)
++
++    def test_closed_causes_and_mutation_mapping(self):
++        self.assertEqual(
++            L1_CAUSES,
++            (
++                CAUSE_PLAN_SCHEMA_INVALID,
++                CAUSE_PLAN_TYPE_INVALID,
++                CAUSE_PLAN_CONSTRAINT_INVALID,
++                CAUSE_PLAN_NON_NORMAL,
++            ),
++        )
++        self.assertEqual(CAUSE_SEQUENT_REDERIVATION_MISMATCH, 'SEQUENT_REDERIVATION_MISMATCH')
++        self.assertNotIn(CAUSE_SEQUENT_REDERIVATION_MISMATCH, L1_CAUSES)
++        self.assertEqual(
++            TOP_LEVEL_TERMINALS,
++            (
++                'DEV_CORE_FEASIBILITY_STOP',
++                'DEV_CORE_FEASIBLE_FOR_AUDIT_CONTRACT',
++            ),
++        )
++        self.assertEqual(
++            DEV_CORE_FEASIBILITY_STOP_REASONS,
++            (
++                'PREMISE_ENUMERABILITY_FAILED',
++                'DAG_ENUMERABILITY_FAILED',
++                'DAG_REPLAY_FAILED',
++                'CHECKER_UNSOUND',
++                'COMPILER_UNSOUND',
++                'MUTATION_ESCAPE',
++                'PUBLIC_PROJECTION_LEAK',
++                'COLLISION_ACCOUNTING_ERROR',
++                'NONDETERMINISM',
++                'COMPILER_FAMILY_UNREACHABLE',
++                'QUERY_MEASUREMENT_OVERFLOW',
++                'ROOT_QUOTA_UNFILLED',
++                'RESOURCE_CEILING_EXHAUSTED',
++            ),
++        )
++        self.assertEqual(
++            DRAW_CAUSES,
++            (
++                'PLAN_CONSTRUCTION_FAILED',
++                'PLAN_SCHEMA_INVALID',
++                'PLAN_TYPE_INVALID',
++                'PLAN_CONSTRAINT_INVALID',
++                'PLAN_NON_NORMAL',
++                'SEQUENT_REDERIVATION_MISMATCH',
++                'CLASSICAL_COUNTEREXAMPLE',
++                'THEOREM_ID_COLLISION',
++                'SKELETON_ID_COLLISION',
++                'COMPILER_NO_MATCH',
++                'COMPILER_AMBIGUOUS_MATCH',
++                'PEANO_REPLAY_REFUSAL',
++                'PEANO_REPLAY_NONTERMINAL',
++                'QUERY_MEASUREMENT_OVERFLOW',
++                'TARGET_BAND_ALREADY_FULL',
++            ),
++        )
++        self.assertEqual(len(TOP_LEVEL_TERMINALS), 2)
++        self.assertEqual(len(DEV_CORE_FEASIBILITY_STOP_REASONS), 13)
++        self.assertEqual(len(DRAW_CAUSES), 15)
++        self.assertIn(CAUSE_SEQUENT_REDERIVATION_MISMATCH, DRAW_CAUSES)
++        self.assertEqual(CAUSE_QUERY_MEASUREMENT_OVERFLOW, 'QUERY_MEASUREMENT_OVERFLOW')
++        self.assertIn(CAUSE_QUERY_MEASUREMENT_OVERFLOW, DRAW_CAUSES)
++        self.assertIn(CAUSE_QUERY_MEASUREMENT_OVERFLOW, DEV_CORE_FEASIBILITY_STOP_REASONS)
++        self.assertEqual(
++            MUTATION_TO_CAUSE,
++            (
++                ('wrong kind/key/type/string/atom-name/ID/atom-list', 'PLAN_SCHEMA_INVALID'),
++                ('duplicate or shadowed hypothesis ID', 'PLAN_SCHEMA_INVALID'),
++                ('missing or out-of-scope hypothesis reference', 'PLAN_TYPE_INVALID'),
++                ('wrong child/conclusion/root goal', 'PLAN_TYPE_INVALID'),
++                ('wrong discharge formula', 'PLAN_TYPE_INVALID'),
++                ('undeclared or unused declared atom', 'PLAN_CONSTRAINT_INVALID'),
++                ('unused global/local hypothesis', 'PLAN_CONSTRAINT_INVALID'),
++                ('duplicate global hypothesis formula', 'PLAN_CONSTRAINT_INVALID'),
++                ('formula bound', 'PLAN_CONSTRAINT_INVALID'),
++                ('node-count/band/expectation mismatch', 'PLAN_CONSTRAINT_INVALID'),
++                ('shallow dependency/too few families/no branching', 'PLAN_CONSTRAINT_INVALID'),
++                ('each section-2.3 beta-redex', 'PLAN_NON_NORMAL'),
++            ),
++        )
++
++    def test_renderer_and_commute_anchor(self):
++        sequent = render_sequent(
++            ['a0', 'a1'],
++            [_and(_atom('a0'), _atom('a1'))],
++            _and(_atom('a1'), _atom('a0')),
++        )
++        self.assertEqual(sequent, RENDERER_AND_COMMUTE)
++        self.assertEqual(sequent, sequent.encode('ascii').decode('ascii'))
++
++    def test_renderer_or_commute_anchor(self):
++        sequent = render_sequent(
++            ['a0', 'a1'],
++            [_or(_atom('a0'), _atom('a1'))],
++            _or(_atom('a1'), _atom('a0')),
++        )
++        self.assertEqual(sequent, RENDERER_OR_COMMUTE)
++
++    def test_renderer_zero_hypotheses_and_no_cardinality_check(self):
++        sequent = render_sequent(['a0', 'a1'], [], _atom('a0'))
++        self.assertEqual(sequent, "[('a0 : prop) -> ('a1 : prop) -> 'a0]")
++        two = render_sequent(['a0', 'a1'], [_atom('a0')], _atom('a0'))
++        self.assertEqual(two, "[('a0 : prop) -> ('a1 : prop) -> 'a0 -> 'a0]")
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/learning/test_phase2_stageb_theory_enumerability.py b/learning/test_phase2_stageb_theory_enumerability.py
+new file mode 100644
+index 0000000..afd667e
+--- /dev/null
++++ b/learning/test_phase2_stageb_theory_enumerability.py
+@@ -0,0 +1,319 @@
++#!/usr/bin/env python3
++"""L0 Peano enumerability for the intuitionistic fragment. No search or plans."""
++
++from __future__ import annotations
++
++import sys
++import unittest
++from pathlib import Path
++
++import peano
++
++LEARNING_DIR = Path(__file__).resolve().parent
++if str(LEARNING_DIR) not in sys.path:
++    sys.path.insert(0, str(LEARNING_DIR))
++
++from phase2_stageb_schema import (
++    DIRECTION_BACKWARD,
++    DIRECTION_FORWARD,
++    REQUIRED_DIRECTIONS,
++    THEORY_FILENAME,
++    THEORY_PREMISES,
++    THEORY_SHA256,
++)
++
++
++THEORY_PATH = LEARNING_DIR / 'theories' / THEORY_FILENAME
++
++ANNOTATION_ABSENT = 'ABSENT'
++
++WITNESS_GOALS = {
++    'and_i': "[('a0 : prop) -> ('a1 : prop) -> (and 'a0 'a1)]",
++    'and_el': "[('a0 : prop) -> ('a1 : prop) -> (and 'a0 'a1) -> 'a0]",
++    'and_er': "[('a0 : prop) -> ('a1 : prop) -> (and 'a0 'a1) -> 'a1]",
++    'or_il': "[('a0 : prop) -> ('a1 : prop) -> 'a0 -> (or 'a0 'a1)]",
++    'or_ir': "[('a0 : prop) -> ('a1 : prop) -> 'a1 -> (or 'a0 'a1)]",
++    'or_e': "[('a0 : prop) -> ('a1 : prop) -> (or 'a0 'a1) -> (or 'a1 'a0)]",
++    'not_i': "[('a0 : prop) -> ['a0 -> false] -> (not 'a0)]",
++    'not_e': "[('a0 : prop) -> (not 'a0) -> 'a0 -> false]",
++    'exfalso': "[false -> ('a0 : prop) -> 'a0]",
++}
++
++FROZEN_PREMISE_TABLE = (
++    {
++        'premise': 'and_i',
++        'annotation_text_or_ABSENT': '#backward and_i.',
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_BACKWARD,),
++        'required_direction': DIRECTION_BACKWARD,
++        'witness_state': WITNESS_GOALS['and_i'],
++    },
++    {
++        'premise': 'and_el',
++        'annotation_text_or_ABSENT': "#forward and_el ('_ : (and 'P 'Q)).",
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_FORWARD,),
++        'required_direction': DIRECTION_FORWARD,
++        'witness_state': WITNESS_GOALS['and_el'],
++    },
++    {
++        'premise': 'and_er',
++        'annotation_text_or_ABSENT': "#forward and_er ('_ : (and 'P 'Q)).",
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_FORWARD,),
++        'required_direction': DIRECTION_FORWARD,
++        'witness_state': WITNESS_GOALS['and_er'],
++    },
++    {
++        'premise': 'or_il',
++        'annotation_text_or_ABSENT': '#backward or_il.',
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_BACKWARD,),
++        'required_direction': DIRECTION_BACKWARD,
++        'witness_state': WITNESS_GOALS['or_il'],
++    },
++    {
++        'premise': 'or_ir',
++        'annotation_text_or_ABSENT': '#backward or_ir.',
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_BACKWARD,),
++        'required_direction': DIRECTION_BACKWARD,
++        'witness_state': WITNESS_GOALS['or_ir'],
++    },
++    {
++        'premise': 'or_e',
++        'annotation_text_or_ABSENT': (
++            '#backward or_e infer infer infer infer subgoal subgoal.'
++        ),
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_BACKWARD,),
++        'required_direction': DIRECTION_BACKWARD,
++        'witness_state': WITNESS_GOALS['or_e'],
++    },
++    {
++        'premise': 'not_i',
++        'annotation_text_or_ABSENT': '#backward not_i.',
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_BACKWARD,),
++        'required_direction': DIRECTION_BACKWARD,
++        'witness_state': WITNESS_GOALS['not_i'],
++    },
++    {
++        'premise': 'not_e',
++        'annotation_text_or_ABSENT': ANNOTATION_ABSENT,
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_BACKWARD, DIRECTION_FORWARD),
++        'required_direction': DIRECTION_BACKWARD,
++        'witness_state': WITNESS_GOALS['not_e'],
++    },
++    {
++        'premise': 'exfalso',
++        'annotation_text_or_ABSENT': '#backward exfalso.',
++        'enumerable': True,
++        'enumerable_directions': (DIRECTION_BACKWARD,),
++        'required_direction': DIRECTION_BACKWARD,
++        'witness_state': WITNESS_GOALS['exfalso'],
++    },
++)
++
++AMBIENT_ARROW_CHAINS = (
++    "[('a0 : prop) -> ('a1 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('base : 'a0) -> 'a1]",
++    "[('a0 : prop) -> ('a1 : prop) -> ('a2 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('h1 : ['a1 -> 'a2]) -> ('base : 'a0) -> 'a2]",
++    "[('a0 : prop) -> ('a1 : prop) -> ('a2 : prop) -> ('a3 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('h1 : ['a1 -> 'a2]) -> ('h2 : ['a2 -> 'a3]) -> ('base : 'a0) -> 'a3]",
++    "[('a0 : prop) -> ('a1 : prop) -> ('a2 : prop) -> ('a3 : prop) -> ('a4 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('h1 : ['a1 -> 'a2]) -> ('h2 : ['a2 -> 'a3]) -> ('h3 : ['a3 -> 'a4]) -> ('base : 'a0) -> 'a4]",
++    "[('a0 : prop) -> ('a1 : prop) -> ('a2 : prop) -> ('a3 : prop) -> ('a4 : prop) -> ('a5 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('h1 : ['a1 -> 'a2]) -> ('h2 : ['a2 -> 'a3]) -> ('h3 : ['a3 -> 'a4]) -> ('h4 : ['a4 -> 'a5]) -> ('base : 'a0) -> 'a5]",
++    "[('a0 : prop) -> ('a1 : prop) -> ('a2 : prop) -> ('a3 : prop) -> ('a4 : prop) -> ('a5 : prop) -> ('a6 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('h1 : ['a1 -> 'a2]) -> ('h2 : ['a2 -> 'a3]) -> ('h3 : ['a3 -> 'a4]) -> ('h4 : ['a4 -> 'a5]) -> ('h5 : ['a5 -> 'a6]) -> ('base : 'a0) -> 'a6]",
++    "[('a0 : prop) -> ('a1 : prop) -> ('a2 : prop) -> ('a3 : prop) -> ('a4 : prop) -> ('a5 : prop) -> ('a6 : prop) -> ('a7 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('h1 : ['a1 -> 'a2]) -> ('h2 : ['a2 -> 'a3]) -> ('h3 : ['a3 -> 'a4]) -> ('h4 : ['a4 -> 'a5]) -> ('h5 : ['a5 -> 'a6]) -> ('h6 : ['a6 -> 'a7]) -> ('base : 'a0) -> 'a7]",
++    "[('a0 : prop) -> ('a1 : prop) -> ('a2 : prop) -> ('a3 : prop) -> ('a4 : prop) -> ('a5 : prop) -> ('a6 : prop) -> ('a7 : prop) -> ('a8 : prop) -> ('h0 : ['a0 -> 'a1]) -> ('h1 : ['a1 -> 'a2]) -> ('h2 : ['a2 -> 'a3]) -> ('h3 : ['a3 -> 'a4]) -> ('h4 : ['a4 -> 'a5]) -> ('h5 : ['a5 -> 'a6]) -> ('h6 : ['a6 -> 'a7]) -> ('h7 : ['a7 -> 'a8]) -> ('base : 'a0) -> 'a8]",
++)
++
++APPLY_PREFIX = 'a '
++CONSTRUCT_PREFIX = 'c '
++
++
++def _annotation_text(theory_text: str, premise: str):
++    for raw in theory_text.splitlines():
++        line = raw.strip()
++        if line.startswith('#backward ') or line.startswith('#forward '):
++            rest = line.split(' ', 1)[1]
++            name = rest.split(' ', 1)[0].rstrip('.')
++            if name == premise:
++                return line
++    return ANNOTATION_ABSENT
++
++
++def _directions(actions, premise: str):
++    found = []
++    apply_serial = APPLY_PREFIX + premise
++    construct_serial = CONSTRUCT_PREFIX + premise
++    serials = [str(action) for action in actions]
++    if apply_serial in serials:
++        found.append(DIRECTION_BACKWARD)
++    if construct_serial in serials:
++        found.append(DIRECTION_FORWARD)
++    return tuple(found), serials
++
++
++def _arrow_argument_name(edge_index: int, base_name: str) -> str:
++    if edge_index == 0:
++        return base_name
++    if edge_index == 1:
++        return 'p'
++    return 'p' + str(edge_index - 2)
++
++
++class TestStageBTheoryEnumerability(unittest.TestCase):
++    def test_theory_bytes_match_pin(self):
++        import hashlib
++        raw = THEORY_PATH.read_bytes()
++        self.assertEqual(hashlib.sha256(raw).hexdigest(), THEORY_SHA256)
++
++    def _execute_unique_intro(self, state, context):
++        matches = [action for action in state.actions() if str(action) == 'intro.']
++        if len(matches) != 1:
++            self.fail(
++                'PREMISE_ENUMERABILITY_FAILED: expected exactly one intro. at '
++                + context
++                + ' found '
++                + str(len(matches))
++            )
++        children = state.execute_action(matches[0])
++        self.assertEqual(len(children), 1, context)
++        return children[0]
++
++    def _intro_until_stable(self, state, context):
++        prefix = 0
++        while True:
++            serials = [str(action) for action in state.actions()]
++            if 'intro.' not in serials:
++                return state
++            state = self._execute_unique_intro(state, context + ' prefix=' + str(prefix))
++            prefix += 1
++
++    def test_nine_premises_annotation_direction_and_witness(self):
++        theory_text = THEORY_PATH.read_text(encoding='utf-8')
++        table = []
++        for premise in THEORY_PREMISES:
++            annotation = _annotation_text(theory_text, premise)
++            goal = WITNESS_GOALS[premise]
++            state = self._intro_until_stable(
++                peano.PyProofState(theory_text, list(THEORY_PREMISES), goal),
++                premise,
++            )
++            directions, serials = _directions(state.actions(), premise)
++            required = REQUIRED_DIRECTIONS[premise]
++            enumerable = required in directions
++            if not enumerable:
++                self.fail(
++                    'PREMISE_ENUMERABILITY_FAILED: '
++                    + premise
++                    + ' missing '
++                    + required
++                    + ' in '
++                    + repr(serials)
++                )
++            table.append({
++                'premise': premise,
++                'annotation_text_or_ABSENT': annotation,
++                'enumerable': True,
++                'enumerable_directions': directions,
++                'required_direction': required,
++                'witness_state': goal,
++            })
++        self.assertEqual(tuple(table), FROZEN_PREMISE_TABLE)
++        self.assertEqual(len(table), 9)
++        self.assertEqual([row['premise'] for row in table], list(THEORY_PREMISES))
++
++    def test_ambient_arrow_chains_depth_1_to_8(self):
++        theory_text = THEORY_PATH.read_text(encoding='utf-8')
++        self.assertEqual(len(AMBIENT_ARROW_CHAINS), 8)
++        for depth, statement in enumerate(AMBIENT_ARROW_CHAINS, start=1):
++            with self.subTest(depth=depth):
++                self._check_ambient_arrow_chain(theory_text, depth, statement)
++
++    def _check_ambient_arrow_chain(self, theory_text, depth, statement):
++        state = peano.PyProofState(theory_text, list(THEORY_PREMISES), statement)
++        intro_steps = 2 * depth + 2
++        for step in range(intro_steps):
++            context = 'DAG_ENUMERABILITY_FAILED: intro. at depth %s step %s' % (
++                depth, step)
++            matches = [
++                action for action in state.actions() if str(action) == 'intro.'
++            ]
++            if len(matches) != 1:
++                self.fail(context + ' found ' + str(len(matches)))
++            children = state.execute_action(matches[0])
++            if len(children) != 1:
++                self.fail(context + ' children ' + str(len(children)))
++            state = children[0]
++        remaining_intros = [
++            action for action in state.actions() if str(action) == 'intro.'
++        ]
++        self.assertEqual(remaining_intros, [], 'extra intro. after declarations')
++        names = state.names_in_context()[1:]
++        edge_names = names[depth + 1:depth + 1 + depth]
++        base_name = names[depth + 1 + depth]
++        self.assertEqual(len(names), 2 * depth + 2)
++        self.assertEqual(len(edge_names), depth)
++        self.assertEqual(base_name, names[2 * depth + 1])
++        for edge_index, edge_name in enumerate(edge_names):
++            construct_serial = CONSTRUCT_PREFIX + edge_name
++            constructs = [
++                action for action in state.actions()
++                if str(action) == construct_serial
++            ]
++            if len(constructs) != 1:
++                self.fail(
++                    'DAG_ENUMERABILITY_FAILED: expected exactly one '
++                    + construct_serial
++                    + ' at depth '
++                    + str(depth)
++                    + ' edge '
++                    + str(edge_index)
++                    + ' found '
++                    + str(len(constructs))
++                )
++            children = state.execute_action(constructs[0])
++            if len(children) != 1:
++                self.fail(
++                    'DAG_ENUMERABILITY_FAILED: construct children at depth '
++                    + str(depth)
++                    + ' edge '
++                    + str(edge_index)
++                )
++            state = children[0]
++            argument = _arrow_argument_name(edge_index, base_name)
++            selection_serial = '=> (' + edge_name + ' ' + argument + ').'
++            selections = [
++                action for action in state.actions()
++                if str(action) == selection_serial
++            ]
++            if len(selections) != 1:
++                self.fail(
++                    'DAG_ENUMERABILITY_FAILED: expected exactly one '
++                    + selection_serial
++                    + ' at depth '
++                    + str(depth)
++                    + ' edge '
++                    + str(edge_index)
++                    + ' found '
++                    + str(len(selections))
++                    + ' in '
++                    + repr([str(action) for action in state.actions()])
++                )
++            is_final = edge_index == depth - 1
++            if is_final:
++                continue
++            children = state.execute_action(selections[0])
++            if len(children) != 1:
++                self.fail(
++                    'DAG_ENUMERABILITY_FAILED: selection children at depth '
++                    + str(depth)
++                    + ' edge '
++                    + str(edge_index)
++                )
++            state = children[0]
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/learning/theories/propositional-logic-intuitionistic-fragment.p b/learning/theories/propositional-logic-intuitionistic-fragment.p
+new file mode 100644
+index 0000000..0f4f63d
+--- /dev/null
++++ b/learning/theories/propositional-logic-intuitionistic-fragment.p
+@@ -0,0 +1,34 @@
++prop : type.
++
++false : prop.
++
++not : [prop -> prop].
++and : [prop -> prop -> prop].
++or : [prop -> prop -> prop].
++
++#backward and_i.
++and_i : [('P : prop) -> ('Q : prop) -> 'P -> 'Q -> (and 'P 'Q)].
++
++#forward and_el ('_ : (and 'P 'Q)).
++and_el : [('P : prop) -> ('Q : prop) -> (and 'P 'Q) -> 'P].
++
++#forward and_er ('_ : (and 'P 'Q)).
++and_er : [('P : prop) -> ('Q : prop) -> (and 'P 'Q) -> 'Q].
++
++#backward or_il.
++or_il : [('P : prop) -> ('Q : prop) -> 'P -> (or 'P 'Q)].
++
++#backward or_ir.
++or_ir : [('P : prop) -> ('Q : prop) -> 'Q -> (or 'P 'Q)].
++
++#backward or_e infer infer infer infer subgoal subgoal.
++or_e : [('P : prop) -> ('Q : prop) -> ('R : prop) ->
++        (or 'P 'Q) -> ['P -> 'R] -> ['Q -> 'R] -> 'R].
++
++#backward not_i.
++not_i : [('P : prop) -> ['P -> false] -> (not 'P)].
++
++not_e : [('P : prop) -> (not 'P) -> 'P -> false].
++
++#backward exfalso.
++exfalso : [false -> ('P : prop) -> 'P].
