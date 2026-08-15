@@ -16,6 +16,10 @@ Full compiler-family coverage, the eight-root Stage-B route, roots, frame
 selection, learner/selector work, MCTS/search, disposable work and scientific
 execution remain unauthorized.
 
-The only current task is the paper-only author request in
-`PROMPT_STAGE_R_L4_MINIMUM_PAPER_CONTRACT_AUTHOR_V1.md`. Its response must stop
-for a bounded driver paper audit; it authorizes no implementation.
+The initial paper-author request is
+`PROMPT_STAGE_R_L4_MINIMUM_PAPER_CONTRACT_AUTHOR_V1.md`; its V1 response is
+preserved as `STAGE_R_L4_MINIMUM_COMPILE_REPLAY_EXECUTABLE_ANNEX_V1_DRAFT.md`.
+The bounded driver audit found one critical algorithmic cluster and six major
+closed repairs. The only current task is the single paper-only repair in
+`PROMPT_STAGE_R_L4_MINIMUM_ANNEX_V1_TARGETED_PAPER_REPAIR_OPUS5.md`. It
+authorizes no implementation or execution.
