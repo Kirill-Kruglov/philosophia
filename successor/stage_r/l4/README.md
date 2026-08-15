@@ -15,3 +15,7 @@ scientific evidence.
 Full compiler-family coverage, the eight-root Stage-B route, roots, frame
 selection, learner/selector work, MCTS/search, disposable work and scientific
 execution remain unauthorized.
+
+The only current task is the paper-only author request in
+`PROMPT_STAGE_R_L4_MINIMUM_PAPER_CONTRACT_AUTHOR_V1.md`. Its response must stop
+for a bounded driver paper audit; it authorizes no implementation.
