@@ -269,6 +269,12 @@ patch or author-choice questionnaire. Use exact algorithms, schemas, cause
 precedence, bounds and proofs. Cite governing sections precisely. Make every
 implementation-affecting choice inside the annex.
 
+Include a final focused-time record for this paper-author pass: start/end if
+available, focused hours used rounded conservatively upward to the next 0.25
+hour, cumulative L4 focused hours consumed and hours remaining from 24. User
+reading/decision latency is not focused time. An omitted time record is a paper
+defect, not permission for unmetered review.
+
 If and only if the contract is fully specified, internally consistent and
 implementable from the pinned surfaces without execution-time design choices,
 end with:
