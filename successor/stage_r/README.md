@@ -1,6 +1,6 @@
 # Stage R — bounded reciprocal-selection route
 
-Status: `MINIMUM_L4_ROUTE_CLOSED_RETURN_TO_IDEA_GATE`
+Status: `STAGE_R_ACTIVE_SUBSTRATE_SEARCH_STOPPED`
 
 The accepted route is the thin MINIMO reciprocal slice described by
 `successor/dev/PHASE2_POST_REVIEW_DRIVER_DECISION_19.md`. Stage H is demoted from
@@ -63,3 +63,14 @@ confirmation is in
 `l4/STAGE_R_L4_MINIMUM_ANNEX_V1_1_DRIVER_BOUNDED_CONFIRMATION.md`. Per the
 contract and activation, the MINIMO Stage-R route has returned to `IDEA_GATE`;
 unused L4 hours do not authorize another repair or a substitute world.
+
+The bounded return gate is preserved in `idea_gate/`. Its three complementary
+tasks considered one purpose-built compositional substitute, E2. Paper
+identifiability passed conditionally and the exact reciprocal interaction
+retained narrow decision value, but the cheapest valid joint observation was
+estimated at 24–80 focused hours and coincided with constructing the minimum
+experiment, above the prospectively fixed eight-hour pre-harness ceiling. The
+single driver synthesis is
+`idea_gate/STAGE_R_E2_IDEA_GATE_DRIVER_SYNTHESIS_V1.md`. E2 therefore stopped
+before build. Active Stage-R substrate search is now stopped; programme claim E
+remains open, and no engineering or scientific execution is authorized.
