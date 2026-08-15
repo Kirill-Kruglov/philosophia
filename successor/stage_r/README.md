@@ -1,6 +1,6 @@
 # Stage R — bounded reciprocal-selection route
 
-Status: `CONTRACT_V2_1_ACCEPTED_L3_PROJECTION_ONLY_AUTHORIZED`
+Status: `CONTRACT_V2_1_ACCEPTED_MINIMUM_L4_BOUNDARY_AUTHORIZED`
 
 The accepted route is the thin MINIMO reciprocal slice described by
 `successor/dev/PHASE2_POST_REVIEW_DRIVER_DECISION_19.md`. Stage H is demoted from
@@ -44,12 +44,13 @@ pass remains. The only next decision is explicit author acceptance of the exact
 contract and activation of projection-only L3. That decision is now recorded
 below.
 
-The author supplied the exact acceptance token on 2026-08-15. Its scope and
-remaining prohibitions are preserved in
-`STAGE_R_L3_PROJECTION_ONLY_ACTIVATION_V1.md`. Only the minimum projection-only
-L3 paper closure and code gate are now authorized; L4 and every execution stage
-remain unauthorized.
+The author supplied the L3 acceptance token on 2026-08-15. Its scope is
+preserved in `STAGE_R_L3_PROJECTION_ONLY_ACTIVATION_V1.md`; the accepted result
+is closed by `l3/STAGE_R_L3_PROJECTION_ONLY_CLOSURE_V1.md`.
 
-No file in this directory authorizes implementation beyond projection-only L3,
-fixture or frame generation, root minting, selector execution, learner
-training, L4 work or a scientific run.
+The author then supplied the exact minimum-L4 activation token. Its scope and
+remaining prohibitions are preserved in
+`STAGE_R_L4_MINIMUM_BOUNDARY_ACTIVATION_V1.md`. Only the serial route “standalone
+minimum L4 paper closure, then its bounded semantic compile/fresh-replay gate”
+is authorized. Roots, fixture or frame selection, learner/selector execution,
+disposable work and scientific execution remain unauthorized.
