@@ -1,6 +1,6 @@
 # Stage R — bounded reciprocal-selection route
 
-Status: `CONTRACT_V2_1_ACCEPTED_MINIMUM_L4_BOUNDARY_AUTHORIZED`
+Status: `MINIMUM_L4_ROUTE_CLOSED_RETURN_TO_IDEA_GATE`
 
 The accepted route is the thin MINIMO reciprocal slice described by
 `successor/dev/PHASE2_POST_REVIEW_DRIVER_DECISION_19.md`. Stage H is demoted from
@@ -54,3 +54,12 @@ remaining prohibitions are preserved in
 minimum L4 paper closure, then its bounded semantic compile/fresh-replay gate”
 is authorized. Roots, fixture or frame selection, learner/selector execution,
 disposable work and scientific execution remain unauthorized.
+
+The bounded L4 paper topology did not produce an implementable annex. V1.1's
+claimed `or_e` blocker was refuted from the pinned Rust `define_subterms`
+semantics, while its replacement semantic descriptor still cannot distinguish
+outer rule actions without an unprovided two-step macro effect. The exact
+confirmation is in
+`l4/STAGE_R_L4_MINIMUM_ANNEX_V1_1_DRIVER_BOUNDED_CONFIRMATION.md`. Per the
+contract and activation, the MINIMO Stage-R route has returned to `IDEA_GATE`;
+unused L4 hours do not authorize another repair or a substitute world.
