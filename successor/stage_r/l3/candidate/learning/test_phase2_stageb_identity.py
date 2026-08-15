@@ -1,0 +1,1294 @@
+#!/usr/bin/env python3
+"""Stage-R L3 projection-only code gate. Frozen fixtures only, no scan."""
+
+from __future__ import annotations
+
+import ast
+import copy
+import hashlib
+import itertools
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+LEARNING_DIR = Path(__file__).resolve().parent
+if str(LEARNING_DIR) not in sys.path:
+    sys.path.insert(0, str(LEARNING_DIR))
+
+from phase2_stageb_canonical import canonical_bytes, canonical_dumps, canonical_hash
+from phase2_stageb_checker import check_plan
+from phase2_stageb_generator import generate_draw
+from phase2_stageb_identity import (
+    BIJECTION_BOUND,
+    CAUSE_SEQUENT_REDERIVATION_MISMATCH,
+    FORMULA_RECURSION_BOUND,
+    L3_FAILURE_KEYS,
+    L3_INVARIANT_CODES,
+    L3_MISMATCH_SUBCAUSES,
+    L3_SCHEMA_NAME,
+    L3_SUCCESS_KEYS,
+    PROOF_RECURSION_BOUND,
+    PUBLIC_ITEM_KEYS,
+    PUBLIC_ITEM_SCHEMA_NAME,
+    L3InvariantError,
+    _bijections,
+    _rule_skeleton,
+    canonical_theorem,
+    identify,
+    public_projection,
+    rederive_theorem,
+    rule_skeleton,
+    skeleton_identity,
+    theorem_identity,
+)
+from phase2_stageb_render import render_sequent
+from phase2_stageb_schema import PROOF_CHILD_FIELDS, THEORY_PREMISES, THEORY_SHA256
+from test_phase2_stageb_checker import (
+    VALID_PLAN_BUILDERS,
+    and_,
+    and_elim_left,
+    and_elim_right,
+    and_intro,
+    assume,
+    atom,
+    exfalso,
+    expectation_for,
+    false_,
+    hyp,
+    not_,
+    not_elim,
+    not_intro,
+    or_,
+    or_elim,
+    or_intro_left,
+    or_intro_right,
+)
+
+# Governing pins. The two artifacts this gate consumes are hash-verified from
+# disk; the remaining three are the recorded documentary pins of the annex.
+CONTRACT_SHA256 = (
+    '1c3cec3aa6bd7094e2d37b062a8f349df5b226e91bbdc4a7b21e80fb785172f3'
+)
+ACTIVATION_SHA256 = (
+    '2539786a2b3954408a8fb98f0d8238636c0644900b56c74a2a6eec436da017b2'
+)
+CHARTER_SHA256 = (
+    '703bf39cfe8f875f9be3781659a7365c1bc99c42f7523e43fef2c0a2c47b8311'
+)
+SOURCE_V3_SHA256 = (
+    'a1f907ad6665b7c96d91496c5a91d32f0f0cae63da48b6b26da6b292d48f528d'
+)
+L2_CODE_GATE_SHA256 = (
+    '8961b5a97ee0972d83a071e1b1c82869a9841f5f01c45add12a88dbfee1010f0'
+)
+
+IN_TREE_SOURCE_SHA256 = {
+    'phase2_stageb_canonical.py':
+        '4f1c2490801a05236caa1a10193eeb5c7f8e03ba70a0263e6e12374d304fe7a0',
+    'phase2_stageb_causes.py':
+        '574a81b75e98fbccc1f8e0344cf8fefd1ccb9e83043ac72e321d49798cb88c2e',
+    'phase2_stageb_checker.py':
+        '1cedff634a60955a05e88a437f8100b70783b1900e523385a4da48e822673d2b',
+    'phase2_stageb_render.py':
+        'c56073d0c4718aa5a95c48e5c58522937a935ca637d68687770126564a6d6621',
+    'phase2_stageb_schema.py':
+        '00df17136fe8acfe53f9a56a1ff9d56c39c2c6a3cf7121dc722cf3978279e4a7',
+    'phase2_stageb_generator.py':
+        'de9b05d6732dfe07c5303439a1fd533f9d6053a62a04480db0659075b16d2a34',
+    'test_phase2_stageb_checker.py':
+        'f107d87c687efa119a92d12cce93f23a9de51a863b0f68ab71acfc6f065dc03c',
+    'theories/propositional-logic-intuitionistic-fragment.p':
+        '2056deaf9c12a81dcb047e60154e8a473ffe235b5e48bb9433eb1d9f70afb507',
+}
+
+RECOVERY_DIR_ENV = 'PHILOSOPHIA_RECOVERY_DIR'
+DEFAULT_RECOVERY_DIR = (
+    '/home/master/llm_projects/philosophia/successor/recovery/'
+    'phase2_stage_b_20260815'
+)
+V3_BASENAME = 'accepted_l2/PHASE2_STAGE_B_L2_RAW_FIXTURE_EXCLUSIONS_V3.json'
+L2_GATE_BASENAME = 'accepted_l2/PHASE2_STAGE_B_L2_CODE_GATE_V1.json'
+
+ARTIFACT_SCHEMA_NAME = 'philosophia.stager.l3-code-gate-exclusions.v1'
+ARTIFACT_KEYS = (
+    'schema', 'contract_sha256', 'activation_sha256', 'charter_sha256',
+    'source_v3_sha256', 'l2_code_gate_sha256', 'identity_domain', 'source_v3',
+    'valid_plan_identities', 'raw_sequent_alias_groups',
+)
+IDENTITY_DOMAIN = 'L1_CHECKED_ND_PLAN_WITH_3_TO_6_DECLARED_ATOMS'
+VALID_PLAN_IDENTITY_KEYS = (
+    'fixture_name', 'source', 'raw_plan_sha256', 'raw_theorem_sha256',
+    'theorem_identity_sha256', 'theorem_name', 'public_projection_sha256',
+    'public_item', 'skeleton_identity_sha256',
+)
+ALIAS_GROUP_KEYS = (
+    'raw_ascii_sequent_sha256', 'canonical_json_string_sha256', 'members',
+)
+SOURCE_L1 = 'L1_HAND_FIXTURE'
+SOURCE_L2 = 'L2_CODE_GATE_FIXTURE'
+
+PRODUCTION_PATH = LEARNING_DIR / 'phase2_stageb_identity.py'
+ALLOWED_IMPORT_MODULES = frozenset((
+    '__future__', 'itertools', 'typing', 'phase2_stageb_canonical',
+    'phase2_stageb_render', 'phase2_stageb_schema',
+))
+FORBIDDEN_CALL_NAMES = frozenset((
+    'open', 'eval', 'exec', 'compile', 'input', '__import__', 'globals',
+    'locals', 'setattr', 'delattr', 'vars', 'print',
+))
+
+
+def _recovery_dir() -> Path:
+    return Path(os.environ.get(RECOVERY_DIR_ENV, DEFAULT_RECOVERY_DIR))
+
+
+def _file_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _load_governing() -> tuple:
+    root = _recovery_dir()
+    v3_path = root / V3_BASENAME
+    gate_path = root / L2_GATE_BASENAME
+    if _file_sha256(v3_path) != SOURCE_V3_SHA256:
+        raise AssertionError('V3 exclusion ledger hash mismatch')
+    if _file_sha256(gate_path) != L2_CODE_GATE_SHA256:
+        raise AssertionError('L2 code-gate JSON hash mismatch')
+    return (
+        json.loads(v3_path.read_text(encoding='ascii')),
+        json.loads(gate_path.read_text(encoding='ascii')),
+    )
+
+
+def _build_fixtures() -> list:
+    """Five L1 builders plus exactly the six frozen L2 rows. No scan."""
+    v3, gate = _load_governing()
+    raw_by_name = {
+        row['fixture_name']: row for row in v3['valid_plan_fixtures']
+    }
+    items = []
+    for name, builder in VALID_PLAN_BUILDERS:
+        plan = builder()
+        items.append((name, SOURCE_L1, plan, expectation_for(plan['proof'])))
+    for row in gate['selected_rows']:
+        result = generate_draw(bytes.fromhex(row['key_hex']), row['draw_index'])
+        if canonical_hash(result) != row['canonical_result_sha256']:
+            raise AssertionError('frozen L2 row result drift')
+        items.append((
+            row['fixture_name'], SOURCE_L2, result['plan'], result['expectation'],
+        ))
+    records = []
+    for name, source, plan, expectation in items:
+        checked = check_plan(plan, expectation)
+        if not checked['ok']:
+            raise AssertionError('fixture no longer L1-accepted')
+        pinned = raw_by_name[name]
+        if canonical_hash(plan) != pinned['raw_plan_sha256']:
+            raise AssertionError('V3 raw plan hash mismatch')
+        if canonical_hash(checked['theorem']) != pinned['raw_theorem_sha256']:
+            raise AssertionError('V3 raw theorem hash mismatch')
+        records.append({
+            'name': name,
+            'source': source,
+            'plan': plan,
+            'expectation': expectation,
+            'checked': checked,
+            'pinned': pinned,
+        })
+    records.sort(key=lambda record: record['name'])
+    return records
+
+
+_FIXTURE_CACHE: list = []
+
+
+def fixtures() -> list:
+    if not _FIXTURE_CACHE:
+        _FIXTURE_CACHE.extend(_build_fixtures())
+    return _FIXTURE_CACHE
+
+
+def alias_groups(v3: dict) -> list:
+    buckets: dict = {}
+    for group in ('enumerability_fixtures', 'renderer_only_fixtures'):
+        for row in v3[group]:
+            key = (
+                row['raw_ascii_sequent_sha256'],
+                row['canonical_json_string_sha256'],
+            )
+            buckets.setdefault(key, []).append(row['fixture_name'])
+    rows = []
+    for key in sorted(buckets):
+        members = sorted(buckets[key])
+        if len(members) > 1:
+            rows.append({
+                'raw_ascii_sequent_sha256': key[0],
+                'canonical_json_string_sha256': key[1],
+                'members': members,
+            })
+    return rows
+
+
+def build_l3_code_gate_exclusions() -> dict:
+    v3, _gate = _load_governing()
+    identities = []
+    for record in fixtures():
+        result = identify(record['plan'], record['checked']['theorem'])
+        if not result['ok']:
+            raise AssertionError('excluded fixture failed L3 identification')
+        identities.append({
+            'fixture_name': record['name'],
+            'source': record['source'],
+            'raw_plan_sha256': record['pinned']['raw_plan_sha256'],
+            'raw_theorem_sha256': record['pinned']['raw_theorem_sha256'],
+            'theorem_identity_sha256': result['theorem_identity'],
+            'theorem_name': result['theorem_name'],
+            'public_projection_sha256': canonical_hash(result['public_item']),
+            'public_item': result['public_item'],
+            'skeleton_identity_sha256': result['skeleton_identity'],
+        })
+    identities.sort(key=lambda row: row['fixture_name'])
+    return {
+        'schema': ARTIFACT_SCHEMA_NAME,
+        'contract_sha256': CONTRACT_SHA256,
+        'activation_sha256': ACTIVATION_SHA256,
+        'charter_sha256': CHARTER_SHA256,
+        'source_v3_sha256': SOURCE_V3_SHA256,
+        'l2_code_gate_sha256': L2_CODE_GATE_SHA256,
+        'identity_domain': IDENTITY_DOMAIN,
+        'source_v3': v3,
+        'valid_plan_identities': identities,
+        'raw_sequent_alias_groups': alias_groups(v3),
+    }
+
+
+def write_l3_code_gate_exclusions(output_path) -> str:
+    """Test-only durable writer. Canonical JSON plus exactly one newline."""
+    target = Path(output_path)
+    payload = canonical_dumps(build_l3_code_gate_exclusions()) + '\n'
+    target.write_text(payload, encoding='ascii')
+    return hashlib.sha256(payload.encode('ascii')).hexdigest()
+
+
+def substitute_formula(formula, renaming):
+    kind = formula['kind']
+    if kind == 'ATOM':
+        return {'kind': 'ATOM', 'name': renaming[formula['name']]}
+    if kind == 'FALSE':
+        return {'kind': 'FALSE'}
+    if kind == 'NOT':
+        return {'kind': 'NOT', 'arg': substitute_formula(formula['arg'], renaming)}
+    return {
+        'kind': kind,
+        'left': substitute_formula(formula['left'], renaming),
+        'right': substitute_formula(formula['right'], renaming),
+    }
+
+
+def substitute_node(node, renaming):
+    out = {
+        'kind': node['kind'],
+        'conclusion': substitute_formula(node['conclusion'], renaming),
+    }
+    if node['kind'] == 'ASSUME':
+        out['hypothesis_id'] = node['hypothesis_id']
+        return out
+    if node['kind'] == 'OR_ELIM':
+        for key in ('left_assumption', 'right_assumption'):
+            out[key] = {
+                'id': node[key]['id'],
+                'formula': substitute_formula(node[key]['formula'], renaming),
+            }
+    if node['kind'] == 'NOT_INTRO':
+        out['assumption'] = {
+            'id': node['assumption']['id'],
+            'formula': substitute_formula(
+                node['assumption']['formula'], renaming),
+        }
+    for field in PROOF_CHILD_FIELDS[node['kind']]:
+        out[field] = substitute_node(node[field], renaming)
+    return out
+
+
+def substitute_plan(plan, renaming):
+    return {
+        'schema': plan['schema'],
+        'atoms': sorted(renaming[name] for name in plan['atoms']),
+        'hypotheses': [
+            {'id': h['id'], 'formula': substitute_formula(h['formula'], renaming)}
+            for h in plan['hypotheses']
+        ],
+        'goal': substitute_formula(plan['goal'], renaming),
+        'proof': substitute_node(plan['proof'], renaming),
+    }
+
+
+def rename_global_ids(plan, mapping):
+    out = copy.deepcopy(plan)
+
+    def walk(node):
+        if node['kind'] == 'ASSUME':
+            hid = node['hypothesis_id']
+            if hid in mapping:
+                node['hypothesis_id'] = mapping[hid]
+            return
+        for field in PROOF_CHILD_FIELDS[node['kind']]:
+            walk(node[field])
+
+    walk(out['proof'])
+    for hypothesis in out['hypotheses']:
+        hypothesis['id'] = mapping.get(hypothesis['id'], hypothesis['id'])
+    return out
+
+
+def rename_local_ids(plan, offset):
+    out = copy.deepcopy(plan)
+
+    def shift(ident):
+        return 'l' + str(int(ident[1:]) + offset)
+
+    def walk(node):
+        kind = node['kind']
+        if kind == 'ASSUME':
+            hid = node['hypothesis_id']
+            if hid.startswith('l'):
+                node['hypothesis_id'] = shift(hid)
+            return
+        if kind == 'OR_ELIM':
+            for key in ('left_assumption', 'right_assumption'):
+                node[key]['id'] = shift(node[key]['id'])
+        if kind == 'NOT_INTRO':
+            node['assumption']['id'] = shift(node['assumption']['id'])
+        for field in PROOF_CHILD_FIELDS[kind]:
+            walk(node[field])
+
+    walk(out['proof'])
+    return out
+
+
+def mutable_ids(value, acc):
+    if type(value) is dict:
+        acc.append(id(value))
+        for item in value.values():
+            mutable_ids(item, acc)
+        return acc
+    if type(value) is list:
+        acc.append(id(value))
+        for item in value:
+            mutable_ids(item, acc)
+    return acc
+
+
+def deep_not(depth):
+    formula = atom('a0')
+    for _ in range(depth):
+        formula = {'kind': 'NOT', 'arg': formula}
+    return formula
+
+
+def canonical_three_atom_theorem():
+    return {
+        'atoms': ['a0', 'a1', 'a2'],
+        'hypotheses': [and_(atom('a0'), atom('a1')), or_(atom('a1'), atom('a2'))],
+        'goal': and_(atom('a2'), atom('a0')),
+    }
+
+
+class GoverningPinsTest(unittest.TestCase):
+
+    def test_in_tree_accepted_sources_unchanged(self):
+        for relative, expected in sorted(IN_TREE_SOURCE_SHA256.items()):
+            path = LEARNING_DIR / relative
+            self.assertTrue(path.is_file(), relative)
+            self.assertEqual(_file_sha256(path), expected, relative)
+
+    def test_consumed_governing_artifacts_hash(self):
+        root = _recovery_dir()
+        self.assertEqual(
+            _file_sha256(root / V3_BASENAME), SOURCE_V3_SHA256)
+        self.assertEqual(
+            _file_sha256(root / L2_GATE_BASENAME), L2_CODE_GATE_SHA256)
+
+    def test_recorded_documentary_pins_are_64_hex(self):
+        for pin in (CONTRACT_SHA256, ACTIVATION_SHA256, CHARTER_SHA256):
+            self.assertEqual(len(pin), 64)
+            self.assertEqual(pin, pin.lower())
+            int(pin, 16)
+
+    def test_gate_runs_inside_the_tree_under_test(self):
+        self.assertTrue((LEARNING_DIR / 'phase2_stageb_identity.py').is_file())
+        self.assertEqual(PRODUCTION_PATH.parent, LEARNING_DIR)
+        self.assertNotIn('candidate', PRODUCTION_PATH.parts)
+
+
+class FrozenFixtureTest(unittest.TestCase):
+
+    def test_exactly_eleven_excluded_valid_plans(self):
+        records = fixtures()
+        self.assertEqual(len(records), 11)
+        names = [record['name'] for record in records]
+        self.assertEqual(names, sorted(names))
+        self.assertEqual(
+            len([r for r in records if r['source'] == SOURCE_L1]), 5)
+        self.assertEqual(
+            len([r for r in records if r['source'] == SOURCE_L2]), 6)
+
+    def test_only_six_literal_rows_regenerated(self):
+        _v3, gate = _load_governing()
+        rows = gate['selected_rows']
+        self.assertEqual(len(rows), 6)
+        for row in rows:
+            self.assertIn(row['key_hex'], gate['fixture_key_hex'])
+            result = generate_draw(
+                bytes.fromhex(row['key_hex']), row['draw_index'])
+            self.assertEqual(
+                canonical_hash(result), row['canonical_result_sha256'])
+
+    def test_selector_scan_helper_is_never_referenced(self):
+        # Assembled from parts so this gate's own bytes stay clean.
+        banned = b'select_l2_' + b'code_gate_' + b'rows'
+        self.assertNotIn(banned, Path(__file__).read_bytes())
+        self.assertNotIn(banned, PRODUCTION_PATH.read_bytes())
+        self.assertNotIn(banned.decode('ascii'), globals())
+        self.assertNotIn(banned.decode('ascii'), dir(sys.modules[__name__]))
+
+    def test_v3_raw_hashes_reverified_before_identity(self):
+        for record in fixtures():
+            self.assertEqual(
+                canonical_hash(record['plan']),
+                record['pinned']['raw_plan_sha256'])
+            self.assertEqual(
+                canonical_hash(record['checked']['theorem']),
+                record['pinned']['raw_theorem_sha256'])
+
+    def test_every_fixture_identifies(self):
+        for record in fixtures():
+            result = identify(record['plan'], record['checked']['theorem'])
+            self.assertTrue(result['ok'], record['name'])
+            self.assertEqual(tuple(result.keys()), L3_SUCCESS_KEYS)
+            self.assertEqual(result['schema'], L3_SCHEMA_NAME)
+            self.assertIsNone(result['cause'])
+            self.assertEqual(len(result['theorem_identity']), 64)
+            self.assertEqual(
+                result['theorem_name'], 't_' + result['theorem_identity'])
+            self.assertEqual(len(result['skeleton_identity']), 64)
+
+
+class AtomBijectionInvarianceTest(unittest.TestCase):
+
+    def test_exhaustive_bijection_invariance(self):
+        total = 0
+        for record in fixtures():
+            plan = record['plan']
+            expectation = record['expectation']
+            base = identify(plan, record['checked']['theorem'])
+            count = len(plan['atoms'])
+            source = list(plan['atoms'])
+            for permutation in itertools.permutations(range(count)):
+                renaming = {
+                    source[index]: 'a' + str(permutation[index])
+                    for index in range(count)
+                }
+                moved = substitute_plan(plan, renaming)
+                checked = check_plan(moved, expectation)
+                self.assertTrue(checked['ok'], (record['name'], permutation))
+                result = identify(moved, checked['theorem'])
+                self.assertEqual(
+                    result['theorem_identity'], base['theorem_identity'])
+                self.assertEqual(
+                    canonical_bytes(result['public_item']),
+                    canonical_bytes(base['public_item']))
+                self.assertEqual(
+                    result['skeleton_identity'], base['skeleton_identity'])
+                total += 1
+        self.assertEqual(total, 6 * 5 + 720 + 720 + 24 + 120 + 120 + 120)
+
+    def test_canonical_theorem_is_the_byte_minimum(self):
+        for record in fixtures():
+            theorem = record['checked']['theorem']
+            canon = canonical_theorem(theorem)
+            count = len(theorem['atoms'])
+            source = list(theorem['atoms'])
+            best = None
+            for permutation in itertools.permutations(range(count)):
+                renaming = {
+                    source[index]: 'a' + str(permutation[index])
+                    for index in range(count)
+                }
+                hypotheses = [
+                    substitute_formula(formula, renaming)
+                    for formula in theorem['hypotheses']
+                ]
+                hypotheses.sort(key=canonical_bytes)
+                candidate = canonical_bytes({
+                    'atoms': ['a' + str(i) for i in range(count)],
+                    'hypotheses': hypotheses,
+                    'goal': substitute_formula(theorem['goal'], renaming),
+                })
+                if best is None or candidate < best:
+                    best = candidate
+            self.assertEqual(canonical_bytes(canon), best)
+
+
+class HypothesisAndIdentifierInvarianceTest(unittest.TestCase):
+
+    def test_global_hypothesis_permutation_is_invariant(self):
+        seen = 0
+        for record in fixtures():
+            plan = record['plan']
+            if len(plan['hypotheses']) < 2:
+                continue
+            seen += 1
+            base = identify(plan, record['checked']['theorem'])
+            reordered = copy.deepcopy(plan)
+            reordered['hypotheses'] = list(reversed(reordered['hypotheses']))
+            checked = check_plan(reordered, record['expectation'])
+            self.assertTrue(checked['ok'])
+            result = identify(reordered, checked['theorem'])
+            self.assertEqual(
+                result['theorem_identity'], base['theorem_identity'])
+            self.assertEqual(
+                canonical_bytes(result['public_item']),
+                canonical_bytes(base['public_item']))
+            self.assertEqual(
+                result['skeleton_identity'], base['skeleton_identity'])
+        self.assertGreaterEqual(seen, 5)
+
+    def test_global_id_rewrite_is_invariant(self):
+        seen = 0
+        for record in fixtures():
+            plan = record['plan']
+            ids = [hypothesis['id'] for hypothesis in plan['hypotheses']]
+            if len(ids) < 2:
+                continue
+            seen += 1
+            offset = {ident: 'h' + str(int(ident[1:]) + 50) for ident in ids}
+            renamed = rename_global_ids(plan, offset)
+            checked = check_plan(renamed, record['expectation'])
+            self.assertTrue(checked['ok'])
+            base = identify(plan, record['checked']['theorem'])
+            result = identify(renamed, checked['theorem'])
+            self.assertEqual(
+                result['theorem_identity'], base['theorem_identity'])
+            self.assertEqual(
+                canonical_bytes(result['public_item']),
+                canonical_bytes(base['public_item']))
+            self.assertEqual(
+                result['skeleton_identity'], base['skeleton_identity'])
+        self.assertGreaterEqual(seen, 5)
+
+    def test_local_id_relabel_is_invariant(self):
+        seen = 0
+        for record in fixtures():
+            plan = record['plan']
+            relabelled = rename_local_ids(plan, 40)
+            if canonical_bytes(relabelled) == canonical_bytes(plan):
+                continue
+            seen += 1
+            checked = check_plan(relabelled, record['expectation'])
+            self.assertTrue(checked['ok'], record['name'])
+            base = identify(plan, record['checked']['theorem'])
+            result = identify(relabelled, checked['theorem'])
+            self.assertEqual(
+                result['theorem_identity'], base['theorem_identity'])
+            self.assertEqual(
+                canonical_bytes(result['public_item']),
+                canonical_bytes(base['public_item']))
+            self.assertEqual(
+                result['skeleton_identity'], base['skeleton_identity'])
+        self.assertGreaterEqual(seen, 4)
+
+    def test_theorem_changing_mutations_change_identity(self):
+        record = fixtures()[0]
+        base = identify(record['plan'], record['checked']['theorem'])
+
+        extra_hypothesis = copy.deepcopy(record['checked']['theorem'])
+        extra_hypothesis['hypotheses'] = (
+            extra_hypothesis['hypotheses'] + [and_(atom('a0'), atom('a1'))])
+        self.assertNotEqual(
+            theorem_identity(extra_hypothesis), base['theorem_identity'])
+        self.assertNotEqual(
+            canonical_bytes(public_projection(
+                canonical_theorem(extra_hypothesis))),
+            canonical_bytes(base['public_item']))
+
+        other_goal = copy.deepcopy(record['checked']['theorem'])
+        other_goal['goal'] = not_(other_goal['goal'])
+        self.assertNotEqual(
+            theorem_identity(other_goal), base['theorem_identity'])
+        self.assertNotEqual(
+            canonical_bytes(public_projection(canonical_theorem(other_goal))),
+            canonical_bytes(base['public_item']))
+
+
+class RawMismatchTest(unittest.TestCase):
+
+    def setUp(self):
+        self.record = fixtures()[0]
+        self.plan = self.record['plan']
+        self.theorem = copy.deepcopy(self.record['checked']['theorem'])
+
+    def assert_mismatch(self, theorem, subcause):
+        result = identify(self.plan, theorem)
+        self.assertEqual(tuple(result.keys()), L3_FAILURE_KEYS)
+        self.assertFalse(result['ok'])
+        self.assertEqual(result['schema'], L3_SCHEMA_NAME)
+        self.assertEqual(result['cause'], CAUSE_SEQUENT_REDERIVATION_MISMATCH)
+        self.assertEqual(result['subcause'], subcause)
+        for absent in (
+                'theorem_identity', 'theorem_name', 'skeleton_identity',
+                'canonical_theorem', 'public_item'):
+            self.assertNotIn(absent, result)
+
+    def test_keyset_mismatch(self):
+        broken = copy.deepcopy(self.theorem)
+        del broken['goal']
+        self.assert_mismatch(broken, 'THEOREM_KEYSET_MISMATCH')
+        extra = copy.deepcopy(self.theorem)
+        extra['extra'] = 1
+        self.assert_mismatch(extra, 'THEOREM_KEYSET_MISMATCH')
+        self.assert_mismatch([], 'THEOREM_KEYSET_MISMATCH')
+
+    def test_atoms_mismatch(self):
+        broken = copy.deepcopy(self.theorem)
+        broken['atoms'] = list(reversed(broken['atoms']))
+        self.assert_mismatch(broken, 'THEOREM_ATOMS_MISMATCH')
+
+    def test_hypotheses_mismatch(self):
+        broken = copy.deepcopy(self.theorem)
+        broken['hypotheses'] = broken['hypotheses'] + [false_()]
+        self.assert_mismatch(broken, 'THEOREM_HYPOTHESES_MISMATCH')
+
+    def test_goal_mismatch(self):
+        broken = copy.deepcopy(self.theorem)
+        broken['goal'] = not_(broken['goal'])
+        self.assert_mismatch(broken, 'THEOREM_GOAL_MISMATCH')
+
+    def test_subcause_precedence(self):
+        every = copy.deepcopy(self.theorem)
+        every['atoms'] = list(reversed(every['atoms']))
+        every['hypotheses'] = every['hypotheses'] + [false_()]
+        every['goal'] = not_(every['goal'])
+        self.assert_mismatch(every, 'THEOREM_ATOMS_MISMATCH')
+        every['spurious'] = True
+        self.assert_mismatch(every, 'THEOREM_KEYSET_MISMATCH')
+        del every['spurious']
+        every['atoms'] = list(self.theorem['atoms'])
+        self.assert_mismatch(every, 'THEOREM_HYPOTHESES_MISMATCH')
+        every['hypotheses'] = copy.deepcopy(self.theorem['hypotheses'])
+        self.assert_mismatch(every, 'THEOREM_GOAL_MISMATCH')
+
+    def test_subcause_tuple_is_the_declared_order(self):
+        self.assertEqual(L3_MISMATCH_SUBCAUSES, (
+            'THEOREM_KEYSET_MISMATCH',
+            'THEOREM_ATOMS_MISMATCH',
+            'THEOREM_HYPOTHESES_MISMATCH',
+            'THEOREM_GOAL_MISMATCH',
+        ))
+
+    def test_rederive_reads_only_public_fields(self):
+        raw = rederive_theorem(self.plan)
+        self.assertEqual(set(raw.keys()), {'atoms', 'hypotheses', 'goal'})
+        self.assertEqual(raw['atoms'], list(self.plan['atoms']))
+        self.assertEqual(
+            canonical_bytes(raw['hypotheses']),
+            canonical_bytes([h['formula'] for h in self.plan['hypotheses']]))
+        self.assertEqual(
+            canonical_bytes(raw['goal']), canonical_bytes(self.plan['goal']))
+        mutated = copy.deepcopy(self.plan)
+        mutated['proof']['conclusion'] = false_()
+        self.assertEqual(
+            canonical_bytes(rederive_theorem(mutated)), canonical_bytes(raw))
+
+
+class SkeletonErasureAndRetentionTest(unittest.TestCase):
+
+    def chain(self, length):
+        node = assume('h0', false_())
+        for _ in range(length):
+            node = exfalso(node, false_())
+        return node
+
+    def or_elim_node(self, swap_pair=False):
+        left_ass = hyp('l0', atom('a0'))
+        right_ass = hyp('l1', atom('a1'))
+        left_branch = or_intro_right(assume('l0', atom('a0')), atom('a1'))
+        right_branch = or_intro_left(assume('l1', atom('a1')), atom('a0'))
+        major = assume('h0', or_(atom('a0'), atom('a1')))
+        conclusion = or_(atom('a1'), atom('a0'))
+        if swap_pair:
+            return or_elim(major, right_ass, right_branch, left_ass,
+                           left_branch, conclusion)
+        return or_elim(major, left_ass, left_branch, right_ass, right_branch,
+                       conclusion)
+
+    def test_formula_atom_and_conclusion_are_erased(self):
+        first = and_intro(assume('h0', atom('a0')), assume('h1', atom('a1')))
+        second = and_intro(
+            assume('h0', and_(atom('a2'), atom('a2'))),
+            assume('h1', not_(atom('a0'))))
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(first)),
+            canonical_bytes(rule_skeleton(second)))
+
+    def test_identifier_relabelling_is_erased(self):
+        first = and_intro(assume('h0', atom('a0')), assume('h9', atom('a1')))
+        second = and_intro(assume('h7', atom('a0')), assume('h2', atom('a1')))
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(first)),
+            canonical_bytes(rule_skeleton(second)))
+
+    def test_and_elim_direction_is_erased(self):
+        source = assume('h0', and_(atom('a0'), atom('a1')))
+        left = and_elim_left(source)
+        right = and_elim_right(copy.deepcopy(source))
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(left)),
+            canonical_bytes(rule_skeleton(right)))
+        self.assertEqual(rule_skeleton(left)['kind'], 'AND_ELIM')
+
+    def test_or_intro_direction_is_erased(self):
+        source = assume('h0', atom('a0'))
+        left = or_intro_left(source, atom('a1'))
+        right = or_intro_right(copy.deepcopy(source), atom('a1'))
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(left)),
+            canonical_bytes(rule_skeleton(right)))
+        self.assertEqual(rule_skeleton(left)['kind'], 'OR_INTRO')
+
+    def test_and_intro_children_exchange_is_erased(self):
+        left = assume('h0', atom('a0'))
+        right = and_elim_left(assume('h1', and_(atom('a1'), atom('a2'))))
+        first = and_intro(copy.deepcopy(left), copy.deepcopy(right))
+        second = and_intro(copy.deepcopy(right), copy.deepcopy(left))
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(first)),
+            canonical_bytes(rule_skeleton(second)))
+
+    def test_paired_or_elim_exchange_is_erased(self):
+        self.assertEqual(
+            canonical_bytes(rule_skeleton(self.or_elim_node())),
+            canonical_bytes(rule_skeleton(self.or_elim_node(swap_pair=True))))
+
+    def test_global_versus_local_leaf_is_retained(self):
+        self.assertEqual(
+            rule_skeleton(assume('h0', atom('a0')))['kind'], 'ASSUME_GLOBAL')
+        self.assertEqual(
+            rule_skeleton(assume('l0', atom('a0')))['kind'], 'ASSUME_LOCAL')
+        self.assertNotEqual(
+            canonical_bytes(rule_skeleton(assume('h0', atom('a0')))),
+            canonical_bytes(rule_skeleton(assume('l0', atom('a0')))))
+
+    def test_not_elim_operand_order_is_retained(self):
+        negative = assume('h0', not_(atom('a0')))
+        positive = and_elim_left(assume('h1', and_(atom('a0'), atom('a1'))))
+        straight = not_elim(copy.deepcopy(negative), copy.deepcopy(positive))
+        swapped = not_elim(copy.deepcopy(positive), copy.deepcopy(negative))
+        self.assertNotEqual(
+            canonical_bytes(rule_skeleton(straight)),
+            canonical_bytes(rule_skeleton(swapped)))
+
+    def test_or_elim_major_position_is_retained(self):
+        node = self.or_elim_node()
+        moved = copy.deepcopy(node)
+        moved['major'] = and_elim_left(
+            assume('h1', and_(or_(atom('a0'), atom('a1')), atom('a2'))))
+        self.assertNotEqual(
+            canonical_bytes(rule_skeleton(node)),
+            canonical_bytes(rule_skeleton(moved)))
+
+    def test_branch_shape_change_is_retained(self):
+        node = self.or_elim_node()
+        deeper = copy.deepcopy(node)
+        deeper['left_branch'] = or_intro_right(
+            and_elim_left(assume('l0', and_(atom('a0'), atom('a2')))),
+            atom('a1'))
+        self.assertNotEqual(
+            canonical_bytes(rule_skeleton(node)),
+            canonical_bytes(rule_skeleton(deeper)))
+
+    def test_chain_length_is_retained(self):
+        self.assertNotEqual(
+            canonical_bytes(rule_skeleton(self.chain(3))),
+            canonical_bytes(rule_skeleton(self.chain(4))))
+
+    def test_rule_kind_is_retained(self):
+        source = assume('h0', false_())
+        as_exfalso = exfalso(copy.deepcopy(source), atom('a0'))
+        as_not_intro = not_intro(
+            hyp('l0', atom('a0')),
+            not_elim(assume('h0', not_(atom('a0'))), assume('l0', atom('a0'))))
+        self.assertNotEqual(
+            canonical_bytes(rule_skeleton(as_exfalso)),
+            canonical_bytes(rule_skeleton(as_not_intro)))
+
+    def test_skeleton_carries_no_formula_or_identifier_text(self):
+        for record in fixtures():
+            encoded = canonical_bytes(rule_skeleton(record['plan']['proof']))
+            for banned in (b'"name"', b'"conclusion"', b'"formula"',
+                           b'"hypothesis_id"', b'ATOM', b'"a0"', b'"h0"',
+                           b'"l0"', b'AND_ELIM_LEFT', b'AND_ELIM_RIGHT',
+                           b'OR_INTRO_LEFT', b'OR_INTRO_RIGHT'):
+                self.assertNotIn(banned, encoded, record['name'])
+
+    def test_skeleton_identity_matches_direct_hash(self):
+        for record in fixtures():
+            self.assertEqual(
+                skeleton_identity(record['plan']),
+                canonical_hash(rule_skeleton(record['plan']['proof'])))
+
+
+class PublicProjectionTest(unittest.TestCase):
+
+    def test_signature_is_one_positional_argument(self):
+        import inspect
+        parameters = list(inspect.signature(public_projection).parameters)
+        self.assertEqual(len(parameters), 1)
+        with self.assertRaises(TypeError):
+            public_projection(canonical_three_atom_theorem(), 'extra')
+
+    def test_exact_keys_and_values(self):
+        for record in fixtures():
+            canon = canonical_theorem(record['checked']['theorem'])
+            item = public_projection(canon)
+            self.assertEqual(tuple(item.keys()), PUBLIC_ITEM_KEYS)
+            self.assertEqual(item['schema'], PUBLIC_ITEM_SCHEMA_NAME)
+            self.assertEqual(item['theory_sha256'], THEORY_SHA256)
+            self.assertEqual(item['premises'], list(THEORY_PREMISES))
+            self.assertEqual(
+                item['goal'],
+                render_sequent(canon['atoms'], canon['hypotheses'],
+                               canon['goal']))
+            self.assertEqual(item['theorem_name'][:2], 't_')
+            self.assertEqual(len(item['theorem_name']), 66)
+            int(item['theorem_name'][2:], 16)
+            self.assertEqual(
+                item['theorem_name'][2:], item['theorem_name'][2:].lower())
+
+    def test_projection_is_stable_under_plan_and_identifier_order(self):
+        for record in fixtures():
+            plan = record['plan']
+            base = identify(plan, record['checked']['theorem'])
+            variants = [rename_local_ids(plan, 30)]
+            if len(plan['hypotheses']) >= 2:
+                reordered = copy.deepcopy(plan)
+                reordered['hypotheses'] = list(
+                    reversed(reordered['hypotheses']))
+                variants.append(reordered)
+            for variant in variants:
+                checked = check_plan(variant, record['expectation'])
+                self.assertTrue(checked['ok'])
+                result = identify(variant, checked['theorem'])
+                self.assertEqual(
+                    canonical_bytes(result['public_item']),
+                    canonical_bytes(base['public_item']))
+
+    def test_rejects_every_sealed_field_mutation(self):
+        base = canonical_three_atom_theorem()
+        self.assertTrue(public_projection(base))
+
+        def rejects(theorem):
+            with self.assertRaises(L3InvariantError) as caught:
+                public_projection(theorem)
+            self.assertEqual(
+                caught.exception.code,
+                'CANONICAL_THEOREM_PRECONDITION_VIOLATED')
+
+        extra = copy.deepcopy(base)
+        extra['root_id'] = 'x'
+        rejects(extra)
+        extra = copy.deepcopy(base)
+        extra['band'] = 'S1'
+        rejects(extra)
+        missing = copy.deepcopy(base)
+        del missing['goal']
+        rejects(missing)
+        renamed = copy.deepcopy(base)
+        renamed['atoms'] = ['a1', 'a2', 'a3']
+        rejects(renamed)
+        unsorted_atoms = copy.deepcopy(base)
+        unsorted_atoms['atoms'] = ['a2', 'a1', 'a0']
+        rejects(unsorted_atoms)
+        unsorted_hyps = copy.deepcopy(base)
+        unsorted_hyps['hypotheses'] = list(reversed(unsorted_hyps['hypotheses']))
+        rejects(unsorted_hyps)
+        duplicated = copy.deepcopy(base)
+        duplicated['hypotheses'] = [
+            duplicated['hypotheses'][0],
+            copy.deepcopy(duplicated['hypotheses'][0]),
+        ]
+        rejects(duplicated)
+        malformed = copy.deepcopy(base)
+        malformed['goal'] = {'kind': 'AND', 'left': atom('a0')}
+        rejects(malformed)
+        undeclared = copy.deepcopy(base)
+        undeclared['goal'] = and_(atom('a5'), atom('a0'))
+        rejects(undeclared)
+        too_few = {
+            'atoms': ['a0', 'a1'],
+            'hypotheses': [atom('a0')],
+            'goal': atom('a1'),
+        }
+        rejects(too_few)
+        too_many = {
+            'atoms': ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'],
+            'hypotheses': [atom('a0')],
+            'goal': and_(
+                and_(and_(atom('a1'), atom('a2')), and_(atom('a3'), atom('a4'))),
+                and_(atom('a5'), atom('a6'))),
+        }
+        rejects(too_many)
+        not_a_mapping = ['a0']
+        rejects(not_a_mapping)
+
+    def test_no_sealed_provenance_leaks_into_the_item(self):
+        for record in fixtures():
+            result = identify(record['plan'], record['checked']['theorem'])
+            encoded = canonical_bytes(result['public_item'])
+            for banned in (b'root', b'draw', b'band', b'scaffold', b'skeleton',
+                           b'node_count', b'words_consumed', b'proof',
+                           b'l2_gate', b'valid_s', b'S1', b'S4', b'plan'):
+                self.assertNotIn(banned, encoded, record['name'])
+
+
+class FreshnessAndAliasTest(unittest.TestCase):
+
+    def test_inputs_are_unchanged(self):
+        for record in fixtures():
+            plan_before = canonical_bytes(record['plan'])
+            theorem_before = canonical_bytes(record['checked']['theorem'])
+            identify(record['plan'], record['checked']['theorem'])
+            self.assertEqual(canonical_bytes(record['plan']), plan_before)
+            self.assertEqual(
+                canonical_bytes(record['checked']['theorem']), theorem_before)
+
+    def test_outputs_alias_neither_inputs_nor_each_other(self):
+        for record in fixtures():
+            plan = record['plan']
+            theorem = record['checked']['theorem']
+            result = identify(plan, theorem)
+            input_ids = set(mutable_ids(plan, []) + mutable_ids(theorem, []))
+            output_ids = mutable_ids(result, [])
+            self.assertEqual(len(output_ids), len(set(output_ids)),
+                             record['name'])
+            self.assertTrue(set(output_ids).isdisjoint(input_ids),
+                            record['name'])
+
+    def test_repeated_calls_return_independent_objects(self):
+        record = fixtures()[0]
+        first = identify(record['plan'], record['checked']['theorem'])
+        second = identify(record['plan'], record['checked']['theorem'])
+        self.assertEqual(canonical_bytes(first), canonical_bytes(second))
+        self.assertTrue(set(mutable_ids(first, [])).isdisjoint(
+            set(mutable_ids(second, []))))
+        first['canonical_theorem']['atoms'].append('a9')
+        third = identify(record['plan'], record['checked']['theorem'])
+        self.assertEqual(canonical_bytes(third), canonical_bytes(second))
+
+
+class InvariantErrorTest(unittest.TestCase):
+
+    def test_code_tuple_is_closed(self):
+        self.assertEqual(L3_INVARIANT_CODES, (
+            'INPUT_NOT_L1_SHAPED',
+            'DECLARED_ATOM_COUNT_OUT_OF_RANGE',
+            'BIJECTION_BOUND_EXCEEDED',
+            'FORMULA_RECURSION_BOUND_EXCEEDED',
+            'PROOF_RECURSION_BOUND_EXCEEDED',
+            'CANONICAL_THEOREM_PRECONDITION_VIOLATED',
+        ))
+
+    def raises(self, code, call):
+        with self.assertRaises(L3InvariantError) as caught:
+            call()
+        self.assertEqual(caught.exception.code, code)
+        self.assertEqual(set(vars(caught.exception)), {'code'})
+
+    def test_input_not_l1_shaped(self):
+        self.raises('INPUT_NOT_L1_SHAPED', lambda: canonical_theorem(None))
+        self.raises('INPUT_NOT_L1_SHAPED', lambda: canonical_theorem({
+            'atoms': ['a0', 'a1', 'a2'], 'hypotheses': [], 'goal': atom('a0'),
+            'extra': 1}))
+        self.raises('INPUT_NOT_L1_SHAPED', lambda: canonical_theorem({
+            'atoms': ['a2', 'a1', 'a0'], 'hypotheses': [], 'goal': atom('a0')}))
+        self.raises('INPUT_NOT_L1_SHAPED', lambda: canonical_theorem({
+            'atoms': ['a0', 'a1', 'a2'], 'hypotheses': [],
+            'goal': atom('a7')}))
+        self.raises('INPUT_NOT_L1_SHAPED', lambda: rederive_theorem({}))
+        self.raises('INPUT_NOT_L1_SHAPED', lambda: skeleton_identity({}))
+        self.raises('INPUT_NOT_L1_SHAPED',
+                    lambda: rule_skeleton({'kind': 'NOPE'}))
+        self.raises('INPUT_NOT_L1_SHAPED',
+                    lambda: rule_skeleton(assume('x0', atom('a0'))))
+
+    def test_declared_atom_count_out_of_range(self):
+        for atoms in (['a0', 'a1'], ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6']):
+            self.raises('DECLARED_ATOM_COUNT_OUT_OF_RANGE',
+                        lambda atoms=atoms: canonical_theorem({
+                            'atoms': list(atoms),
+                            'hypotheses': [atom(name) for name in atoms],
+                            'goal': atom(atoms[0])}))
+
+    def test_bijection_bound_exceeded(self):
+        self.assertEqual(BIJECTION_BOUND, 720)
+        self.assertEqual(len(list(_bijections(6))), 720)
+        self.raises('BIJECTION_BOUND_EXCEEDED', lambda: _bijections(7))
+
+    def test_formula_recursion_bound_exceeded(self):
+        self.assertEqual(FORMULA_RECURSION_BOUND, 24)
+        deep = deep_not(FORMULA_RECURSION_BOUND + 2)
+        self.raises('FORMULA_RECURSION_BOUND_EXCEEDED',
+                    lambda: canonical_theorem({
+                        'atoms': ['a0', 'a1', 'a2'],
+                        'hypotheses': [atom('a1'), atom('a2')],
+                        'goal': deep}))
+
+    def test_proof_recursion_bound_exceeded(self):
+        self.assertEqual(PROOF_RECURSION_BOUND, 38)
+        node = assume('h0', false_())
+        for _ in range(PROOF_RECURSION_BOUND + 2):
+            node = exfalso(node, false_())
+        self.raises('PROOF_RECURSION_BOUND_EXCEEDED',
+                    lambda: rule_skeleton(node))
+
+    def test_canonical_theorem_precondition_violated(self):
+        self.raises('CANONICAL_THEOREM_PRECONDITION_VIOLATED',
+                    lambda: public_projection({
+                        'atoms': ['a1', 'a2', 'a3'],
+                        'hypotheses': [atom('a1')],
+                        'goal': atom('a2')}))
+
+    def test_accepted_fixtures_never_raise(self):
+        for record in fixtures():
+            try:
+                identify(record['plan'], record['checked']['theorem'])
+            except L3InvariantError as error:  # pragma: no cover - gate failure
+                raise AssertionError(
+                    'accepted fixture raised ' + error.code)
+
+    def test_deep_chain_fixture_stays_inside_the_proof_bound(self):
+        chain = [r for r in fixtures()
+                 if r['name'] == 'valid_s4_exfalso_chain'][0]
+        self.assertTrue(skeleton_identity(chain['plan']))
+
+
+class FreshProcessDeterminismTest(unittest.TestCase):
+
+    SCRIPT = (
+        'import sys, json\n'
+        'sys.path.insert(0, sys.argv[1])\n'
+        'from phase2_stageb_canonical import canonical_dumps\n'
+        'from phase2_stageb_checker import check_plan\n'
+        'from phase2_stageb_identity import identify\n'
+        'import test_phase2_stageb_checker as fixtures_module\n'
+        'out = []\n'
+        'for name, builder in sorted(fixtures_module.VALID_PLAN_BUILDERS):\n'
+        '    plan = builder()\n'
+        '    expectation = fixtures_module.expectation_for(plan["proof"])\n'
+        '    checked = check_plan(plan, expectation)\n'
+        '    out.append(identify(plan, checked["theorem"]))\n'
+        'sys.stdout.write(canonical_dumps(out))\n'
+    )
+
+    def run_child(self, seed):
+        environment = dict(os.environ)
+        environment['PYTHONHASHSEED'] = seed
+        completed = subprocess.run(
+            [sys.executable, '-c', self.SCRIPT, str(LEARNING_DIR)],
+            capture_output=True, env=environment, cwd=str(LEARNING_DIR),
+            check=False)
+        self.assertEqual(completed.returncode, 0, completed.stderr[-800:])
+        return completed.stdout
+
+    def test_two_fresh_processes_agree(self):
+        first = self.run_child('0')
+        second = self.run_child('12345')
+        self.assertTrue(first)
+        self.assertEqual(first, second)
+        local = canonical_dumps([
+            identify(record['plan'], record['checked']['theorem'])
+            for record in fixtures() if record['source'] == SOURCE_L1
+        ]).encode('ascii')
+        self.assertEqual(
+            json.loads(first.decode('ascii')),
+            json.loads(local.decode('ascii')))
+
+
+class ExclusionArtifactTest(unittest.TestCase):
+
+    def test_artifact_is_reproducible_and_exact(self):
+        with tempfile.TemporaryDirectory() as first_dir, \
+                tempfile.TemporaryDirectory() as second_dir:
+            first_path = Path(first_dir) / 'a.json'
+            second_path = Path(second_dir) / 'b.json'
+            first_hash = write_l3_code_gate_exclusions(first_path)
+            second_hash = write_l3_code_gate_exclusions(second_path)
+            self.assertEqual(first_hash, second_hash)
+            first_bytes = first_path.read_bytes()
+            self.assertEqual(first_bytes, second_path.read_bytes())
+            self.assertTrue(first_bytes.endswith(b'\n'))
+            self.assertFalse(first_bytes[:-1].endswith(b'\n'))
+            payload = json.loads(first_bytes.decode('ascii'))
+
+        self.assertEqual(tuple(sorted(payload.keys())),
+                         tuple(sorted(ARTIFACT_KEYS)))
+        self.assertEqual(payload['schema'], ARTIFACT_SCHEMA_NAME)
+        self.assertEqual(payload['identity_domain'], IDENTITY_DOMAIN)
+        self.assertEqual(payload['contract_sha256'], CONTRACT_SHA256)
+        self.assertEqual(payload['activation_sha256'], ACTIVATION_SHA256)
+        self.assertEqual(payload['charter_sha256'], CHARTER_SHA256)
+        self.assertEqual(payload['source_v3_sha256'], SOURCE_V3_SHA256)
+        self.assertEqual(payload['l2_code_gate_sha256'], L2_CODE_GATE_SHA256)
+
+        v3, _gate = _load_governing()
+        self.assertEqual(payload['source_v3'], v3)
+
+        rows = payload['valid_plan_identities']
+        self.assertEqual(len(rows), 11)
+        self.assertEqual([row['fixture_name'] for row in rows],
+                         sorted(row['fixture_name'] for row in rows))
+        pinned = {r['fixture_name']: r for r in v3['valid_plan_fixtures']}
+        for row in rows:
+            self.assertEqual(tuple(sorted(row.keys())),
+                             tuple(sorted(VALID_PLAN_IDENTITY_KEYS)))
+            self.assertIn(row['source'], (SOURCE_L1, SOURCE_L2))
+            reference = pinned[row['fixture_name']]
+            self.assertEqual(row['raw_plan_sha256'],
+                             reference['raw_plan_sha256'])
+            self.assertEqual(row['raw_theorem_sha256'],
+                             reference['raw_theorem_sha256'])
+            self.assertEqual(row['theorem_name'],
+                             't_' + row['theorem_identity_sha256'])
+            self.assertEqual(tuple(sorted(row['public_item'].keys())),
+                             tuple(sorted(PUBLIC_ITEM_KEYS)))
+            self.assertEqual(canonical_hash(row['public_item']),
+                             row['public_projection_sha256'])
+            self.assertEqual(row['public_item']['theorem_name'],
+                             row['theorem_name'])
+        self.assertEqual(
+            [r['fixture_name'] for r in rows if r['source'] == SOURCE_L2],
+            ['l2_gate_00', 'l2_gate_01', 'l2_gate_02', 'l2_gate_03',
+             'l2_gate_04', 'l2_gate_05'])
+
+        groups = payload['raw_sequent_alias_groups']
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(tuple(sorted(groups[0].keys())),
+                         tuple(sorted(ALIAS_GROUP_KEYS)))
+        self.assertEqual(groups[0]['members'],
+                         ['premise_witness_or_e', 'renderer_or_commute'])
+
+        mapped = {row['fixture_name'] for row in rows}
+        for group in ('enumerability_fixtures', 'renderer_only_fixtures'):
+            for entry in v3[group]:
+                self.assertNotIn(entry['fixture_name'], mapped)
+
+    def test_artifact_carries_no_seed_quota_or_root_field(self):
+        payload = build_l3_code_gate_exclusions()
+        encoded = canonical_bytes(payload)
+        for banned in (b'stage6', b'stage_6', b'quota', b'root_key',
+                       b'collision_precedence', b'dev_root'):
+            self.assertNotIn(banned, encoded)
+
+    def test_identities_are_pairwise_distinct_where_plans_differ(self):
+        payload = build_l3_code_gate_exclusions()
+        rows = payload['valid_plan_identities']
+        self.assertEqual(
+            len({row['raw_plan_sha256'] for row in rows}), 11)
+        self.assertEqual(
+            len({row['theorem_identity_sha256'] for row in rows}), 11)
+        for row in rows:
+            self.assertEqual(row['public_projection_sha256'],
+                             canonical_hash(row['public_item']))
+
+
+class ProductionSourceDisciplineTest(unittest.TestCase):
+
+    def setUp(self):
+        self.source = PRODUCTION_PATH.read_text(encoding='ascii')
+        self.tree = ast.parse(self.source)
+
+    def test_import_allowlist(self):
+        for node in ast.walk(self.tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    self.assertIn(alias.name.split('.')[0],
+                                  ALLOWED_IMPORT_MODULES, alias.name)
+            elif isinstance(node, ast.ImportFrom):
+                self.assertEqual(node.level, 0)
+                self.assertIn((node.module or '').split('.')[0],
+                              ALLOWED_IMPORT_MODULES, node.module)
+
+    def test_imports_are_module_level_only(self):
+        for node in self.tree.body:
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef,
+                                 ast.ClassDef)):
+                for inner in ast.walk(node):
+                    self.assertNotIsInstance(inner, ast.Import)
+                    self.assertNotIsInstance(inner, ast.ImportFrom)
+
+    def test_no_forbidden_calls(self):
+        for node in ast.walk(self.tree):
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                self.assertNotIn(node.func.id, FORBIDDEN_CALL_NAMES,
+                                 node.func.id)
+            if isinstance(node, ast.Attribute):
+                self.assertNotIn(node.attr, ('system', 'popen', 'run',
+                                             'write_text', 'read_text',
+                                             'open', 'urlopen'))
+
+    def test_no_retry_or_unbounded_loop_constructs(self):
+        for node in ast.walk(self.tree):
+            self.assertNotIsInstance(node, ast.While)
+            self.assertNotIsInstance(node, ast.Try)
+            self.assertNotIsInstance(node, ast.Global)
+            self.assertNotIsInstance(node, ast.Nonlocal)
+
+    def test_no_mutable_module_globals(self):
+        for node in self.tree.body:
+            if isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign)):
+                value = node.value
+                self.assertNotIsInstance(value, ast.Dict)
+                self.assertNotIsInstance(value, ast.List)
+                self.assertNotIsInstance(value, ast.Set)
+                self.assertNotIsInstance(value, ast.ListComp)
+                self.assertNotIsInstance(value, ast.DictComp)
+                self.assertTrue(
+                    isinstance(value, (ast.Constant, ast.Tuple, ast.Call)),
+                    ast.dump(value))
+                if isinstance(value, ast.Call):
+                    self.assertIsInstance(value.func, ast.Name)
+                    self.assertEqual(value.func.id, 'frozenset')
+
+    def test_no_randomness_time_or_filesystem_names(self):
+        for banned in ('random', 'secrets', 'time', 'datetime', 'pathlib',
+                       'os.', 'subprocess', 'socket', 'hashlib', 'json',
+                       'torch', 'peano', 'proofsearch', 'phase2_stageb_checker',
+                       'phase2_stageb_generator', 'phase2_stageb_causes'):
+            self.assertNotIn(banned, self.source, banned)
+
+    def test_module_exposes_the_declared_entry_points_and_no_layer_leak(self):
+        import phase2_stageb_identity as module
+        for name in ('canonical_theorem', 'theorem_identity', 'rule_skeleton',
+                     'skeleton_identity', 'public_projection',
+                     'rederive_theorem', 'identify'):
+            self.assertTrue(callable(getattr(module, name)), name)
+        defined = {
+            node.name for node in self.tree.body
+            if isinstance(node, (ast.FunctionDef, ast.ClassDef))
+        }
+        self.assertEqual(
+            sorted(name for name in defined if not name.startswith('_')),
+            ['L3InvariantError', 'canonical_theorem', 'identify',
+             'public_projection', 'rederive_theorem', 'rule_skeleton',
+             'skeleton_identity', 'theorem_identity'])
+        for leaked in ('check_plan', 'generate_draw', 'rederived_theorem',
+                       'formulas_equal', 'used_families'):
+            self.assertNotIn(leaked, vars(module), leaked)
+
+
+if __name__ == '__main__':
+    unittest.main()

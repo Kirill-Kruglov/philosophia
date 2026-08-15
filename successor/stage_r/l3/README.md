@@ -1,6 +1,6 @@
 # Stage-R L3 — projection-only boundary
 
-Status: `PAPER_CLOSED_BUILDER_PROMPT_READY`
+Status: `L3_CANDIDATE_V1_BOUNDED_REPAIR_REQUIRED`
 
 This directory contains the minimum L3 contract activated by
 `../STAGE_R_L3_PROJECTION_ONLY_ACTIVATION_V1.md`. The executable annex and its
@@ -16,3 +16,10 @@ work and scientific execution remain unauthorized.
 The only executable next task is
 `PROMPT_STAGE_R_L3_PROJECTION_ONLY_BUILDER_V1.md`. It produces a candidate
 package and stops for one driver code audit; it does not commit or push.
+
+Candidate V1 is preserved under `candidate/`. The driver reproduced its green
+131-test route but found one canonical-projection defect and incomplete mandatory
+gate seams. The findings are closed in `STAGE_R_L3_DRIVER_CODE_AUDIT_V1.md`.
+The only next task is
+`PROMPT_STAGE_R_L3_PROJECTION_ONLY_BOUNDED_REPAIR_V2.md`; the frozen exclusion
+JSON may not change.
