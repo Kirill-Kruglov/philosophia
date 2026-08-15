@@ -27,14 +27,18 @@ CODEX_SESSION = Path(
 ANNEX_SESSION = CLAUDE_ROOT / "4a860db1-6296-4c4a-9f80-254624b5cb84.jsonl"
 CODE_SESSION = CLAUDE_ROOT / "537c1991-a987-4007-aded-c85adb41ef5a.jsonl"
 L01_SESSION = CLAUDE_ROOT / "91788c31-b8bd-4ad7-ad5b-04358301ff5a.jsonl"
+AUTHORITY_SESSION = CLAUDE_ROOT / "4d096aa4-d0f3-41a7-a72d-1f2080a54ce6.jsonl"
 
 ANNEX_PATH = "/tmp/PHASE2_STAGE_B_L2_GENERATOR_ANNEX_FINAL_XY_REVIEW.md"
 V2_ANNEX_PATH = "/tmp/PHASE2_STAGE_B_L2_GENERATOR_ANNEX_V2_NONVACUOUS_DRAFT.md"
+CHARTER_PATH = "/tmp/PHASE2_STAGE_B_DEV_CORE_CHARTER_V1_1_1_BOUNDARY_CORRECTION.md"
 GENERATOR_PATH = (
     "/tmp/minimo_phase2_stageb_l2_final/learning/phase2_stageb_generator.py"
 )
 
 EXPECTED = {
+    "accepted_authority/PHASE2_STAGE_B_DEV_CORE_CHARTER_V1_1_1_BOUNDARY_CORRECTION.md":
+        "703bf39cfe8f875f9be3781659a7365c1bc99c42f7523e43fef2c0a2c47b8311",
     "accepted_l2/PHASE2_STAGE_B_L2_GENERATOR_ANNEX_FINAL_XY_REVIEW.md":
         "3a78a53ecb8e5275f433bc03c50b7b93746c597e3d2d1fcf0bedd4249f102da8",
     "accepted_l2/learning/phase2_stageb_generator.py":
@@ -111,6 +115,39 @@ def claude_tool_uses(path: Path):
         for block in record.get("message", {}).get("content", []):
             if block.get("type") == "tool_use":
                 yield block
+
+
+def claude_read_payload(path: Path, file_path: str) -> bytes:
+    """Return a byte-identical full-file Read payload recorded by Claude."""
+    candidates = []
+    for record in records(path):
+        result = record.get("toolUseResult")
+        if not isinstance(result, dict):
+            continue
+        file_result = result.get("file")
+        if not isinstance(file_result, dict):
+            continue
+        if file_result.get("filePath") != file_path:
+            continue
+        content = file_result.get("content")
+        if not isinstance(content, str):
+            raise RuntimeError(f"non-text Claude Read payload {file_path}")
+        candidates.append(content.encode("utf-8"))
+    if not candidates:
+        raise RuntimeError(f"missing Claude Read payload {file_path}")
+    if any(candidate != candidates[0] for candidate in candidates[1:]):
+        raise RuntimeError(f"conflicting Claude Read payloads {file_path}")
+    return candidates[0]
+
+
+def recover_charter() -> bytes:
+    candidates = [
+        claude_read_payload(session, CHARTER_PATH)
+        for session in (ANNEX_SESSION, CODE_SESSION, AUTHORITY_SESSION)
+    ]
+    if any(candidate != candidates[0] for candidate in candidates[1:]):
+        raise RuntimeError("conflicting cross-session Stage-B charter payloads")
+    return candidates[0]
 
 
 def replay_final_annex() -> bytes:
@@ -469,6 +506,8 @@ def main() -> None:
     generator = recover_generator()
     generator_test = recover_v5_test()
     recovered = {
+        "accepted_authority/PHASE2_STAGE_B_DEV_CORE_CHARTER_V1_1_1_BOUNDARY_CORRECTION.md":
+            recover_charter(),
         "accepted_l2/PHASE2_STAGE_B_L2_GENERATOR_ANNEX_FINAL_XY_REVIEW.md":
             replay_final_annex(),
         "accepted_l2/learning/phase2_stageb_generator.py": generator,

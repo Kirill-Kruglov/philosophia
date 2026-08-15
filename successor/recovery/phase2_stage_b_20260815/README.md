@@ -15,6 +15,9 @@ bytes.
 
 - `accepted_l2/` contains the byte-exact accepted final L2 annex, production
   generator, V5 test, frozen code-gate JSON and exclusion ledger V3.
+- `accepted_authority/` contains the byte-exact Stage-B development-core
+  charter v1.1.1 recovered from three mutually identical full-file Claude Read
+  payloads and verified against its previously pinned SHA-256.
 - `archive/accepted_l01/` contains the byte-exact accepted L0/L1 source tree and
   exclusion ledger V2.
 - `patches/` contains the byte-exact accepted L0/L1 V3 and L2 V5 delta and

@@ -3,6 +3,8 @@
 ## Recovered boundary
 
 - MINIMO base: `6066f482c6752915ad21119f93dc162f4cb9db72`
+- Stage-B development-core charter v1.1.1 SHA-256:
+  `703bf39cfe8f875f9be3781659a7365c1bc99c42f7523e43fef2c0a2c47b8311`
 - durable Stage-A patch SHA-256:
   `e08a8d29d67d82297216722b3e13e6c1a3f4bd354962a2865b1cfc57a9980bbd`
 - L0/L1 V3 delta SHA-256:
@@ -57,7 +59,7 @@ From this directory:
 sha256sum -c SHA256SUMS
 ```
 
-verifies all 28 recovered artifacts. Running
+verifies all 29 recovered artifacts. Running
 `tools/recover_from_transcripts.py` again is idempotent: it replays the recorded
-payloads, regenerates the patches and refuses any pinned hash or existing-byte
-mismatch.
+payloads, including the full-file Stage-B charter Read payload, regenerates the
+patches and refuses any pinned hash or existing-byte mismatch.
