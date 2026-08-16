@@ -51,7 +51,17 @@ that prediction runs all the way down, through mind and brain and life, and the
 [Computational Life](https://arxiv.org/abs/2406.19108) work he co-authored shows
 self-replicating programs arising in a soup of random ones with no fitness
 function imposed: structure from interaction, with nobody supplying the
-structure. The verified-discovery line proposes the other half.
+structure. A different at-scale neighbouring form has now appeared:
+[Hamilton-Zero](https://arxiv.org/abs/2608.11911), a foundation model with
+roughly 0.5B variational parameters, is pretrained over hundreds of thousands of
+generated Hamiltonian systems that vary in connection topology, system size, and
+interaction type and strength, with its
+[source](https://github.com/simulacra-research/HamiltonZero) and a
+[foundation checkpoint](https://huggingface.co/simulacra-research/HamiltonZero)
+released. Its scale makes it a stronger contemporary form of amortized learning
+across generated systems than any position paper, but it is not a completed
+answer to the question here: it does not isolate self-selected contact from
+matched donated contact. The verified-discovery line proposes the other half.
 [*Formal Conjectures*](https://arxiv.org/abs/2605.13171) puts more than a
 thousand open research conjectures into Lean so that a machine's mathematics can
 be checked by a kernel instead of argued about by us.
@@ -920,7 +930,7 @@ The permanent Level 0 statement is:
 | A world intended to test path-manufactured structure needs a non-trivial compositional invariant | **DERIVED CONSTRAINT, UNRUN** | follows from the triviality limit in VI.4: a count is not enough, the mind's own transformations must compose. Path concatenation and comparison transitivity are candidate cells; none is built |
 | Equational Wall-B library carrier | **CLOSED / SPARSE** | preregistered [frame audit 13](../successor/dev/WALLB_FRAME_AUDIT_13.md): 2/40 screen-qualified against threshold 5, Wilson 95% [0.014, 0.165]; [closure](../successor/dev/WALLB_EQUATIONAL_CELL_CLOSURE.md) preserved; non-citable development, not an ACTIVE/YOKED result |
 | Equational Wall-B policy carrier | **SCREEN-VIABLE; ACTIVE/YOKED UNRUN** | preregistered [policy-channel audit 14b](../successor/dev/WALLB_POLICY_CHANNEL_AUDIT_14B.md): hard-oracle sweep froze `best_first`; 12/40 screen-qualified, Wilson 95% [0.181, 0.454]; recorded beside the library kill; no design contract and no ACTIVE/YOKED run authorized |
-| Continuation route | **SUCCESSOR STOPPED AT DEVELOPMENT GATE** | Route B produced no locked successor scientific test: walk-world path-manufacture was void by construction; the equational cell is closed on both carriers with different verdicts (library sparse; policy screen-viable and left unrun); Officina remains frozen rather than active |
+| Continuation route | **SUCCESSOR STOPPED AT DEVELOPMENT GATE** | Route B produced no locked successor scientific test: walk-world path-manufacture was void by construction; the equational cell is closed on both carriers with different verdicts (library sparse; policy screen-viable and left unrun); a later MINIMO-based route had its Phase-2 Stage-A and Stage-B L0–L3 engineering surfaces accepted but stopped before any scientific execution, the Stage-R route ending at its minimum-L4 paper boundary and a purpose-built E2 alternative stopping at IDEA_GATE before build; active substrate search is now stopped; Officina remains frozen rather than active |
 
 ## What this does not show
 
@@ -955,6 +965,14 @@ optimizer, and one budget. What they carry forward is a constraint on any next
 world intended to test path-manufactured structure, not a verdict on chosen
 contact.
 
+A separate non-citable development line reached a related boundary from the side
+of representation rather than contact. Under the unpaired-stream interface
+considered by that line (TWOPRES), element correspondence between two
+presentations of one finite monoid is identifiable at best up to `Aut(M)`; the
+line closed as `NOT_CHEAPLY_AUDITABLE` before any implementation. It is a mapped
+development boundary under that interface, not an experiment and not a claim
+about representations in general.
+
 The later equational development screens do not show that compositional
 libraries fail, that ranking policies fail, or that chosen contact earns
 nothing. They asked prior questions about whether each experience carrier was
@@ -969,6 +987,18 @@ experimental slot on this substrate. What survives is a method constraint:
 measure the prevalence of the mechanism an experiment needs before selecting a
 convenient world and mistaking it for a family, and do not rewrite a correctly
 earned sparse kill when a different carrier later screens.
+
+[Minimo](https://arxiv.org/abs/2407.00695), an agent that jointly learns to pose
+conjectures and prove them, bootstrapping from the axioms of propositional
+logic, arithmetic and group theory, is the nearest external instance of a
+self-teaching formal substrate. This programme ran one repository-default
+exploratory realization of it, trained on self-generated formal material and
+evaluated on a fixed human-written theorem panel — the only point at which such a
+substrate was actually run here, and its fixed-panel transfer measured. It is
+non-citable development: not ACTIVE/YOKED evidence, not the programme's
+cross-world or presentation transfer, and not a Philosophia result. A later route
+built on the same substrate stopped before any scientific execution, and active
+substrate search is now stopped; the programme claim remains open.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and

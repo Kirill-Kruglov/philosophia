@@ -12,6 +12,32 @@ Level 2 is blocked, and the programme thesis remains open. Reviewers must not
 turn this process boundary, Level 0, or any design artifact into a scientific
 ending.
 
+## Current successor boundary (status only, non-citable development)
+
+Since this draft was first circulated, the successor stopped at development gates
+without any scientific execution. At status altitude: the walk-world learner
+branch closed without competence; the equational Wall-B library carrier is
+`CLOSED / SPARSE` (2/40) and the policy carrier is `SCREEN-VIABLE` (12/40) and
+left unrun by author choice; a later MINIMO-based route had Phase-2 Stage-A and
+Stage-B L0–L3 engineering surfaces accepted, but the Stage-R route then ended at
+its minimum-L4 paper boundary and the E2 alternative stopped at IDEA_GATE before
+build. An
+exploratory MINIMO learner was trained and evaluated on a fixed human-written
+panel in Phase 1; the later Stage-R route minted no root and executed no learner.
+Active substrate search is stopped; no L4 implementation or Stage-R root,
+learner/selector execution, ACTIVE/YOKED comparison, scientific lock, outcome, or
+programme claim followed; the programme claim remains `OPEN`. Authoritative status
+objects (non-citable):
+`successor/dev/WALLB_EQUATIONAL_CELL_CLOSURE.md`,
+`successor/dev/WALLB_POLICY_CHANNEL_AUDIT_14B.md`,
+`successor/dev/PHASE1_TERMINAL_18.md`,
+`successor/dev/PHASE2_STAGE_A_DRIVER_CLOSURE_19.md`,
+`successor/recovery/phase2_stage_b_20260815/README.md`,
+`successor/stage_r/l3/STAGE_R_L3_PROJECTION_ONLY_CLOSURE_V1.md`,
+`successor/stage_r/l4/STAGE_R_L4_MINIMUM_ANNEX_V1_1_DRIVER_BOUNDED_CONFIRMATION.md`,
+`successor/stage_r/README.md`,
+`successor/stage_r/idea_gate/STAGE_R_E2_IDEA_GATE_DRIVER_SYNTHESIS_V1.md`.
+
 ## Read first
 
 1. `essay/climbing-the-wall-of-experience.md`
@@ -106,3 +132,17 @@ Attack the essay as a philosophical and structural partner:
 - Do not upgrade harness-valid to scientifically true.
 - Do not describe the combined token+journal blade as holdout-portable.
 - Do not remove uncomfortable limits for rhetorical flow.
+- Do not promote any successor development screen (the Wall-B library or policy
+  carrier), accepted engineering surface (Phase-2 Stage-A/B or Stage-R L3), the
+  minimum-L4 paper boundary, or the E2 IDEA_GATE stop into a scientific result,
+  ACTIVE/YOKED outcome, or programme claim.
+- Do not state B2 Slot 4c as closed or add its diagnostic anywhere; it has no
+  formal author closure.
+- Do not state the TWOPRES element-correspondence boundary as anything stronger
+  than a non-citable mapped development boundary, up to `Aut(M)` and only under
+  the unpaired-stream interface; do not generalize it to representations in
+  general.
+- Do not describe the Minimo fixed-panel evaluation as the programme's
+  cross-world or presentation transfer or as an ACTIVE/YOKED result, and do not
+  describe Hamilton-Zero as testing self-selected contact, path independence, or
+  the Philosophia causal contrast.

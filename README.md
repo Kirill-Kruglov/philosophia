@@ -25,10 +25,17 @@ representations.
 
 > **Successor status: stopped at development gates.** The `officina` governance
 > harness is frozen after terminal structural review; it is not an active route.
-> The walk-world learner branch closed without competence, and the later
-> equational Wall-B cell produced only 2/40 screen-qualified fresh
-> presentations against a preregistered minimum of 5. No successor ACTIVE/YOKED
-> comparison, scientific lock, outcome, or programme claim exists.
+> The walk-world learner branch closed without competence. In the later
+> equational Wall-B cell the library carrier is `CLOSED / SPARSE` (2/40
+> screen-qualified fresh presentations against a preregistered minimum of 5),
+> while the candidate-ordering policy carrier is `SCREEN-VIABLE` (12/40, Wilson
+> 95% [0.181, 0.454]) and was left unrun by author choice. A later MINIMO-based
+> route had its Phase-2 Stage-A engineering surface accepted and its Stage-B
+> L0–L3 surfaces accepted, but the Stage-R route ended at its minimum-L4 paper
+> boundary and a purpose-built E2 alternative stopped at IDEA_GATE before build;
+> active substrate search is now stopped. No L4 implementation or Stage-R root,
+> learner/selector execution, ACTIVE/YOKED comparison, scientific lock, outcome,
+> or programme claim followed.
 
 ## The question
 
@@ -57,11 +64,16 @@ reason to silently redesign the question.
 The current route ends here. The signed
 [`Route B author decision`](canonical/AUTHOR_ROUTE_DECISION.md) led first to the
 [`Officina successor`](successor/officina/README.md), whose governance harness
-is now [frozen](src/philosophia/officina/FROZEN.md). Two later non-citable
-development branches also stopped before a scientific lock: the walk-world
-path-manufacture axis was void by construction, and the equational Wall-B cell
-failed its preregistered five-world frame gate. The registered chosen-contact
-contrast remains unrun.
+is now [frozen](src/philosophia/officina/FROZEN.md). Several later non-citable
+development branches also stopped before a scientific lock, for different
+reasons: the walk-world path-manufacture axis was void by construction; in the
+equational Wall-B cell the library carrier failed its preregistered five-world
+frame gate while the policy carrier passed its screen and was deliberately not
+spent; and a later MINIMO-based route reached accepted Phase-2 Stage-A and
+Stage-B L0–L3 engineering surfaces but stopped before any scientific execution,
+its Stage-R route ending at a minimum-L4 paper boundary and a purpose-built E2
+alternative stopping at IDEA_GATE before build. Active substrate search is now
+stopped, and the registered chosen-contact contrast remains unrun.
 
 See [`canonical/KILL_MATRIX.md`](canonical/KILL_MATRIX.md) for the current
 decision surface and [`canonical/RESULTS_CANONICAL.md`](canonical/RESULTS_CANONICAL.md)
