@@ -1,0 +1,21 @@
+WARNING: CUDA unavailable; running on cpu. Pilot 08 used CUDA; numbers are instrument diagnostics on this device.
+input_hashes: {'B2_INSTRUMENT_REPAIR_09_TICKET.md': 'b8759ebdd7743239bf97238394cb267c091382469ac10dfc4308b5b53670cc85', 'B2_PATH_VS_DESTINATION_DESIGN_V2.md': '160726a6c06fed20b5aa554449c3f14c03f45b9ee52cdcf1ca49ff49ce238dd2', 'B2_PILOT_08.md': '107d8a6ed5dcf3e6dac9d4f43196f6c3bdf3d372ff5068e0df050bcceeb76d7f', 'b2_path_pilot_08.py': 'd5099d56ec78911a8dfb451a94d34350a3b8060fe90a0d05687edcc458f1c03f', 'b2_pilot_08_results.json': '593b478811eea533428805f60f618d58df04de4fed2bd06aaae6fe767aa63052'}
+script_hash: b09cd6aa1e1b29b6b0c0510663ca8b5eb34c801708ffa7ff455a7de6b5456bee
+N_max=2000; K=floor(N_max/8)=250
+displacement-class overlap: {'path_abs_d_count': 81, 'panel_diff_count': 72, 'abs_d_intersect_panel_diff': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68], 'n_overlap': 69, 'note': 'word-level intersect=0 does not establish content independence: path road-pool and panel can still share displacement classes.'}
+heldout seed=0: same=512 diff=512 exclude=1494
+
+=== SEED 0 K=250 k_hash=7af5a1ca28e9e59f heldout_words=1494 USE_BN_PROJECTOR=False ===
+[seed 0] arm D...
+  mechanism probes [init]...
+  ckpt oracle_step=0 qualifies=False S3=False S2=False
+  ckpt oracle_step=50 qualifies=False S3=False S2=False
+  ckpt oracle_step=100 qualifies=False S3=False S2=False
+  ckpt oracle_step=150 qualifies=False S3=False S2=False
+  ckpt oracle_step=200 qualifies=False S3=False S2=False
+  ckpt oracle_step=250 qualifies=False S3=False S2=False
+  ckpt oracle_step=300 qualifies=False S3=False S2=False
+  ckpt oracle_step=350 qualifies=False S3=False S2=False
+
+STOP: budget exceeded on CPU (no CUDA). Halted during seed0 arm D dest training after ckpt 350.
+EXIT:137
