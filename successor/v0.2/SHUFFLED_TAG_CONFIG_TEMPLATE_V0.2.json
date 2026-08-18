@@ -1,0 +1,32 @@
+{
+  "schema": "philosophia.aliasing.shuffled_tag_config.v0.2",
+  "prereg_version": "0.2-candidate-for-lock",
+  "status": "UNFILLED_TEMPLATE",
+  "primary_confirmatory_root_sha256": "TO_FILL",
+  "trigger_primary_status": "TO_FILL",
+  "trigger_primary_decision_sha256": "TO_FILL",
+  "runner_sha256": "TO_FILL_PRELOCKED_VALUE",
+  "analysis_sha256": "TO_FILL_PRELOCKED_VALUE",
+  "environment_sha256": "TO_FILL_SAME_AS_PRIMARY",
+  "model_config_sha256": "TO_FILL_SAME_AS_PRIMARY",
+  "M": null,
+  "module_pool": [],
+  "B_history": null,
+  "tau": null,
+  "N_paired_seeds": null,
+  "replicate_seeds": [],
+  "history_worlds": 6,
+  "required_probe_k": [
+    6
+  ],
+  "context_code_set": "same_z_H1_through_z_H6_as_primary_seed",
+  "assignment": "per_example_world_independent_balanced_within_block",
+  "world_to_code_mapping_forbidden": true,
+  "diagnostic_contrasts": [
+    "V=R_ALIAS6-R_SHUFFLED6",
+    "I=R_SHUFFLED6-R_SEP6"
+  ],
+  "diagnostic_ci_two_sided": 0.975,
+  "diagnostic_heavy_cap_threshold_strict_gt": 0.1,
+  "lock_timestamp": "TO_FILL"
+}

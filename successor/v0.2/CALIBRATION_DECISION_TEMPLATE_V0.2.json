@@ -1,0 +1,44 @@
+{
+  "schema": "philosophia.aliasing.calibration_decision.v0.2",
+  "prereg_version": "0.2-candidate-for-lock",
+  "status": "UNFILLED_TEMPLATE",
+  "model_config_ref": "TO_RESOLVE_FROM_REPOSITORY",
+  "model_config_sha256": "TO_FILL",
+  "precalibration_root_sha256": "TO_FILL",
+  "environment_sha256": "TO_FILL",
+  "p0_attempts": [],
+  "selected_M": null,
+  "selected_module_pool": [],
+  "B_history": null,
+  "tau": null,
+  "determinism_full_replay": {
+    "seed_namespace": "deterministic-replay",
+    "duplicate_run_roots": [],
+    "exact_match": null,
+    "gate": "TO_FILL"
+  },
+  "power_pilot": {
+    "n_paired_seeds": 6,
+    "k_endpoints": [
+      1,
+      6
+    ],
+    "k1_integrity": "TO_FILL",
+    "k1_median_T": null,
+    "k1_zero_count": null,
+    "k1_capped_count": null,
+    "d_values_sha256": "TO_FILL",
+    "sample_sd_d": null,
+    "sigma_upper_80_one_sided": null,
+    "delta_SESOI": 0.1823215567939546,
+    "alpha_directional_two_sided": 0.05,
+    "target_power_directional": 0.9,
+    "alpha_tost_one_sided": 0.05,
+    "target_power_equivalence_at_zero": 0.9,
+    "N_superiority": null,
+    "N_equivalence": null,
+    "N_confirmatory": null,
+    "gate": "TO_FILL"
+  },
+  "decision_sha256": "COMPUTE_AFTER_FILL"
+}

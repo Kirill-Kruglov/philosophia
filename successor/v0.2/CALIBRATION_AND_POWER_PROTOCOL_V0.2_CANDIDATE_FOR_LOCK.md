@@ -1,0 +1,298 @@
+# Calibration and power protocol v0.2 — candidate for lock
+
+**Status:** CANDIDATE FOR LOCK
+
+Development may determine engineering scale/budgets/sample size only through this mechanical route. It may not redefine the scientific contrast, SESOI, learner family, primary estimator, or interpretation.
+
+---
+
+## 1. Disjoint seed stages
+
+Use disjoint namespaces for:
+
+- P0 calibration;
+- P1.5 deterministic replay;
+- P2/P3 paired power pilot;
+- confirmatory;
+- conditional SHUFFLED_TAG uses the same confirmatory replicate seeds but a distinct context-assignment RNG namespace.
+
+No development seed appears in primary confirmation.
+
+Pre-generate up to 128 confirmatory seeds; only first mechanically selected N are authorized.
+
+---
+
+## 2. P-1 provenance gate
+
+Before any P0 run:
+
+- exact Level 0 `MODEL_CONFIG_REF` path exists;
+- its raw-byte SHA256 is recorded;
+- declared v0.2 config diff contains only authorized deviations.
+
+Failure=`BLOCKED_CONFIG_PROVENANCE`.
+
+This gate is evaluated before investing in other lock artifacts.
+
+---
+
+## 3. Pre-calibration root
+
+Before P0 produces any outcome-bearing trajectory, hash-commit:
+
+- all v0.2 scientific documents;
+- primary and conditional-diagnostic implementation code/tests;
+- exact model config ref/hash and diff;
+- environment lock;
+- seed derivation + test vectors;
+- calibration selector;
+- dual-target power script;
+- primary analysis + heavy-cap sign-gate implementation on synthetic fixtures;
+- SHUFFLED_TAG analysis implementation on synthetic fixtures;
+- D0 deterministic smoke report.
+
+Any scientific/code change after P0 begins voids v0.2 calibration and requires a new preregistration version, except generated immutable decision/config artifacts explicitly permitted by this protocol.
+
+---
+
+## 4. Fixed competence definition
+
+Held-out accuracy >=0.95 at 3 consecutive evaluations.
+
+Evaluations: 0,100,200,...
+
+Raw T = first evaluation step beginning earliest fully observed qualifying run.
+
+---
+
+## 5. P0 — single-world headroom/scale calibration
+
+### 5.1 Start
+
+Always M=96, pool `[131..138]`.
+
+### 5.2 Sample
+
+Exactly 16 development-only fresh-model runs.
+
+Each:
+
+- modulus selected deterministically from pool;
+- fresh initialization;
+- one fixed non-trainable context code;
+- locked 70% split;
+- no history;
+- fresh optimizer;
+- eval every 100;
+- hard cap 20,000 updates.
+
+### 5.3 Acceptance
+
+Define T20=min(T,20000), using 20000 for capped raw event time only for this selector.
+
+Scale passes iff:
+
+1. <=2/16 runs capped at 20,000; and
+2. median(T20) in `[2000,8000]` inclusive.
+
+If median<2000: too easy.
+
+If median>8000 or >2/16 capped: too hard.
+
+### 5.4 Authorized transition
+
+If M96 too easy -> exactly one escalation to M128/pool `[176..183]`; rerun P0 with disjoint calibration sub-namespace.
+
+If M128 too easy -> `INADMISSIBLE_SUBSTRATE_TOO_EASY`.
+
+If any attempted scale too hard -> `INADMISSIBLE_SUBSTRATE_TOO_HARD`; no LR/WD/downscale/custom-pool search.
+
+If M96 passes, M128 is forbidden.
+
+---
+
+## 6. P1 — mechanical budgets
+
+After P0 pass, selected M is fixed.
+
+### 6.1 History budget
+
+`B_history = ceil_to_100(median(T20))`.
+
+Every history world in every primary/diagnostic arm receives exactly this many optimizer updates.
+
+### 6.2 Probe cap
+
+Compute empirical Q0.90 of 16 T20 using locked NumPy quantile `method="linear"`.
+
+`tau = ceil_to_100(min(30000, 3*Q0.90))`.
+
+Freeze tau thereafter.
+
+### 6.3 Calibration artifact
+
+Write immutable `CALIBRATION_DECISION.json` with scale/pool/all T/cap values/median/Q90/B_history/tau/provenance hashes.
+
+No override.
+
+---
+
+## 7. P1.5 — full deterministic replay
+
+Before P2:
+
+Use exactly one dedicated `deterministic-replay` seed at selected M.
+
+Run twice from clean process state:
+
+- same initialization;
+- complete H1 block of B_history updates;
+- complete k1 C probe until criterion/tau.
+
+Require exact equality of every trajectory-sensitive hash/log value specified in implementation contract.
+
+Failure=`BLOCKED_DETERMINISM` and v0.2 stops. Repair requires a new preregistration version and fresh P0/P1.
+
+---
+
+## 8. P2 — six-seed paired endpoint/headroom pilot
+
+Exactly 6 new paired seeds.
+
+Run ALIASED + SEPARABLE through six history worlds with frozen B_history/tau. Must execute C probes k=1 and k=6; k=2,4 may be emitted but never affect gates.
+
+### 8.1 k1 integrity
+
+All k1 paired checkpoints/probe trajectories match exactly. Any mismatch=`INVALID_K1_ARM_DIVERGENCE`.
+
+### 8.2 k1 headroom
+
+Use single unique k1 C trajectory per pair.
+
+Admissible iff:
+
+- median T_C,k1 >=1000;
+- <=1/6 has T=0;
+- <=1/6 capped at tau.
+
+If M96 fails only by floor -> one authorized escalation to M128 followed by complete new P0/P1/P1.5/P2 with fresh development seeds.
+
+If M128 floor -> `INADMISSIBLE_TRANSFER_FLOOR`.
+
+If >1/6 capped -> `INADMISSIBLE_TRANSFER_CEILING`.
+
+---
+
+## 9. P3 — variance-only dual-target N
+
+For six paired seeds compute canonical d_i from k1,k6.
+
+Pilot mean/sign/p-value/curve shape are **not inputs** to sample-size selection.
+
+Let m=6, sample SD s_d, df=5.
+
+One-sided 80% upper population-SD bound:
+
+`sigma_U = s_d * sqrt(df / chi2_ppf(0.20,df))`.
+
+If s_d=0, minimum-N rule below applies.
+
+Constants:
+
+- `Delta = delta_SESOI = ln(1.20)`;
+- two-sided directional alpha=.05;
+- directional target power=.90 at |delta|=Delta;
+- TOST alpha=.05 per one-sided test (90% CI);
+- equivalence target power=.90 at true delta=0 with margin ±Delta.
+
+### 9.1 Directional superiority target
+
+Normal-approximation:
+
+`N_sup = ceil(((z_0.975 + z_0.90)*sigma_U/Delta)^2)`.
+
+### 9.2 Practical-equivalence target
+
+For symmetric TOST at true delta=0, approximate power is
+
+`2*Phi(Delta*sqrt(N)/sigma_U - z_0.95)-1`.
+
+Solve target .90:
+
+`N_eq = ceil(((z_0.95 + z_0.95)*sigma_U/Delta)^2)`.
+
+(The second z_0.95 is `z_(1+0.90)/2`.)
+
+### 9.3 Final N
+
+`N = max(20, N_sup, N_eq)`.
+
+If N>128 -> `BLOCKED_POWER`.
+
+If s_d=0 -> N=20.
+
+This explicitly prices both directional and equivalence goals; practical equivalence is still subject to the no-heavy-cap rule in confirmatory analysis.
+
+---
+
+## 10. Confirmatory lock
+
+Before any confirmatory training:
+
+1. instantiate first N seeds from confirmatory namespace;
+2. pre-generate world allocations/splits/context hashes/batch generator roots;
+3. write final `CONFIRMATORY_CONFIG.json` including heavy-cap and conditional diagnostic policies;
+4. lock runner/analysis/SHUFFLED_TAG implementation and analysis hashes;
+5. rerun the full P1.5 deterministic replay once under final runtime and require exact match between its duplicate executions;
+6. publish/commit confirmatory root;
+7. only then execute primary confirmation.
+
+No further calibration.
+
+---
+
+## 11. Primary confirmatory runtime
+
+Each of N paired seeds runs:
+
+- ALIASED 6-world history;
+- SEPARABLE 6-world history;
+- C probes k=1,2,4,6;
+- H1 reacquisition k=6.
+
+Independent unit = paired seed.
+
+---
+
+## 12. Conditional SHUFFLED_TAG runtime budget
+
+If and only if:
+
+- primary confirmation is valid; and
+- primary status is **not** `ALIASED_TRANSFER_ADVANTAGE` or `ALIASED_TRANSFER_ADVANTAGE_BOUNDED`,
+
+then `SHUFFLED_TAG` is mandatory.
+
+It uses:
+
+- same locked N replicate seeds;
+- same model initialization per seed;
+- same world allocations/splits/batch order/B_history/tau;
+- one six-world history per seed;
+- only k=6 C probe required.
+
+No new power calculation, seed selection, or tuning is allowed. Compute capacity for this possible N-arm diagnostic must be reserved before confirmatory lock.
+
+Invalid primary confirmation does not trigger SHUFFLED_TAG because no scientific primary regime result exists to decompose.
+
+---
+
+## 13. Technical failures
+
+Transient process crash may be rerun only from beginning of the same locked seed/arm/stage under identical config.
+
+A seed may not be replaced because outcome is inconvenient.
+
+If valid primary paired count<N -> `INVALID_INCOMPLETE_CONFIRMATION`.
+
+If required SHUFFLED_TAG is triggered and valid diagnostic count<N -> primary category remains recorded, but causal interpretation of non-positive outcome remains `DIAGNOSTIC_INCOMPLETE`; no separation-vs-variability attribution is licensed.

@@ -1,0 +1,61 @@
+{
+  "schema": "philosophia.aliasing.confirmatory_config.v0.2",
+  "prereg_version": "0.2-candidate-for-lock",
+  "status": "UNFILLED_TEMPLATE",
+  "confirmatory_root_sha256": "TO_FILL",
+  "git_sha": "TO_FILL",
+  "runner_sha256": "TO_FILL",
+  "analysis_sha256": "TO_FILL",
+  "shuffled_tag_runner_sha256": "TO_FILL",
+  "shuffled_tag_analysis_sha256": "TO_FILL",
+  "environment_sha256": "TO_FILL",
+  "model_config_ref": "TO_RESOLVE_FROM_REPOSITORY",
+  "model_config_sha256": "TO_FILL",
+  "M": null,
+  "module_pool": [],
+  "train_fraction": 0.7,
+  "history_worlds": 6,
+  "probe_k": [
+    1,
+    2,
+    4,
+    6
+  ],
+  "B_history": null,
+  "tau": null,
+  "eval_interval": 100,
+  "competence_accuracy": 0.95,
+  "competence_consecutive_evals": 3,
+  "primary_arms": [
+    "ALIASED",
+    "SEPARABLE"
+  ],
+  "context_code_trainable": false,
+  "context_scale_dynamic": false,
+  "history_interleaving": false,
+  "history_early_stop": false,
+  "optimizer_reset_each_world": true,
+  "probe_optimizer_reset": true,
+  "delta_SESOI": 0.1823215567939546,
+  "SESOI_gain_ratio": 1.2,
+  "SESOI_role": "point_estimate_licensing_threshold",
+  "heavy_cap_threshold_strict_gt": 0.1,
+  "heavy_cap_requires_sign_gate": true,
+  "practical_equivalence_allowed_under_heavy_cap": false,
+  "N_paired_seeds": null,
+  "confirmatory_seeds": [],
+  "conditional_shuffled_tag": {
+    "prelocked": true,
+    "trigger_on_valid_primary_status_except": [
+      "ALIASED_TRANSFER_ADVANTAGE",
+      "ALIASED_TRANSFER_ADVANTAGE_BOUNDED"
+    ],
+    "same_N_and_seeds": true,
+    "required_probe_k": [
+      6
+    ]
+  },
+  "allocation_manifest_sha256": "TO_FILL",
+  "final_determinism_replay_sha256": "TO_FILL",
+  "lock_timestamp": "TO_FILL"
+}
