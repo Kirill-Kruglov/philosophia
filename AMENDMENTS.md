@@ -1,6 +1,6 @@
 # Amendments
 
-No Philosophia preregistration exists yet, so there are no amendments.
+Amendments to the candidate-for-lock preregistration are recorded below.
 
 When a locked design must change, append a signed entry here containing the date,
 affected gate, old rule, new rule, reason forced by execution, and the commit that
@@ -21,3 +21,5 @@ contains the amendment. Never rewrite an earlier entry.
 - `AMENDMENTS.md`
 
 **Scientific values:** none changed (estimand, arms, SESOI, gates, N rule, module pools, interpretation unchanged). This is a runtime/determinism documentation fix only.
+
+**Follow-up (2026-08-18, pre-lock):** preamble replaced (the previous opening sentence contradicted this entry); `SHUFFLED_TAG_CONFIG_TEMPLATE_V0.2.json` now records `torch_num_threads=1` / `torch_num_interop_threads=1` (any JSON configuring a real run carries these fields; decision/record templates do not); bundle rehashed.
