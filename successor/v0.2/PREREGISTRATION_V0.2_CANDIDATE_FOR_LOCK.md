@@ -143,6 +143,7 @@ Architecture, initialization family, optimizer family, batch size, base LR, weig
 4. LR is constant at the inherited base value: no warmup and no schedule;
 5. optimizer state resets at each history boundary and every probe;
 6. data generation, fixed history budget, and probe stopping semantics follow v0.2.
+7. execution is pinned to a single intra-op and single inter-op thread, overriding the inherited Level 0 runtime thread pinning (16 intra-op / 32 inter-op); the inherited `configure_canonical_torch_runtime()` is not invoked. This is a runtime/determinism setting, not an architecture or optimizer change; single-thread execution is required for the bit-reproducibility that the k=1 identity gate and the D0/D1 replays depend on (implementation contract §17).
 
 No architecture search, head/layer/width change, optimizer-family change, LR/WD sweep, curriculum search, per-arm tuning, or post-calibration hyperparameter change is authorized.
 
