@@ -25,7 +25,7 @@ Final machine-visible config must contain at minimum:
 - replicate seed and namespace roots;
 - batch size/LR/WD/optimizer/dtype;
 - positional encoding type/max-position handling;
-- gradient accumulation/drop-last semantics;
+- batch policy (full batch / explicit size), gradient accumulation, drop-last semantics;
 - CPU thread count/device/backend/deterministic flags;
 - heavy-cap threshold;
 - conditional SHUFFLED_TAG policy.
@@ -44,24 +44,36 @@ No numerical reconstruction from prose or remembered settings is allowed.
 
 ## 3. Deterministic seed derivation
 
-Canonical seed derivation:
+Canonical primitive:
 
-`seed64(namespace, replicate_index, extra...) = first_8_bytes(SHA256(UTF8("philosophia-alias-v0.2|" + namespace + "|" + fields)))`, unsigned little-endian, masked to 63 bits.
+`seed64(namespace, *fields) = first_8_bytes(SHA256(UTF8(preimage)))`, interpreted unsigned little-endian and masked to 63 bits, where
 
-Disjoint namespaces include:
+`preimage = "philosophia-alias-v0.2|" + namespace + "|" + "|".join(str(int(f)) for f in fields)`
 
-- calibration;
-- power-pilot;
-- confirmatory;
-- deterministic-replay;
-- world-order;
-- pair-split;
-- batch-order;
-- model-init;
-- context-code;
-- shuffled-tag.
+All integers are rendered base-10, unpadded, with no sign. The separator is `|` in both positions. There is no trailing separator.
 
-Commit implementation and first 20 values for each namespace before P0.
+Derivation is two-level and this is mandatory.
+
+**Stage namespaces** (level 1): `calibration`, `power-pilot`, `confirmatory`, `deterministic-replay`.
+
+**Role namespaces** (level 2): `world-order`, `pair-split`, `batch-order`, `model-init`, `context-code`, `shuffled-tag`.
+
+For a replicate at index `i` of stage `S`:
+
+1. `replicate_seed = seed64(S, i)`;
+2. every role seed derives from that replicate seed, never from `i`:
+   - `world_order_seed = seed64("world-order", replicate_seed)`;
+   - `pair_split_seed = seed64("pair-split", replicate_seed)`;
+   - `model_init_seed = seed64("model-init", replicate_seed)`;
+   - `context_code_seed(n) = seed64("context-code", replicate_seed, n)`;
+   - `batch_order_seed(history_position, epoch) = seed64("batch-order", replicate_seed, history_position, epoch)`;
+   - `shuffled_tag_seed(history_position) = seed64("shuffled-tag", replicate_seed, history_position)`.
+
+Consequence, and the reason the two-level form is required: replicate 0 of `calibration` and replicate 0 of `confirmatory` receive different allocations, splits, initializations, and context vectors. A one-level scheme keyed on `replicate_index` would make development and confirmatory replicates identical and would violate the stage disjointness required by the calibration protocol.
+
+The conditional `SHUFFLED_TAG` diagnostic reuses the confirmatory `replicate_seed` unchanged and differs only in the `shuffled-tag` role stream, as its protocol requires.
+
+Commit the implementation and the published test vectors (`TEST_VECTORS_V0.2.json`) before P0.
 
 ---
 
@@ -75,6 +87,17 @@ Authorized scales only:
 Operands `a,b in [0,M-1]`; target `y=(a+b)%n`.
 
 Numeric input/output vocabulary must cover integer tokens `0..2*M-2`. No modulus token exists.
+
+The inherited Level 0 relation between vocabulary and output head carries over verbatim with "numeric range" replacing "modulus":
+
+- `numeric_tokens = 2M-1` (ids `0..2M-2`);
+- `equals_token = 2M-1`, a real input token, as in Level 0;
+- `vocabulary_size = training_classes = 2M` (192 at M=96, 256 at M=128);
+- `reporting_classes = 2M-1`;
+- `W_U` has shape `[d_model, vocabulary_size]`; the `=` column remains a trained but never-correct class exactly as at Level 0;
+- training loss is cross-entropy over the first `training_classes` logits at the readout position; evaluation argmax is taken over the first `reporting_classes` logits.
+
+Narrowing `W_U` to `2M-1` is not authorized: it is an architecture change absent from preregistration §6.3.
 
 Exhaustive unit tests must verify all M^2 operand pairs for every authorized modulus against integer reference arithmetic.
 
@@ -120,10 +143,14 @@ Mismatch = pre-run `BLOCKED_IMPLEMENTATION`.
 
 For each replicate:
 
-1. deterministically permute selected 8-value pool with `world-order` seed;
+1. permute the selected 8-value pool, in ascending order, as
+   `numpy.random.Generator(numpy.random.PCG64(world_order_seed)).permutation(pool)`;
+   the NumPy major version is fixed by the environment lock and is part of the pre-calibration root;
 2. perm[0] -> C;
 3. perm[1:7] -> H1..H6;
 4. perm[7] -> spare.
+
+The allocation hash is `SHA256(UTF8("world-alloc-v0.2|M=<M>|stage=<stage>|i=<replicate_index>|" + ",".join(str(v) for v in permutation)))`.
 
 Write allocation manifest before training.
 
@@ -138,10 +165,15 @@ Split operand pairs, not generated world rows.
 For each replicate:
 
 1. enumerate all M^2 `(a,b)` lexicographically;
-2. hash with pair-split seed;
-3. sort by hash then lexical tie-break;
+2. compute for each pair the full 32-byte digest
+   `SHA256(UTF8("philosophia-alias-v0.2|pair-split|" + str(pair_split_seed) + "|" + str(a) + "|" + str(b)))`;
+3. sort ascending by that digest compared as bytes, tie-broken by `(a,b)`;
 4. first floor(0.70*M^2) -> train;
 5. rest -> held-out.
+
+The split digest is
+`split_hash = SHA256(b"pair-split-v0.2|M=<M>|train|" + train pairs in lexicographic order as two uint16 little-endian each + b"|held|" + held-out pairs likewise)`.
+It is a set hash and is independent of the ranked order.
 
 Same pair split across all worlds and all arms for the replicate.
 
@@ -158,10 +190,10 @@ No trainable per-world parameter is allowed.
 
 For each replicate/world:
 
-1. derive context seed from `(replicate_seed,n)`;
+1. derive context seed as `seed64("context-code", replicate_seed, n)`;
 2. draw d_model float64 iid standard normal using locked NumPy/PCG64;
 3. L2-normalize;
-4. compute once at model initialization the median L2 norm of initialized numeric token embeddings;
+4. compute once at model initialization the median L2 norm of initialized numeric token embeddings; the median is taken over the numeric rows `W_E[0 : 2M-1]` only, excluding the `=` row, at initialization; `2M-1` is odd at both authorized scales, so the median is an exact order statistic;
 5. scale every context vector to that same initial median norm;
 6. cast to model input dtype;
 7. freeze permanently.
@@ -249,11 +281,15 @@ For a given seed/history position, ALIASED and SEPARABLE have byte-identical `(a
 
 At H1, complete input tensors must be identical.
 
+Under the inherited full-batch policy the `batch-order` permutation fixes the row order **inside** the single full batch. It does not change which examples are seen, and affects the trajectory only through floating-point summation order; it is retained because it is logged, because it must be byte-identical between ALIASED and SEPARABLE at a given (replicate, history position, epoch), and because it defines the presentation order that the SHUFFLED_TAG schedule consumes.
+
 ---
 
 ## 13. Optimizer semantics
 
 Optimizer family/base LR/WD/batch/initialization and any inherited accumulation rule come from `MODEL_CONFIG_REF`.
+
+The inherited batch policy is **full batch**: one optimizer update consumes every training pair of the replicate split (6451 at M=96, 11468 at M=128). It is resolved from the `MODEL_CONFIG_REF` subtree (`data.py` + `train.py`), whose SHA256 values are recorded in the P-1 provenance record alongside `config.py` and `model.py`. `drop_last=false`, `gradient_accumulation_steps=1`. One epoch is therefore one optimizer update, and `B_history`, `tau`, and the competence evaluation interval are all counted in these full-batch updates.
 
 Cell-specific:
 
@@ -369,5 +405,11 @@ At minimum:
 - context norm and current token-embedding median norm;
 - batch hash;
 - runtime fingerprint.
+
+Under full batch, the batch hash is taken over the ordered `(a,b,y)` rows of the whole update.
+
+Tensor and state hashing are inherited from Level 0 `model._hash_tensor`:
+`SHA256(ascii(str(dtype)) || ascii(str(tuple(shape))) || detached.cpu().contiguous().numpy().tobytes())`.
+`state_dict_hash = SHA256` over `name + "|" + tensor_hash` concatenated in the inherited parameter creation order `W_E, W_pos, W_Q, W_K, W_V, W_O, W_in, b_in, W_out, b_out, W_U`.
 
 Raw logs are append-only after finalization.

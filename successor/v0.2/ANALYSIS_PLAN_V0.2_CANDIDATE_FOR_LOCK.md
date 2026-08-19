@@ -199,6 +199,8 @@ Before aggregate primary analysis:
 
 Any mismatch=`INVALID_K1_ARM_DIVERGENCE`; do not drop seed and continue.
 
+Scope of this gate: at k=1 both arms are the same computation under the same context code, so bit identity is structural rather than empirical. The gate detects arm-specific state leakage, context mis-indexing, and nondeterministic execution; it is not independent evidence of floating-point reproducibility, which the D0 and D1 replays carry.
+
 ---
 
 ## 12. Secondary curve shape
@@ -248,6 +250,8 @@ Algebraically:
 For mean(V) and mean(I), report two-sided **97.5% paired t CIs** (Bonferroni familywise alpha <=.05 across the two preplanned contrasts).
 
 If >10% of probes are capped in any arm entering a contrast, additionally apply the same conservative sign gate for that contrast; no component claim is licensed unless direction agrees under the sign gate.
+
+The diagnostic sign-gate implementation is part of the pre-calibration root (lock manifest section B) and must exist and hash before primary confirmation, in the same way as the primary sign gate. A diagnostic analysis module without it does not satisfy this plan.
 
 ### 14.2 Predeclared interpretation patterns
 

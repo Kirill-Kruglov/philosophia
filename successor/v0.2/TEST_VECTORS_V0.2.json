@@ -1,0 +1,302 @@
+{
+  "schema": "philosophia.aliasing.test_vectors.v0.2",
+  "prereg_version": "0.2-candidate-for-lock",
+  "purpose": "shared inputs for the acceptance vector; not scientific data",
+  "authoritative_semantics": {
+    "authoritative_true": "verified independently of the implementation under test; an implementation that does not reproduce it within the stated tolerance is wrong.",
+    "authoritative_false": "computed once while writing this file from the rules pinned in the bundle. Implementations must still compare against it; a disagreement is resolved by re-deriving from the pinned rule, not by assuming this file is correct."
+  },
+  "seed_primitive_examples": {
+    "note": "level-1 stage seeds; fill from the pinned primitive and verify",
+    "preimage_form": "philosophia-alias-v0.2|<namespace>|<field0>|<field1>|...",
+    "authoritative": true,
+    "seed64(calibration,0)": 598340420449222029,
+    "seed64(power-pilot,0)": 2985627791312555741,
+    "seed64(confirmatory,0)": 2865567934413349673,
+    "seed64(deterministic-replay,0)": 8724511081414729435
+  },
+  "shared_test_replicates": {
+    "stages": ["calibration", "power-pilot", "confirmatory", "deterministic-replay"],
+    "replicate_indices": [0, 1, 2, 3, 4, 5, 6, 7],
+    "scales": [96, 128],
+    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "model_init_seed", "state_dict_hash", "context_set_hash"]
+  },
+  "k1_identity_case": {
+    "stage": "deterministic-replay",
+    "replicate_index": 0,
+    "M": 96,
+    "B_history_smoke": 20,
+    "tau_smoke": 200,
+    "eval_interval": 100,
+    "note": "smoke budgets for the identity and D0 gates only; not B_history/tau"
+  },
+  "synthetic_primary_fixture": {
+    "tau": 5000,
+    "restricted_cost_rule": "C = 1 + min(T, tau); capped -> C = 1 + tau; R = ln(C)",
+    "paired_difference_rule": "d_i = R_SEPARABLE,k6 - R_ALIASED,k6 (k1 arms are identical, so the difference-in-differences reduces to this)",
+    "T_k1_both_arms": [1200, 900, 1500, 1100, 1300, 800, 1700, 1000, 1400, 1250, 950, 1600, 1050, 1350, 1150, 1450, 875, 1550, 1225, 1325],
+    "T_aliased_k6": [300, 250, 400, 275, 350, 200, 450, 260, 380, 330, 240, 420, 265, 355, 295, 390, 210, 410, 305, 345],
+    "T_separable_k6": [500, 420, 640, 470, 560, 340, 720, 430, 610, 530, 400, 680, 445, 570, 490, 625, 355, 660, 505, 555],
+    "case_no_heavy_cap": {
+      "capped_indices": {"ALIASED_k6": [], "SEPARABLE_k6": []},
+      "expected": {
+        "authoritative": true,
+        "N": 20,
+        "delta_hat": 0.49375154163621315,
+        "s_d": 0.023174474049244234,
+        "ci95": [0.48290555391996226, 0.504597529352464],
+        "ci90": [0.48479122739900826, 0.502711855873418],
+        "f_cap_aliased_k6": 0.0,
+        "f_cap_separable_k6": 0.0,
+        "HEAVY_CAP": false,
+        "sign_pos_successes": 20,
+        "L_plus": 0.8608916593317348,
+        "status": "ALIASED_TRANSFER_ADVANTAGE"
+      }
+    },
+    "case_heavy_cap": {
+      "capped_indices": {"ALIASED_k6": [], "SEPARABLE_k6": [17, 18, 19]},
+      "expected": {
+        "authoritative": true,
+        "N": 20,
+        "delta_hat": 0.8193075771795622,
+        "ci95": [0.44829296737527236, 1.190322186983852],
+        "ci90": [0.5127972272315036, 1.1258179271276207],
+        "f_cap_separable_k6": 0.15,
+        "HEAVY_CAP": true,
+        "sign_pos_successes": 20,
+        "L_plus": 0.8608916593317348,
+        "SIGN_POS_PASS": true,
+        "status": "ALIASED_TRANSFER_ADVANTAGE_BOUNDED"
+      }
+    },
+    "case_practically_equivalent": {
+      "note": "constructed so the entire 90% CI lies inside [-ln1.20, +ln1.20] with no arm capped; these arrays replace T_aliased_k6/T_separable_k6 for this case only",
+      "tau": 5000,
+      "T_aliased_k6": [320, 268, 415, 287, 362, 214, 468, 275, 394, 341, 252, 436, 279, 368, 308, 404, 222, 425, 317, 357],
+      "T_separable_k6": [330, 260, 440, 284, 369, 203, 506, 269, 410, 344, 242, 458, 279, 375, 305, 416, 209, 455, 320, 350],
+      "capped_indices": {"ALIASED_k6": [], "SEPARABLE_k6": []},
+      "expected": {
+        "authoritative": false,
+        "N": 20,
+        "delta_hat": 0.00819919194788885,
+        "s_d": 0.03934268061834409,
+        "ci95": [-0.010213749368673935, 0.026612133264451637],
+        "ci90": [-0.007012492275246748, 0.02341087617102445],
+        "f_cap_aliased_k6": 0.0,
+        "f_cap_separable_k6": 0.0,
+        "HEAVY_CAP": false,
+        "ci90_inside_equivalence_region": true,
+        "sign_pos_successes": 11,
+        "L_plus": 0.34693139764309294,
+        "SIGN_POS_PASS": false,
+        "status": "PRACTICALLY_EQUIVALENT"
+      }
+    },
+    "case_unresolved": {
+      "note": "constructed so the 95% CI crosses zero, the 90% CI is not contained in the equivalence region, and no arm is capped; these arrays replace T_aliased_k6/T_separable_k6 for this case only",
+      "tau": 5000,
+      "T_aliased_k6": [300, 250, 400, 275, 350, 200, 450, 260, 380, 330, 240, 420, 265, 355, 295, 390, 210, 410, 305, 345],
+      "T_separable_k6": [661, 112, 761, 137, 841, 83, 766, 143, 799, 158, 626, 209, 478, 163, 680, 202, 421, 180, 535, 186],
+      "capped_indices": {"ALIASED_k6": [], "SEPARABLE_k6": []},
+      "expected": {
+        "authoritative": false,
+        "N": 20,
+        "delta_hat": -0.0021960103721383904,
+        "s_d": 0.7509799777957844,
+        "ci95": [-0.3536654589134769, 0.3492734381692001],
+        "ci90": [-0.2925593028723552, 0.2881672821280784],
+        "f_cap_aliased_k6": 0.0,
+        "f_cap_separable_k6": 0.0,
+        "HEAVY_CAP": false,
+        "ci95_crosses_zero": true,
+        "ci90_inside_equivalence_region": false,
+        "sign_pos_successes": 10,
+        "L_plus": 0.3019539112864935,
+        "SIGN_POS_PASS": false,
+        "status": "UNRESOLVED"
+      }
+    }
+  },
+  "synthetic_shuffled_tag_fixture": {
+    "note": "N=20 k6 R-inputs for ALIASED / SHUFFLED / SEPARABLE; exercises the diagnostic contrasts of analysis plan section 14 and the diagnostic sign gate of section 14.1",
+    "tau": 5000,
+    "restricted_cost_rule": "C = 1 + min(T, tau); capped -> C = 1 + tau; R = ln(C)",
+    "contrast_rules": {
+      "V_i": "R_ALIASED,k6 - R_SHUFFLED,k6",
+      "I_i": "R_SHUFFLED,k6 - R_SEPARABLE,k6",
+      "interval": "two-sided 97.5% paired Student-t CI on the mean",
+      "sign_gate_trigger": "cap fraction > 0.10 in any arm entering that contrast",
+      "resolved_positive": "97.5% CI lower bound > 0 and, when the sign gate is triggered, SIGN_POS_PASS"
+    },
+    "case_no_diagnostic_heavy_cap": {
+      "T_aliased_k6": [900, 820, 1010, 870, 960, 760, 1080, 840, 1000, 930, 800, 1040, 860, 970, 890, 1020, 780, 1050, 910, 950],
+      "T_shuffled_k6": [600, 545, 672, 580, 640, 505, 720, 560, 666, 620, 532, 692, 572, 646, 592, 680, 518, 700, 606, 632],
+      "T_separable_k6": [612, 530, 690, 566, 655, 520, 702, 548, 680, 604, 545, 676, 588, 630, 606, 662, 530, 714, 592, 648],
+      "capped_indices": {"ALIASED_k6": [], "SHUFFLED_k6": [], "SEPARABLE_k6": []},
+      "expected": {
+        "authoritative": false,
+        "N": 20,
+        "f_cap": {"ALIASED_k6": 0.0, "SHUFFLED_k6": 0.0, "SEPARABLE_k6": 0.0},
+        "V": {
+          "mean": 0.40623715808827965,
+          "s": 0.0012658676266478308,
+          "ci975": [0.40554835676024337, 0.40692595941631593],
+          "sign_gate_required": false,
+          "sign_pos_successes": 20,
+          "L_plus": 0.8608916593317348,
+          "SIGN_POS_PASS": true,
+          "resolved_positive": true
+        },
+        "I": {
+          "mean": -0.0019036175920133403,
+          "s": 0.024972674072644363,
+          "ci975": [-0.015492092961595361, 0.01168485777756868],
+          "sign_gate_required": false,
+          "sign_pos_successes": 9,
+          "L_plus": 0.2586506097489123,
+          "SIGN_POS_PASS": false,
+          "resolved_positive": false
+        },
+        "algebraic_identity_max_abs_residual_V_plus_I_plus_d": 0.0,
+        "label": "V_RESOLVED_POSITIVE_I_NOT"
+      }
+    },
+    "case_diagnostic_heavy_cap": {
+      "note": "SHUFFLED is capped in 6/20 probes and enters both contrasts, so the sign gate is required for V and for I. V's 97.5% CI lower bound is positive but the Clopper-Pearson gate fails, so V is not resolved positive; the gate is load-bearing here.",
+      "T_aliased_k6": [700, 640, 760, 680, 730, 600, 800, 660, 750, 710, 620, 780, 670, 740, 690, 770, 610, 790, 705, 725],
+      "T_shuffled_k6": [60, 55, 0, 50, 62, 45, 58, 52, 0, 57, 48, 61, 53, 59, 51, 63, 46, 0, 56, 54],
+      "T_separable_k6": [640, 600, 700, 655, 690, 570, 745, 625, 710, 668, 585, 725, 632, 700, 648, 720, 580, 735, 660, 682],
+      "capped_indices": {"ALIASED_k6": [], "SHUFFLED_k6": [2, 4, 8, 11, 15, 17], "SEPARABLE_k6": []},
+      "expected": {
+        "authoritative": false,
+        "N": 20,
+        "f_cap": {"ALIASED_k6": 0.0, "SHUFFLED_k6": 0.3, "SEPARABLE_k6": 0.0},
+        "V": {
+          "mean": 1.2114124990236503,
+          "s": 2.0760256992291164,
+          "ci975": [0.08177680208016436, 2.3410481959671365],
+          "sign_gate_required": true,
+          "sign_pos_successes": 14,
+          "L_plus": 0.49218159338520673,
+          "SIGN_POS_PASS": false,
+          "resolved_positive": false
+        },
+        "I": {
+          "mean": -1.1491127721885683,
+          "s": 2.079656116602031,
+          "ci975": [-2.2807239018354024, -0.017501642541734252],
+          "sign_gate_required": true,
+          "sign_pos_successes": 6,
+          "L_plus": 0.13955374900238637,
+          "SIGN_POS_PASS": false,
+          "resolved_positive": false
+        },
+        "algebraic_identity_max_abs_residual_V_plus_I_plus_d": 0.0,
+        "label": "DECOMPOSITION_UNRESOLVED"
+      }
+    }
+  },
+  "shuffled_tag_schedule_case": {
+    "stage": "confirmatory",
+    "replicate_index": 0,
+    "B_history_demo": 100,
+    "train_size_demo": 6451,
+    "P": 645100,
+    "report": ["per-block code-count vector", "extra_subset", "schedule_hash"]
+  },
+  "pinned_encodings": {
+    "seed_primitive": {
+      "preimage": "\"philosophia-alias-v0.2|\" + namespace + \"|\" + \"|\".join(str(int(f)) for f in fields)",
+      "digest": "first 8 bytes of SHA256(UTF8(preimage)), unsigned little-endian, masked to 63 bits",
+      "levels": "stage namespace -> replicate_seed = seed64(stage, i); role seeds derive from replicate_seed, never from i"
+    },
+    "world_order": {
+      "algorithm": "numpy.random.Generator(numpy.random.PCG64(world_order_seed)).permutation(pool) with pool in ascending order",
+      "allocation_hash": "SHA256(UTF8(\"world-alloc-v0.2|M=<M>|stage=<stage>|i=<replicate_index>|\" + \",\".join(str(v) for v in permutation)))"
+    },
+    "pair_split": {
+      "rank_key": "SHA256(UTF8(\"philosophia-alias-v0.2|pair-split|\" + str(pair_split_seed) + \"|\" + str(a) + \"|\" + str(b))), full 32 bytes compared as bytes",
+      "tie_break": "(a,b) ascending",
+      "train_count": "floor(0.70 * M^2)",
+      "split_hash": "SHA256(b\"pair-split-v0.2|M=<M>|train|\" + train pairs in lexicographic order as two uint16 little-endian each + b\"|held|\" + held-out pairs likewise)",
+      "split_hash_property": "set hash; independent of the ranked order"
+    },
+    "tensor_hash": {
+      "source": "inherited from Level 0 model._hash_tensor",
+      "rule": "SHA256(ascii(str(dtype)) || ascii(str(tuple(shape))) || detached.cpu().contiguous().numpy().tobytes())"
+    },
+    "state_dict_hash": {
+      "rule": "SHA256 over name + \"|\" + tensor_hash concatenated in inherited parameter creation order",
+      "parameter_order": ["W_E", "W_pos", "W_Q", "W_K", "W_V", "W_O", "W_in", "b_in", "W_out", "b_out", "W_U"]
+    },
+    "output_head": {
+      "numeric_tokens": "2M-1",
+      "equals_token": "2M-1",
+      "vocabulary_size": "2M",
+      "training_classes": "2M",
+      "reporting_classes": "2M-1",
+      "W_U_shape": "[d_model, vocabulary_size]",
+      "note": "the '=' column is a trained but never-correct class, as at Level 0; narrowing W_U to 2M-1 is not authorized"
+    },
+    "batch_policy": {
+      "policy": "full batch",
+      "train_pairs_per_update": {"M96": 6451, "M128": 11468},
+      "drop_last": false,
+      "gradient_accumulation_steps": 1,
+      "resolved_from": "MODEL_CONFIG_REF subtree (data.py + train.py)"
+    },
+    "context_scale_reference": {
+      "rule": "median L2 norm over the numeric rows W_E[0 : 2M-1] only, excluding the '=' row, taken once at model initialization",
+      "note": "2M-1 is odd at both authorized scales, so the median is an exact order statistic"
+    }
+  },
+  "model_config_acceptance_projection": {
+    "note": "byte-identity of v0.2_model_config.json across implementations is withdrawn as an acceptance item; it was never derivable from the bundle. The full config file stays free-form. Acceptance compares this canonical projection instead.",
+    "serialization": "json.dumps(obj, sort_keys=True, separators=(\",\",\":\"), ensure_ascii=True) with no trailing newline, then SHA256 over the UTF-8 bytes",
+    "keys": [
+      "residual_width",
+      "heads",
+      "head_width",
+      "mlp_width",
+      "layers",
+      "normalization",
+      "activation",
+      "optimizer_family",
+      "learning_rate",
+      "beta1",
+      "beta2",
+      "epsilon",
+      "weight_decay",
+      "warmup_updates",
+      "lr_schedule",
+      "batch_policy",
+      "dtype",
+      "sequence_length",
+      "context_position",
+      "readout_position",
+      "max_position",
+      "positional_table_rows_added",
+      "numeric_tokens_96",
+      "vocabulary_size_96",
+      "training_classes_96",
+      "reporting_classes_96",
+      "equals_token_96",
+      "numeric_tokens_128",
+      "vocabulary_size_128",
+      "training_classes_128",
+      "reporting_classes_128",
+      "equals_token_128",
+      "torch_num_threads",
+      "torch_num_interop_threads",
+      "deterministic_algorithms",
+      "config_py_sha256",
+      "model_py_sha256"
+    ]
+  },
+  "comparison_tolerance": {
+    "integers_counts_flags_statuses_hashes": "exact",
+    "real_valued_statistics": "absolute 1e-9",
+    "rationale": "summation order can move the last ulp of s_d and the CI bounds; a 1-ulp difference is not a divergence, a status or count difference is"
+  }
+}

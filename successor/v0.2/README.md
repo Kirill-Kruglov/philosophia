@@ -47,6 +47,9 @@ In v0.2 the SESOI is explicitly a **point-estimate licensing threshold**. Direct
 10. `CALIBRATION_DECISION_TEMPLATE_V0.2.json` — machine-readable development decision template.
 11. `CONFIRMATORY_CONFIG_TEMPLATE_V0.2.json` — machine-readable confirmatory lock template.
 12. `SHUFFLED_TAG_CONFIG_TEMPLATE_V0.2.json` — machine-readable conditional diagnostic template.
+13. `TEST_VECTORS_V0.2.json` — shared acceptance-vector inputs and pinned encodings for independent implementations.
+
+The bundle is these thirteen files. The shared inputs of the acceptance vector — seed-primitive examples, the replicate/scale grid, the synthetic primary and SHUFFLED_TAG fixtures, and the pinned seed/permutation/split/hash encodings — live in item 13, so independent implementations co-fail on trajectory-relevant quantities rather than only on spec arithmetic.
 
 ## Repository-dependent item
 
