@@ -64,6 +64,7 @@ If unavailable -> `BLOCKED_CONFIG_PROVENANCE`.
 
 ### Tests/reports
 
+- locked-environment version assertion;
 - exhaustive world truth report;
 - exact p_flip report;
 - split size/hash report;

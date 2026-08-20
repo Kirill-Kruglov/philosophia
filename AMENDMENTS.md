@@ -109,3 +109,29 @@ Two clarifying notes carrying no rule change were also appended: analysis plan �
 - `successor/v0.2/TEST_VECTORS_V0.2.json`
 - `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
 - `AMENDMENTS.md`
+
+## 2026-08-20 — pre-data, pre-lock: index conventions and negative controls
+
+**Date:** 2026-08-20  
+**Status:** **pre-data, pre-lock**. No outcome-bearing run exists, so nothing is invalidated. This is the fifth pre-lock amendment; the bundle is closed after it and the Phase-A rebuild brief quotes the manifest this commit produces.  
+**Cause:** the index conventions of the bundle were carried only implicitly, by the block labels of one digest formula, and were ambiguous in three ways rather than two. External recomputation confirmed three distinct readings of the schedule digest — fully 1-based, 0-based seeds with 1-based labels, and fully 0-based — all of which a plain reading of §4.1 step 5 admits. The same ambiguity affects `batch_order_seed(history_position, epoch)` in implementation contract §3, where no published hash enforces anything at all. Two clarity findings from amendment #4 are also closed, and the live-version assertion that had been a private checker convenience is promoted to a required test after the previous pass found one implementation built against a NumPy the repository does not resolve to.
+
+**Affected gates:** implementation contract §§3, 9, 17; conditional SHUFFLED_TAG protocol §§4.1, 4.2; lock manifest §B; `TEST_VECTORS_V0.2.json`. No gate in the preregistration is touched.
+
+**The five edits:**
+
+1. **Index conventions stated once, centrally** — implementation contract §3 now fixes `replicate_index` 0-based, `history_position` **1-based** (H1 = 1, binding in `batch_order_seed`, `shuffled_tag_seed`, the SHUFFLED_TAG block labels, and every log field of that name), `epoch` 0-based running 0..B_history-1 under the full-batch policy, and `k` unaffected. The SHUFFLED_TAG protocol §§4.1 and 4.2 now point at that clause rather than leaving the numbering to inference.
+2. **Negative controls for the schedule digest** — `shuffled_tag_schedule_case.expected` now publishes the digests of both wrong conventions alongside the correct one, so an index bug identifies itself instead of surfacing as an unexplained hash difference. All three were recomputed under the locked NumPy 2.5.1 and are mutually distinct.
+3. **§9 rule 3 subordinated to rule 4** — rule 3's "no parameter is added" branch does not apply to the inherited Level 0 learner, whose `W_pos` is a learned table exactly one row short; the rule now says so and states it is never a licence to skip rule 4.
+4. **§9 rule 5 names the number** — `max_position = sequence_length = 4`, counted as a number of positions and not as a zero-based index, matching the projection value. The Phase-A implementations had split 4 versus 3 on this field.
+5. **Locked-environment assertion becomes a required test** — implementation contract §17 now requires an acceptance test asserting at process start that live CPython, PyTorch, NumPy, and SciPy versions equal the `locked_environment` block exactly, with failure `BLOCKED_IMPLEMENTATION`; lock manifest §B lists it first under Tests/reports.
+
+**Scientific values:** none changed. The primary estimand, the arms, the SESOI (`ln 1.20`), the CI levels, the heavy-cap threshold, the sign-gate rule, the N rule, the module pools, the competence rule, the kill-matrix statuses, and the interpretation fences are all unchanged. `PREREGISTRATION_V0.2_CANDIDATE_FOR_LOCK.md` is again **byte-unchanged**, still `8b669b42c57242d1369a45a90a8ae808fa9e8de1b5faa0a72f6696fd48b8d946`.
+
+**Files touched:**
+- `successor/v0.2/IMPLEMENTATION_CONTRACT_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/CONDITIONAL_SHUFFLED_TAG_PROTOCOL_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/LOCK_MANIFEST_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/TEST_VECTORS_V0.2.json`
+- `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
+- `AMENDMENTS.md`

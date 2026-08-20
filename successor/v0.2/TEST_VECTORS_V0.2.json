@@ -222,7 +222,13 @@
       "code_count_vector": [107517, 107516, 107516, 107517, 107517, 107517],
       "code_count_vector_sum": 645100,
       "schedule_hash": "4be275b7cbf111ebf71483958efd392074057c17d74a6aa4dc3cb0de82ab2250",
-      "authoritative": true
+      "authoritative": true,
+      "negative_controls": {
+        "note": "digests produced by the two wrong index conventions, published so a mismatch identifies its own cause instead of appearing as an unexplained hash difference. An implementation reproducing one of these has an indexing bug, not a modelling bug.",
+        "zero_based_seeds_one_based_labels": "a4a55713812ba7d035a1426ced728649c1d0400754758c0b9a4acd0da4d1c193",
+        "fully_zero_based": "f7f8718dad0ef55a7e454f0967432c5f532b24e001338c87f94142294600a570",
+        "correct": "4be275b7cbf111ebf71483958efd392074057c17d74a6aa4dc3cb0de82ab2250"
+      }
     }
   },
   "locked_environment": {

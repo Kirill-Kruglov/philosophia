@@ -86,6 +86,15 @@ For a replicate at index `i` of stage `S`:
    - `batch_order_seed(history_position, epoch) = seed64("batch-order", replicate_seed, history_position, epoch)`;
    - `shuffled_tag_seed(history_position) = seed64("shuffled-tag", replicate_seed, history_position)`.
 
+Index conventions, binding wherever these names appear in the bundle:
+
+- `replicate_index` is 0-based; the first replicate of a stage is 0;
+- `history_position` is **1-based**: H1 = 1, H6 = 6. It is used with this numbering in `batch_order_seed`, in `shuffled_tag_seed`, in the SHUFFLED_TAG block labels, and in every log field of that name;
+- `epoch` is 0-based; the first epoch of a history block is 0. Under the inherited full-batch policy one epoch is one optimizer update, so within a block of `B_history` updates the epoch runs 0..B_history-1;
+- probe index `k` retains its own meaning (number of completed history worlds before the probe) and is unaffected by the above.
+
+An implementation that numbers any of these differently produces a different trajectory. The published schedule digest and its negative controls in `TEST_VECTORS_V0.2.json` enforce the `history_position` convention mechanically; the others are enforced by the k=1 and D0 acceptance items.
+
 Consequence, and the reason the two-level form is required: replicate 0 of `calibration` and replicate 0 of `confirmatory` receive different allocations, splits, initializations, and context vectors. A one-level scheme keyed on `replicate_index` would make development and confirmatory replicates identical and would violate the stage disjointness required by the calibration protocol.
 
 The conditional `SHUFFLED_TAG` diagnostic reuses the confirmatory `replicate_seed` unchanged and differs only in the `shuffled-tag` role stream, as its protocol requires.
@@ -241,9 +250,9 @@ Rules:
 
 1. all arms/stages use the same shifted positions;
 2. prediction readout is the inherited readout applied to the correspondingly shifted task position;
-3. if inherited positional encoding is analytic/fixed or already supports the longer sequence, no parameter is added;
+3. if inherited positional encoding is analytic/fixed or already supports the longer sequence, no parameter is added. For the inherited Level 0 learner this branch does not apply: `W_pos` is a learned `[sequence_length, d_model]` table that is exactly one row short, so rule 4 governs. Rule 3 covers only an analytic or fixed positional encoding, which this cell does not use, and is never a licence to skip rule 4;
 4. a learned positional table is drawn **once**, as a single `[sequence_length, d_model] = [4, d_model]` tensor, at the inherited position in the initialization draw order and under the inherited positional-parameter initialization rule. It is **not** drawn as `[3, d_model]` and then extended by a separately drawn row: the two consume the random stream differently and would change every parameter drawn afterwards. The "one shared row only" constraint of this rule bounds how much the table may grow relative to the inherited task sequence; it does not describe the drawing procedure. The added row is shared across all worlds and arms and is declared in the config diff;
-5. `max_position` may increase only by one relative to the inherited task sequence requirement;
+5. `max_position` may increase only by one relative to the inherited task sequence requirement. Resolved for this cell: the inherited task sequence is 3 positions, v0.2 has 4, and `max_position = sequence_length = 4`, counted as a number of positions and not as a zero-based index. The projection value in `TEST_VECTORS_V0.2.json` is this number;
 6. no per-world or per-arm positional parameter is allowed.
 
 A unit test must compare position IDs/readout indices against the declared shifted layout.
@@ -381,6 +390,7 @@ Rules:
 - one CPU thread for trajectory-sensitive CPU operations;
 - deterministic PyTorch algorithms enabled;
 - exact package versions are pinned by the environment lock and are part of the pre-calibration root: CPython, PyTorch, NumPy, and SciPy are each recorded as a full version string, not a major or minor version. NumPy decides the world-order and SHUFFLED_TAG permutations and the `tau` quantile; SciPy decides the Clopper-Pearson bound and the chi-squared factor in the N rule. A version change in either is a change to the locked runtime and requires the same treatment as any other post-lock runtime change;
+- an acceptance test asserts, at process start, that the live CPython, PyTorch, NumPy, and SciPy versions equal the `locked_environment` block of `TEST_VECTORS_V0.2.json` exactly. Failure is `BLOCKED_IMPLEMENTATION` and no further stage may run;
 - nondeterministic kernels forbidden;
 - Python/NumPy/PyTorch CPU/accelerator RNG explicitly seeded;
 - no deterministic setting may be relaxed after outcome-bearing development.
