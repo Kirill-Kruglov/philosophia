@@ -19,7 +19,13 @@
     "stages": ["calibration", "power-pilot", "confirmatory", "deterministic-replay"],
     "replicate_indices": [0, 1, 2, 3, 4, 5, 6, 7],
     "scales": [96, 128],
-    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "model_init_seed", "state_dict_hash", "context_set_hash", "batch_order_seed(h1,e0)"]
+    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "model_init_seed", "state_dict_hash", "context_set_hash", "batch_order_seed(h1,e0)"],
+    "published_context_set_hashes": {
+      "authoritative": true,
+      "note": "SHA256 of the §8 context-set preimage; per-world tensor_hash is the §19 rule on the frozen float32 vector, not the float64 draw. Allocation order C,H1..H6,spare.",
+      "calibration/0/M96": "35d6dfef419ad048599e31f1248f74bc4d2880b534cd21dc5d31fecce6ef7ea7",
+      "deterministic-replay/0/M96": "807b9cd764393fb06a18e9e5a2e5a0953b2add5d7069589fd939a487d846c9bc"
+    }
   },
   "k1_identity_case": {
     "stage": "deterministic-replay",
@@ -245,10 +251,12 @@
       "replicate_seed": 8724511081414729435,
       "h1_e0": 6415953772222957738,
       "h1_e1": 4082218470627201015,
-      "h6_e0": 4093966265741506018
+      "h6_e0": 4093966265741506018,
+      "probe_h0_e0": 2730718178529918974,
+      "reacq_h7_e0": 5664936142307372860
     },
     "negative_control": {
-      "note": "value produced if history_position is numbered from 0; reproducing it means an indexing bug",
+      "note": "After amendment #7, history_position=0 is the reserved C-probe sentinel (implementation contract §12), so deterministic_replay_0_h0_e0 equals probe_h0_e0 and is the authorized C-probe seed, not a bug. confirmatory_0_h0_e0 remains a negative control: reproducing it as a history-block seed means an indexing bug.",
       "confirmatory_0_h0_e0": 4115698630092310716,
       "deterministic_replay_0_h0_e0": 2730718178529918974
     }

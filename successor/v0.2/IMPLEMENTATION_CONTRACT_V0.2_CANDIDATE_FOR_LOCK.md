@@ -224,13 +224,26 @@ For each replicate/world:
 6. cast to model input dtype;
 7. freeze permanently.
 
+### Context set digest
+
+The per-world vector is hashed by the §19 tensor rule applied to the **frozen model-input dtype tensor**, that is after step 6's cast to float32 and not to the float64 draw. The replicate's context set digest is
+
+`context_set_hash = SHA256(UTF8("context-set-v0.2|M=<M>|stage=<stage>|i=<replicate_index>|") + concatenation over the eight worlds in allocation order C, H1, H2, H3, H4, H5, H6, spare of UTF8("<n>|" + tensor_hash(z_n) + "|"))`
+
+where `<n>` is the modulus in base 10. Allocation order, not ascending modulus order, so the digest also witnesses the allocation.
+
 Context is injected directly as input-position representation 0, not through a trainable world-embedding table.
 
 Precisely: the input representation is constructed exactly as at Level 0, except that the position-0 row of the token-embedding term is the frozen context vector instead of an embedding lookup. The inherited positional term is then added at every position uniformly, so the position-0 representation is `z + W_pos[0]` and task positions 1..3 are `W_E[token] + W_pos[position]`. No positional term is omitted, rescaled, or duplicated at position 0, and the context vector is never added to a task position.
 
 ### Norm-drift rule
 
-No dynamic rescaling is allowed. At the end of every history block log:
+No dynamic rescaling is allowed. Two measurement points are logged and they are distinct fields, not one field measured at an implementation's choice of moment:
+
+- `context_norm_ratio_at_init`, taken once at model initialization, immediately after step 5. It is 1.0 by construction and exists as an assertion, not as an observation;
+- `context_norm_ratio_at_block_end`, taken at the end of every history block, which is the drift diagnostic.
+
+At each block end log:
 
 - fixed context-vector norm;
 - current median numeric-token-embedding norm;
@@ -310,6 +323,13 @@ For a given seed/history position, ALIASED and SEPARABLE have byte-identical `(a
 At H1, complete input tensors must be identical.
 
 Under the inherited full-batch policy the `batch-order` permutation fixes the row order **inside** the single full batch. It does not change which examples are seen, and affects the trajectory only through floating-point summation order; it is retained because it is logged, because it must be byte-identical between ALIASED and SEPARABLE at a given (replicate, history position, epoch), and because it defines the presentation order that the SHUFFLED_TAG schedule consumes.
+
+Forked probes are not history worlds and take reserved `history_position` sentinels outside the 1..6 range, so no probe ever replays a history block's batch order:
+
+- every fresh-C probe, at every k, in both primary arms and in the SHUFFLED_TAG diagnostic: `history_position = 0`;
+- H1 reacquisition: `history_position = 7`.
+
+Within a probe, `epoch` counts from 0 for the probe's first update. C probes at different k therefore share one batch-order stream over the same C training split, which is intended: it keeps the probes matched across k and across arms.
 
 ---
 
@@ -397,7 +417,7 @@ Rules:
 
 ### Two mandatory replay tests
 
-**D0 pre-P0 smoke:** same short config executed twice -> exact init/batch/loss/final hashes.
+**D0 pre-P0 smoke:** the same short config executed twice from clean process state, with exact equality of init, batch, loss, eval and final hashes. The smoke config is fixed so the gate is comparable across implementations: stage `deterministic-replay`, replicate 0, M=96, arm ALIASED, `B_history = 20`, `tau = 200`, evaluation interval 100 — the same configuration as the k=1 identity case published in `TEST_VECTORS_V0.2.json`.
 
 **D1 after P1, before P2:** one dedicated deterministic-replay seed executes the **full selected H1 block of B_history updates plus the full k1 C probe to tau/criterion twice independently**. Entire trajectory artifacts must match bit-for-bit.
 
@@ -436,7 +456,11 @@ At minimum:
 - batch hash;
 - runtime fingerprint.
 
-Under full batch, the batch hash is taken over the ordered `(a,b,y)` rows of the whole update.
+Under full batch the batch digest covers the whole update:
+
+`batch_hash = tensor_hash(rows)` where `rows` is an int64 tensor of shape `[N,3]` whose columns are `(a, b, y)` and whose row order is the presentation order fixed by the `batch-order` permutation for that `(replicate, history_position, epoch)`. The §19 tensor rule already binds dtype and shape, so no separate prefix is added.
+
+An implementation may additionally log `input_hash = tensor_hash(embedded)` over the `[N, 4, d_model]` float32 residual immediately after embedding and before attention. It is optional and diagnostic; it never enters a gate.
 
 Tensor and state hashing are inherited from Level 0 `model._hash_tensor`:
 `SHA256(ascii(str(dtype)) || ascii(str(tuple(shape))) || detached.cpu().contiguous().numpy().tobytes())`.

@@ -156,3 +156,28 @@ Two clarifying notes carrying no rule change were also appended: analysis plan �
 - `successor/v0.2/TEST_VECTORS_V0.2.json`
 - `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
 - `AMENDMENTS.md`
+
+## 2026-08-20 — pre-data, pre-lock: pin four encodings the Phase-A rebuild exposed
+
+**Date:** 2026-08-20  
+**Status:** **pre-data, pre-lock**. No outcome-bearing run exists, so nothing is invalidated. This is the seventh pre-lock amendment.  
+**Cause:** the Phase-A rebuild produced a three-way agreement on every static quantity — seeds, allocation, split, initialization, and all eleven per-parameter tensor hashes — and exposed four unpinned encodings (the context-set digest, the batch digest, the probe batch-order coordinate, and the norm-ratio measurement point) plus an unpinned D0 budget. An arithmetic divergence between the three implementations is under gradient bisect and is **not** closed here; it will be addressed by a later amendment.
+
+**Affected gates:** implementation contract §§8, 12, 17, 19; `TEST_VECTORS_V0.2.json`. No gate in the preregistration is touched.
+
+**The four edits:**
+
+1. **Context-set digest preimage** (implementation contract §8) — the per-world vector is hashed by the §19 tensor rule on the frozen float32 model-input tensor, not the float64 draw; `context_set_hash` concatenates those hashes over the eight worlds in allocation order C, H1..H6, spare. Published authoritative values: `calibration/0/M96` = `35d6dfef419ad048599e31f1248f74bc4d2880b534cd21dc5d31fecce6ef7ea7`; `deterministic-replay/0/M96` = `807b9cd764393fb06a18e9e5a2e5a0953b2add5d7069589fd939a487d846c9bc`.
+2. **Batch and optional input digest preimages** (implementation contract §19) — `batch_hash = tensor_hash(rows)` over an int64 `[N,3]` tensor of `(a,b,y)` in `batch-order` presentation order, with no extra prefix; `input_hash` over the `[N,4,d_model]` float32 residual is optional, diagnostic, and never a gate.
+3. **Probe batch-order sentinels** (implementation contract §12) — forked probes are not history worlds: every fresh-C probe uses `history_position = 0`; H1 reacquisition uses `history_position = 7`. Published `deterministic_replay_0` literals: `probe_h0_e0 = 2730718178529918974`, `reacq_h7_e0 = 5664936142307372860`.
+4. **Norm-ratio measurement points and D0 budget** (implementation contract §§8, 17) — `context_norm_ratio_at_init` (always 1.0, after scale step 5) is distinct from `context_norm_ratio_at_block_end`; D0 is the k=1 identity smoke config: stage `deterministic-replay`, replicate 0, M=96, arm ALIASED, `B_history = 20`, `tau = 200`, evaluation interval 100.
+
+**Not closed:** the arithmetic divergence among the three implementations remains under bisect and is reserved for a later amendment. No value is guessed here.
+
+**Scientific values:** none changed. The primary estimand, the arms, the SESOI (`ln 1.20`), the CI levels, the heavy-cap threshold, the sign-gate rule, the N rule, the module pools, the competence rule, the kill-matrix statuses, and the interpretation fences are all unchanged. `PREREGISTRATION_V0.2_CANDIDATE_FOR_LOCK.md` is again **byte-unchanged**, still `8b669b42c57242d1369a45a90a8ae808fa9e8de1b5faa0a72f6696fd48b8d946`.
+
+**Files touched:**
+- `successor/v0.2/IMPLEMENTATION_CONTRACT_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/TEST_VECTORS_V0.2.json`
+- `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
+- `AMENDMENTS.md`
