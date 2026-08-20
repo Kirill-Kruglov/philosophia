@@ -82,3 +82,30 @@ Two clarifying notes carrying no rule change were also appended: analysis plan �
 - `successor/v0.2/TEST_VECTORS_V0.2.json`
 - `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
 - `AMENDMENTS.md`
+
+## 2026-08-20 — pre-data, pre-lock: final pass before the Phase-A rebuild
+
+**Date:** 2026-08-20  
+**Status:** **pre-data, pre-lock**. No outcome-bearing run exists, so nothing is invalidated. This is the fourth and final pre-lock amendment; the bundle is closed after it.  
+**Cause:** external verification of amendment #3 recomputed `MODEL_CONFIG_REF_ROOT` and `projection_sha256` exactly and closed four of that amendment's open questions. Two further free encodings were found by reading an implementation rather than the bundle — the positional-table draw procedure and the position-0 representation — either of which would change every initialization hash. A third gap was an unpinned NumPy/SciPy version behind four decision-relevant numerical routines.
+
+**Affected gates:** implementation contract §§2, 8, 9, 17; conditional SHUFFLED_TAG protocol §§4.1, 4.2; `TEST_VECTORS_V0.2.json`. No gate in the preregistration is touched.
+
+**The seven edits:**
+
+1. **Inherited arm named** — `config.py` carries two arms and its hash covers both; `paper_mainline_arm()` (`weight_decay = 1.0`) is the grokking regime and `artifact_fidelity_arm()` (`0.1`) is its absence. §2 now fixes the paper-mainline arm as the inherited one and forbids the artifact arm from appearing in any v0.2 configuration, artifact, or log.
+2. **Single authorized inheritance route** — the frozen Level 0 dataclasses validate values that v0.2 legitimately replaces (`modulus`, `vocabulary_size`, `warmup_updates`), so the override route was free. §2 now fixes inheritance **by value**: the frozen classes are never instantiated, and subclassing, validator relaxation, and construct-then-neutralize are forbidden because they record different provenance for an identical trajectory.
+3. **Positional table and context injection** — §9 rule 4 now requires `W_pos` to be drawn once as a single `[4, d_model]` tensor rather than as `[3, d_model]` plus a separately drawn row, which consumes the random stream differently and would change every parameter drawn afterwards; §8 now fixes the position-0 representation as `z + W_pos[0]`, with the inherited positional term added uniformly and the context vector never added to a task position.
+4. **Exact package versions pinned** — §17 now requires CPython, PyTorch, NumPy, and SciPy to be recorded as full version strings, since NumPy decides the world-order and SHUFFLED_TAG permutations and the `tau` quantile while SciPy decides the Clopper-Pearson bound and the chi-squared factor in the N rule. The two "NumPy major version" phrases are corrected to "exact NumPy version", and the resolved versions are published in `TEST_VECTORS_V0.2.json` as `locked_environment`: CPython `3.12.3`, torch `2.9.1+cpu`, NumPy `2.5.1`, SciPy `1.18.0`.
+5. **SHUFFLED_TAG schedule expected values published** — `shuffled_tag_schedule_case` was the last trajectory-relevant item without an expected value. It now publishes the ranking, `extra_subset`, the code-count vector with its ordering convention, and `schedule_hash`, all authoritative.
+6. **Schedule digest is incremental** — §4.2 now states that a single SHA256 state absorbs each block as it is generated, so the digest formula cannot be read as requiring all six blocks to be materialized at once.
+7. **Redundant `P` derivation removed** — §4.1 step 1 no longer derives `P` from "batch size and inherited final-batch behavior" and states `P = B_history * train_size` directly.
+
+**Scientific values:** none changed. The primary estimand, the arms, the SESOI (`ln 1.20`), the CI levels, the heavy-cap threshold, the sign-gate rule, the N rule, the module pools, the competence rule, the kill-matrix statuses, and the interpretation fences are all unchanged. `PREREGISTRATION_V0.2_CANDIDATE_FOR_LOCK.md` is again **byte-unchanged**, still `8b669b42c57242d1369a45a90a8ae808fa9e8de1b5faa0a72f6696fd48b8d946`.
+
+**Files touched:**
+- `successor/v0.2/IMPLEMENTATION_CONTRACT_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/CONDITIONAL_SHUFFLED_TAG_PROTOCOL_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/TEST_VECTORS_V0.2.json`
+- `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
+- `AMENDMENTS.md`

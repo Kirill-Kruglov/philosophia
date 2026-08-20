@@ -212,7 +212,25 @@
     "B_history_demo": 100,
     "train_size_demo": 6451,
     "P": 645100,
-    "report": ["per-block code-count vector", "extra_subset", "schedule_hash"]
+    "report": ["per-block code-count vector", "extra_subset", "schedule_hash"],
+    "code_count_vector_ordering": "index 0 is code 1",
+    "expected": {
+      "replicate_seed": 2865567934413349673,
+      "P_mod_6": 4,
+      "extra_subset_ranking": [1, 6, 5, 4, 2, 3],
+      "extra_subset": [1, 4, 5, 6],
+      "code_count_vector": [107517, 107516, 107516, 107517, 107517, 107517],
+      "code_count_vector_sum": 645100,
+      "schedule_hash": "4be275b7cbf111ebf71483958efd392074057c17d74a6aa4dc3cb0de82ab2250",
+      "authoritative": true
+    }
+  },
+  "locked_environment": {
+    "python": "3.12.3",
+    "torch": "2.9.1+cpu",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "note": "all three implementations must build against these exact versions. NumPy decides the world-order and SHUFFLED_TAG permutations and the tau quantile; SciPy decides the Clopper-Pearson bound and the chi-squared factor in the N rule. A change to any of these is a change to the locked runtime (implementation contract section 17)."
   },
   "model_config_ref": {
     "subtree": "src/philosophia/level0/",

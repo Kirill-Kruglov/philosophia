@@ -53,6 +53,10 @@ Resolve this before P0. If any of the four files cannot be recovered exactly, st
 
 No numerical reconstruction from prose or remembered settings is allowed.
 
+Inherited numeric values are taken from the **paper-mainline arm**: `paper_mainline_arm()` in `config.py`, i.e. `weight_decay = 1.0`, together with the architecture and optimizer constants of `ModelConfig` / `RunConfig`. The artifact-fidelity arm (`artifact_fidelity_arm()`, `weight_decay = 0.1`) is not inherited and must not appear in any v0.2 configuration, artifact, or log. The Level 0 fixed-epoch schedules of either arm are replaced by the v0.2 budgets under preregistration §6.3 item 5.
+
+The frozen Level 0 dataclasses `ModelConfig`, `RunConfig`, and `ArmConfig` are **not instantiated** by v0.2. Inheritance is by value: v0.2 reads the numeric field defaults and constructs its own configuration object around them. This is the single authorized route. Subclassing a frozen class, relaxing or monkey-patching a validator, and constructing with a frozen value that is then neutralized downstream are all forbidden, because they record different provenance for an identical trajectory. `configure_canonical_torch_runtime()` is likewise never invoked (preregistration §6.3 item 7).
+
 ---
 
 ## 3. Deterministic seed derivation
@@ -158,7 +162,7 @@ For each replicate:
 
 1. permute the selected 8-value pool, in ascending order, as
    `numpy.random.Generator(numpy.random.PCG64(world_order_seed)).permutation(pool)`;
-   the NumPy major version is fixed by the environment lock and is part of the pre-calibration root;
+   the exact NumPy version is fixed by the environment lock and is part of the pre-calibration root;
 2. perm[0] -> C;
 3. perm[1:7] -> H1..H6;
 4. perm[7] -> spare.
@@ -213,6 +217,8 @@ For each replicate/world:
 
 Context is injected directly as input-position representation 0, not through a trainable world-embedding table.
 
+Precisely: the input representation is constructed exactly as at Level 0, except that the position-0 row of the token-embedding term is the frozen context vector instead of an embedding lookup. The inherited positional term is then added at every position uniformly, so the position-0 representation is `z + W_pos[0]` and task positions 1..3 are `W_E[token] + W_pos[position]`. No positional term is omitted, rescaled, or duplicated at position 0, and the context vector is never added to a task position.
+
 ### Norm-drift rule
 
 No dynamic rescaling is allowed. At the end of every history block log:
@@ -236,7 +242,7 @@ Rules:
 1. all arms/stages use the same shifted positions;
 2. prediction readout is the inherited readout applied to the correspondingly shifted task position;
 3. if inherited positional encoding is analytic/fixed or already supports the longer sequence, no parameter is added;
-4. if a learned positional table is exactly too short, it may be extended by **one shared row only**, initialized with the inherited positional-parameter initialization rule; the extension is shared across all worlds/arms and must be declared in the config diff;
+4. a learned positional table is drawn **once**, as a single `[sequence_length, d_model] = [4, d_model]` tensor, at the inherited position in the initialization draw order and under the inherited positional-parameter initialization rule. It is **not** drawn as `[3, d_model]` and then extended by a separately drawn row: the two consume the random stream differently and would change every parameter drawn afterwards. The "one shared row only" constraint of this rule bounds how much the table may grow relative to the inherited task sequence; it does not describe the drawing procedure. The added row is shared across all worlds and arms and is declared in the config diff;
 5. `max_position` may increase only by one relative to the inherited task sequence requirement;
 6. no per-world or per-arm positional parameter is allowed.
 
@@ -374,6 +380,7 @@ Rules:
 
 - one CPU thread for trajectory-sensitive CPU operations;
 - deterministic PyTorch algorithms enabled;
+- exact package versions are pinned by the environment lock and are part of the pre-calibration root: CPython, PyTorch, NumPy, and SciPy are each recorded as a full version string, not a major or minor version. NumPy decides the world-order and SHUFFLED_TAG permutations and the `tau` quantile; SciPy decides the Clopper-Pearson bound and the chi-squared factor in the N rule. A version change in either is a change to the locked runtime and requires the same treatment as any other post-lock runtime change;
 - nondeterministic kernels forbidden;
 - Python/NumPy/PyTorch CPU/accelerator RNG explicitly seeded;
 - no deterministic setting may be relaxed after outcome-bearing development.
