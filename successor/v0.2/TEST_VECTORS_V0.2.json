@@ -19,7 +19,7 @@
     "stages": ["calibration", "power-pilot", "confirmatory", "deterministic-replay"],
     "replicate_indices": [0, 1, 2, 3, 4, 5, 6, 7],
     "scales": [96, 128],
-    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "model_init_seed", "state_dict_hash", "context_set_hash"]
+    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "model_init_seed", "state_dict_hash", "context_set_hash", "batch_order_seed(h1,e0)"]
   },
   "k1_identity_case": {
     "stage": "deterministic-replay",
@@ -229,6 +229,28 @@
         "fully_zero_based": "f7f8718dad0ef55a7e454f0967432c5f532b24e001338c87f94142294600a570",
         "correct": "4be275b7cbf111ebf71483958efd392074057c17d74a6aa4dc3cb0de82ab2250"
       }
+    }
+  },
+  "batch_order_seed_examples": {
+    "note": "enforces the 1-based history_position and 0-based epoch conventions of implementation contract §3 the way the schedule digest enforces history_position for SHUFFLED_TAG. Pure digest arithmetic: version-independent.",
+    "rule": "seed64(\"batch-order\", replicate_seed, history_position, epoch)",
+    "authoritative": true,
+    "confirmatory_0": {
+      "replicate_seed": 2865567934413349673,
+      "h1_e0": 4688654692225231775,
+      "h1_e1": 6090316220366375700,
+      "h6_e0": 1609769581247693350
+    },
+    "deterministic_replay_0": {
+      "replicate_seed": 8724511081414729435,
+      "h1_e0": 6415953772222957738,
+      "h1_e1": 4082218470627201015,
+      "h6_e0": 4093966265741506018
+    },
+    "negative_control": {
+      "note": "value produced if history_position is numbered from 0; reproducing it means an indexing bug",
+      "confirmatory_0_h0_e0": 4115698630092310716,
+      "deterministic_replay_0_h0_e0": 2730718178529918974
     }
   },
   "locked_environment": {

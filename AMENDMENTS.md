@@ -135,3 +135,24 @@ Two clarifying notes carrying no rule change were also appended: analysis plan �
 - `successor/v0.2/TEST_VECTORS_V0.2.json`
 - `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
 - `AMENDMENTS.md`
+
+## 2026-08-20 — pre-data, pre-lock: batch_order_seed literals and a code-span fix
+
+**Date:** 2026-08-20  
+**Status:** **pre-data, pre-lock**. No outcome-bearing run exists, so nothing is invalidated. This is the sixth pre-lock amendment.  
+**Cause:** amendment #5 pinned the `epoch` and `history_position` conventions in prose but left `batch_order_seed` without any published literal, so a cross-implementation off-by-one in either index would have survived every acceptance item — D0 replays one implementation against itself and the k=1 gate compares two arms of the same implementation, so a self-consistent off-by-one passes both. The `history_position` convention was mechanically enforced only for the SHUFFLED_TAG schedule digest. Separately, the parenthetical inserted into §4.1 step 5 by amendment #5 split the generator expression across two code spans.
+
+**Affected gates:** conditional SHUFFLED_TAG protocol §4.1; `TEST_VECTORS_V0.2.json`. No gate in the preregistration is touched, and no prose rule changes meaning.
+
+**The two edits:**
+
+1. **Code span made continuous** — the parenthetical `(with history_position 1-based, H1 = 1, as fixed by implementation contract §3)` moves from the middle of the generator expression to the end of step 5, so `numpy.random.Generator(numpy.random.PCG64(seed64(...))).permutation(multiset)` is one uninterrupted, copy-pasteable span. The rule is unchanged.
+2. **`batch_order_seed` literals published** — a new top-level `batch_order_seed_examples` object gives `seed64("batch-order", replicate_seed, history_position, epoch)` for the confirmatory and deterministic-replay replicate 0 at `(h1,e0)`, `(h1,e1)`, and `(h6,e0)`, plus a negative control at `(h0,e0)` for each, which is the value an implementation numbering history positions from 0 would produce. `batch_order_seed(h1,e0)` is added to `shared_test_replicates.report`. This gives the `epoch` and `history_position` conventions of implementation contract §3 the same mechanical enforcement the schedule digest already gives `history_position` for SHUFFLED_TAG. The values are pure digest arithmetic and are version-independent.
+
+**Scientific values:** none changed. The primary estimand, the arms, the SESOI (`ln 1.20`), the CI levels, the heavy-cap threshold, the sign-gate rule, the N rule, the module pools, the competence rule, the kill-matrix statuses, and the interpretation fences are all unchanged. `PREREGISTRATION_V0.2_CANDIDATE_FOR_LOCK.md` is again **byte-unchanged**, still `8b669b42c57242d1369a45a90a8ae808fa9e8de1b5faa0a72f6696fd48b8d946`.
+
+**Files touched:**
+- `successor/v0.2/CONDITIONAL_SHUFFLED_TAG_PROTOCOL_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/TEST_VECTORS_V0.2.json`
+- `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
+- `AMENDMENTS.md`
