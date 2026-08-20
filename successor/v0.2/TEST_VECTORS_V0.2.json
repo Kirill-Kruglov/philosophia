@@ -19,12 +19,18 @@
     "stages": ["calibration", "power-pilot", "confirmatory", "deterministic-replay"],
     "replicate_indices": [0, 1, 2, 3, 4, 5, 6, 7],
     "scales": [96, 128],
-    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "model_init_seed", "state_dict_hash", "context_set_hash", "batch_order_seed(h1,e0)"],
+    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "train_order_hash", "model_init_seed", "state_dict_hash", "context_set_hash", "batch_order_seed(h1,e0)"],
     "published_context_set_hashes": {
       "authoritative": true,
       "note": "SHA256 of the §8 context-set preimage; per-world tensor_hash is the §19 rule on the frozen float32 vector, not the float64 draw. Allocation order C,H1..H6,spare.",
       "calibration/0/M96": "35d6dfef419ad048599e31f1248f74bc4d2880b534cd21dc5d31fecce6ef7ea7",
       "deterministic-replay/0/M96": "807b9cd764393fb06a18e9e5a2e5a0953b2add5d7069589fd939a487d846c9bc"
+    },
+    "published_train_order_hashes": {
+      "authoritative": true,
+      "note": "SHA256 of the §7 order-sensitive preimage over train then held-out pairs in ranked order. Distinct from split_hash, which is a set digest over lexicographic order.",
+      "calibration/0/M96": "8367637358f22a2e3e356b2b57e6840d31119e7ba059af160fa22d3e3d8807a2",
+      "deterministic-replay/0/M96": "ba950fb26bd73f4c183612533ca0f268ba5015bc485a037aa13573107118c338"
     }
   },
   "k1_identity_case": {
@@ -35,6 +41,13 @@
     "tau_smoke": 200,
     "eval_interval": 100,
     "note": "smoke budgets for the identity and D0 gates only; not B_history/tau"
+  },
+  "published_first_batch": {
+    "authoritative": true,
+    "note": "batch_hash of the first H1 update, history_position=1, epoch=0, under the section 19 preimage: tensor_hash of the int64 [N,3] rows (a,b,y) in presentation order. Reproducing a different value means the split index basis, the batch-order permutation, or the row construction differs.",
+    "rule": "batch_hash = tensor_hash(rows) with rows = int64 [n_train, 3], columns (a, b, (a+b) mod n_H1), ordered by PCG64(batch_order_seed(replicate_seed, 1, 0)).permutation(n_train) over the ranked train array",
+    "calibration/0/M96": {"n_H1": 136, "n_train": 6451, "batch_hash": "d4e7a4615914b39bfe32f83a8ec2e020745dc4935f359db913f2e766c36044fe"},
+    "deterministic-replay/0/M96": {"n_H1": 135, "n_train": 6451, "batch_hash": "ea01a67c2429f0b552f275cb2ccebd471e8dd79ad1d339091c170b803531a744"}
   },
   "synthetic_primary_fixture": {
     "tau": 5000,
@@ -245,7 +258,9 @@
       "replicate_seed": 2865567934413349673,
       "h1_e0": 4688654692225231775,
       "h1_e1": 6090316220366375700,
-      "h6_e0": 1609769581247693350
+      "h6_e0": 1609769581247693350,
+      "probe_h0_e0": 4115698630092310716,
+      "reacq_h7_e0": 7834854571252348942
     },
     "deterministic_replay_0": {
       "replicate_seed": 8724511081414729435,
@@ -256,7 +271,7 @@
       "reacq_h7_e0": 5664936142307372860
     },
     "negative_control": {
-      "note": "After amendment #7, history_position=0 is the reserved C-probe sentinel (implementation contract §12), so deterministic_replay_0_h0_e0 equals probe_h0_e0 and is the authorized C-probe seed, not a bug. confirmatory_0_h0_e0 remains a negative control: reproducing it as a history-block seed means an indexing bug.",
+      "note": "Since amendment #7, history_position=0 is the reserved C-probe sentinel (implementation contract §12), so both *_h0_e0 values are legitimate C-probe seeds. They remain diagnostic in one direction only: reproducing either of them in a HISTORY-BLOCK slot, where h1_e0 is expected, means history_position is numbered from zero. Compare by slot, not by value.",
       "confirmatory_0_h0_e0": 4115698630092310716,
       "deterministic_replay_0_h0_e0": 2730718178529918974
     }

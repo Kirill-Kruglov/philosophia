@@ -181,3 +181,30 @@ Two clarifying notes carrying no rule change were also appended: analysis plan �
 - `successor/v0.2/TEST_VECTORS_V0.2.json`
 - `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
 - `AMENDMENTS.md`
+
+## 2026-08-20 — pre-data, pre-lock: pin the ranked split index basis
+
+**Date:** 2026-08-20  
+**Status:** **pre-data, pre-lock**. No outcome-bearing run exists, so nothing is invalidated. This is the eighth pre-lock amendment.  
+**Cause:** the gradient bisect localized the remaining cross-implementation divergence to the order in which the training split is materialized. All three implementations applied the same `PCG64(batch_order_seed)` permutation to the same set of pairs under the same seed; two indexed the split in the ranked order of §7 steps 1–4, and one re-sorted lexicographically first. The order-insensitive `split_hash` could not detect this. Independent reconstruction reproduced both digests from that single difference. The arithmetic path itself — backward pass, optimizer, and reduction — was exonerated: two implementations match bit-for-bit through `embedded_hash`, `logits_hash`, and all eleven gradient hashes.
+
+**Affected gates:** implementation contract §§3, 7, 19; `TEST_VECTORS_V0.2.json`. No gate in the preregistration is touched.
+
+**The six edits:**
+
+1. **Ranked order is the index basis** (implementation contract §7 step 6) — train and held-out arrays are materialized in the ranked order of step 3 and never re-sorted; that order is the index basis for the §12 `batch-order` permutation and the SHUFFLED_TAG presentation stream.
+2. **Order-sensitive companion digest** (implementation contract §7) — `train_order_hash` over ranked-order uint16 pairs. Published authoritative values: `calibration/0/M96` = `8367637358f22a2e3e356b2b57e6840d31119e7ba059af160fa22d3e3d8807a2`; `deterministic-replay/0/M96` = `ba950fb26bd73f4c183612533ca0f268ba5015bc485a037aa13573107118c338`.
+3. **First-update batch anchors** (`published_first_batch`) — `batch_hash` of the first H1 update (`history_position=1`, `epoch=0`) over the ranked train array: `calibration/0/M96` = `d4e7a4615914b39bfe32f83a8ec2e020745dc4935f359db913f2e766c36044fe` (`n_H1=136`); `deterministic-replay/0/M96` = `ea01a67c2429f0b552f275cb2ccebd471e8dd79ad1d339091c170b803531a744` (`n_H1=135`).
+4. **Probe sentinels named in §3** — the 1..6 range covers history worlds only; `0` and `7` are reserved as already fixed in §12.
+5. **Negative-control note symmetrized** — both `*_h0_e0` values are legitimate C-probe seeds; they diagnose only when they appear in a history-block slot. Confirmatory literals published: `probe_h0_e0 = 4115698630092310716`, `reacq_h7_e0 = 7834854571252348942`.
+6. **Runtime fingerprint named** (implementation contract §19) — CPython/PyTorch/NumPy/SciPy versions, intra-op and inter-op thread counts, `mkldnn.is_available()`, and `torch.__config__.parallel_info()`.
+
+**Not in this amendment:** the eleven per-parameter gradient hashes for the FULL and ONE cases. Two implementations agree on them; they are published only after the third reproduces them under the locked runtime (`torch==2.9.1+cpu`).
+
+**Scientific values:** none changed. The primary estimand, the arms, the SESOI (`ln 1.20`), the CI levels, the heavy-cap threshold, the sign-gate rule, the N rule, the module pools, the competence rule, the kill-matrix statuses, and the interpretation fences are all unchanged. `PREREGISTRATION_V0.2_CANDIDATE_FOR_LOCK.md` is again **byte-unchanged**, still `8b669b42c57242d1369a45a90a8ae808fa9e8de1b5faa0a72f6696fd48b8d946`.
+
+**Files touched:**
+- `successor/v0.2/IMPLEMENTATION_CONTRACT_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/TEST_VECTORS_V0.2.json`
+- `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
+- `AMENDMENTS.md`

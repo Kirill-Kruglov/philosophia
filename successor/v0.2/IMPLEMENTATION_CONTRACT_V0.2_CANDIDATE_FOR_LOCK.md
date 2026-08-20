@@ -90,6 +90,7 @@ Index conventions, binding wherever these names appear in the bundle:
 
 - `replicate_index` is 0-based; the first replicate of a stage is 0;
 - `history_position` is **1-based**: H1 = 1, H6 = 6. It is used with this numbering in `batch_order_seed`, in `shuffled_tag_seed`, in the SHUFFLED_TAG block labels, and in every log field of that name;
+  The 1..6 range covers history worlds only. Values outside it are reserved for forked probes and are fixed in §12: `0` for every fresh-C probe and `7` for H1 reacquisition. No other value is authorized;
 - `epoch` is 0-based; the first epoch of a history block is 0. Under the inherited full-batch policy one epoch is one optimizer update, so within a block of `B_history` updates the epoch runs 0..B_history-1;
 - probe index `k` retains its own meaning (number of completed history worlds before the probe) and is unaffected by the above.
 
@@ -196,10 +197,19 @@ For each replicate:
 3. sort ascending by that digest compared as bytes, tie-broken by `(a,b)`;
 4. first floor(0.70*M^2) -> train;
 5. rest -> held-out.
+6. the train and held-out arrays are materialized **in the ranked order produced by step 3** and are never re-sorted. The train array is the ranked prefix, the held-out array the ranked remainder, each kept in that order.
+
+This ranked order is the index basis for every index into a split: the `batch-order` permutation of §12 permutes positions in the ranked train array, and the SHUFFLED_TAG schedule consumes presentations in the resulting order. Re-sorting either array — lexicographically or otherwise — before indexing changes which rows are presented in which order, and therefore changes every trajectory, while leaving `split_hash` unchanged, because that digest is deliberately order-insensitive. The `train_order_hash` below is the order-sensitive companion that detects it.
 
 The split digest is
 `split_hash = SHA256(b"pair-split-v0.2|M=<M>|train|" + train pairs in lexicographic order as two uint16 little-endian each + b"|held|" + held-out pairs likewise)`.
 It is a set hash and is independent of the ranked order.
+
+The order-sensitive companion digest is
+
+`train_order_hash = SHA256(UTF8("pair-split-order-v0.2|M=<M>|train|") + train pairs in ranked order as two uint16 little-endian each + UTF8("|held|") + held-out pairs in ranked order as two uint16 little-endian each)`
+
+`split_hash` witnesses which pairs are in each side; `train_order_hash` witnesses the ranked order those arrays are stored in. Both are logged and both are acceptance items.
 
 Same pair split across all worlds and all arms for the replicate.
 
@@ -454,7 +464,7 @@ At minimum:
 - context code/hash or code-index schedule hash;
 - context norm and current token-embedding median norm;
 - batch hash;
-- runtime fingerprint.
+- runtime fingerprint: the exact CPython, PyTorch, NumPy and SciPy versions, `torch.get_num_threads()`, `torch.get_num_interop_threads()`, `torch.backends.mkldnn.is_available()`, and the full text of `torch.__config__.parallel_info()`;
 
 Under full batch the batch digest covers the whole update:
 
