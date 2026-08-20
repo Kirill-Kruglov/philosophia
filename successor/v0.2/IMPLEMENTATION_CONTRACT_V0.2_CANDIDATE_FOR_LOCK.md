@@ -204,6 +204,7 @@ This ranked order is the index basis for every index into a split: the `batch-or
 The split digest is
 `split_hash = SHA256(b"pair-split-v0.2|M=<M>|train|" + train pairs in lexicographic order as two uint16 little-endian each + b"|held|" + held-out pairs likewise)`.
 It is a set hash and is independent of the ranked order.
+The lexicographic ordering in this preimage is a hashing convention that makes the digest order-insensitive; it does not describe how the arrays are materialized, which is fixed by step 6.
 
 The order-sensitive companion digest is
 
@@ -250,7 +251,7 @@ Precisely: the input representation is constructed exactly as at Level 0, except
 
 No dynamic rescaling is allowed. Two measurement points are logged and they are distinct fields, not one field measured at an implementation's choice of moment:
 
-- `context_norm_ratio_at_init`, taken once at model initialization, immediately after step 5. It is 1.0 by construction and exists as an assertion, not as an observation;
+- `context_norm_ratio_at_init`, taken once at model initialization immediately after step 6's cast: the measured L2 norm of the **frozen float32** context vector divided by the float32 median numeric-token-embedding norm. It is not written as the constant 1.0. Because the vector is scaled in float64 and then cast, the measured value differs from 1 by a float32 rounding; an implementation must assert `|ratio - 1| <= 1e-6` and treat a larger deviation as `BLOCKED_IMPLEMENTATION`. The assertion, not the constant, is what detects a scaling error;
 - `context_norm_ratio_at_block_end`, taken at the end of every history block, which is the drift diagnostic.
 
 At each block end log:
@@ -420,6 +421,7 @@ Rules:
 - one CPU thread for trajectory-sensitive CPU operations;
 - deterministic PyTorch algorithms enabled;
 - exact package versions are pinned by the environment lock and are part of the pre-calibration root: CPython, PyTorch, NumPy, and SciPy are each recorded as a full version string, not a major or minor version. NumPy decides the world-order and SHUFFLED_TAG permutations and the `tau` quantile; SciPy decides the Clopper-Pearson bound and the chi-squared factor in the N rule. A version change in either is a change to the locked runtime and requires the same treatment as any other post-lock runtime change;
+- the thread-count contract is set through the torch API and checked through `at::get_num_threads()`, `omp_get_max_threads()`, and `mkl_get_max_threads()`; the `OMP_NUM_THREADS` and `MKL_NUM_THREADS` environment variables are not part of the contract, but if set they must be set only to `1`;
 - an acceptance test asserts, at process start, that the live CPython, PyTorch, NumPy, and SciPy versions equal the `locked_environment` block of `TEST_VECTORS_V0.2.json` exactly. Failure is `BLOCKED_IMPLEMENTATION` and no further stage may run;
 - nondeterministic kernels forbidden;
 - Python/NumPy/PyTorch CPU/accelerator RNG explicitly seeded;
@@ -427,7 +429,7 @@ Rules:
 
 ### Two mandatory replay tests
 
-**D0 pre-P0 smoke:** the same short config executed twice from clean process state, with exact equality of init, batch, loss, eval and final hashes. The smoke config is fixed so the gate is comparable across implementations: stage `deterministic-replay`, replicate 0, M=96, arm ALIASED, `B_history = 20`, `tau = 200`, evaluation interval 100 — the same configuration as the k=1 identity case published in `TEST_VECTORS_V0.2.json`.
+**D0 pre-P0 smoke:** the same short config executed twice from clean process state, with exact equality of init, batch, loss, eval and final hashes. The smoke config is fixed so the gate is comparable across implementations: stage `deterministic-replay`, replicate 0, M=96, arm ALIASED, `B_history = 20`, `tau = 200`, evaluation interval 100 — the same configuration as the k=1 identity case published in `TEST_VECTORS_V0.2.json`. Held-out evaluation inside a history block is logged at step 0 and at the end of the block, that is at epochs {0, B_history}, and nowhere else. It is diagnostic and enters no gate, but it is compared field by field in the k=1 identity case, so its cadence is fixed.
 
 **D1 after P1, before P2:** one dedicated deterministic-replay seed executes the **full selected H1 block of B_history updates plus the full k1 C probe to tau/criterion twice independently**. Entire trajectory artifacts must match bit-for-bit.
 
@@ -472,8 +474,10 @@ Under full batch the batch digest covers the whole update:
 
 An implementation may additionally log `input_hash = tensor_hash(embedded)` over the `[N, 4, d_model]` float32 residual immediately after embedding and before attention. It is optional and diagnostic; it never enters a gate.
 
+No aggregate `trajectory_hash` exists for the C probe; the probe is compared through its listed per-step fields.
+
 Tensor and state hashing are inherited from Level 0 `model._hash_tensor`:
 `SHA256(ascii(str(dtype)) || ascii(str(tuple(shape))) || detached.cpu().contiguous().numpy().tobytes())`.
-`state_dict_hash = SHA256` over `name + "|" + tensor_hash` concatenated in the inherited parameter creation order `W_E, W_pos, W_Q, W_K, W_V, W_O, W_in, b_in, W_out, b_out, W_U`.
+`state_dict_hash = SHA256` over entries concatenated in the inherited parameter creation order `W_E, W_pos, W_Q, W_K, W_V, W_O, W_in, b_in, W_out, b_out, W_U`; entries are concatenated with no separator between them; each entry is itself the UTF-8 of `name + "|" + tensor_hash`.
 
 Raw logs are append-only after finalization.

@@ -90,6 +90,8 @@ If unavailable -> `BLOCKED_CONFIG_PROVENANCE`.
 
 Record git SHA, timestamp, all file hashes, environment/model hashes, verifier version, `scientific_outcome:false`.
 
+The identifier of a bundle state is `bundle_manifest_sha256`, the SHA256 of `CANDIDATE_BUNDLE_SHA256.txt`. A git commit id is not a bundle identifier: a worktree can carry the correct bundle bytes under a different HEAD, and did during round 3. Every artifact and every implementation report records `bundle_manifest_sha256`; a git SHA may be recorded alongside it but never in place of it.
+
 Any scientific/code change after P0 requires a new preregistration version except immutable generated artifacts below.
 
 ---

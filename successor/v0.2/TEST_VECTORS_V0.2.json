@@ -19,19 +19,19 @@
     "stages": ["calibration", "power-pilot", "confirmatory", "deterministic-replay"],
     "replicate_indices": [0, 1, 2, 3, 4, 5, 6, 7],
     "scales": [96, 128],
-    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "train_order_hash", "model_init_seed", "state_dict_hash", "context_set_hash", "batch_order_seed(h1,e0)"],
-    "published_context_set_hashes": {
-      "authoritative": true,
-      "note": "SHA256 of the §8 context-set preimage; per-world tensor_hash is the §19 rule on the frozen float32 vector, not the float64 draw. Allocation order C,H1..H6,spare.",
-      "calibration/0/M96": "35d6dfef419ad048599e31f1248f74bc4d2880b534cd21dc5d31fecce6ef7ea7",
-      "deterministic-replay/0/M96": "807b9cd764393fb06a18e9e5a2e5a0953b2add5d7069589fd939a487d846c9bc"
-    },
-    "published_train_order_hashes": {
-      "authoritative": true,
-      "note": "SHA256 of the §7 order-sensitive preimage over train then held-out pairs in ranked order. Distinct from split_hash, which is a set digest over lexicographic order.",
-      "calibration/0/M96": "8367637358f22a2e3e356b2b57e6840d31119e7ba059af160fa22d3e3d8807a2",
-      "deterministic-replay/0/M96": "ba950fb26bd73f4c183612533ca0f268ba5015bc485a037aa13573107118c338"
-    }
+    "report": ["replicate_seed", "world_order_seed", "allocation C/H1..H6/spare", "allocation_hash", "pair_split_seed", "split sizes", "split_hash", "train_order_hash", "model_init_seed", "state_dict_hash", "context_set_hash", "batch_order_seed(h1,e0)"]
+  },
+  "published_context_set_hashes": {
+    "authoritative": true,
+    "note": "SHA256 of the §8 context-set preimage; per-world tensor_hash is the §19 rule on the frozen float32 vector, not the float64 draw. Allocation order C,H1..H6,spare.",
+    "calibration/0/M96": "35d6dfef419ad048599e31f1248f74bc4d2880b534cd21dc5d31fecce6ef7ea7",
+    "deterministic-replay/0/M96": "807b9cd764393fb06a18e9e5a2e5a0953b2add5d7069589fd939a487d846c9bc"
+  },
+  "published_train_order_hashes": {
+    "authoritative": true,
+    "note": "SHA256 of the §7 order-sensitive preimage over train then held-out pairs in ranked order. Distinct from split_hash, which is a set digest over lexicographic order.",
+    "calibration/0/M96": "8367637358f22a2e3e356b2b57e6840d31119e7ba059af160fa22d3e3d8807a2",
+    "deterministic-replay/0/M96": "ba950fb26bd73f4c183612533ca0f268ba5015bc485a037aa13573107118c338"
   },
   "k1_identity_case": {
     "stage": "deterministic-replay",
@@ -48,6 +48,89 @@
     "rule": "batch_hash = tensor_hash(rows) with rows = int64 [n_train, 3], columns (a, b, (a+b) mod n_H1), ordered by PCG64(batch_order_seed(replicate_seed, 1, 0)).permutation(n_train) over the ranked train array",
     "calibration/0/M96": {"n_H1": 136, "n_train": 6451, "batch_hash": "d4e7a4615914b39bfe32f83a8ec2e020745dc4935f359db913f2e766c36044fe"},
     "deterministic-replay/0/M96": {"n_H1": 135, "n_train": 6451, "batch_hash": "ea01a67c2429f0b552f275cb2ccebd471e8dd79ad1d339091c170b803531a744"}
+  },
+  "published_gradient_fixture": {
+    "authoritative": true,
+    "note": "One forward and one backward from a freshly built model, no optimizer step. Diagnostic anchor for the arithmetic path: it detects a divergence in the backward before any training amplifies it.",
+    "case": {"stage": "deterministic-replay", "index": 0, "M": 96, "n_H1": 135, "history_position": 1, "epoch": 0},
+    "loss_rule": "F.cross_entropy(logits[:, readout, :training_classes], y) with reduction='mean'",
+    "validity_domain": {
+      "python": "3.12.3",
+      "torch": "2.9.1+cpu",
+      "numpy": "2.5.1",
+      "scipy": "1.18.0",
+      "torch_num_threads": 1,
+      "torch_num_interop_threads": 1,
+      "aten_num_threads": 1,
+      "omp_max_threads": 1,
+      "mkl_max_threads": 1,
+      "mkldnn_is_available": true,
+      "aten_parallel_backend": "OpenMP",
+      "openmp": "201511",
+      "mkl": "2024.2-Product Build 20240605",
+      "mkl_dnn": "v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)"
+    },
+    "observed_parallel_info": {
+      "compared": false,
+      "note": "Verbatim diagnostic context from each implementation report. Environment-variable lines are not part of the validity domain.",
+      "a2": "ATen/Parallel:\n\tat::get_num_threads() : 1\n\tat::get_num_interop_threads() : 1\nOpenMP 201511 (a.k.a. OpenMP 4.5)\n\tomp_get_max_threads() : 1\nIntel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n\tmkl_get_max_threads() : 1\nIntel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\nstd::thread::hardware_concurrency() : 32\nEnvironment variables:\n\tOMP_NUM_THREADS : [not set]\n\tMKL_NUM_THREADS : [not set]\nATen parallel backend: OpenMP\n",
+      "b2": "ATen/Parallel:\n\tat::get_num_threads() : 1\n\tat::get_num_interop_threads() : 1\nOpenMP 201511 (a.k.a. OpenMP 4.5)\n\tomp_get_max_threads() : 1\nIntel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n\tmkl_get_max_threads() : 1\nIntel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\nstd::thread::hardware_concurrency() : 32\nEnvironment variables:\n\tOMP_NUM_THREADS : [not set]\n\tMKL_NUM_THREADS : [not set]\nATen parallel backend: OpenMP\n",
+      "c2": "ATen/Parallel:\n\tat::get_num_threads() : 1\n\tat::get_num_interop_threads() : 1\nOpenMP 201511 (a.k.a. OpenMP 4.5)\n\tomp_get_max_threads() : 1\nIntel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n\tmkl_get_max_threads() : 1\nIntel(R) MKL-DNN v3.7.1 (Git Hash 8d263e693366ef8db40acc569cc7d8edf644556d)\nstd::thread::hardware_concurrency() : 32\nEnvironment variables:\n\tOMP_NUM_THREADS : 1\n\tMKL_NUM_THREADS : 1\nATen parallel backend: OpenMP\n"
+    },
+    "validity_note": "These gradient hashes are valid only under the fingerprint above. A build that changes the backend while preserving tensor hashes must fail this fixture rather than appear to be an arithmetic disagreement.",
+    "FULL": {
+      "n_rows": 6451,
+      "loss": "5.277676105499268",
+      "embedded_hash": "fb4c0f3ea03c2bee5162bcde4546051d39dd38c443427180b1ea452a5415d615",
+      "logits_hash": "d602fb294887db147a9f7ab010eeafeb7c75eb12ec0c8865917c22bf080e001b",
+      "gradients": [
+        {"name": "W_E", "grad_hash": "a16955d85e5e15b0d7b4e953a03a581669782cfdc84cf49b256031a6fd7435bc", "grad_sum": "0.12675378295941186", "grad_absmax": "0.021404413506388664", "grad_l2": "0.0784490945058837"},
+        {"name": "W_pos", "grad_hash": "c142420d0f9eec8418222d906046e123ba1c2a58a56ec896d455b972abeda55c", "grad_sum": "0.14352218826206808", "grad_absmax": "0.02140437439084053", "grad_l2": "0.0855487140434028"},
+        {"name": "W_K", "grad_hash": "dd66c587a976f411b9ce03fe293103075a52b2bc68e49e34cbeddf607e80d081", "grad_sum": "0.0004713599311230027", "grad_absmax": "3.523640043567866e-05", "grad_l2": "0.000520898534081436"},
+        {"name": "W_Q", "grad_hash": "000dc9d133a99b900bf3aa77854cc0ad422f3118ab230384669eee802f19d22e", "grad_sum": "0.0010374405570337808", "grad_absmax": "4.477475886233151e-05", "grad_l2": "0.0006340446484138193"},
+        {"name": "W_V", "grad_hash": "f71545f233ea80fc463141bed148d8c1d62d544d9dfc69ea6ec8488f86dc3f2f", "grad_sum": "-0.01604297193054549", "grad_absmax": "0.0026444841641932726", "grad_l2": "0.05197990956950086"},
+        {"name": "W_O", "grad_hash": "ef5f15bc5d0ce6f6b60ca2f0737af05d4de258d745e22459e84063f21ccd3f50", "grad_sum": "0.016677297740599784", "grad_absmax": "0.003148679854348302", "grad_l2": "0.04683368390944069"},
+        {"name": "W_in", "grad_hash": "a21495ad64646916043109e07abc5ca238dd76fc228ff3314131a0f6e24c4601", "grad_sum": "0.2197575801205069", "grad_absmax": "0.0044029769487679005", "grad_l2": "0.09366227865928313"},
+        {"name": "b_in", "grad_hash": "3d8dee888fc39b845d0dfdbf771b1687d75d138e780e1f98a3f097ced2afb2ee", "grad_sum": "0.10765510993002181", "grad_absmax": "0.011746156960725784", "grad_l2": "0.06249181844972292"},
+        {"name": "W_out", "grad_hash": "5b8dd9f49c153486434d10823dce46c756f311d5a275058f035abfdbacaabad7", "grad_sum": "-0.46495480836471775", "grad_absmax": "0.003856225637719035", "grad_l2": "0.09840324592858897"},
+        {"name": "b_out", "grad_hash": "99a0511663e0f1599611a5ae711487ea192fb75b18ad618e7ecc599af4d3e345", "grad_sum": "-0.016206009226152673", "grad_absmax": "0.009981018491089344", "grad_l2": "0.04456345466865708"},
+        {"name": "W_U", "grad_hash": "c658f6532718be0bd572e26ec9006b7256d6c2f436508723bc184250ecdc691a", "grad_sum": "3.374918478016298e-08", "grad_absmax": "0.004231483209878206", "grad_l2": "0.13436811833474152"}
+      ]
+    },
+    "ONE": {
+      "n_rows": 1,
+      "loss": "4.992480278015137",
+      "embedded_hash": "6a777c8103803b0c7a206a0e646763ebf3209e2052d6ba56b2b9bf1528bf3e73",
+      "logits_hash": "989cfb738d96700c9c2a83e493be1f23ad5acd2b4cd9d64b5e1ee37600800e53",
+      "gradients": [
+        {"name": "W_E", "grad_hash": "ccf5bfb5f55c0df8bf3b846da46ab210d41dcd0ff7d7fa1a7ad179d3f380599f", "grad_sum": "0.6365626299520954", "grad_absmax": "0.3676685690879822", "grad_l2": "1.5398920540488192"},
+        {"name": "W_pos", "grad_hash": "2772d2472f9e238b13ee3234925a4216201a00c4463fb32ee37221aa86010424", "grad_sum": "0.4901729169068858", "grad_absmax": "0.3676685690879822", "grad_l2": "1.5843540844872677"},
+        {"name": "W_K", "grad_hash": "355266c8e9275b0efc717868d91e95de789bc14bd26bc5542b019da3674cde26", "grad_sum": "-0.01735519634978866", "grad_absmax": "0.0011537790996953845", "grad_l2": "0.014257774281420787"},
+        {"name": "W_Q", "grad_hash": "ece753c0183abb33995add74661679eeed901ad33b607bbaf0b8c741685e5803", "grad_sum": "-0.02511604169395909", "grad_absmax": "0.0007843681378290057", "grad_l2": "0.014901541416328329"},
+        {"name": "W_V", "grad_hash": "9dff85985a743d2700c142cfcd85b649689106d98d0094fac26955213bbda6b9", "grad_sum": "-0.021396359759311423", "grad_absmax": "0.05546678602695465", "grad_l2": "1.0702682617648456"},
+        {"name": "W_O", "grad_hash": "42e347369fe1c69d5087f4066d376af4903045daa10de0d41b5280297039a0f6", "grad_sum": "-0.24374602547169388", "grad_absmax": "0.04931197315454483", "grad_l2": "0.991149614267026"},
+        {"name": "W_in", "grad_hash": "c6e7aaf5f0752c96e2c4e83269adb64db8d19e71978d7995469aaf67a30212c2", "grad_sum": "-2.226808202546408", "grad_absmax": "0.07671274989843369", "grad_l2": "1.6441622983264974"},
+        {"name": "b_in", "grad_hash": "03d5a3c7dd8310d4e24c06f52616ef261390f9046cde10f3412683b68e60fc51", "grad_sum": "-1.0252546957635786", "grad_absmax": "0.2119344025850296", "grad_l2": "1.0739052422717634"},
+        {"name": "W_out", "grad_hash": "a131bb68ad2aa3b9090ec34d8c3b2f03d4c50d76a24b1033d2a0f76c212331fd", "grad_sum": "-3.412474532311462", "grad_absmax": "0.09127403050661087", "grad_l2": "1.8026394760213644"},
+        {"name": "b_out", "grad_hash": "ec7e2bdec214bd8ed77469088af1219db3ca1f9cb84c959c07a8242da8de913d", "grad_sum": "-0.11911405934370123", "grad_absmax": "0.22340089082717896", "grad_l2": "0.7994223119370157"},
+        {"name": "W_U", "grad_hash": "573af44bce6c34a5344dee68610f13133ed40d6dada00b6f816c0e8577a93633", "grad_sum": "-5.221509127295576e-07", "grad_absmax": "0.6515691876411438", "grad_l2": "2.6549171960370526"}
+      ]
+    }
+  },
+  "published_power_decision": {
+    "authoritative": true,
+    "note": "Fixture for the section 9 dual-target N calculator. Inputs are a pilot sample SD only; the pilot mean never enters.",
+    "constants": {"m": 6, "df": 5, "Delta": 0.1823215567939546, "chi2_ppf_0.20_df5": 2.342534305841121, "sigma_U_over_s_d": 1.460972436233567},
+    "cases": [
+      {"s_d": 0.0, "sigma_U": 0.0, "N_sup": null, "N_eq": null, "N": 20, "status": "OK", "rule": "s_d = 0 -> N = 20"},
+      {"s_d": 0.25, "sigma_U": 0.36524310905839175, "N_sup": 43, "N_eq": 44, "N": 44, "status": "OK"},
+      {"s_d": 0.60, "sigma_U": 0.8765834617401401, "N_sup": 243, "N_eq": 251, "N": 251, "status": "BLOCKED_POWER", "rule": "N > 128"}
+    ],
+    "remark": "z_0.95 + z_0.95 = 3.2897 exceeds z_0.975 + z_0.90 = 3.2416, so N_eq >= N_sup for every sigma_U and the max in section 9.3 is always attained by N_eq or by the floor of 20. The directional branch never binds. This is a property of the constants, not a defect: both targets are priced honestly and the equivalence target is the stricter one."
+  },
+  "published_objects": {
+    "note": "Every object in this file carrying expected values. An acceptance report must cover all of them; anything not listed here carries no expected value.",
+    "paths": ["seed_primitive_examples", "batch_order_seed_examples", "published_context_set_hashes", "published_train_order_hashes", "published_first_batch", "published_gradient_fixture", "published_power_decision", "synthetic_primary_fixture", "synthetic_shuffled_tag_fixture", "shuffled_tag_schedule_case", "model_config_acceptance_projection", "model_config_ref"]
   },
   "synthetic_primary_fixture": {
     "tau": 5000,
@@ -310,7 +393,9 @@
       "tie_break": "(a,b) ascending",
       "train_count": "floor(0.70 * M^2)",
       "split_hash": "SHA256(b\"pair-split-v0.2|M=<M>|train|\" + train pairs in lexicographic order as two uint16 little-endian each + b\"|held|\" + held-out pairs likewise)",
-      "split_hash_property": "set hash; independent of the ranked order"
+      "split_hash_property": "set hash; independent of the ranked order",
+      "index_basis": "ranked order from step 3; train is the ranked prefix, held-out the ranked remainder, neither is re-sorted; this is the basis the batch-order permutation indexes",
+      "train_order_hash": "SHA256(UTF8(\"pair-split-order-v0.2|M=<M>|train|\") + train pairs in ranked order as two uint16 little-endian each + UTF8(\"|held|\") + held-out pairs in ranked order likewise)"
     },
     "tensor_hash": {
       "source": "inherited from Level 0 model._hash_tensor",

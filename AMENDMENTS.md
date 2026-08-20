@@ -208,3 +208,33 @@ Two clarifying notes carrying no rule change were also appended: analysis plan �
 - `successor/v0.2/TEST_VECTORS_V0.2.json`
 - `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
 - `AMENDMENTS.md`
+
+## 2026-08-20 — pre-data, pre-lock: publish the gradient and power fixtures and close the remaining encodings
+
+**Date:** 2026-08-20
+**Status:** **pre-data, pre-lock**. No outcome-bearing run exists, so nothing is invalidated. This is the ninth pre-lock amendment.
+**Cause:** round 3 converged three ways on all 64 shared replicates, the k=1 identity case, D0, and the FULL/ONE/FULL-REPEAT gradient diagnostic. That agreement makes the arithmetic fixture publishable. One diagnostic field still had two reporting interpretations, four already-authoritative anchors could be skipped because they were nested, and the final queued encoding and identifier details remained to be pinned before Phase A2.
+
+**Affected gates:** implementation contract §§7, 8, 17, 19; lock manifest §B; `TEST_VECTORS_V0.2.json`. No gate in the preregistration is touched.
+
+**The eight edits:**
+
+1. **Published gradient fixture** — `published_gradient_fixture` now fixes the FULL and ONE loss, embedded/logits hashes, and all eleven gradients in draw order, including hash, sum, absolute maximum, and L2 norm. Its validity domain is the 14-field structural runtime fingerprint on which all three reports agree. The three verbatim `parallel_info` strings remain as `observed_parallel_info` with `compared:false`; `OMP_NUM_THREADS` and `MKL_NUM_THREADS` are not validity fields because effective single-thread state is fixed through the torch API and checked through ATen, OpenMP, and MKL. FULL-REPEAT remains an intra-implementation control and is not published.
+2. **Measured initial context norm ratio** — `context_norm_ratio_at_init` is the measured frozen-float32 context norm divided by the float32 initial median numeric-token-embedding norm after the cast, not the constant 1.0. Implementations assert `|ratio - 1| <= 1e-6`; a larger deviation is `BLOCKED_IMPLEMENTATION`.
+3. **Discoverable published objects** — `published_context_set_hashes` and `published_train_order_hashes` move to the top level unchanged, and `published_objects.paths` gives the mechanical acceptance checklist. Every listed path resolves to an existing object.
+4. **Published power decision** — `published_power_decision` anchors the section 9 dual-target calculator for `s_d` equal to 0, 0.25, and 0.60 under SciPy 1.18.0, including the minimum-N and `BLOCKED_POWER` branches. It records explicitly that the pilot mean never enters.
+5. **Three text pins** — the lexicographic `split_hash` order is identified as an order-insensitive hashing convention rather than the array materialization order; D0 held-out evaluation cadence is fixed at epochs `{0, B_history}`; and `state_dict_hash` entries are UTF-8 `name + "|" + tensor_hash` values concatenated with no inter-entry separator, matching all three implementations.
+6. **Pair-split encodings completed** — `pinned_encodings.pair_split` now states the ranked-array index basis and the order-sensitive `train_order_hash` preimage.
+7. **Bundle identifier pinned** — lock manifest §B defines `bundle_manifest_sha256` as SHA256 of `CANDIDATE_BUNDLE_SHA256.txt`; git SHA is optional provenance and never a substitute for the bundle identifier.
+8. **Undefined probe aggregate removed** — no aggregate C-probe `trajectory_hash` exists in the contract. Probe acceptance compares the already-listed per-step fields, leaving no undefined aggregate in the log schema.
+
+**Arithmetic-path closure:** the shared arithmetic path is now anchored by an authoritative one-forward/one-backward fixture. Across the three independent reports every published FULL/ONE arithmetic field and every structural validity field matches exactly.
+
+**Scientific values:** none changed. The primary estimand, the arms, the SESOI (`ln 1.20`), the CI levels, the heavy-cap threshold, the sign-gate rule, the N rule, the module pools, the competence rule, the kill-matrix statuses, and the interpretation fences are all unchanged. `PREREGISTRATION_V0.2_CANDIDATE_FOR_LOCK.md` is again **byte-unchanged**, still `8b669b42c57242d1369a45a90a8ae808fa9e8de1b5faa0a72f6696fd48b8d946`.
+
+**Files touched:**
+- `successor/v0.2/IMPLEMENTATION_CONTRACT_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/LOCK_MANIFEST_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/TEST_VECTORS_V0.2.json`
+- `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
+- `AMENDMENTS.md`
