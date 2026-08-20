@@ -1,0 +1,25 @@
+task: eval
+problemset: kleene
+max_problems: 1000
+accumulate_library: false
+agent:
+  max_mcts_nodes: 2000
+  type: mcts
+  node_type: holophrasm
+  expansions: 1000
+  max_searches: 1
+  max_examples: 1000
+  policy:
+    type: LM
+    lr: 0.0001
+    value_prior_weight: 10
+    max_pos_neg_ratio: 5
+    train_iterations: 2000
+    batch_size: 10000
+  curiosity:
+    type: constant
+job:
+  wandb_project: null
+seed: 0
+agent_path: /home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/2.pt
+results_path: /home/master/llm_projects/philosophia/successor/dev/phase1_extrinsic_16/checkpoint_2.json

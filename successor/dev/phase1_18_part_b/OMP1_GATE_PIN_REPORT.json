@@ -1,0 +1,122 @@
+{
+  "gated": false,
+  "note": "Set equality against OMP=16 pins is reported, never a stop condition (amendment 5). Thread interleaving can produce differences.",
+  "per_checkpoint": [
+    {
+      "checkpoint": "ck0",
+      "field_provenance": {
+        "class": "DERIVED",
+        "classes_in_comparison": [
+          "INFERRED",
+          "INFERRED"
+        ],
+        "inputs": [
+          "omp1.solved",
+          "PHASE1_17.pin"
+        ]
+      },
+      "identical_to_phase1_17_pin": true,
+      "n_pin": 11,
+      "n_solved": 11,
+      "omp1_omp_class": "INFERRED",
+      "only_got": [],
+      "only_pin": [],
+      "pin_basis": "PHASE1_17 pins produced at OMP=16; not a same-config reference",
+      "pin_omp_class": "INFERRED",
+      "symmetric_difference": []
+    },
+    {
+      "checkpoint": "ck1",
+      "field_provenance": {
+        "class": "DERIVED",
+        "classes_in_comparison": [
+          "MEASURED_IN_PROCESS",
+          "INFERRED"
+        ],
+        "inputs": [
+          "omp1.solved",
+          "PHASE1_17.pin"
+        ]
+      },
+      "identical_to_phase1_17_pin": true,
+      "n_pin": 19,
+      "n_solved": 19,
+      "omp1_omp_class": "MEASURED_IN_PROCESS",
+      "only_got": [],
+      "only_pin": [],
+      "pin_basis": "PHASE1_17 pins produced at OMP=16; not a same-config reference",
+      "pin_omp_class": "INFERRED",
+      "symmetric_difference": []
+    },
+    {
+      "checkpoint": "ck2",
+      "field_provenance": {
+        "class": "DERIVED",
+        "classes_in_comparison": [
+          "MEASURED_IN_PROCESS",
+          "INFERRED"
+        ],
+        "inputs": [
+          "omp1.solved",
+          "PHASE1_17.pin"
+        ]
+      },
+      "identical_to_phase1_17_pin": true,
+      "n_pin": 11,
+      "n_solved": 11,
+      "omp1_omp_class": "MEASURED_IN_PROCESS",
+      "only_got": [],
+      "only_pin": [],
+      "pin_basis": "PHASE1_17 pins produced at OMP=16; not a same-config reference",
+      "pin_omp_class": "INFERRED",
+      "symmetric_difference": []
+    },
+    {
+      "checkpoint": "ck3",
+      "field_provenance": {
+        "class": "DERIVED",
+        "classes_in_comparison": [
+          "MEASURED_IN_PROCESS",
+          "INFERRED"
+        ],
+        "inputs": [
+          "omp1.solved",
+          "PHASE1_17.pin"
+        ]
+      },
+      "identical_to_phase1_17_pin": true,
+      "n_pin": 11,
+      "n_solved": 11,
+      "omp1_omp_class": "MEASURED_IN_PROCESS",
+      "only_got": [],
+      "only_pin": [],
+      "pin_basis": "PHASE1_17 pins produced at OMP=16; not a same-config reference",
+      "pin_omp_class": "INFERRED",
+      "symmetric_difference": []
+    },
+    {
+      "checkpoint": "ck4",
+      "field_provenance": {
+        "class": "DERIVED",
+        "classes_in_comparison": [
+          "MEASURED_IN_PROCESS",
+          "INFERRED"
+        ],
+        "inputs": [
+          "omp1.solved",
+          "PHASE1_17.pin"
+        ]
+      },
+      "identical_to_phase1_17_pin": true,
+      "n_pin": 13,
+      "n_solved": 13,
+      "omp1_omp_class": "MEASURED_IN_PROCESS",
+      "only_got": [],
+      "only_pin": [],
+      "pin_basis": "PHASE1_17 pins produced at OMP=16; not a same-config reference",
+      "pin_omp_class": "INFERRED",
+      "symmetric_difference": []
+    }
+  ],
+  "role": "configuration_sensitivity_vs_phase1_17_pins"
+}

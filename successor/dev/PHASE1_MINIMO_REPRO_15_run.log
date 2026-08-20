@@ -1,0 +1,1603 @@
+Running from: C:\Users\LEGION\Kirill\ShareTops\minimo\learning\outputs\2026-08-09\23-57-05
+Running in single-process mode.
+[2026-08-09T23:57:07.151328] Iteration #0: making conjectures...
+[2026-08-09T23:58:36.710176] done, have 200 conjectures
+['false', '(or (iff (iff false false) false) false)', '(iff (and false false) (or false false))', '(or (or (iff (or false (iff (iff false false) false)) (iff false false)) false) (not (or false (not (and (and false (or (or (not (or (or false false) (or false false))) false) false)) false)))))', '(or false false)', '(iff (not (iff (or false false) (or false (not false)))) false)', '(iff false (or false false))', "[('a0 : prop) -> 'a0]", '(not false)', "[('a0 : false) -> (not false)]", '(or (and false (and false false)) (and (or false false) (or false false)))', "[('a0 : false) -> false]", "[('a0 : (iff false false)) -> (and false false)]", '(iff false false)', '(iff false (or false (and false false)))', '(or false (iff (and false false) false))', '(iff false (not false))', '(or (or (or false false) (iff false (or false (or (or false false) false)))) false)', "[('a0 : prop) -> false]", '(or (iff false false) false)', "[('a0 : (iff false (not false))) -> ('a1 : false) -> false]", '(or (or false false) false)', "[('a0 : false) -> (or false (or (or false (iff false false)) (iff false false)))]", '(iff (or false false) (and false (or false false)))', "[('a0 : (or false false)) -> (iff false (and false false))]", '(or false (or false false))', '(not (and (or false (or (not (iff false false)) false)) false))', '(or (and (iff false false) false) false)', "[('a0 : (iff false false)) -> false]", "[('a0 : (or (and false (iff false false)) false)) -> false]", '(and false false)', '(and false (and false false))', '(iff (and false (or (iff false (not false)) (or false (iff false (and (or false false) (or false false)))))) (and false false))', '(or (iff false (or false false)) false)', '(or (iff (and false (and (not (or false false)) false)) false) false)', "[('a0 : (or false false)) -> (and (or (or (or (or (or false (and false false)) false) false) (and false false)) (and (and false (or false false)) false)) (not false))]", "[('a0 : (iff (or (not (or false (and false (iff (not false) (and (not false) (and false false)))))) false) false)) -> false]", '(or (and (or false (or (or (not false) false) (and (or false false) false))) (not (iff false (iff (or false false) (and false false))))) (and false false))', "[('a0 : false) -> (or false (or false (or false false)))]", '(and (or false false) false)', '(or false (iff false false))', '(or (or false false) (iff (and false false) (or false false)))', "[('a0 : (or false false)) -> false]", "[('a0 : (iff false false)) -> (and (not (iff false false)) false)]", "[('a0 : (and (iff (and false (or false (and (or (or (or false false) false) (and false false)) false))) false) (or (or false false) false))) -> false]", '(and (or (iff false false) false) false)', "[('a0 : false) -> (or false false)]", '(and (not false) false)', '(iff false (or (and false (and false false)) (or (and false (and false (or false false))) (and false false))))', '(iff false (and false false))', '(iff (and false false) (iff false false))', '(iff (iff false false) (or (or false false) false))', '(iff (or false false) false)', '(and false (iff (and false false) (or false false)))', "[('a0 : (iff false (iff false false))) -> false]", '(or (not false) false)', "[('a0 : (iff (or (not false) (and (iff false false) (and false (or false (or (or (not false) (not false)) false))))) (iff (and (or false (and false false)) (and false (and false false))) (or false (iff false false))))) -> false]", '(or (not false) (iff (not (or (iff (or false (iff false (and false (or false false)))) false) false)) (iff false false)))', "[('a0 : false) -> (and (or (and false false) false) false)]", "[('a0 : false) -> ('a1 : (and (or (or (iff false false) (and false false)) false) false)) -> (iff (or false (iff false (or false (not false)))) (not false))]", '(and (or (and false false) (and false (and false false))) false)', '(iff (iff (and false false) false) (and (iff (or false (and false (or false (or false (or false (iff false false)))))) false) false))', '(or false (and false false))', "[('a0 : prop) -> ('a1 : 'a0) -> 'a0]", '(iff (iff (and false false) (or (not (and false false)) (not false))) false)', "[('a0 : false) -> (or false (or false false))]", '(or (iff false false) (iff false false))', '(and false (or false false))', '(iff (or false (iff (and false false) false)) (or (iff false false) false))', '(iff false (or (or false false) (and false false)))', '(or (or (or false false) false) false)', "[('a0 : false) -> (iff false false)]", "[('a0 : false) -> ('a1 : false) -> false]", '(not (or false false))', '(and false (and (or false false) false))', "[('a0 : false) -> ('a1 : prop) -> (iff (and 'a1 (or (not false) false)) false)]", '(iff (iff false false) (not (iff false (not false))))', '(iff (iff (iff (iff (and (not (iff (iff (and false false) false) (and (and false (and false false)) (iff (not false) false)))) false) false) false) (iff false (iff false false))) false)', "[('a0 : prop) -> (and (or 'a0 false) (not 'a0))]", '(iff (or false false) (not false))', "[('a0 : (or false false)) -> ('a1 : false) -> false]", '(and (iff false false) false)', "[('a0 : (or false (iff (not false) false))) -> false]", "[('a0 : (and (or false false) (not false))) -> false]", '(iff false (and (and false (not false)) (iff (iff (iff (and false false) (and (not false) false)) false) false)))', '(or (iff (or (iff false false) false) false) (iff (and false (and false (and false false))) (not (and false (iff (and false false) false)))))', '(iff false (or (or false false) false))', "[('a0 : (and false false)) -> (not false)]", "[('a0 : (iff false (or false false))) -> false]", "[('a0 : false) -> ('a1 : prop) -> (and 'a1 (or 'a1 'a1))]", "[('a0 : (and false (iff false (iff false (not false))))) -> (and (or false (or (not (and false (or false false))) false)) false)]", '(or (iff false (iff false false)) (and (or false false) false))', "[('a0 : (or false (or false false))) -> false]", '(or (iff false (not false)) false)', "[('a0 : (and false false)) -> false]", '(and (not (or false false)) false)', '(and (not false) (and false false))', "[('a0 : (or false (not false))) -> false]", "[('a0 : (or (and (iff (and (and false false) false) false) false) false)) -> false]", "[('a0 : false) -> (and (iff (not false) false) (iff false false))]", '(not (or false (and false (or false (or false false)))))', '(iff false (or (or (or false false) false) (not (not (not false)))))', '(and (or false (iff false (or false false))) false)', "[('a0 : (or false (and false (or false false)))) -> false]", '(and (and false (or false (not (and (or false (and false (or false false))) (not false))))) (not false))', '(iff (and (iff (or (and (or (not (not false)) false) false) false) false) false) (or false (iff false false)))', "[('a0 : false) -> (and false false)]", '(iff (iff false false) false)', "[('a0 : false) -> (and (or false false) false)]", "[('a0 : prop) -> ('a1 : false) -> 'a0]", "[('a0 : (or (or false (or (and (and false false) false) (or (and false false) false))) (iff false false))) -> (or false (iff false (or (or false (or false false)) false)))]", '(or (and false false) (and false false))', '(or (iff false false) (or false false))', '(or (and false false) false)', "[('a0 : prop) -> (iff (and (or 'a0 false) false) false)]", '(or (iff false false) (iff false (and (not false) false)))', "[('a0 : false) -> ('a1 : (or false (and false false))) -> false]", "[('a0 : prop) -> (or 'a0 (or false (not 'a0)))]", '(or (iff (iff false (or false false)) false) false)', "[('a0 : (and (iff (and (not (and (iff false (or false (iff false (iff false false)))) (not false))) false) false) false)) -> ('a1 : false) -> false]", '(not (iff false (iff false false)))', '(or false (iff (and (not (not false)) (not false)) (and false false)))', '(iff (or false false) (iff false (or false false)))', '(and (and false false) false)', '(iff (not (and (iff (or (or false false) false) (iff false (iff false false))) false)) false)', '(or (iff (iff false (or (or false false) (and (or (or false false) false) (or false false)))) false) false)', '(or (iff (iff false (or (and false false) (and false false))) false) (iff false false))', "[('a0 : prop) -> (or 'a0 (and (iff 'a0 (or false 'a0)) false))]", '(and false (iff false false))', '(or (iff (and false (and false false)) false) false)', '(or (or (or (not (iff false (or false (iff false (or false false))))) false) (or false (or false false))) false)', "[('a0 : false) -> ('a1 : false) -> (iff (iff false (iff false false)) false)]", '(or false (not (iff (and (or false false) false) false)))', '(iff false (and (or (or false false) (iff (or false (not false)) false)) false))', '(or (or false false) (not (and false (or false false))))', "[('a0 : prop) -> (or false false)]", "[('a0 : prop) -> (iff 'a0 false)]", '(and (iff false false) (iff (iff false false) false))', '(iff false (iff false false))', '(or false (not false))', '(iff (or false (iff false false)) false)', '(or false (iff false (or false false)))', "[('a0 : false) -> ('a1 : (or (not false) (or false false))) -> false]", '(and (or (or false false) false) false)', "[('a0 : (iff (and false false) false)) -> (and false (or (not false) false))]", '(iff (or (iff false (not (or false (iff false false)))) false) false)', "[('a0 : (or (and false false) (or (not false) false))) -> (or false (iff false (not false)))]", "[('a0 : (or false (or (and (not (or (and (and false (or false false)) false) false)) (iff (and false (or (or false false) false)) false)) (not (or (or false (and false (iff (or (and false false) false) false))) false))))) -> false]", '(or false (or false (or (or false false) false)))', "[('a0 : (iff false false)) -> ('a1 : prop) -> false]", "[('a0 : (or false (iff (and false false) false))) -> false]", '(and false (and (or (and (or (and false (or false (or false (not false)))) false) false) false) false))', '(or (and (or (not false) (iff false false)) false) (and false (or (iff false (and (and (or (or false (or (not (or false (or false (iff false (and false (or (or false false) false)))))) false)) false) false) false)) (not false))))', "[('a0 : (or false (iff false false))) -> false]", '(and false (and false (or false false)))', '(or (and (or (and false false) (not (or false false))) false) false)', "[('a0 : (iff (or (or (and false (or false (iff false (or false (or false (and (not false) false)))))) false) false) (not false))) -> (and (iff (or false false) (iff false (not (and (or false false) false)))) false)]", "[('a0 : false) -> ('a1 : (and (or false (and false false)) false)) -> (or false false)]", "[('a0 : (or (and false false) (and false false))) -> (iff (iff false false) (iff (or (or (or (and false false) false) false) false) false))]", '(and (and false (or false false)) false)', '(and (or false false) (or (and (iff (and false (and false (not (or false (or false false))))) false) false) false))', '(iff (and false false) false)', "[('a0 : false) -> ('a1 : (not false)) -> false]", "[('a0 : false) -> (or (not false) false)]", '(or false (or (not false) false))', '(iff false (iff false (or false (iff (or false false) (iff false false)))))', '(or false (iff (iff false false) false))', '(iff false (or (iff false false) false))', "[('a0 : false) -> (and false (not (and (or false (and false false)) false)))]", '(iff false (or false (or false false)))', '(and false (or false (or false false)))', "[('a0 : (not (or false false))) -> false]", "[('a0 : (and false (not (not false)))) -> (and false false)]", "[('a0 : (or false false)) -> (and false false)]", '(and false (and (or (not (or false false)) false) false))', "[('a0 : (and (and false (and (not (not (not false))) false)) false)) -> false]", '(and false (not (iff (iff false false) (iff false false))))', "[('a0 : prop) -> (or 'a0 false)]", "[('a0 : (and (iff false false) (iff false false))) -> false]", '(or (and (or (or false false) false) false) (not (and false false)))', "[('a0 : false) -> ('a1 : (or false false)) -> (and false false)]", '(and (iff false (or false false)) (or false false))', "[('a0 : (or (or false (and false (and false (and (or (or false false) false) false)))) false)) -> false]", '(iff (or false (iff (or false false) (iff false false))) (not false))', "[('a0 : (not false)) -> false]", '(and false (iff (iff false false) false))', '(or false (or (and false (not false)) false))', "[('a0 : false) -> ('a1 : false) -> (and false false)]", "[('a0 : (iff (or false (not (and false false))) (and (and false false) (and false (or (and false false) (not false)))))) -> false]", '(iff false (iff (or (or (and false (iff false (not (iff false false)))) (and false false)) false) (or false (not false))))', "[('a0 : false) -> (or (or false false) false)]", '(or (or false (or false false)) (and false false))', '(and (or false (not false)) false)', '(or (and (or (or false (not (and (or false false) false))) false) false) (or false (not false)))', '(not (not false))', '(or false (not (and false false)))', "[('a0 : (or (and (not false) (and (or (iff (not (and (and (iff false false) (and (not false) (or false false))) false)) false) false) false)) false)) -> (and false false)]", "[('a0 : false) -> (iff (and (iff false false) false) false)]", "[('a0 : (iff false (and false false))) -> false]", '(and (iff false false) (or false (not (iff false false))))']
+Submitting tasks...
+Proving false on cuda:0
+State: G=1
+State: {  }
+Goal: false
+
+Actions: ['a not_e', 'a exfalso', 'c em']
+Policy: [0.58817635 0.16232465 0.250501  ]
+Taking action a not_e
+Did not find solution.
+Proving (or (iff (iff false false) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff (iff false false) false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.21743487 0.24248497 0.28056112 0.26052104]
+Taking action a exfalso
+Did not find solution.
+Proving (iff (and false false) (or false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (and false false) (or false false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.53006012 0.001002   0.46993988]
+Taking action a exfalso
+Did not find solution.
+Proving (or (or (iff (or false (iff (iff false false) false)) (iff false false)) false) (not (or false (not (and (and false (or (or (not (or (or false false) (or false false))) false) false)) false))))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (or (iff (or false (iff (iff false false) false)) (iff false false)) false) (not (or false (not (and (and false (or (or (not (or (or false false) (or false false))) false) false)) false)))))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.001002   0.001002   0.35671343 0.64228457]
+Taking action c em
+Did not find solution.
+Proving (or false false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.12825651 0.13326653 0.15831663 0.58116232]
+Taking action c em
+Did not find solution.
+Proving (iff (not (iff (or false false) (or false (not false)))) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (not (iff (or false false) (or false (not false)))) false)
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.3757515 0.001002  0.6242485]
+Taking action c em
+Did not find solution.
+Proving (iff false (or false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (or false false))
+
+Found solution!
+theorem t : (iff false (or false false)) {
+    apply iff_i.
+    goal [false -> (or false false)] {
+        intro x : false.
+        apply or_ir.
+    }
+    goal [(or false false) -> false] {
+        intro x : (or false false).
+        apply or_e.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving [('a0 : prop) -> 'a0] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> 'a0]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.35771543 0.28757515 0.35571142]
+Taking action intro.
+Did not find solution.
+Proving (not false) on cuda:0
+State: G=1
+State: {  }
+Goal: (not false)
+
+Found solution!
+theorem t : (not false) {
+    apply not_i.
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+}
+Proving [('a0 : false) -> (not false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (not false)]
+
+Found solution!
+theorem t : [('a0 : false) -> (not false)] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (or (and false (and false false)) (and (or false false) (or false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (and false (and false false)) (and (or false false) (or false false)))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.12725451 0.12925852 0.34669339 0.39779559]
+Taking action c em
+Did not find solution.
+Proving [('a0 : false) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> false]
+
+Found solution!
+theorem t : [('a0 : false) -> false] {
+    intro _ : [('a0 : false) -> false].
+}
+Proving [('a0 : (iff false false)) -> (and false false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff false false)) -> (and false false)]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.11422846 0.36472946 0.52204409]
+Taking action c em
+Did not find solution.
+Proving (iff false false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false false)
+
+Found solution!
+theorem t : (iff false false) {
+    apply iff_i.
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+}
+Proving (iff false (or false (and false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (or false (and false false)))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.46092184 0.001002   0.53907816]
+Taking action c em
+Did not find solution.
+Proving (or false (iff (and false false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (iff (and false false) false))
+
+Found solution!
+theorem t : (or false (iff (and false false) false)) {
+    apply or_ir.
+    goal (iff (and false false) false) {
+        apply iff_i.
+        goal [(and false false) -> false] {
+            intro x : (and false false).
+            show false by and_er.
+        }
+        goal [false -> (and false false)] {
+            intro x : false.
+            apply exfalso.
+        }
+    }
+}
+Proving (iff false (not false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (not false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.14328657 0.46693387 0.39078156]
+Taking action a iff_i
+Did not find solution.
+Proving (or (or (or false false) (iff false (or false (or (or false false) false)))) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (or (or false false) (iff false (or false (or (or false false) false)))) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.35370741 0.3507014  0.13126253 0.16533066]
+Taking action a or_il
+Did not find solution.
+Proving [('a0 : prop) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.56913828 0.14829659 0.28356713]
+Taking action intro.
+Did not find solution.
+Proving (or (iff false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff false false) false)
+
+Found solution!
+theorem t : (or (iff false false) false) {
+    apply or_il.
+    goal (iff false false) {
+        apply iff_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving [('a0 : (iff false (not false))) -> ('a1 : false) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff false (not false))) -> ('a1 : false) -> false]
+
+Found solution!
+theorem t : [('a0 : (iff false (not false))) -> ('a1 : false) -> false] {
+    intro x : (iff false (not false)).
+    intro _ : [('a1 : false) -> false].
+}
+Proving (or (or false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (or false false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.21142285 0.22745491 0.13627255 0.4258517 ]
+Taking action c em
+Did not find solution.
+Proving [('a0 : false) -> (or false (or (or false (iff false false)) (iff false false)))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (or false (or (or false (iff false false)) (iff false false)))]
+
+Found solution!
+theorem t : [('a0 : false) -> (or false (or (or false (iff false false)) (iff false false)))] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (iff (or false false) (and false (or false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (or false false) (and false (or false false)))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.14328657 0.001002   0.85671343]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or false false)) -> (iff false (and false false))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false false)) -> (iff false (and false false))]
+
+Found solution!
+theorem t : [('a0 : (or false false)) -> (iff false (and false false))] {
+    intro x : (or false false).
+    apply exfalso.
+    goal false {
+        apply or_e.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving (or false (or false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (or false false))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.21242485 0.22344689 0.13627255 0.42885772]
+Taking action c em
+Did not find solution.
+Proving (not (and (or false (or (not (iff false false)) false)) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (not (and (or false (or (not (iff false false)) false)) false))
+
+Found solution!
+theorem t : (not (and (or false (or (not (iff false false)) false)) false)) {
+    apply not_i.
+    goal [(and (or false (or (not (iff false false)) false)) false) -> false] {
+        intro x : (and (or false (or (not (iff false false)) false)) false).
+        show false by and_er.
+    }
+}
+Proving (or (and (iff false false) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (and (iff false false) false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.22645291 0.23747495 0.26853707 0.26853707]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : (iff false false)) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff false false)) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.1743487  0.18036072 0.64629259]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or (and false (iff false false)) false)) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or (and false (iff false false)) false)) -> false]
+
+Found solution!
+theorem t : [('a0 : (or (and false (iff false false)) false)) -> false] {
+    intro x : (or (and false (iff false false)) false).
+    apply or_e.
+    goal [(and false (iff false false)) -> false] {
+        intro x0 : (and false (iff false false)).
+        show false by and_el.
+    }
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+}
+Proving (and false false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and false false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.55911824 0.19739479 0.24448898]
+Taking action a and_i
+Did not find solution.
+Proving (and false (and false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (and false (and false false))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.24448898 0.08116232 0.6753507 ]
+Taking action c em
+Did not find solution.
+Proving (iff (and false (or (iff false (not false)) (or false (iff false (and (or false false) (or false false)))))) (and false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (and false (or (iff false (not false)) (or false (iff false (and (or false false) (or false false)))))) (and false false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.78056112 0.001002   0.21943888]
+Taking action a exfalso
+Did not find solution.
+Proving (or (iff false (or false false)) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff false (or false false)) false)
+
+Found solution!
+theorem t : (or (iff false (or false false)) false) {
+    apply or_il.
+    goal (iff false (or false false)) {
+        apply iff_i.
+        goal [false -> (or false false)] {
+            intro x : false.
+            apply or_ir.
+        }
+        goal [(or false false) -> false] {
+            intro x : (or false false).
+            apply or_e.
+            goal [false -> false] {
+                intro _ : [false -> false].
+            }
+            goal [false -> false] {
+                intro _ : [false -> false].
+            }
+        }
+    }
+}
+Proving (or (iff (and false (and (not (or false false)) false)) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff (and false (and (not (or false false)) false)) false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.25150301 0.24749499 0.15731463 0.34468938]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or false false)) -> (and (or (or (or (or (or false (and false false)) false) false) (and false false)) (and (and false (or false false)) false)) (not false))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false false)) -> (and (or (or (or (or (or false (and false false)) false) false) (and false false)) (and (and false (or false false)) false)) (not false))]
+
+Found solution!
+theorem t : [('a0 : (or false false)) -> (and (or (or (or (or (or false (and false false)) false) false) (and false false)) (and (and false (or false false)) false)) (not false))] {
+    intro x : (or false false).
+    apply exfalso.
+    goal false {
+        apply or_e.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving [('a0 : (iff (or (not (or false (and false (iff (not false) (and (not false) (and false false)))))) false) false)) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff (or (not (or false (and false (iff (not false) (and (not false) (and false false)))))) false) false)) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.6012024  0.11222445 0.28757515]
+Taking action intro.
+Did not find solution.
+Proving (or (and (or false (or (or (not false) false) (and (or false false) false))) (not (iff false (iff (or false false) (and false false))))) (and false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (and (or false (or (or (not false) false) (and (or false false) false))) (not (iff false (iff (or false false) (and false false))))) (and false false))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.001002   0.26653307 0.41382766 0.31963928]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : false) -> (or false (or false (or false false)))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (or false (or false (or false false)))]
+
+Found solution!
+theorem t : [('a0 : false) -> (or false (or false (or false false)))] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (and (or false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (or false false) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.56913828 0.23446894 0.19739479]
+Taking action a and_i
+Did not find solution.
+Proving (or false (iff false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (iff false false))
+
+Found solution!
+theorem t : (or false (iff false false)) {
+    apply or_ir.
+    goal (iff false false) {
+        apply iff_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving (or (or false false) (iff (and false false) (or false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (or false false) (iff (and false false) (or false false)))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.27354709 0.29859719 0.21242485 0.21643287]
+Taking action a or_ir
+Did not find solution.
+Proving [('a0 : (or false false)) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false false)) -> false]
+
+Found solution!
+theorem t : [('a0 : (or false false)) -> false] {
+    intro x : (or false false).
+    apply or_e.
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+}
+Proving [('a0 : (iff false false)) -> (and (not (iff false false)) false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff false false)) -> (and (not (iff false false)) false)]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.15430862 0.38677355 0.45991984]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (and (iff (and false (or false (and (or (or (or false false) false) (and false false)) false))) false) (or (or false false) false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (and (iff (and false (or false (and (or (or (or false false) false) (and false false)) false))) false) (or (or false false) false))) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.498998   0.37274549 0.12925852]
+Taking action intro.
+Did not find solution.
+Proving (and (or (iff false false) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (or (iff false false) false) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.26853707 0.37675351 0.35571142]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : false) -> (or false false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (or false false)]
+
+Found solution!
+theorem t : [('a0 : false) -> (or false false)] {
+    intro x : false.
+    apply or_ir.
+}
+Proving (and (not false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (not false) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.46492986 0.14428858 0.39178357]
+Taking action a and_i
+Did not find solution.
+Proving (iff false (or (and false (and false false)) (or (and false (and false (or false false))) (and false false)))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (or (and false (and false false)) (or (and false (and false (or false false))) (and false false))))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.56012024 0.001002   0.43987976]
+Taking action a exfalso
+Did not find solution.
+Proving (iff false (and false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (and false false))
+
+Found solution!
+theorem t : (iff false (and false false)) {
+    apply iff_i.
+    goal [false -> (and false false)] {
+        intro x : false.
+        apply exfalso.
+    }
+    goal [(and false false) -> false] {
+        intro x : (and false false).
+        show false by and_er.
+    }
+}
+Proving (iff (and false false) (iff false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (and false false) (iff false false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.35270541 0.001002   0.64729459]
+Taking action c em
+Did not find solution.
+Proving (iff (iff false false) (or (or false false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (iff false false) (or (or false false) false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.15731463 0.001002   0.84268537]
+Taking action c em
+Did not find solution.
+Proving (iff (or false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (or false false) false)
+
+Found solution!
+theorem t : (iff (or false false) false) {
+    apply iff_i.
+    goal [(or false false) -> false] {
+        intro x : (or false false).
+        apply or_e.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+    goal [false -> (or false false)] {
+        intro x : false.
+        apply or_ir.
+    }
+}
+Proving (and false (iff (and false false) (or false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (and false (iff (and false false) (or false false)))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.66633267 0.13627255 0.19839679]
+Taking action a and_i
+Did not find solution.
+Proving [('a0 : (iff false (iff false false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff false (iff false false))) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.12725451 0.34669339 0.52705411]
+Taking action c em
+Did not find solution.
+Proving (or (not false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (not false) false)
+
+Found solution!
+theorem t : (or (not false) false) {
+    apply or_il.
+    goal (not false) {
+        apply not_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving [('a0 : (iff (or (not false) (and (iff false false) (and false (or false (or (or (not false) (not false)) false))))) (iff (and (or false (and false false)) (and false (and false false))) (or false (iff false false))))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff (or (not false) (and (iff false false) (and false (or false (or (or (not false) (not false)) false))))) (iff (and (or false (and false false)) (and false (and false false))) (or false (iff false false))))) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.66633267 0.24849699 0.08617234]
+Taking action intro.
+Did not find solution.
+Proving (or (not false) (iff (not (or (iff (or false (iff false (and false (or false false)))) false) false)) (iff false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (not false) (iff (not (or (iff (or false (iff false (and false (or false false)))) false) false)) (iff false false)))
+
+Found solution!
+theorem t : (or (not false) (iff (not (or (iff (or false (iff false (and false (or false false)))) false) false)) (iff false false))) {
+    apply or_il.
+    goal (not false) {
+        apply not_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving [('a0 : false) -> (and (or (and false false) false) false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (and (or (and false false) false) false)]
+
+Found solution!
+theorem t : [('a0 : false) -> (and (or (and false false) false) false)] {
+    intro x : false.
+    apply exfalso.
+}
+Proving [('a0 : false) -> ('a1 : (and (or (or (iff false false) (and false false)) false) false)) -> (iff (or false (iff false (or false (not false)))) (not false))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> ('a1 : (and (or (or (iff false false) (and false false)) false) false)) -> (iff (or false (iff false (or false (not false)))) (not false))]
+
+Found solution!
+theorem t : [('a0 : false) -> ('a1 : (and (or (or (iff false false) (and false false)) false) false)) -> (iff (or false (iff false (or false (not false)))) (not false))] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (and (or (and false false) (and false (and false false))) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (or (and false false) (and false (and false false))) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.39278557 0.21743487 0.39078156]
+Taking action a and_i
+Did not find solution.
+Proving (iff (iff (and false false) false) (and (iff (or false (and false (or false (or false (or false (iff false false)))))) false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (iff (and false false) false) (and (iff (or false (and false (or false (or false (or false (iff false false)))))) false) false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.53907816 0.001002   0.46092184]
+Taking action a exfalso
+Did not find solution.
+Proving (or false (and false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (and false false))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.31663327 0.36673347 0.16733467 0.1503006 ]
+Taking action a or_ir
+Did not find solution.
+Proving [('a0 : prop) -> ('a1 : 'a0) -> 'a0] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> ('a1 : 'a0) -> 'a0]
+
+Found solution!
+theorem t : [('a0 : prop) -> ('a1 : 'a0) -> 'a0] {
+    intro x : prop.
+    intro _ : [('a1 : x) -> x].
+}
+Proving (iff (iff (and false false) (or (not (and false false)) (not false))) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (iff (and false false) (or (not (and false false)) (not false))) false)
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.22745491 0.001002   0.77254509]
+Taking action c em
+Did not find solution.
+Proving [('a0 : false) -> (or false (or false false))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (or false (or false false))]
+
+Found solution!
+theorem t : [('a0 : false) -> (or false (or false false))] {
+    intro x : false.
+    apply or_il.
+}
+Proving (or (iff false false) (iff false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff false false) (iff false false))
+
+Found solution!
+theorem t : (or (iff false false) (iff false false)) {
+    apply or_ir.
+    goal (iff false false) {
+        apply iff_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving (and false (or false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (and false (or false false))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.58016032 0.21843687 0.20240481]
+Taking action a and_i
+Did not find solution.
+Proving (iff (or false (iff (and false false) false)) (or (iff false false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (or false (iff (and false false) false)) (or (iff false false) false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.51503006 0.001002   0.48496994]
+Taking action a exfalso
+Did not find solution.
+Proving (iff false (or (or false false) (and false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (or (or false false) (and false false)))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.13527054 0.001002   0.86472946]
+Taking action c em
+Did not find solution.
+Proving (or (or (or false false) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (or (or false false) false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.28757515 0.30661323 0.13527054 0.27154309]
+Taking action a or_ir
+Did not find solution.
+Proving [('a0 : false) -> (iff false false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (iff false false)]
+
+Found solution!
+theorem t : [('a0 : false) -> (iff false false)] {
+    intro x : false.
+    apply exfalso.
+}
+Proving [('a0 : false) -> ('a1 : false) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> ('a1 : false) -> false]
+
+Found solution!
+theorem t : [('a0 : false) -> ('a1 : false) -> false] {
+    intro x : false.
+    intro _ : [('a1 : false) -> false].
+}
+Proving (not (or false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (not (or false false))
+
+Found solution!
+theorem t : (not (or false false)) {
+    apply not_i.
+    goal [(or false false) -> false] {
+        intro x : (or false false).
+        apply or_e.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving (and false (and (or false false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (and false (and (or false false) false))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.2755511  0.33166333 0.39378758]
+Taking action c em
+Did not find solution.
+Proving [('a0 : false) -> ('a1 : prop) -> (iff (and 'a1 (or (not false) false)) false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> ('a1 : prop) -> (iff (and 'a1 (or (not false) false)) false)]
+
+Found solution!
+theorem t : [('a0 : false) -> ('a1 : prop) -> (iff (and 'a1 (or (not false) false)) false)] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (iff (iff false false) (not (iff false (not false)))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (iff false false) (not (iff false (not false))))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.91683367 0.001002   0.08316633]
+Taking action a exfalso
+Did not find solution.
+Proving (iff (iff (iff (iff (and (not (iff (iff (and false false) false) (and (and false (and false false)) (iff (not false) false)))) false) false) false) (iff false (iff false false))) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (iff (iff (iff (and (not (iff (iff (and false false) false) (and (and false (and false false)) (iff (not false) false)))) false) false) false) (iff false (iff false false))) false)
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.78056112 0.001002   0.21943888]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : prop) -> (and (or 'a0 false) (not 'a0))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> (and (or 'a0 false) (not 'a0))]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.1993988  0.28156313 0.52004008]
+Taking action c em
+Did not find solution.
+Proving (iff (or false false) (not false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (or false false) (not false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.29358717 0.41182365 0.29559118]
+Taking action a iff_i
+Did not find solution.
+Proving [('a0 : (or false false)) -> ('a1 : false) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false false)) -> ('a1 : false) -> false]
+
+Found solution!
+theorem t : [('a0 : (or false false)) -> ('a1 : false) -> false] {
+    intro x : (or false false).
+    intro _ : [('a1 : false) -> false].
+}
+Proving (and (iff false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (iff false false) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.26553106 0.1002004  0.63527054]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or false (iff (not false) false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false (iff (not false) false))) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.25851703 0.64729459 0.09519038]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : (and (or false false) (not false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (and (or false false) (not false))) -> false]
+
+Found solution!
+theorem t : [('a0 : (and (or false false) (not false))) -> false] {
+    intro x : (and (or false false) (not false)).
+    show (or false false) by and_el.
+    apply or_e.
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+}
+Proving (iff false (and (and false (not false)) (iff (iff (iff (and false false) (and (not false) false)) false) false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (and (and false (not false)) (iff (iff (iff (and false false) (and (not false) false)) false) false)))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.77855711 0.001002   0.22144289]
+Taking action a exfalso
+Did not find solution.
+Proving (or (iff (or (iff false false) false) false) (iff (and false (and false (and false false))) (not (and false (iff (and false false) false))))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff (or (iff false false) false) false) (iff (and false (and false (and false false))) (not (and false (iff (and false false) false)))))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.47795591 0.001002   0.25951904 0.26252505]
+Taking action a or_il
+Did not find solution.
+Proving (iff false (or (or false false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (or (or false false) false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.51402806 0.001002   0.48597194]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : (and false false)) -> (not false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (and false false)) -> (not false)]
+
+Found solution!
+theorem t : [('a0 : (and false false)) -> (not false)] {
+    intro x : (and false false).
+    apply not_i.
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+}
+Proving [('a0 : (iff false (or false false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff false (or false false))) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.20140281 0.51503006 0.28456914]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : false) -> ('a1 : prop) -> (and 'a1 (or 'a1 'a1))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> ('a1 : prop) -> (and 'a1 (or 'a1 'a1))]
+
+Found solution!
+theorem t : [('a0 : false) -> ('a1 : prop) -> (and 'a1 (or 'a1 'a1))] {
+    intro x : false.
+    apply exfalso.
+}
+Proving [('a0 : (and false (iff false (iff false (not false))))) -> (and (or false (or (not (and false (or false false))) false)) false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (and false (iff false (iff false (not false))))) -> (and (or false (or (not (and false (or false false))) false)) false)]
+
+Found solution!
+theorem t : [('a0 : (and false (iff false (iff false (not false))))) -> (and (or false (or (not (and false (or false false))) false)) false)] {
+    intro x : (and false (iff false (iff false (not false)))).
+    show false by and_el.
+    apply exfalso.
+}
+Proving (or (iff false (iff false false)) (and (or false false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff false (iff false false)) (and (or false false) false))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.23446894 0.27154309 0.20541082 0.28957916]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or false (or false false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false (or false false))) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.24849699 0.53907816 0.21342685]
+Taking action a exfalso
+Did not find solution.
+Proving (or (iff false (not false)) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff false (not false)) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.29759519 0.32965932 0.18136273 0.19238477]
+Taking action a or_ir
+Did not find solution.
+Proving [('a0 : (and false false)) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (and false false)) -> false]
+
+Found solution!
+theorem t : [('a0 : (and false false)) -> false] {
+    intro x : (and false false).
+    show false by and_er.
+}
+Proving (and (not (or false false)) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (not (or false false)) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.42184369 0.25951904 0.31963928]
+Taking action a and_i
+Did not find solution.
+Proving (and (not false) (and false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (not false) (and false false))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.18436874 0.6252505  0.19138277]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : (or false (not false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false (not false))) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.3256513  0.25651303 0.41883768]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or (and (iff (and (and false false) false) false) false) false)) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or (and (iff (and (and false false) false) false) false) false)) -> false]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.5260521 0.2004008 0.2745491]
+Taking action intro.
+Did not find solution.
+Proving [('a0 : false) -> (and (iff (not false) false) (iff false false))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (and (iff (not false) false) (iff false false))]
+
+Found solution!
+theorem t : [('a0 : false) -> (and (iff (not false) false) (iff false false))] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (not (or false (and false (or false (or false false))))) on cuda:0
+State: G=1
+State: {  }
+Goal: (not (or false (and false (or false (or false false)))))
+
+Found solution!
+theorem t : (not (or false (and false (or false (or false false))))) {
+    apply not_i.
+    goal [(or false (and false (or false (or false false)))) -> false] {
+        intro x : (or false (and false (or false (or false false)))).
+        apply or_e.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [(and false (or false (or false false))) -> false] {
+            intro x0 : (and false (or false (or false false))).
+            show false by and_el.
+        }
+    }
+}
+Proving (iff false (or (or (or false false) false) (not (not (not false))))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (or (or (or false false) false) (not (not (not false)))))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.61122244 0.001002   0.38877756]
+Taking action a exfalso
+Did not find solution.
+Proving (and (or false (iff false (or false false))) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (or false (iff false (or false false))) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.38977956 0.13827655 0.47294589]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or false (and false (or false false)))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or false (and false (or false false)))) -> false]
+
+Found solution!
+theorem t : [('a0 : (or false (and false (or false false)))) -> false] {
+    intro x : (or false (and false (or false false))).
+    apply or_e.
+    goal [false -> false] {
+        intro _ : [false -> false].
+    }
+    goal [(and false (or false false)) -> false] {
+        intro x0 : (and false (or false false)).
+        show false by and_el.
+    }
+}
+Proving (and (and false (or false (not (and (or false (and false (or false false))) (not false))))) (not false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (and false (or false (not (and (or false (and false (or false false))) (not false))))) (not false))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.001002  0.0991984 0.9008016]
+Taking action c em
+Did not find solution.
+Proving (iff (and (iff (or (and (or (not (not false)) false) false) false) false) false) (or false (iff false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (and (iff (or (and (or (not (not false)) false) false) false) false) false) (or false (iff false false)))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.54108216 0.001002   0.45891784]
+Taking action a exfalso
+Did not find solution.
+Proving [('a0 : false) -> (and false false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (and false false)]
+
+Found solution!
+theorem t : [('a0 : false) -> (and false false)] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (iff (iff false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (iff false false) false)
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.11923848 0.22044088 0.66132265]
+Taking action c em
+Did not find solution.
+Proving [('a0 : false) -> (and (or false false) false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> (and (or false false) false)]
+
+Found solution!
+theorem t : [('a0 : false) -> (and (or false false) false)] {
+    intro x : false.
+    apply exfalso.
+}
+Proving [('a0 : prop) -> ('a1 : false) -> 'a0] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> ('a1 : false) -> 'a0]
+
+Found solution!
+theorem t : [('a0 : prop) -> ('a1 : false) -> 'a0] {
+    intro x : prop.
+    intro x0 : false.
+    apply exfalso.
+}
+Proving [('a0 : (or (or false (or (and (and false false) false) (or (and false false) false))) (iff false false))) -> (or false (iff false (or (or false (or false false)) false)))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or (or false (or (and (and false false) false) (or (and false false) false))) (iff false false))) -> (or false (iff false (or (or false (or false false)) false)))]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.36973948 0.13527054 0.49599198]
+Taking action c em
+Did not find solution.
+Proving (or (and false false) (and false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (and false false) (and false false))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.23847695 0.250501   0.24448898 0.26753507]
+Taking action c em
+Did not find solution.
+Proving (or (iff false false) (or false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff false false) (or false false))
+
+Found solution!
+theorem t : (or (iff false false) (or false false)) {
+    apply or_il.
+    goal (iff false false) {
+        apply iff_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving (or (and false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (and false false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.31663327 0.35571142 0.1753507  0.15330661]
+Taking action a or_ir
+Did not find solution.
+Proving [('a0 : prop) -> (iff (and (or 'a0 false) false) false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> (iff (and (or 'a0 false) false) false)]
+
+Found solution!
+theorem t : [('a0 : prop) -> (iff (and (or 'a0 false) false) false)] {
+    intro x : prop.
+    apply iff_i.
+    goal [(and (or x false) false) -> false] {
+        intro x0 : (and (or x false) false).
+        show false by and_er.
+    }
+    goal [false -> (and (or x false) false)] {
+        intro x0 : false.
+        apply exfalso.
+    }
+}
+Proving (or (iff false false) (iff false (and (not false) false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff false false) (iff false (and (not false) false)))
+
+Found solution!
+theorem t : (or (iff false false) (iff false (and (not false) false))) {
+    apply or_il.
+    goal (iff false false) {
+        apply iff_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving [('a0 : false) -> ('a1 : (or false (and false false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> ('a1 : (or false (and false false))) -> false]
+
+Found solution!
+theorem t : [('a0 : false) -> ('a1 : (or false (and false false))) -> false] {
+    intro x : false.
+    intro _ : [('a1 : (or false (and false false))) -> false].
+}
+Proving [('a0 : prop) -> (or 'a0 (or false (not 'a0)))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> (or 'a0 (or false (not 'a0)))]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.2995992  0.44589178 0.25551102]
+Taking action a exfalso
+Did not find solution.
+Proving (or (iff (iff false (or false false)) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff (iff false (or false false)) false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.27655311 0.29659319 0.1242485  0.30360721]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (and (iff (and (not (and (iff false (or false (iff false (iff false false)))) (not false))) false) false) false)) -> ('a1 : false) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (and (iff (and (not (and (iff false (or false (iff false (iff false false)))) (not false))) false) false) false)) -> ('a1 : false) -> false]
+
+Found solution!
+theorem t : [('a0 : (and (iff (and (not (and (iff false (or false (iff false (iff false false)))) (not false))) false) false) false)) -> ('a1 : false) -> false] {
+    intro x : (and (iff (and (not (and (iff false (or false (iff false (iff false false)))) (not false))) false) false) false).
+    intro _ : [('a1 : false) -> false].
+}
+Proving (not (iff false (iff false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (not (iff false (iff false false)))
+
+Actions: ['a not_i', 'a exfalso', 'c em']
+Policy: [0.14028056 0.68436874 0.17635271]
+Taking action a exfalso
+Did not find solution.
+Proving (or false (iff (and (not (not false)) (not false)) (and false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (iff (and (not (not false)) (not false)) (and false false)))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.249499   0.26953908 0.33867735 0.14328657]
+Taking action a exfalso
+Did not find solution.
+Proving (iff (or false false) (iff false (or false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (or false false) (iff false (or false false)))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.15831663 0.001002   0.84168337]
+Taking action c em
+Did not find solution.
+Proving (and (and false false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (and false false) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.250501   0.09018036 0.66032064]
+Taking action c em
+Did not find solution.
+Proving (iff (not (and (iff (or (or false false) false) (iff false (iff false false))) false)) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (not (and (iff (or (or false false) false) (iff false (iff false false))) false)) false)
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.44088176 0.001002   0.55911824]
+Taking action c em
+Did not find solution.
+Proving (or (iff (iff false (or (or false false) (and (or (or false false) false) (or false false)))) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff (iff false (or (or false false) (and (or (or false false) false) (or false false)))) false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.001002   0.24148297 0.51002004 0.24849699]
+Taking action a exfalso
+Did not find solution.
+Proving (or (iff (iff false (or (and false false) (and false false))) false) (iff false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff (iff false (or (and false false) (and false false))) false) (iff false false))
+
+Found solution!
+theorem t : (or (iff (iff false (or (and false false) (and false false))) false) (iff false false)) {
+    apply or_ir.
+    goal (iff false false) {
+        apply iff_i.
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+        goal [false -> false] {
+            intro _ : [false -> false].
+        }
+    }
+}
+Proving [('a0 : prop) -> (or 'a0 (and (iff 'a0 (or false 'a0)) false))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> (or 'a0 (and (iff 'a0 (or false 'a0)) false))]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.64428858 0.18937876 0.16733467]
+Taking action intro.
+Did not find solution.
+Proving (and false (iff false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (and false (iff false false))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.250501   0.09218437 0.65831663]
+Taking action c em
+Did not find solution.
+Proving (or (iff (and false (and false false)) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (iff (and false (and false false)) false) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.3507014  0.36673347 0.12124248 0.16232465]
+Taking action a or_ir
+Did not find solution.
+Proving (or (or (or (not (iff false (or false (iff false (or false false))))) false) (or false (or false false))) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (or (or (not (iff false (or false (iff false (or false false))))) false) (or false (or false false))) false)
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.001002   0.38076152 0.33967936 0.27955912]
+Taking action a or_ir
+Did not find solution.
+Proving [('a0 : false) -> ('a1 : false) -> (iff (iff false (iff false false)) false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> ('a1 : false) -> (iff (iff false (iff false false)) false)]
+
+Found solution!
+theorem t : [('a0 : false) -> ('a1 : false) -> (iff (iff false (iff false false)) false)] {
+    intro x : false.
+    apply exfalso.
+}
+Proving (or false (not (iff (and (or false false) false) false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (not (iff (and (or false false) false) false)))
+
+Actions: ['a or_il', 'a or_ir', 'a exfalso', 'c em']
+Policy: [0.23847695 0.27855711 0.3006012  0.18336673]
+Taking action a exfalso
+Did not find solution.
+Proving (iff false (and (or (or false false) (iff (or false (not false)) false)) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (and (or (or false false) (iff (or false (not false)) false)) false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.60821643 0.001002   0.39178357]
+Taking action a exfalso
+Did not find solution.
+Proving (or (or false false) (not (and false (or false false)))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or (or false false) (not (and false (or false false))))
+
+Found solution!
+theorem t : (or (or false false) (not (and false (or false false)))) {
+    apply or_ir.
+    goal (not (and false (or false false))) {
+        apply not_i.
+        goal [(and false (or false false)) -> false] {
+            intro x : (and false (or false false)).
+            show false by and_el.
+        }
+    }
+}
+Proving [('a0 : prop) -> (or false false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> (or false false)]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.61823647 0.22044088 0.16232465]
+Taking action intro.
+Did not find solution.
+Proving [('a0 : prop) -> (iff 'a0 false)] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : prop) -> (iff 'a0 false)]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.37875752 0.17735471 0.44488978]
+Taking action c em
+Did not find solution.
+Proving (and (iff false false) (iff (iff false false) false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (iff false false) (iff (iff false false) false))
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.12324649 0.78056112 0.09719439]
+Taking action a exfalso
+Did not find solution.
+Proving (iff false (iff false false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff false (iff false false))
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.10921844 0.21342685 0.67835671]
+Taking action c em
+Did not find solution.
+Proving (or false (not false)) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (not false))
+
+Found solution!
+theorem t : (or false (not false)) {
+    show (or false (not false)) by em.
+}
+Proving (iff (or false (iff false false)) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (or false (iff false false)) false)
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.56312625 0.001002   0.43687375]
+Taking action a exfalso
+Did not find solution.
+Proving (or false (iff false (or false false))) on cuda:0
+State: G=1
+State: {  }
+Goal: (or false (iff false (or false false)))
+
+Found solution!
+theorem t : (or false (iff false (or false false))) {
+    apply or_ir.
+    goal (iff false (or false false)) {
+        apply iff_i.
+        goal [false -> (or false false)] {
+            intro x : false.
+            apply or_ir.
+        }
+        goal [(or false false) -> false] {
+            intro x : (or false false).
+            apply or_e.
+            goal [false -> false] {
+                intro _ : [false -> false].
+            }
+            goal [false -> false] {
+                intro _ : [false -> false].
+            }
+        }
+    }
+}
+Proving [('a0 : false) -> ('a1 : (or (not false) (or false false))) -> false] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : false) -> ('a1 : (or (not false) (or false false))) -> false]
+
+Found solution!
+theorem t : [('a0 : false) -> ('a1 : (or (not false) (or false false))) -> false] {
+    intro x : false.
+    intro _ : [('a1 : (or (not false) (or false false))) -> false].
+}
+Proving (and (or (or false false) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (and (or (or false false) false) false)
+
+Actions: ['a and_i', 'a exfalso', 'c em']
+Policy: [0.38476954 0.29559118 0.32064128]
+Taking action a and_i
+Did not find solution.
+Proving [('a0 : (iff (and false false) false)) -> (and false (or (not false) false))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (iff (and false false) false)) -> (and false (or (not false) false))]
+
+Actions: ['intro.', 'a exfalso', 'c em']
+Policy: [0.61022044 0.18837675 0.20240481]
+Taking action intro.
+Did not find solution.
+Proving (iff (or (iff false (not (or false (iff false false)))) false) false) on cuda:0
+State: G=1
+State: {  }
+Goal: (iff (or (iff false (not (or false (iff false false)))) false) false)
+
+Actions: ['a exfalso', 'a iff_i', 'c em']
+Policy: [0.24749499 0.001002   0.75250501]
+Taking action c em
+Did not find solution.
+Proving [('a0 : (or (and false false) (or (not false) false))) -> (or false (iff false (not false)))] on cuda:0
+State: G=1
+State: {  }
+Goal: [('a0 : (or (and false false) (or (not false) false))) -> (or false (iff false (not false)))]
+

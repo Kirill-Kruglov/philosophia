@@ -1,0 +1,16 @@
+Attempting problem: kleene_1
+State: G=1
+State: {  }
+Goal: [('A : prop) -> ['A -> 'A]]
+
+  0%|          | 0/200 [00:00<?, ?it/s]  3%|▎         | 6/200 [00:00<00:03, 58.51it/s]  4%|▎         | 7/200 [00:00<00:02, 68.09it/s]
+Found solution!
+theorem t : [('A : prop) -> ['A -> 'A]] {
+    intro x : prop.
+    intro _ : [x -> x].
+}
+Success? True
+Elapsed_s 0.105
+Solved 1/30
+Solved problems: kleene_1
+Wrote results to /home/master/llm_projects/philosophia/successor/dev/phase1_extrinsic_16/smoke_ck0_thm1.json

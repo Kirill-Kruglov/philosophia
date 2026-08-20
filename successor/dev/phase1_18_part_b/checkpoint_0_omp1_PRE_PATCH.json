@@ -1,0 +1,319 @@
+{
+  "accumulate_library": false,
+  "agent_path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/0.pt",
+  "begin": 0,
+  "binary_label": "bin_66ffb139374696cc",
+  "canonical_for_homogeneous_omp1_arm": false,
+  "end": 30,
+  "field_provenance": {
+    "binary_label": {
+      "class": "DERIVED",
+      "inputs": [
+        "proofsearch_py_sha256"
+      ]
+    },
+    "canonical_for_homogeneous_omp1_arm": {
+      "class": "DERIVED",
+      "inputs": [
+        "omp1_arm_role"
+      ]
+    },
+    "omp1_arm_role": {
+      "class": "DERIVED",
+      "inputs": [
+        "role_arg",
+        "proofsearch_py_sha256"
+      ]
+    },
+    "omp_num_threads": {
+      "basis": "stamp process environ; eval did not record omp_num_threads",
+      "class": "INFERRED"
+    },
+    "proofsearch_py_sha256": {
+      "basis": "eval process imported proofsearch before D1/am4 patch; sha256 recovered from git HEAD:learning/proofsearch.py (saved as phase1_18_part_b/proofsearch_pre_d1_patch.py)",
+      "class": "INFERRED"
+    },
+    "thread_controls": {
+      "basis": "stamp process environ; eval did not record thread_controls",
+      "class": "INFERRED"
+    },
+    "torch_are_deterministic_algorithms_enabled": {
+      "basis": "ABSENT_PRE_PATCH_EVAL; field not written by eval process",
+      "class": "INFERRED"
+    }
+  },
+  "mcts_budget": 8000,
+  "mean_elapsed_s": 402.89258568286897,
+  "n_problems": 30,
+  "n_solved": 11,
+  "omp1_arm_role": "PRE_PATCH_REPORTED_ALONGSIDE",
+  "omp_num_threads": 1,
+  "problemset": "kleene",
+  "proofsearch_py_sha256": "66ffb139374696cc51b55fe1e5b88c6bf2243b0911b32b83cc084b178de2bf4e",
+  "records": [
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.23459362983703613,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7,
+      "problem": "kleene_1",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 706.747750043869,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_2",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 554.898508310318,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_3",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 691.0241022109985,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_4",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 656.9252276420593,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_5",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 481.8269248008728,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_6",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 493.8262667655945,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_7",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 603.2201411724091,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_8a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 600.4802150726318,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_8b",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 493.272830247879,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 492.20761585235596,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9b",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 92.4232850074768,
+      "mcts_budget": 8000,
+      "mcts_expansions": 1658,
+      "problem": "kleene_10a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 92.29109740257263,
+      "mcts_budget": 8000,
+      "mcts_expansions": 1662,
+      "problem": "kleene_10b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 2.094554901123047,
+      "mcts_budget": 8000,
+      "mcts_expansions": 57,
+      "problem": "kleene_11",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 683.3160238265991,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_12",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 654.0798316001892,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_13",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 660.3670423030853,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_14",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 657.1582207679749,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_15",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 34.855955362319946,
+      "mcts_budget": 8000,
+      "mcts_expansions": 658,
+      "problem": "kleene_16",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 5.5317628383636475,
+      "mcts_budget": 8000,
+      "mcts_expansions": 148,
+      "problem": "kleene_17a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 6.026845216751099,
+      "mcts_budget": 8000,
+      "mcts_expansions": 161,
+      "problem": "kleene_17b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 6.360149383544922,
+      "mcts_budget": 8000,
+      "mcts_expansions": 180,
+      "problem": "kleene_18a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 6.5673439502716064,
+      "mcts_budget": 8000,
+      "mcts_expansions": 194,
+      "problem": "kleene_18b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 1.8874051570892334,
+      "mcts_budget": 8000,
+      "mcts_expansions": 56,
+      "problem": "kleene_19",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 48.62864851951599,
+      "mcts_budget": 8000,
+      "mcts_expansions": 939,
+      "problem": "kleene_20",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 672.5310621261597,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_21",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 651.3381426334381,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_22",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 636.6050846576691,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_23",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 662.2063875198364,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_24",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 737.8445515632629,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_25",
+      "success": false
+    }
+  ],
+  "seed": 0,
+  "solved": [
+    "kleene_1",
+    "kleene_10a",
+    "kleene_10b",
+    "kleene_11",
+    "kleene_16",
+    "kleene_17a",
+    "kleene_17b",
+    "kleene_18a",
+    "kleene_18b",
+    "kleene_19",
+    "kleene_20"
+  ],
+  "success_rate": 0.36666666666666664,
+  "thread_controls": {
+    "MKL_NUM_THREADS": 1,
+    "NUMEXPR_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "TORCH_NUM_THREADS": 1,
+    "VECLIB_MAXIMUM_THREADS": 1
+  },
+  "torch_are_deterministic_algorithms_enabled": null
+}

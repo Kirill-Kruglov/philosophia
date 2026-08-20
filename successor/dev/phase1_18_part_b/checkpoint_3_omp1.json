@@ -1,0 +1,348 @@
+{
+  "accumulate_library": false,
+  "agent_path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/3.pt",
+  "begin": 0,
+  "binary_label": "bin_4826c2946817b9e9",
+  "end": 30,
+  "field_provenance": {
+    "binary_label": {
+      "class": "DERIVED",
+      "inputs": [
+        "proofsearch_py_sha256"
+      ]
+    },
+    "canonical_for_homogeneous_omp1_arm": {
+      "class": "DERIVED",
+      "inputs": [
+        "omp1_arm_role"
+      ]
+    },
+    "mcts_budget": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "mean_elapsed_s": {
+      "class": "DERIVED",
+      "inputs": [
+        "records.elapsed_s"
+      ]
+    },
+    "n_solved": {
+      "class": "DERIVED",
+      "inputs": [
+        "solved"
+      ]
+    },
+    "omp1_arm_role": {
+      "class": "DERIVED",
+      "inputs": [
+        "role_arg",
+        "proofsearch_py_sha256"
+      ]
+    },
+    "omp_num_threads": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "proofsearch_py_sha256": {
+      "basis": "sha256 of proofsearch.py bytes at module import",
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "records": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "seed": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "solved": {
+      "class": "DERIVED",
+      "inputs": [
+        "records"
+      ]
+    },
+    "success_rate": {
+      "class": "DERIVED",
+      "inputs": [
+        "n_solved",
+        "n_problems"
+      ]
+    },
+    "thread_controls": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "torch_are_deterministic_algorithms_enabled": {
+      "class": "MEASURED_IN_PROCESS"
+    }
+  },
+  "mcts_budget": 8000,
+  "mean_elapsed_s": 310.6473408699036,
+  "n_problems": 30,
+  "n_solved": 11,
+  "omp_num_threads": 1,
+  "problemset": "kleene",
+  "proofsearch_py_sha256": "4826c2946817b9e9e8094bc143ec2a54f1c2dc7916d82b0160938a2473a27a72",
+  "records": [
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.19743013381958008,
+      "mcts_budget": 8000,
+      "mcts_expansions": 5,
+      "problem": "kleene_1",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 499.63996624946594,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_2",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 495.48103070259094,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_3",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 466.7871353626251,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_4",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 436.4075412750244,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_5",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 460.0010244846344,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_6",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 437.5587589740753,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_7",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 443.7434139251709,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_8a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 439.64648151397705,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_8b",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 436.09151220321655,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 437.74419713020325,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9b",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 7.4510509967803955,
+      "mcts_budget": 8000,
+      "mcts_expansions": 174,
+      "problem": "kleene_10a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 7.331515312194824,
+      "mcts_budget": 8000,
+      "mcts_expansions": 172,
+      "problem": "kleene_10b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 1.0232322216033936,
+      "mcts_budget": 8000,
+      "mcts_expansions": 24,
+      "problem": "kleene_11",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 529.3727865219116,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_12",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 501.85983991622925,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_13",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 495.8467926979065,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_14",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 517.5439927577972,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_15",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 4.158963918685913,
+      "mcts_budget": 8000,
+      "mcts_expansions": 93,
+      "problem": "kleene_16",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 6.330775022506714,
+      "mcts_budget": 8000,
+      "mcts_expansions": 165,
+      "problem": "kleene_17a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 7.793110609054565,
+      "mcts_budget": 8000,
+      "mcts_expansions": 201,
+      "problem": "kleene_17b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 5.977696657180786,
+      "mcts_budget": 8000,
+      "mcts_expansions": 150,
+      "problem": "kleene_18a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 6.834776401519775,
+      "mcts_budget": 8000,
+      "mcts_expansions": 173,
+      "problem": "kleene_18b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.9557058811187744,
+      "mcts_budget": 8000,
+      "mcts_expansions": 30,
+      "problem": "kleene_19",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 219.44512629508972,
+      "mcts_budget": 8000,
+      "mcts_expansions": 4439,
+      "problem": "kleene_20",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 442.86188197135925,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_21",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 503.5706422328949,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_22",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 487.6490924358368,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_23",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 549.8802175521851,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_24",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 470.234534740448,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_25",
+      "success": false
+    }
+  ],
+  "seed": 0,
+  "solved": [
+    "kleene_1",
+    "kleene_10a",
+    "kleene_10b",
+    "kleene_11",
+    "kleene_16",
+    "kleene_17a",
+    "kleene_17b",
+    "kleene_18a",
+    "kleene_18b",
+    "kleene_19",
+    "kleene_20"
+  ],
+  "success_rate": 0.36666666666666664,
+  "thread_controls": {
+    "MKL_NUM_THREADS": 1,
+    "NUMEXPR_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "TORCH_NUM_THREADS": 1,
+    "VECLIB_MAXIMUM_THREADS": 1
+  },
+  "torch_are_deterministic_algorithms_enabled": false
+}

@@ -1,0 +1,10 @@
+- task=eval
+- problemset=kleene
+- agent=mcts-lm
+- agent.max_mcts_nodes=8000
+- agent.node_type=holophrasm
+- accumulate_library=false
+- +seed=0
+- +agent_path=/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/0.pt
+- job.wandb_project=null
+- +results_path=/home/master/llm_projects/philosophia/successor/dev/phase1_18_part_b/checkpoint_0_omp1.json

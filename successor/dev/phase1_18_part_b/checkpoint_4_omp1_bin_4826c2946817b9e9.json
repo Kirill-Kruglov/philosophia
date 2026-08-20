@@ -1,0 +1,350 @@
+{
+  "accumulate_library": false,
+  "agent_path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/4.pt",
+  "begin": 0,
+  "binary_label": "bin_4826c2946817b9e9",
+  "end": 30,
+  "field_provenance": {
+    "binary_label": {
+      "class": "DERIVED",
+      "inputs": [
+        "proofsearch_py_sha256"
+      ]
+    },
+    "canonical_for_homogeneous_omp1_arm": {
+      "class": "DERIVED",
+      "inputs": [
+        "omp1_arm_role"
+      ]
+    },
+    "mcts_budget": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "mean_elapsed_s": {
+      "class": "DERIVED",
+      "inputs": [
+        "records.elapsed_s"
+      ]
+    },
+    "n_solved": {
+      "class": "DERIVED",
+      "inputs": [
+        "solved"
+      ]
+    },
+    "omp1_arm_role": {
+      "class": "DERIVED",
+      "inputs": [
+        "role_arg",
+        "proofsearch_py_sha256"
+      ]
+    },
+    "omp_num_threads": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "proofsearch_py_sha256": {
+      "basis": "sha256 of proofsearch.py bytes at module import",
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "records": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "seed": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "solved": {
+      "class": "DERIVED",
+      "inputs": [
+        "records"
+      ]
+    },
+    "success_rate": {
+      "class": "DERIVED",
+      "inputs": [
+        "n_solved",
+        "n_problems"
+      ]
+    },
+    "thread_controls": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "torch_are_deterministic_algorithms_enabled": {
+      "class": "MEASURED_IN_PROCESS"
+    }
+  },
+  "mcts_budget": 8000,
+  "mean_elapsed_s": 311.98219854831694,
+  "n_problems": 30,
+  "n_solved": 13,
+  "omp_num_threads": 1,
+  "problemset": "kleene",
+  "proofsearch_py_sha256": "4826c2946817b9e9e8094bc143ec2a54f1c2dc7916d82b0160938a2473a27a72",
+  "records": [
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.20181035995483398,
+      "mcts_budget": 8000,
+      "mcts_expansions": 5,
+      "problem": "kleene_1",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 511.85528802871704,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_2",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 112.82429265975952,
+      "mcts_budget": 8000,
+      "mcts_expansions": 1927,
+      "problem": "kleene_3",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 477.7573871612549,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_4",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 473.1910388469696,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_5",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 137.94300603866577,
+      "mcts_budget": 8000,
+      "mcts_expansions": 2389,
+      "problem": "kleene_6",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 188.1775619983673,
+      "mcts_budget": 8000,
+      "mcts_expansions": 3214,
+      "problem": "kleene_7",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 454.3456735610962,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_8a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 454.5750689506531,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_8b",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 462.6243040561676,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 452.617968082428,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9b",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 14.86773419380188,
+      "mcts_budget": 8000,
+      "mcts_expansions": 330,
+      "problem": "kleene_10a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 18.334064245224,
+      "mcts_budget": 8000,
+      "mcts_expansions": 392,
+      "problem": "kleene_10b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 1.6794228553771973,
+      "mcts_budget": 8000,
+      "mcts_expansions": 41,
+      "problem": "kleene_11",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 594.3320603370667,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_12",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 547.8229174613953,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_13",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 546.2636876106262,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_14",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 557.2769315242767,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_15",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 7.210197925567627,
+      "mcts_budget": 8000,
+      "mcts_expansions": 166,
+      "problem": "kleene_16",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 21.557416677474976,
+      "mcts_budget": 8000,
+      "mcts_expansions": 493,
+      "problem": "kleene_17a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 92.08708572387695,
+      "mcts_budget": 8000,
+      "mcts_expansions": 1727,
+      "problem": "kleene_17b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 11.99003529548645,
+      "mcts_budget": 8000,
+      "mcts_expansions": 275,
+      "problem": "kleene_18a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 15.548127174377441,
+      "mcts_budget": 8000,
+      "mcts_expansions": 357,
+      "problem": "kleene_18b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 1.2659947872161865,
+      "mcts_budget": 8000,
+      "mcts_expansions": 38,
+      "problem": "kleene_19",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 423.9044620990753,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_20",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 452.12957859039307,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_21",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 513.7895038127899,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_22",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 724.8094048500061,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_23",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 601.8781244754791,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_24",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 486.60580706596375,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_25",
+      "success": false
+    }
+  ],
+  "seed": 0,
+  "solved": [
+    "kleene_1",
+    "kleene_3",
+    "kleene_6",
+    "kleene_7",
+    "kleene_10a",
+    "kleene_10b",
+    "kleene_11",
+    "kleene_16",
+    "kleene_17a",
+    "kleene_17b",
+    "kleene_18a",
+    "kleene_18b",
+    "kleene_19"
+  ],
+  "success_rate": 0.43333333333333335,
+  "thread_controls": {
+    "MKL_NUM_THREADS": 1,
+    "NUMEXPR_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "TORCH_NUM_THREADS": 1,
+    "VECLIB_MAXIMUM_THREADS": 1
+  },
+  "torch_are_deterministic_algorithms_enabled": false
+}

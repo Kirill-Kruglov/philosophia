@@ -1,0 +1,902 @@
+{
+  "accumulate_library": false,
+  "agent_path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/1.pt",
+  "begin": 0,
+  "binary_label": "bin_4826c2946817b9e9",
+  "end": 30,
+  "field_provenance": {
+    "binary_label": {
+      "class": "DERIVED",
+      "inputs": [
+        "proofsearch_py_sha256"
+      ]
+    },
+    "canonical_for_homogeneous_omp1_arm": {
+      "class": "DERIVED",
+      "inputs": [
+        "omp1_arm_role"
+      ]
+    },
+    "host_load": {
+      "basis": "sidecar from phase1_18_host_monitor finalize",
+      "class": "DERIVED",
+      "inputs": [
+        "host_load.start",
+        "host_load.periodic_jsonl",
+        "host_load.end"
+      ]
+    },
+    "mcts_budget": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "mean_elapsed_s": {
+      "class": "DERIVED",
+      "inputs": [
+        "records.elapsed_s"
+      ]
+    },
+    "n_solved": {
+      "class": "DERIVED",
+      "inputs": [
+        "solved"
+      ]
+    },
+    "omp1_arm_role": {
+      "class": "DERIVED",
+      "inputs": [
+        "role_arg",
+        "proofsearch_py_sha256"
+      ]
+    },
+    "omp_num_threads": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "proofsearch_py_sha256": {
+      "basis": "sha256 of proofsearch.py bytes at module import",
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "records": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "seed": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "solved": {
+      "class": "DERIVED",
+      "inputs": [
+        "records"
+      ]
+    },
+    "success_rate": {
+      "class": "DERIVED",
+      "inputs": [
+        "n_solved",
+        "n_problems"
+      ]
+    },
+    "thread_controls": {
+      "class": "MEASURED_IN_PROCESS"
+    },
+    "torch_are_deterministic_algorithms_enabled": {
+      "class": "MEASURED_IN_PROCESS"
+    }
+  },
+  "host_load": {
+    "end": {
+      "field_provenance": {
+        "loadavg_1_5_15": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "nproc": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "other_phase_jobs": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "procs_blocked": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "procs_running": {
+          "class": "MEASURED_IN_PROCESS"
+        }
+      },
+      "loadavg_1_5_15": [
+        1.44287109375,
+        1.5078125,
+        1.50439453125
+      ],
+      "nproc": 32,
+      "other_phase_jobs": [
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-835523eba99a8002 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 123323
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-73bbde8aba47c4b7 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 135931
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-9ad9bdb780be7052 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 138156
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0324f9043ee72433 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 138897
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-aa99a6c6f222cd40 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 139196
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-91e5f659e5b53b4a -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 139645
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-fcf9a90adb68c18c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 139918
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-f1f7bf6265b1bc61 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 140560
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0919d8348e83b7a7 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 141054
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0592870e2d64e15f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 141297
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-9cac8649a81a59e1 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 142148
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-69241993efe0c6cc -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 142397
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-1effa8fa0aea63b0 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 146941
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-42106d4468da136c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 147184
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-e83f6fb09101dd5d -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 147445
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-539fdb8d03a42c6d -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 147677
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-6aad175b5a68aa3c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 148004
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-077438c731c59a55 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 148310
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-4b94ac83d3db8ef8 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 149674
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-ac4450b7ac15de6f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 328749
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-c5419a124ae8cce6 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 329017
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-85e6b6693f1d5b34 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 329314
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-20b8ec3974529504 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 329752
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-16e4bed7425c5ee9 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330131
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-3a59bf0d56e7a986 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330371
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-c6177d9da8eea55f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330599
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-9fe246a69fd79ced -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330878
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-dcf824526c3c5e2b -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 331184
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0f68ea78fe7bc41e -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 331669
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-97a89b82255c14f2 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 332006
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-b8644697356dde31 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 332347
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-b432672678b1026f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 332658
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-6c9268b99e7cb213 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 333028
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-d51a937d89654d7d -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 339276
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-442094987a7fae1f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 340622
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-049148b958712db5 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 340858
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-1ce290b6c152de23 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 341183
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-c03cce694b6516b8 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 341507
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-85f57e498043a92c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 341837
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-f3dcde6d7f5496dc -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 342393
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0660fd9566a40b54 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 342937
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-8f2d26cc5e880bf4 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 343251
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-5cc080064887ac02 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 353106
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-6a260d7864f8a7ca -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 353694
+        },
+        {
+          "cmd": "/bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval -- \"$snap\" && { builtin set +u 2>/dev/null || true; builtin eval \"${__CURSOR_SANDBOX_ENV_RESTORE:-}\" 2>/dev/null; builtin export PWD=\"$(builtin pwd)",
+          "pid": 353740
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-32b9895e7c25d268 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 353997
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-8159a2d1f306e2de -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 367218
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-d3d42a1cc9a9a5a7 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 397501
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-ccb57850f92f0a2e -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 397889
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-dcab9c1fe58e3bfe -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 411137
+        },
+        {
+          "cmd": "bash /home/master/llm_projects/philosophia/successor/dev/run_phase1_18_part_b_am2.sh ",
+          "pid": 1093216
+        }
+      ],
+      "proc_loadavg": [
+        "1.44",
+        "1.51",
+        "1.50"
+      ],
+      "procs_blocked": 0,
+      "procs_running": 1,
+      "unix_s": 1786947552.7943773,
+      "when": "end"
+    },
+    "field_provenance": {
+      "end": {
+        "class": "MEASURED_IN_PROCESS"
+      },
+      "host_otherwise_idle": {
+        "class": "DERIVED",
+        "inputs": [
+          "series.other_phase_jobs"
+        ],
+        "rule": "true iff every series sample has empty other_phase_jobs"
+      },
+      "max_loadavg_1": {
+        "class": "DERIVED",
+        "inputs": [
+          "series.loadavg_1_5_15[0]"
+        ]
+      },
+      "max_procs_running": {
+        "class": "DERIVED",
+        "inputs": [
+          "series.procs_running"
+        ]
+      },
+      "n_periodic_samples": {
+        "class": "DERIVED",
+        "inputs": [
+          "periodic_jsonl"
+        ]
+      },
+      "n_series_samples": {
+        "class": "DERIVED",
+        "inputs": [
+          "start",
+          "periodic_jsonl",
+          "end"
+        ]
+      },
+      "start": {
+        "class": "MEASURED_IN_PROCESS"
+      },
+      "wall_s": {
+        "class": "DERIVED",
+        "inputs": [
+          "unix_start",
+          "unix_end"
+        ]
+      }
+    },
+    "host_otherwise_idle": false,
+    "max_loadavg_1": 2.51220703125,
+    "max_procs_running": 7,
+    "n_periodic_samples": 136,
+    "n_series_samples": 138,
+    "periodic_jsonl": "/home/master/llm_projects/philosophia/successor/dev/phase1_18_part_b/checkpoint_1_omp1_rep1_load.jsonl",
+    "start": {
+      "field_provenance": {
+        "loadavg_1_5_15": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "nproc": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "other_phase_jobs": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "procs_blocked": {
+          "class": "MEASURED_IN_PROCESS"
+        },
+        "procs_running": {
+          "class": "MEASURED_IN_PROCESS"
+        }
+      },
+      "loadavg_1_5_15": [
+        1.76611328125,
+        1.62353515625,
+        1.50390625
+      ],
+      "nproc": 32,
+      "other_phase_jobs": [
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-835523eba99a8002 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 123323
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-73bbde8aba47c4b7 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 135931
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-9ad9bdb780be7052 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 138156
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0324f9043ee72433 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 138897
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-aa99a6c6f222cd40 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 139196
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-91e5f659e5b53b4a -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 139645
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-fcf9a90adb68c18c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 139918
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-f1f7bf6265b1bc61 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 140560
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0919d8348e83b7a7 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 141054
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0592870e2d64e15f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 141297
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-9cac8649a81a59e1 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 142148
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-69241993efe0c6cc -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 142397
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-1effa8fa0aea63b0 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 146941
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-42106d4468da136c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 147184
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-e83f6fb09101dd5d -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 147445
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-539fdb8d03a42c6d -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 147677
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-6aad175b5a68aa3c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 148004
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-077438c731c59a55 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 148310
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-4b94ac83d3db8ef8 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 149674
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-ac4450b7ac15de6f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 328749
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-c5419a124ae8cce6 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 329017
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-85e6b6693f1d5b34 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 329314
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-20b8ec3974529504 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 329752
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-16e4bed7425c5ee9 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330131
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-3a59bf0d56e7a986 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330371
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-c6177d9da8eea55f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330599
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-9fe246a69fd79ced -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 330878
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-dcf824526c3c5e2b -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 331184
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0f68ea78fe7bc41e -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 331669
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-97a89b82255c14f2 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 332006
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-b8644697356dde31 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 332347
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-b432672678b1026f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 332658
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-6c9268b99e7cb213 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 333028
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-d51a937d89654d7d -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 339276
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-442094987a7fae1f -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 340622
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-049148b958712db5 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 340858
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-1ce290b6c152de23 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 341183
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-c03cce694b6516b8 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 341507
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-85f57e498043a92c -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 341837
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-f3dcde6d7f5496dc -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 342393
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-0660fd9566a40b54 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 342937
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-8f2d26cc5e880bf4 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 343251
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-5cc080064887ac02 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 353106
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-6a260d7864f8a7ca -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 353694
+        },
+        {
+          "cmd": "/bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval -- \"$snap\" && { builtin set +u 2>/dev/null || true; builtin eval \"${__CURSOR_SANDBOX_ENV_RESTORE:-}\" 2>/dev/null; builtin export PWD=\"$(builtin pwd)",
+          "pid": 353740
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-32b9895e7c25d268 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 353997
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-8159a2d1f306e2de -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 367218
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-d3d42a1cc9a9a5a7 -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 397501
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-ccb57850f92f0a2e -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 397889
+        },
+        {
+          "cmd": "/usr/share/cursor/resources/app/resources/helpers/cursorsandbox --policy /home/master/.cursor/sandbox-policies/sandbox-policy-dcab9c1fe58e3bfe -- /bin/bash -O extglob -c snap=$(command cat <&3) && builtin shopt -s extglob && builtin eval --",
+          "pid": 411137
+        },
+        {
+          "cmd": "bash /home/master/llm_projects/philosophia/successor/dev/run_phase1_18_part_b_am2.sh ",
+          "pid": 1093216
+        }
+      ],
+      "proc_loadavg": [
+        "1.77",
+        "1.62",
+        "1.50"
+      ],
+      "procs_blocked": 0,
+      "procs_running": 2,
+      "unix_s": 1786939439.452456,
+      "when": "start"
+    },
+    "wall_s": 8113
+  },
+  "mcts_budget": 8000,
+  "mean_elapsed_s": 270.2531971693039,
+  "n_problems": 30,
+  "n_solved": 19,
+  "omp_num_threads": 1,
+  "problemset": "kleene",
+  "proofsearch_py_sha256": "4826c2946817b9e9e8094bc143ec2a54f1c2dc7916d82b0160938a2473a27a72",
+  "records": [
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.2019503116607666,
+      "mcts_budget": 8000,
+      "mcts_expansions": 5,
+      "problem": "kleene_1",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 254.2143096923828,
+      "mcts_budget": 8000,
+      "mcts_expansions": 4130,
+      "problem": "kleene_2",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 288.16807413101196,
+      "mcts_budget": 8000,
+      "mcts_expansions": 4279,
+      "problem": "kleene_3",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 520.7990667819977,
+      "mcts_budget": 8000,
+      "mcts_expansions": 7836,
+      "problem": "kleene_4",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 146.93994069099426,
+      "mcts_budget": 8000,
+      "mcts_expansions": 2340,
+      "problem": "kleene_5",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 282.1111044883728,
+      "mcts_budget": 8000,
+      "mcts_expansions": 4718,
+      "problem": "kleene_6",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 291.94759917259216,
+      "mcts_budget": 8000,
+      "mcts_expansions": 5050,
+      "problem": "kleene_7",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 479.01825046539307,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_8a",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 441.41920590400696,
+      "mcts_budget": 8000,
+      "mcts_expansions": 6980,
+      "problem": "kleene_8b",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 459.10738158226013,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9a",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 492.17282938957214,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_9b",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 20.6487295627594,
+      "mcts_budget": 8000,
+      "mcts_expansions": 480,
+      "problem": "kleene_10a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 20.663131952285767,
+      "mcts_budget": 8000,
+      "mcts_expansions": 482,
+      "problem": "kleene_10b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 1.0749232769012451,
+      "mcts_budget": 8000,
+      "mcts_expansions": 28,
+      "problem": "kleene_11",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 441.1799519062042,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_12",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 366.10472774505615,
+      "mcts_budget": 8000,
+      "mcts_expansions": 6357,
+      "problem": "kleene_13",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 455.16624879837036,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_14",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 444.3608572483063,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_15",
+      "success": false
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 7.182566404342651,
+      "mcts_budget": 8000,
+      "mcts_expansions": 177,
+      "problem": "kleene_16",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 5.562733888626099,
+      "mcts_budget": 8000,
+      "mcts_expansions": 149,
+      "problem": "kleene_17a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 4.704024791717529,
+      "mcts_budget": 8000,
+      "mcts_expansions": 125,
+      "problem": "kleene_17b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 5.539988994598389,
+      "mcts_budget": 8000,
+      "mcts_expansions": 153,
+      "problem": "kleene_18a",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 4.654214143753052,
+      "mcts_budget": 8000,
+      "mcts_expansions": 125,
+      "problem": "kleene_18b",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.8678231239318848,
+      "mcts_budget": 8000,
+      "mcts_expansions": 27,
+      "problem": "kleene_19",
+      "success": true
+    },
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 27.725789785385132,
+      "mcts_budget": 8000,
+      "mcts_expansions": 604,
+      "problem": "kleene_20",
+      "success": true
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 480.7411801815033,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_21",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 553.9869120121002,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_22",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 557.6733577251434,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_23",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 582.4918630123138,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_24",
+      "success": false
+    },
+    {
+      "agent_iterations": 1,
+      "elapsed_s": 471.1671779155731,
+      "mcts_budget": 8000,
+      "mcts_expansions": 8000,
+      "problem": "kleene_25",
+      "success": false
+    }
+  ],
+  "seed": 0,
+  "solved": [
+    "kleene_1",
+    "kleene_2",
+    "kleene_3",
+    "kleene_4",
+    "kleene_5",
+    "kleene_6",
+    "kleene_7",
+    "kleene_8b",
+    "kleene_10a",
+    "kleene_10b",
+    "kleene_11",
+    "kleene_13",
+    "kleene_16",
+    "kleene_17a",
+    "kleene_17b",
+    "kleene_18a",
+    "kleene_18b",
+    "kleene_19",
+    "kleene_20"
+  ],
+  "success_rate": 0.6333333333333333,
+  "thread_controls": {
+    "MKL_NUM_THREADS": 1,
+    "NUMEXPR_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "TORCH_NUM_THREADS": 1,
+    "VECLIB_MAXIMUM_THREADS": 1
+  },
+  "torch_are_deterministic_algorithms_enabled": false
+}

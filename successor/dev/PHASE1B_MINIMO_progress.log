@@ -1,0 +1,240 @@
+﻿phase1b_start=2026-08-10T07:26:29.3754061+03:00
+stub_pid=34148
+worker_pid=2916
+monitor_pid=5792
+cmd=bootstrap.py theory=propositional-logic job.wandb_project=null n_conjectures=40
+hydra=C:\Users\LEGION\Kirill\ShareTops\minimo\learning\outputs\2026-08-10\07-27-05
+long_poll_start=2026-08-10T07:28:20.7582098+03:00 worker=2916 stop_total_h=24
+t=07:28:20 elapsed_h=0,00 alive=True pid=2916 vram=2627 MiB, 100 % outcomes= tqdm=| 1/40 [00:10<07:02, 10.83s/it]
+t=07:31:21 elapsed_h=0,05 alive=True pid=2916 vram=3155 MiB, 17 % outcomes= tqdm=| 3/40 [02:22<28:28, 46.18s/it]
+t=07:34:21 elapsed_h=0,10 alive=True pid=2916 vram=4348 MiB, 5 % outcomes= tqdm=| 3/40 [02:22<28:28, 46.18s/it]
+t=07:37:21 elapsed_h=0,15 alive=True pid=2916 vram=7204 MiB, 91 % outcomes= tqdm=| 5/40 [08:20<1:03:09, 108.28s/it]
+t=07:40:21 elapsed_h=0,20 alive=True pid=2916 vram=7844 MiB, 1 % outcomes= tqdm=| 5/40 [08:20<1:03:09, 108.28s/it]
+t=07:43:21 elapsed_h=0,25 alive=True pid=2916 vram=7844 MiB, 90 % outcomes= tqdm=| 6/40 [14:21<1:49:56, 194.02s/it]
+t=07:46:21 elapsed_h=0,30 alive=True pid=2916 vram=7844 MiB, 33 % outcomes= tqdm=| 7/40 [18:02<1:51:38, 202.98s/it]
+t=07:49:21 elapsed_h=0,35 alive=True pid=2916 vram=7844 MiB, 0 % outcomes= tqdm=| 8/40 [20:21<1:37:26, 182.71s/it]
+t=07:52:21 elapsed_h=0,40 alive=True pid=2916 vram=7844 MiB, 100 % outcomes= tqdm=| 8/40 [20:21<1:37:26, 182.71s/it]
+t=07:55:21 elapsed_h=0,45 alive=True pid=2916 vram=7859 MiB, 100 % outcomes= tqdm=| 8/40 [20:21<1:37:26, 182.71s/it]
+t=07:58:21 elapsed_h=0,50 alive=True pid=2916 vram=7844 MiB, 100 % outcomes= tqdm=| 8/40 [20:21<1:37:26, 182.71s/it]
+t=08:01:22 elapsed_h=0,55 alive=True pid=2916 vram=7844 MiB, 0 % outcomes= tqdm=| 8/40 [20:21<1:37:26, 182.71s/it]
+t=08:04:22 elapsed_h=0,60 alive=True pid=2916 vram=7844 MiB, 38 % outcomes= tqdm=| 11/40 [35:17<1:35:18, 197.20s/it]
+t=08:07:22 elapsed_h=0,65 alive=True pid=2916 vram=7842 MiB, 59 % outcomes= tqdm=| 12/40 [37:41<1:24:29, 181.04s/it]
+t=08:10:22 elapsed_h=0,70 alive=True pid=2916 vram=7758 MiB, 100 % outcomes= tqdm=| 15/40 [40:33<38:36, 92.64s/it]
+t=08:13:22 elapsed_h=0,75 alive=True pid=2916 vram=7654 MiB, 100 % outcomes= tqdm=| 16/40 [43:14<45:15, 113.13s/it]
+t=08:16:22 elapsed_h=0,80 alive=True pid=2916 vram=7667 MiB, 100 % outcomes= tqdm=| 16/40 [43:14<45:15, 113.13s/it]
+t=08:19:22 elapsed_h=0,85 alive=True pid=2916 vram=7654 MiB, 100 % outcomes= tqdm=| 18/40 [49:17<49:09, 134.06s/it]
+t=08:22:22 elapsed_h=0,90 alive=True pid=2916 vram=7707 MiB, 100 % outcomes= tqdm=| 18/40 [49:17<49:09, 134.06s/it]
+t=08:25:22 elapsed_h=0,95 alive=True pid=2916 vram=7695 MiB, 100 % outcomes= tqdm=| 20/40 [55:34<49:41, 149.09s/it]
+t=08:28:22 elapsed_h=1,00 alive=True pid=2916 vram=7710 MiB, 56 % outcomes= tqdm=| 20/40 [55:34<49:41, 149.09s/it]
+t=08:31:23 elapsed_h=1,05 alive=True pid=2916 vram=7710 MiB, 100 % outcomes= tqdm=| 20/40 [55:34<49:41, 149.09s/it]
+t=08:34:23 elapsed_h=1,10 alive=True pid=2916 vram=7654 MiB, 19 % outcomes= tqdm=| 21/40 [1:05:56<1:32:12, 291.18s/it]
+t=08:37:23 elapsed_h=1,15 alive=True pid=2916 vram=7683 MiB, 100 % outcomes= tqdm=| 21/40 [1:05:56<1:32:12, 291.18s/it]
+t=08:40:23 elapsed_h=1,20 alive=True pid=2916 vram=7655 MiB, 100 % outcomes= tqdm=| 21/40 [1:05:56<1:32:12, 291.18s/it]
+t=08:43:23 elapsed_h=1,25 alive=True pid=2916 vram=7701 MiB, 100 % outcomes= tqdm=| 21/40 [1:05:56<1:32:12, 291.18s/it]
+t=08:46:23 elapsed_h=1,30 alive=True pid=2916 vram=7701 MiB, 100 % outcomes= tqdm=| 21/40 [1:05:56<1:32:12, 291.18s/it]
+t=08:49:23 elapsed_h=1,35 alive=True pid=2916 vram=7655 MiB, 0 % outcomes= tqdm=| 21/40 [1:05:56<1:32:12, 291.18s/it]
+t=08:52:23 elapsed_h=1,40 alive=True pid=2916 vram=7655 MiB, 100 % outcomes= tqdm=| 23/40 [1:23:07<1:43:29, 365.26s/it]
+t=08:55:24 elapsed_h=1,45 alive=True pid=2916 vram=7683 MiB, 97 % outcomes= tqdm=| 23/40 [1:23:07<1:43:29, 365.26s/it]
+t=08:58:24 elapsed_h=1,50 alive=True pid=2916 vram=7701 MiB, 100 % outcomes= tqdm=| 24/40 [1:29:42<1:39:49, 374.35s/it]
+t=09:01:24 elapsed_h=1,55 alive=True pid=2916 vram=7701 MiB, 81 % outcomes= tqdm=| 24/40 [1:29:42<1:39:49, 374.35s/it]
+t=09:04:24 elapsed_h=1,60 alive=True pid=2916 vram=7701 MiB, 100 % outcomes= tqdm=| 25/40 [1:35:31<1:31:39, 366.66s/it]
+t=09:07:24 elapsed_h=1,65 alive=True pid=2916 vram=7655 MiB, 100 % outcomes= tqdm=| 25/40 [1:35:31<1:31:39, 366.66s/it]
+t=09:10:24 elapsed_h=1,70 alive=True pid=2916 vram=7683 MiB, 100 % outcomes= tqdm=| 25/40 [1:35:31<1:31:39, 366.66s/it]
+t=09:13:24 elapsed_h=1,75 alive=True pid=2916 vram=7701 MiB, 100 % outcomes= tqdm=| 27/40 [1:45:03<1:05:26, 302.03s/it]
+t=09:16:24 elapsed_h=1,80 alive=True pid=2916 vram=7705 MiB, 92 % outcomes= tqdm=| 28/40 [1:45:48<44:59, 224.92s/it]
+t=09:19:24 elapsed_h=1,85 alive=True pid=2916 vram=7705 MiB, 0 % outcomes= tqdm=| 29/40 [1:50:45<45:11, 246.53s/it]
+t=09:22:25 elapsed_h=1,90 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 30/40 [1:51:32<31:05, 186.54s/it]
+t=09:25:25 elapsed_h=1,95 alive=True pid=2916 vram=7707 MiB, 63 % outcomes= tqdm=| 30/40 [1:51:32<31:05, 186.54s/it]
+t=09:28:25 elapsed_h=2,00 alive=True pid=2916 vram=7706 MiB, 96 % outcomes= tqdm=| 31/40 [2:00:07<42:45, 285.05s/it]
+t=09:31:25 elapsed_h=2,05 alive=True pid=2916 vram=7687 MiB, 26 % outcomes= tqdm=| 31/40 [2:00:07<42:45, 285.05s/it]
+t=09:34:25 elapsed_h=2,10 alive=True pid=2916 vram=7687 MiB, 100 % outcomes= tqdm=| 32/40 [2:06:07<41:00, 307.53s/it]
+t=09:37:25 elapsed_h=2,15 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 34/40 [2:07:10<16:42, 167.03s/it]
+t=09:40:25 elapsed_h=2,20 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 34/40 [2:07:10<16:42, 167.03s/it]
+t=09:43:25 elapsed_h=2,25 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 34/40 [2:07:10<16:42, 167.03s/it]
+t=09:46:25 elapsed_h=2,30 alive=True pid=2916 vram=7687 MiB, 37 % outcomes= tqdm=| 36/40 [2:18:03<14:56, 224.16s/it]
+t=09:49:26 elapsed_h=2,35 alive=True pid=2916 vram=7659 MiB, 100 % outcomes= tqdm=| 36/40 [2:18:03<14:56, 224.16s/it]
+t=09:52:26 elapsed_h=2,40 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 36/40 [2:18:03<14:56, 224.16s/it]
+t=09:55:26 elapsed_h=2,45 alive=True pid=2916 vram=7705 MiB, 0 % outcomes= tqdm=| 36/40 [2:18:03<14:56, 224.16s/it]
+t=09:58:26 elapsed_h=2,50 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 38/40 [2:28:24<08:06, 243.34s/it]
+t=10:01:26 elapsed_h=2,55 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 38/40 [2:28:24<08:06, 243.34s/it]
+t=10:04:26 elapsed_h=2,60 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 39/40 [2:35:18<04:54, 294.66s/it]
+t=10:07:26 elapsed_h=2,65 alive=True pid=2916 vram=7705 MiB, 100 % outcomes= tqdm=| 39/40 [2:35:18<04:54, 294.66s/it]
+t=10:10:26 elapsed_h=2,70 alive=True pid=2916 vram=7669 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:13:26 elapsed_h=2,75 alive=True pid=2916 vram=7697 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:16:27 elapsed_h=2,80 alive=True pid=2916 vram=7715 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:19:27 elapsed_h=2,85 alive=True pid=2916 vram=7715 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:22:27 elapsed_h=2,90 alive=True pid=2916 vram=7715 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:25:27 elapsed_h=2,95 alive=True pid=2916 vram=7669 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:28:27 elapsed_h=3,00 alive=True pid=2916 vram=7669 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:31:27 elapsed_h=3,05 alive=True pid=2916 vram=7721 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:34:27 elapsed_h=3,10 alive=True pid=2916 vram=7717 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:37:28 elapsed_h=3,15 alive=True pid=2916 vram=7716 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:40:28 elapsed_h=3,20 alive=True pid=2916 vram=7716 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:43:28 elapsed_h=3,25 alive=True pid=2916 vram=7716 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:46:28 elapsed_h=3,30 alive=True pid=2916 vram=7716 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:49:28 elapsed_h=3,35 alive=True pid=2916 vram=7716 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:52:28 elapsed_h=3,40 alive=True pid=2916 vram=7716 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:55:28 elapsed_h=3,45 alive=True pid=2916 vram=7716 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=10:58:28 elapsed_h=3,50 alive=True pid=2916 vram=7669 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=11:01:29 elapsed_h=3,55 alive=True pid=2916 vram=7669 MiB, 100 % outcomes= tqdm=| 40/40 [00:00<?, ?it/s]
+t=11:04:29 elapsed_h=3,60 alive=True pid=2916 vram=7711 MiB, 0 % outcomes=outcomes_0.json tqdm=| 1/40 [01:01<39:56, 61.46s/it]
+t=11:07:29 elapsed_h=3,65 alive=True pid=2916 vram=7775 MiB, 100 % outcomes=outcomes_0.json tqdm=| 2/40 [01:29<26:38, 42.05s/it]
+t=11:10:29 elapsed_h=3,70 alive=True pid=2916 vram=7821 MiB, 100 % outcomes=outcomes_0.json tqdm=| 2/40 [01:29<26:38, 42.05s/it]
+t=11:13:29 elapsed_h=3,75 alive=True pid=2916 vram=7819 MiB, 87 % outcomes=outcomes_0.json tqdm=| 3/40 [08:58<2:20:24, 227.68s/it]
+poller_restart=2026-08-10T11:15:47.2113190+03:00 note=only_alert_on_new_outcomes_files
+t=11:15:47 elapsed_h=0,00 alive=True vram=7813 MiB, 61 % outcomes=outcomes_0.json new=
+t=11:18:47 elapsed_h=0,05 alive=True vram=7761 MiB, 100 % outcomes=outcomes_0.json new=
+t=11:21:47 elapsed_h=0,10 alive=True vram=7710 MiB, 100 % outcomes=outcomes_0.json new=
+t=11:24:48 elapsed_h=0,15 alive=True vram=7760 MiB, 0 % outcomes=outcomes_0.json new=
+t=11:27:48 elapsed_h=0,20 alive=True vram=7769 MiB, 100 % outcomes=outcomes_0.json new=
+t=11:30:48 elapsed_h=0,25 alive=True vram=7764 MiB, 100 % outcomes=outcomes_0.json new=
+t=11:33:48 elapsed_h=0,30 alive=True vram=7768 MiB, 21 % outcomes=outcomes_0.json new=
+t=11:36:48 elapsed_h=0,35 alive=True vram=7764 MiB, 89 % outcomes=outcomes_0.json new=
+t=11:39:48 elapsed_h=0,40 alive=True vram=7737 MiB, 0 % outcomes=outcomes_0.json new=
+t=11:42:49 elapsed_h=0,45 alive=True vram=7740 MiB, 94 % outcomes=outcomes_0.json new=
+t=11:45:49 elapsed_h=0,50 alive=True vram=7764 MiB, 0 % outcomes=outcomes_0.json new=
+t=11:48:49 elapsed_h=0,55 alive=True vram=7764 MiB, 0 % outcomes=outcomes_0.json new=
+t=11:51:49 elapsed_h=0,60 alive=True vram=7753 MiB, 100 % outcomes=outcomes_0.json new=
+t=11:54:49 elapsed_h=0,65 alive=True vram=7753 MiB, 100 % outcomes=outcomes_0.json new=
+t=11:57:49 elapsed_h=0,70 alive=True vram=7780 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:00:49 elapsed_h=0,75 alive=True vram=7792 MiB, 97 % outcomes=outcomes_0.json new=
+t=12:03:49 elapsed_h=0,80 alive=True vram=7792 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:06:50 elapsed_h=0,85 alive=True vram=7792 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:09:50 elapsed_h=0,90 alive=True vram=7800 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:12:50 elapsed_h=0,95 alive=True vram=7754 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:15:50 elapsed_h=1,00 alive=True vram=7792 MiB, 53 % outcomes=outcomes_0.json new=
+t=12:18:50 elapsed_h=1,05 alive=True vram=7792 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:21:50 elapsed_h=1,10 alive=True vram=7755 MiB, 78 % outcomes=outcomes_0.json new=
+t=12:24:50 elapsed_h=1,15 alive=True vram=7783 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:27:50 elapsed_h=1,20 alive=True vram=7785 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:30:50 elapsed_h=1,25 alive=True vram=7802 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:33:51 elapsed_h=1,30 alive=True vram=7802 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:36:51 elapsed_h=1,35 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:39:51 elapsed_h=1,40 alive=True vram=7801 MiB, 1 % outcomes=outcomes_0.json new=
+t=12:42:51 elapsed_h=1,45 alive=True vram=7801 MiB, 73 % outcomes=outcomes_0.json new=
+t=12:45:51 elapsed_h=1,50 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:48:51 elapsed_h=1,55 alive=True vram=7755 MiB, 0 % outcomes=outcomes_0.json new=
+t=12:51:51 elapsed_h=1,60 alive=True vram=7755 MiB, 100 % outcomes=outcomes_0.json new=
+t=12:54:52 elapsed_h=1,65 alive=True vram=7783 MiB, 0 % outcomes=outcomes_0.json new=
+t=12:57:52 elapsed_h=1,70 alive=True vram=7801 MiB, 29 % outcomes=outcomes_0.json new=
+t=13:00:52 elapsed_h=1,75 alive=True vram=7801 MiB, 29 % outcomes=outcomes_0.json new=
+t=13:03:52 elapsed_h=1,80 alive=True vram=7801 MiB, 60 % outcomes=outcomes_0.json new=
+t=13:06:52 elapsed_h=1,85 alive=True vram=7801 MiB, 82 % outcomes=outcomes_0.json new=
+t=13:09:52 elapsed_h=1,90 alive=True vram=7801 MiB, 92 % outcomes=outcomes_0.json new=
+t=13:12:52 elapsed_h=1,95 alive=True vram=7801 MiB, 87 % outcomes=outcomes_0.json new=
+t=13:15:53 elapsed_h=2,00 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=13:18:53 elapsed_h=2,05 alive=True vram=7755 MiB, 100 % outcomes=outcomes_0.json new=
+t=13:21:53 elapsed_h=2,10 alive=True vram=7801 MiB, 98 % outcomes=outcomes_0.json new=
+t=13:24:53 elapsed_h=2,15 alive=True vram=7801 MiB, 38 % outcomes=outcomes_0.json new=
+t=13:27:53 elapsed_h=2,20 alive=True vram=7802 MiB, 47 % outcomes=outcomes_0.json new=
+t=13:30:53 elapsed_h=2,25 alive=True vram=7802 MiB, 94 % outcomes=outcomes_0.json new=
+t=13:33:53 elapsed_h=2,30 alive=True vram=7801 MiB, 91 % outcomes=outcomes_0.json new=
+t=13:36:54 elapsed_h=2,35 alive=True vram=7801 MiB, 51 % outcomes=outcomes_0.json new=
+t=13:39:54 elapsed_h=2,40 alive=True vram=7801 MiB, 58 % outcomes=outcomes_0.json new=
+t=13:42:54 elapsed_h=2,45 alive=True vram=7801 MiB, 39 % outcomes=outcomes_0.json new=
+t=13:45:54 elapsed_h=2,50 alive=True vram=7801 MiB, 49 % outcomes=outcomes_0.json new=
+t=13:48:54 elapsed_h=2,55 alive=True vram=7801 MiB, 57 % outcomes=outcomes_0.json new=
+t=13:51:54 elapsed_h=2,60 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=13:54:54 elapsed_h=2,65 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=13:57:54 elapsed_h=2,70 alive=True vram=7801 MiB, 99 % outcomes=outcomes_0.json new=
+t=14:00:55 elapsed_h=2,75 alive=True vram=7801 MiB, 38 % outcomes=outcomes_0.json new=
+t=14:03:55 elapsed_h=2,80 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:06:55 elapsed_h=2,85 alive=True vram=7801 MiB, 93 % outcomes=outcomes_0.json new=
+t=14:09:55 elapsed_h=2,90 alive=True vram=7755 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:12:55 elapsed_h=2,95 alive=True vram=7783 MiB, 11 % outcomes=outcomes_0.json new=
+t=14:15:56 elapsed_h=3,00 alive=True vram=7801 MiB, 58 % outcomes=outcomes_0.json new=
+t=14:18:56 elapsed_h=3,05 alive=True vram=7806 MiB, 24 % outcomes=outcomes_0.json new=
+t=14:21:56 elapsed_h=3,10 alive=True vram=7783 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:24:56 elapsed_h=3,15 alive=True vram=7801 MiB, 77 % outcomes=outcomes_0.json new=
+t=14:27:56 elapsed_h=3,20 alive=True vram=7755 MiB, 89 % outcomes=outcomes_0.json new=
+t=14:30:56 elapsed_h=3,25 alive=True vram=7783 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:33:57 elapsed_h=3,30 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:36:57 elapsed_h=3,35 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:39:57 elapsed_h=3,40 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:42:57 elapsed_h=3,45 alive=True vram=7801 MiB, 37 % outcomes=outcomes_0.json new=
+t=14:45:57 elapsed_h=3,50 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=14:48:57 elapsed_h=3,55 alive=True vram=7801 MiB, 0 % outcomes=outcomes_0.json new=
+t=14:51:57 elapsed_h=3,60 alive=True vram=7801 MiB, 65 % outcomes=outcomes_0.json new=
+t=14:54:58 elapsed_h=3,65 alive=True vram=7783 MiB, 0 % outcomes=outcomes_0.json new=
+t=14:57:58 elapsed_h=3,70 alive=True vram=7755 MiB, 67 % outcomes=outcomes_0.json new=
+t=15:00:58 elapsed_h=3,75 alive=True vram=7783 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:03:58 elapsed_h=3,80 alive=True vram=7801 MiB, 61 % outcomes=outcomes_0.json new=
+t=15:06:58 elapsed_h=3,85 alive=True vram=7783 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:09:58 elapsed_h=3,90 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:12:58 elapsed_h=3,95 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:15:59 elapsed_h=4,00 alive=True vram=7755 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:18:59 elapsed_h=4,05 alive=True vram=7783 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:21:59 elapsed_h=4,10 alive=True vram=7755 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:24:59 elapsed_h=4,15 alive=True vram=7783 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:27:59 elapsed_h=4,20 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:30:59 elapsed_h=4,25 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:33:59 elapsed_h=4,30 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:37:00 elapsed_h=4,35 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:40:00 elapsed_h=4,40 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:43:00 elapsed_h=4,45 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:46:00 elapsed_h=4,50 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:49:00 elapsed_h=4,55 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:52:01 elapsed_h=4,60 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:55:01 elapsed_h=4,65 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=15:58:01 elapsed_h=4,70 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json new=
+t=16:01:01 elapsed_h=4,75 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=outcomes_1.json
+t=16:04:01 elapsed_h=4,80 alive=True vram=7867 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:07:01 elapsed_h=4,85 alive=True vram=7817 MiB, 37 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:10:01 elapsed_h=4,90 alive=True vram=7812 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:13:02 elapsed_h=4,95 alive=True vram=7789 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:16:02 elapsed_h=5,00 alive=True vram=7789 MiB, 11 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:19:02 elapsed_h=5,05 alive=True vram=7789 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:22:02 elapsed_h=5,10 alive=True vram=7792 MiB, 53 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:25:02 elapsed_h=5,15 alive=True vram=7795 MiB, 44 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:28:02 elapsed_h=5,20 alive=True vram=7768 MiB, 83 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:31:03 elapsed_h=5,25 alive=True vram=7792 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:34:03 elapsed_h=5,30 alive=True vram=7792 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:37:03 elapsed_h=5,35 alive=True vram=7792 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:40:03 elapsed_h=5,40 alive=True vram=7792 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:43:03 elapsed_h=5,45 alive=True vram=7765 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:46:03 elapsed_h=5,50 alive=True vram=7768 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:49:04 elapsed_h=5,55 alive=True vram=7768 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:52:04 elapsed_h=5,60 alive=True vram=7779 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:55:04 elapsed_h=5,65 alive=True vram=7792 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=16:58:04 elapsed_h=5,70 alive=True vram=7787 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:01:04 elapsed_h=5,75 alive=True vram=7787 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:04:04 elapsed_h=5,80 alive=True vram=7754 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:07:05 elapsed_h=5,85 alive=True vram=7754 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:10:05 elapsed_h=5,90 alive=True vram=7755 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:13:05 elapsed_h=5,96 alive=True vram=7783 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:16:06 elapsed_h=6,01 alive=True vram=7772 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:19:06 elapsed_h=6,06 alive=True vram=7801 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:22:07 elapsed_h=6,11 alive=True vram=7801 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:25:07 elapsed_h=6,16 alive=True vram=7803 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:28:07 elapsed_h=6,21 alive=True vram=7802 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:31:07 elapsed_h=6,26 alive=True vram=7802 MiB, 74 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:34:07 elapsed_h=6,31 alive=True vram=7755 MiB, 94 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:37:07 elapsed_h=6,36 alive=True vram=7783 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:40:07 elapsed_h=6,41 alive=True vram=7801 MiB, 28 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:43:08 elapsed_h=6,46 alive=True vram=7801 MiB, 48 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:46:08 elapsed_h=6,51 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:49:08 elapsed_h=6,56 alive=True vram=7801 MiB, 92 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:52:08 elapsed_h=6,61 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:55:08 elapsed_h=6,66 alive=True vram=7783 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=17:58:08 elapsed_h=6,71 alive=True vram=7783 MiB, 93 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:01:09 elapsed_h=6,76 alive=True vram=7801 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:04:09 elapsed_h=6,81 alive=True vram=7806 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:07:09 elapsed_h=6,86 alive=True vram=7806 MiB, 82 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:10:09 elapsed_h=6,91 alive=True vram=7801 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:13:09 elapsed_h=6,96 alive=True vram=7755 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:16:10 elapsed_h=7,01 alive=True vram=7783 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:19:11 elapsed_h=7,06 alive=True vram=7801 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:22:11 elapsed_h=7,11 alive=True vram=7801 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:25:11 elapsed_h=7,16 alive=True vram=7787 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:28:11 elapsed_h=7,21 alive=True vram=7837 MiB, 90 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:31:12 elapsed_h=7,26 alive=True vram=7844 MiB, 97 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:34:12 elapsed_h=7,31 alive=True vram=7844 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:37:12 elapsed_h=7,36 alive=True vram=7844 MiB, 41 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:40:12 elapsed_h=7,41 alive=True vram=7844 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:43:13 elapsed_h=7,46 alive=True vram=7844 MiB, 92 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:46:13 elapsed_h=7,51 alive=True vram=7844 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:49:13 elapsed_h=7,56 alive=True vram=7844 MiB, 94 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:52:13 elapsed_h=7,61 alive=True vram=7844 MiB, 100 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=18:55:14 elapsed_h=7,66 alive=True vram=7844 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=19:01:15 elapsed_h=7,76 alive=True vram=7557 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=
+t=19:04:15 elapsed_h=7,81 alive=True vram=7713 MiB, 0 % outcomes=outcomes_0.json,outcomes_1.json new=

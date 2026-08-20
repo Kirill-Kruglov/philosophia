@@ -1,0 +1,7 @@
+Lenovo Legion excluded from experimental runs: 8 GiB VRAM gave no expected performance gain.
+Host=workbench product=MS-S1 MAX PRF_DOMAIN=philosophia.stageb-presignature-probe.v1
+fresh_exec_0_sha256=464ff6bfea061bcea795586cf8c62ad2276e25eb9dd7c93b387de42340b51af0
+fresh_exec_1_sha256=464ff6bfea061bcea795586cf8c62ad2276e25eb9dd7c93b387de42340b51af0
+fresh_executions_byte_identical=true
+registry_entries=78 path=/home/master/llm_projects/philosophia/successor/dev/phase2_disposable_identity_registry.jsonl
+refuse_if_registered_selfcheck=ok

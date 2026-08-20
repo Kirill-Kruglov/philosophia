@@ -1,0 +1,25 @@
+{
+  "accumulate_library": false,
+  "agent_path": "/home/master/llm_projects/minimo/learning/outputs/2026-08-10/00-14-33/0.pt",
+  "begin": 0,
+  "end": 1,
+  "mcts_budget": 200,
+  "mean_elapsed_s": 0.10491299629211426,
+  "n_problems": 1,
+  "n_solved": 1,
+  "problemset": "kleene",
+  "records": [
+    {
+      "agent_iterations": 0,
+      "elapsed_s": 0.10491299629211426,
+      "mcts_budget": 200,
+      "problem": "kleene_1",
+      "success": true
+    }
+  ],
+  "seed": 0,
+  "solved": [
+    "kleene_1"
+  ],
+  "success_rate": 1.0
+}

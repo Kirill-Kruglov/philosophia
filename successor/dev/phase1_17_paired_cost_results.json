@@ -1,0 +1,417 @@
+{
+  "16d_solved_counts": {
+    "checkpoint_1_seed1.json": 19,
+    "checkpoint_1_seed2.json": 19,
+    "checkpoint_1_seed3.json": 19,
+    "checkpoint_2_seed1.json": 11,
+    "checkpoint_2_seed2.json": 11,
+    "checkpoint_2_seed3.json": 11
+  },
+  "input_hashes": [
+    {
+      "nbytes": 5365,
+      "rel": "phase1_extrinsic_16b/checkpoint_0.json",
+      "sha256_lf": "e6cc59633568dc854ae81c8ab55541a2be05c07d738428e3df2d371486adf119",
+      "sha256_raw": "e6cc59633568dc854ae81c8ab55541a2be05c07d738428e3df2d371486adf119"
+    },
+    {
+      "nbytes": 5492,
+      "rel": "phase1_extrinsic_16c/checkpoint_1.json",
+      "sha256_lf": "5924cef6d2572e1d71d6292b3caebf0cb43cb3262fbcae3596d72161dcbb7693",
+      "sha256_raw": "5924cef6d2572e1d71d6292b3caebf0cb43cb3262fbcae3596d72161dcbb7693"
+    },
+    {
+      "nbytes": 5372,
+      "rel": "phase1_extrinsic_16c/checkpoint_2.json",
+      "sha256_lf": "8980eae924f499c00853a623eab202e84b1797696a372f5a642f205184d2d83c",
+      "sha256_raw": "8980eae924f499c00853a623eab202e84b1797696a372f5a642f205184d2d83c"
+    },
+    {
+      "nbytes": 5368,
+      "rel": "phase1_extrinsic_16c/checkpoint_3.json",
+      "sha256_lf": "a36865bb7b5198efb483f37273dfa5f5113b3583706920b00434cfc4a2b8f44a",
+      "sha256_raw": "a36865bb7b5198efb483f37273dfa5f5113b3583706920b00434cfc4a2b8f44a"
+    },
+    {
+      "nbytes": 5395,
+      "rel": "phase1_extrinsic_16b/checkpoint_4.json",
+      "sha256_lf": "3e5e198e78e319c7487c852f05fb7b8cee9c35ea2c613e653f7b88a0c2f1e038",
+      "sha256_raw": "3e5e198e78e319c7487c852f05fb7b8cee9c35ea2c613e653f7b88a0c2f1e038"
+    },
+    {
+      "nbytes": 5489,
+      "rel": "phase1_extrinsic_16d/checkpoint_1_seed1.json",
+      "sha256_lf": "c069b67a338b018c77e01da54d19ab08620d753e619d7acb7339dc49d11ac938",
+      "sha256_raw": "c069b67a338b018c77e01da54d19ab08620d753e619d7acb7339dc49d11ac938"
+    },
+    {
+      "nbytes": 5495,
+      "rel": "phase1_extrinsic_16d/checkpoint_1_seed2.json",
+      "sha256_lf": "80615607154d85428ec77acdf3fc05c3554b8fd8041c0ab3537fad3fb5674723",
+      "sha256_raw": "80615607154d85428ec77acdf3fc05c3554b8fd8041c0ab3537fad3fb5674723"
+    },
+    {
+      "nbytes": 5491,
+      "rel": "phase1_extrinsic_16d/checkpoint_1_seed3.json",
+      "sha256_lf": "b3616be9d069532ecb88b507e4826742f9260fbe495e3b8760590cfc028b00be",
+      "sha256_raw": "b3616be9d069532ecb88b507e4826742f9260fbe495e3b8760590cfc028b00be"
+    },
+    {
+      "nbytes": 5367,
+      "rel": "phase1_extrinsic_16d/checkpoint_2_seed1.json",
+      "sha256_lf": "ff1b8583983bf7293d837c66e85892e593096abcf912e6e146506ef999e385df",
+      "sha256_raw": "ff1b8583983bf7293d837c66e85892e593096abcf912e6e146506ef999e385df"
+    },
+    {
+      "nbytes": 5367,
+      "rel": "phase1_extrinsic_16d/checkpoint_2_seed2.json",
+      "sha256_lf": "bab4ce6e2289f4535158771614fa0b5989d44e638d34de786a3be8e472d5baa8",
+      "sha256_raw": "bab4ce6e2289f4535158771614fa0b5989d44e638d34de786a3be8e472d5baa8"
+    },
+    {
+      "nbytes": 5367,
+      "rel": "phase1_extrinsic_16d/checkpoint_2_seed3.json",
+      "sha256_lf": "088697fe6d4950c0a8cbab21220b7650dbab10eb659d3a44d77b3ad8b46b3bfe",
+      "sha256_raw": "088697fe6d4950c0a8cbab21220b7650dbab10eb659d3a44d77b3ad8b46b3bfe"
+    },
+    {
+      "nbytes": 5787715,
+      "rel": "phase1_extrinsic_16c_run.log",
+      "sha256_lf": "3a6c92e74c1607167f8804bffa686fd7f040823793770644e12e3290597b6439",
+      "sha256_raw": "e3be7821e92824b4fb2d9f653a82f06e293c340282c8cbc299fd7fce82c4de47"
+    }
+  ],
+  "item_1_cost_counter": {
+    "agent_iterations": {
+      "is_search_cost": false,
+      "observed": "0 on every success, 1 on every exhaustion",
+      "unit": "outer agent actions after one MCTS call",
+      "where": "checkpoint JSON records via proofsearch.py"
+    },
+    "elapsed_s": {
+      "host_independent": false,
+      "unit": "wall seconds",
+      "where": "checkpoint JSON"
+    },
+    "fields_present_in_16b_16c_16d_records": [
+      "agent_iterations",
+      "elapsed_s",
+      "mcts_budget",
+      "problem",
+      "success"
+    ],
+    "host_independent_per_problem_counter_recorded": false,
+    "item_2_status": "STOPPED \u2014 no host-independent per-problem cost counter",
+    "mcts_budget": {
+      "is_used_cost": false,
+      "unit": "MCTS loop ceiling",
+      "where": "checkpoint JSON"
+    },
+    "mcts_expansions_in_these_artifacts": false,
+    "smallest_instrumentation_change": "Record integer mcts_expansions (= sum of MonteCarloTreeSearch.evaluate n_entered) on each ProofSearchResult / JSON record. Do not use elapsed_s or tqdm."
+  },
+  "item_2_paired_cost": null,
+  "item_3_ck1_lost_at_ck2": [
+    "kleene_13",
+    "kleene_2",
+    "kleene_3",
+    "kleene_4",
+    "kleene_5",
+    "kleene_6",
+    "kleene_7",
+    "kleene_8b"
+  ],
+  "item_3_curve_counts": [
+    11,
+    19,
+    11,
+    11,
+    13
+  ],
+  "item_3_solved_sets": {
+    "ck0": [
+      "kleene_1",
+      "kleene_10a",
+      "kleene_10b",
+      "kleene_11",
+      "kleene_16",
+      "kleene_17a",
+      "kleene_17b",
+      "kleene_18a",
+      "kleene_18b",
+      "kleene_19",
+      "kleene_20"
+    ],
+    "ck1": [
+      "kleene_1",
+      "kleene_2",
+      "kleene_3",
+      "kleene_4",
+      "kleene_5",
+      "kleene_6",
+      "kleene_7",
+      "kleene_8b",
+      "kleene_10a",
+      "kleene_10b",
+      "kleene_11",
+      "kleene_13",
+      "kleene_16",
+      "kleene_17a",
+      "kleene_17b",
+      "kleene_18a",
+      "kleene_18b",
+      "kleene_19",
+      "kleene_20"
+    ],
+    "ck2": [
+      "kleene_1",
+      "kleene_10a",
+      "kleene_10b",
+      "kleene_11",
+      "kleene_16",
+      "kleene_17a",
+      "kleene_17b",
+      "kleene_18a",
+      "kleene_18b",
+      "kleene_19",
+      "kleene_20"
+    ],
+    "ck3": [
+      "kleene_1",
+      "kleene_10a",
+      "kleene_10b",
+      "kleene_11",
+      "kleene_16",
+      "kleene_17a",
+      "kleene_17b",
+      "kleene_18a",
+      "kleene_18b",
+      "kleene_19",
+      "kleene_20"
+    ],
+    "ck4": [
+      "kleene_1",
+      "kleene_3",
+      "kleene_6",
+      "kleene_7",
+      "kleene_10a",
+      "kleene_10b",
+      "kleene_11",
+      "kleene_16",
+      "kleene_17a",
+      "kleene_17b",
+      "kleene_18a",
+      "kleene_18b",
+      "kleene_19"
+    ]
+  },
+  "item_3_table": [
+    {
+      "checkpoint": "ck0",
+      "n_solved": 11,
+      "solved": [
+        "kleene_1",
+        "kleene_10a",
+        "kleene_10b",
+        "kleene_11",
+        "kleene_16",
+        "kleene_17a",
+        "kleene_17b",
+        "kleene_18a",
+        "kleene_18b",
+        "kleene_19",
+        "kleene_20"
+      ]
+    },
+    {
+      "checkpoint": "ck1",
+      "n_solved": 19,
+      "solved": [
+        "kleene_1",
+        "kleene_2",
+        "kleene_3",
+        "kleene_4",
+        "kleene_5",
+        "kleene_6",
+        "kleene_7",
+        "kleene_8b",
+        "kleene_10a",
+        "kleene_10b",
+        "kleene_11",
+        "kleene_13",
+        "kleene_16",
+        "kleene_17a",
+        "kleene_17b",
+        "kleene_18a",
+        "kleene_18b",
+        "kleene_19",
+        "kleene_20"
+      ]
+    },
+    {
+      "checkpoint": "ck2",
+      "n_solved": 11,
+      "solved": [
+        "kleene_1",
+        "kleene_10a",
+        "kleene_10b",
+        "kleene_11",
+        "kleene_16",
+        "kleene_17a",
+        "kleene_17b",
+        "kleene_18a",
+        "kleene_18b",
+        "kleene_19",
+        "kleene_20"
+      ]
+    },
+    {
+      "checkpoint": "ck3",
+      "n_solved": 11,
+      "solved": [
+        "kleene_1",
+        "kleene_10a",
+        "kleene_10b",
+        "kleene_11",
+        "kleene_16",
+        "kleene_17a",
+        "kleene_17b",
+        "kleene_18a",
+        "kleene_18b",
+        "kleene_19",
+        "kleene_20"
+      ]
+    },
+    {
+      "checkpoint": "ck4",
+      "n_solved": 13,
+      "solved": [
+        "kleene_1",
+        "kleene_3",
+        "kleene_6",
+        "kleene_7",
+        "kleene_10a",
+        "kleene_10b",
+        "kleene_11",
+        "kleene_16",
+        "kleene_17a",
+        "kleene_17b",
+        "kleene_18a",
+        "kleene_18b",
+        "kleene_19"
+      ]
+    }
+  ],
+  "item_4_clustering": {
+    "ck1_minus_ck2": [
+      "kleene_13",
+      "kleene_2",
+      "kleene_3",
+      "kleene_4",
+      "kleene_5",
+      "kleene_6",
+      "kleene_7",
+      "kleene_8b"
+    ],
+    "ck2_minus_ck1": [],
+    "logs_support": {
+      "choice_among_three": "NOT_DECIDED_BY_LOGS",
+      "divergent_search": "No first-branching / action-trace field in these artifacts.",
+      "related_cluster": "Goal char-lengths in log: [68, 85, 87, 88, 89]; names alone do not prove one event.",
+      "threshold_effect": "1/8 have tqdm_last>=7500 (['kleene_4']); not all eight near cap."
+    },
+    "n_with_tqdm_last_ge_7500": 1,
+    "names_tqdm_last_ge_7500": [
+      "kleene_4"
+    ],
+    "per_theorem_from_16c_run_log": {
+      "kleene_13": {
+        "ck1_elapsed_s": 170.4018428325653,
+        "ck2_elapsed_s": 230.81693601608276,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ['A -> (not 'B)] -> ['B -> (not 'A)]]",
+        "proof_print_n_nonempty_lines": 12,
+        "statement_length_chars": 68,
+        "tqdm_last_n_of_8000": 6324,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      },
+      "kleene_2": {
+        "ck1_elapsed_s": 120.75818347930908,
+        "ck2_elapsed_s": 231.25944995880127,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ('C : prop) -> ['A -> 'B] -> ['B -> 'C] -> ['A -> 'C]]",
+        "proof_print_n_nonempty_lines": 12,
+        "statement_length_chars": 85,
+        "tqdm_last_n_of_8000": 4157,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      },
+      "kleene_3": {
+        "ck1_elapsed_s": 130.29640197753906,
+        "ck2_elapsed_s": 223.33359217643738,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ('C : prop) -> ['A -> ['B -> 'C]] -> ['B -> ['A -> 'C]]]",
+        "proof_print_n_nonempty_lines": 10,
+        "statement_length_chars": 87,
+        "tqdm_last_n_of_8000": 4197,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      },
+      "kleene_4": {
+        "ck1_elapsed_s": 238.390527009964,
+        "ck2_elapsed_s": 179.20519971847534,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ('C : prop) -> ['A -> ['B -> 'C]] -> [(and 'A 'B) -> 'C]]",
+        "proof_print_n_nonempty_lines": 11,
+        "statement_length_chars": 88,
+        "tqdm_last_n_of_8000": 7854,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      },
+      "kleene_5": {
+        "ck1_elapsed_s": 63.931037187576294,
+        "ck2_elapsed_s": 171.0524604320526,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ('C : prop) -> [(and 'A 'B) -> 'C] -> ['A -> ['B -> 'C]]]",
+        "proof_print_n_nonempty_lines": 12,
+        "statement_length_chars": 88,
+        "tqdm_last_n_of_8000": 2274,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      },
+      "kleene_6": {
+        "ck1_elapsed_s": 133.12322735786438,
+        "ck2_elapsed_s": 197.20026993751526,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ('C : prop) -> ['A -> 'B] -> [['B -> 'C] -> ['A -> 'C]]]",
+        "proof_print_n_nonempty_lines": 12,
+        "statement_length_chars": 87,
+        "tqdm_last_n_of_8000": 4733,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      },
+      "kleene_7": {
+        "ck1_elapsed_s": 130.8679976463318,
+        "ck2_elapsed_s": 196.09067511558533,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ('C : prop) -> ['A -> 'B] -> [['C -> 'A] -> ['C -> 'B]]]",
+        "proof_print_n_nonempty_lines": 12,
+        "statement_length_chars": 87,
+        "tqdm_last_n_of_8000": 4945,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      },
+      "kleene_8b": {
+        "ck1_elapsed_s": 207.86486434936523,
+        "ck2_elapsed_s": 191.76715469360352,
+        "ck2_success": false,
+        "goal": "[('A : prop) -> ('B : prop) -> ('C : prop) -> ['A -> 'B] -> [(and 'C 'A) -> (and 'C 'B)]]",
+        "proof_print_n_nonempty_lines": 17,
+        "statement_length_chars": 89,
+        "tqdm_last_n_of_8000": 7007,
+        "tqdm_note": "timer-refreshed; not a recorded expansion counter"
+      }
+    }
+  },
+  "script_hashes": {
+    "nbytes": 5864,
+    "rel": "phase1_17_paired_cost.py",
+    "sha256_lf": "212b1f38451382837c47d54eff7816ea9c9af7596ffccfed17de52276a2964ae",
+    "sha256_raw": "212b1f38451382837c47d54eff7816ea9c9af7596ffccfed17de52276a2964ae"
+  },
+  "status": "DESCRIPTIVE_ONLY__NO_VERDICT_TOKEN"
+}
