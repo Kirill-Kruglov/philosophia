@@ -73,14 +73,20 @@ For each history block, before training:
 
 1. let `P` be the number of individual example presentations implied by B_history, batch size, and inherited final-batch behavior;
 2. construct a multiset of code indices 1..6 with counts differing by at most one and total P;
-3. choose the `P mod 6` code indices receiving one extra presentation from a seed-specific subset that is fixed for the **entire replicate**, not separately by world;
+3. the `P mod 6` code indices that receive one extra presentation are the first `P mod 6` codes in the ranking of `{1,...,6}` by the full 32-byte digest `SHA256(UTF8("philosophia-alias-v0.2|shuffled-tag-extra|" + str(replicate_seed) + "|" + str(c)))`, compared as bytes ascending and tie-broken by `c` ascending; the selected set is recorded in ascending code order. This ranking uses no pseudorandom generator and depends only on the replicate, so it is fixed for the entire replicate and identical in every history block;
 4. therefore construct the **same code-count vector in every history block**;
-5. independently pseudorandomize the within-block ordering of that multiset using `(replicate, history_position)` in the locked `shuffled-tag` namespace;
+5. order the multiset within the block as `numpy.random.Generator(numpy.random.PCG64(seed64("shuffled-tag", replicate_seed, history_position))).permutation(multiset)`, where `multiset` is the length-`P` array of code indices in ascending code order; the NumPy major version is fixed by the environment lock and is part of the pre-calibration root;
 6. consume one code index per training-example presentation in exact batch order.
 
 Thus empirical code-count marginals are identical in every history world (so code frequency does not identify world), while individual example assignments remain unrelated to world/operand/target.
 
 Record schedule root/hash before training each diagnostic seed.
+
+### 4.2 Schedule digest and size
+
+`schedule_hash = SHA256(b"shuffled-tag-schedule-v0.2|stage=<stage>|i=<replicate_index>|P=<P>|" + for h = 1..6 in order: b"|h<h>|" + that block's ordered code indices, one uint8 per presentation)`.
+
+Under the inherited full-batch policy `P = B_history * train_size` exactly. At a confirmatory budget this is tens of millions of entries per block; the schedule is generated and consumed one block at a time, and materializing all six blocks simultaneously is neither required nor specified. Because a code index is consumed per training-example presentation and a full-batch epoch presents every training pair once, an example receives a freshly drawn code in every epoch. That is the intended construction: the diagnostic supplies per-presentation context variability without world information, not a stable per-example tag.
 
 ---
 

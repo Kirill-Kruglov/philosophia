@@ -34,9 +34,22 @@ Final machine-visible config must contain at minimum:
 
 ## 2. P-1 model config provenance
 
-Resolve `MODEL_CONFIG_REF` before P0. Record exact path and SHA256 over raw bytes.
+`MODEL_CONFIG_REF` resolves to an **ordered file set** inside the Level 0 subtree `src/philosophia/level0/`, not to a single file, because the architecture is not in `config.py`:
 
-If no exact Level 0 paper-mainline trajectory config can be recovered, stop with `BLOCKED_CONFIG_PROVENANCE`.
+1. `config.py` — widths, optimizer constants, frozen class definitions;
+2. `model.py` — block structure, parameter set, initialization draw order;
+3. `data.py` — dataset construction and the inherited batch policy;
+4. `train.py` — the optimization step and any inherited accumulation rule.
+
+Record, in this order, each file's repository path and the SHA256 over its raw bytes, and record the reference root
+
+`MODEL_CONFIG_REF_ROOT = SHA256(UTF8("model-config-ref-v0.2\n" + concatenation over the four files in order of "<name> <sha256>\n"))`
+
+where `<name>` is the path relative to `src/philosophia/level0/`. The preregistration §6.1 form `<path>@<SHA256>` denotes the subtree root `src/philosophia/level0/` and this reference root.
+
+Each implementation vendors the four files byte-for-byte into its own worktree and verifies the vendored copies against these hashes before building anything.
+
+Resolve this before P0. If any of the four files cannot be recovered exactly, stop with `BLOCKED_CONFIG_PROVENANCE`.
 
 No numerical reconstruction from prose or remembered settings is allowed.
 

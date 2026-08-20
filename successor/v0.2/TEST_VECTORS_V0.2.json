@@ -3,7 +3,7 @@
   "prereg_version": "0.2-candidate-for-lock",
   "purpose": "shared inputs for the acceptance vector; not scientific data",
   "authoritative_semantics": {
-    "authoritative_true": "verified independently of the implementation under test; an implementation that does not reproduce it within the stated tolerance is wrong.",
+    "authoritative_true": "verified independently of the implementation under test; an implementation that does not reproduce it within the stated tolerance is wrong. Every fixture in this file carrying the flag has been re-derived by a party that did not write it.",
     "authoritative_false": "computed once while writing this file from the rules pinned in the bundle. Implementations must still compare against it; a disagreement is resolved by re-deriving from the pinned rule, not by assuming this file is correct."
   },
   "seed_primitive_examples": {
@@ -33,6 +33,7 @@
   "synthetic_primary_fixture": {
     "tau": 5000,
     "restricted_cost_rule": "C = 1 + min(T, tau); capped -> C = 1 + tau; R = ln(C)",
+    "capped_precedence": "capped_indices is authoritative. At a capped index the tabulated T value carries no information and the restricted cost is ln(1+tau) regardless; a null entry means the same thing. An implementation that computes min(T,tau) without consulting the flag is wrong.",
     "paired_difference_rule": "d_i = R_SEPARABLE,k6 - R_ALIASED,k6 (k1 arms are identical, so the difference-in-differences reduces to this)",
     "T_k1_both_arms": [1200, 900, 1500, 1100, 1300, 800, 1700, 1000, 1400, 1250, 950, 1600, 1050, 1350, 1150, 1450, 875, 1550, 1225, 1325],
     "T_aliased_k6": [300, 250, 400, 275, 350, 200, 450, 260, 380, 330, 240, 420, 265, 355, 295, 390, 210, 410, 305, 345],
@@ -77,7 +78,7 @@
       "T_separable_k6": [330, 260, 440, 284, 369, 203, 506, 269, 410, 344, 242, 458, 279, 375, 305, 416, 209, 455, 320, 350],
       "capped_indices": {"ALIASED_k6": [], "SEPARABLE_k6": []},
       "expected": {
-        "authoritative": false,
+        "authoritative": true,
         "N": 20,
         "delta_hat": 0.00819919194788885,
         "s_d": 0.03934268061834409,
@@ -100,7 +101,7 @@
       "T_separable_k6": [661, 112, 761, 137, 841, 83, 766, 143, 799, 158, 626, 209, 478, 163, 680, 202, 421, 180, 535, 186],
       "capped_indices": {"ALIASED_k6": [], "SEPARABLE_k6": []},
       "expected": {
-        "authoritative": false,
+        "authoritative": true,
         "N": 20,
         "delta_hat": -0.0021960103721383904,
         "s_d": 0.7509799777957844,
@@ -122,12 +123,20 @@
     "note": "N=20 k6 R-inputs for ALIASED / SHUFFLED / SEPARABLE; exercises the diagnostic contrasts of analysis plan section 14 and the diagnostic sign gate of section 14.1",
     "tau": 5000,
     "restricted_cost_rule": "C = 1 + min(T, tau); capped -> C = 1 + tau; R = ln(C)",
+    "capped_precedence": "capped_indices is authoritative. At a capped index the tabulated T value carries no information and the restricted cost is ln(1+tau) regardless; a null entry means the same thing. An implementation that computes min(T,tau) without consulting the flag is wrong.",
     "contrast_rules": {
       "V_i": "R_ALIASED,k6 - R_SHUFFLED,k6",
       "I_i": "R_SHUFFLED,k6 - R_SEPARABLE,k6",
       "interval": "two-sided 97.5% paired Student-t CI on the mean",
       "sign_gate_trigger": "cap fraction > 0.10 in any arm entering that contrast",
-      "resolved_positive": "97.5% CI lower bound > 0 and, when the sign gate is triggered, SIGN_POS_PASS"
+      "resolved_positive": "97.5% CI lower bound > 0 and, when the sign gate is triggered, SIGN_POS_PASS",
+      "labels": {
+        "VARIABILITY_COMPONENT_SUPPORTED": "V resolved positive, I not resolved positive",
+        "STABLE_INFORMATIVE_CODE_REGIME_SUPPORTED": "I resolved positive, V not resolved positive",
+        "MIXED_COMPONENTS_SUPPORTED": "both resolved positive",
+        "COMPONENT_DECOMPOSITION_UNRESOLVED": "neither resolved positive, or any other pattern",
+        "source": "KILL_MATRIX_V0.2 and ANALYSIS_PLAN_V0.2 section 14.2; no other label string is permitted"
+      }
     },
     "case_no_diagnostic_heavy_cap": {
       "T_aliased_k6": [900, 820, 1010, 870, 960, 760, 1080, 840, 1000, 930, 800, 1040, 860, 970, 890, 1020, 780, 1050, 910, 950],
@@ -135,7 +144,7 @@
       "T_separable_k6": [612, 530, 690, 566, 655, 520, 702, 548, 680, 604, 545, 676, 588, 630, 606, 662, 530, 714, 592, 648],
       "capped_indices": {"ALIASED_k6": [], "SHUFFLED_k6": [], "SEPARABLE_k6": []},
       "expected": {
-        "authoritative": false,
+        "authoritative": true,
         "N": 20,
         "f_cap": {"ALIASED_k6": 0.0, "SHUFFLED_k6": 0.0, "SEPARABLE_k6": 0.0},
         "V": {
@@ -159,17 +168,17 @@
           "resolved_positive": false
         },
         "algebraic_identity_max_abs_residual_V_plus_I_plus_d": 0.0,
-        "label": "V_RESOLVED_POSITIVE_I_NOT"
+        "label": "VARIABILITY_COMPONENT_SUPPORTED"
       }
     },
     "case_diagnostic_heavy_cap": {
       "note": "SHUFFLED is capped in 6/20 probes and enters both contrasts, so the sign gate is required for V and for I. V's 97.5% CI lower bound is positive but the Clopper-Pearson gate fails, so V is not resolved positive; the gate is load-bearing here.",
       "T_aliased_k6": [700, 640, 760, 680, 730, 600, 800, 660, 750, 710, 620, 780, 670, 740, 690, 770, 610, 790, 705, 725],
-      "T_shuffled_k6": [60, 55, 0, 50, 62, 45, 58, 52, 0, 57, 48, 61, 53, 59, 51, 63, 46, 0, 56, 54],
+      "T_shuffled_k6": [60, 55, null, 50, null, 45, 58, 52, null, 57, 48, null, 53, 59, 51, null, 46, null, 56, 54],
       "T_separable_k6": [640, 600, 700, 655, 690, 570, 745, 625, 710, 668, 585, 725, 632, 700, 648, 720, 580, 735, 660, 682],
       "capped_indices": {"ALIASED_k6": [], "SHUFFLED_k6": [2, 4, 8, 11, 15, 17], "SEPARABLE_k6": []},
       "expected": {
-        "authoritative": false,
+        "authoritative": true,
         "N": 20,
         "f_cap": {"ALIASED_k6": 0.0, "SHUFFLED_k6": 0.3, "SEPARABLE_k6": 0.0},
         "V": {
@@ -193,7 +202,7 @@
           "resolved_positive": false
         },
         "algebraic_identity_max_abs_residual_V_plus_I_plus_d": 0.0,
-        "label": "DECOMPOSITION_UNRESOLVED"
+        "label": "COMPONENT_DECOMPOSITION_UNRESOLVED"
       }
     }
   },
@@ -204,6 +213,18 @@
     "train_size_demo": 6451,
     "P": 645100,
     "report": ["per-block code-count vector", "extra_subset", "schedule_hash"]
+  },
+  "model_config_ref": {
+    "subtree": "src/philosophia/level0/",
+    "note": "ordered file set, not a single file; see implementation contract section 2",
+    "files": [
+      {"name": "config.py", "sha256": "fbda820b5f919f47b0bb63a51285bb582a0434368e0bf411b79618cf799f3e4f"},
+      {"name": "model.py", "sha256": "b42a8f9f5c4081a112a6f3c032f9e3433966a22c2e1e2e50e72ddf07381d7b05"},
+      {"name": "data.py", "sha256": "1e0a64bddb932d71c47f5c056bf0a7976d5e407a08fb26dbb8c939061b67b715"},
+      {"name": "train.py", "sha256": "363c689025e8a5dfac7e8188e9a60fc260552787bd73c1df8fb1975dbdcfa2f1"}
+    ],
+    "root_rule": "SHA256(UTF8(\"model-config-ref-v0.2\\n\" + concatenation over the four files in order of \"<name> <sha256>\\n\"))",
+    "MODEL_CONFIG_REF_ROOT": "aae16aa53e97cb227b82a9628936fa569efc39a382f58d839e002c643a5616e8"
   },
   "pinned_encodings": {
     "seed_primitive": {
@@ -245,6 +266,13 @@
       "drop_last": false,
       "gradient_accumulation_steps": 1,
       "resolved_from": "MODEL_CONFIG_REF subtree (data.py + train.py)"
+    },
+    "shuffled_tag": {
+      "extra_subset_rank_key": "SHA256(UTF8(\"philosophia-alias-v0.2|shuffled-tag-extra|\" + str(replicate_seed) + \"|\" + str(c))) for c in 1..6, full 32 bytes compared as bytes ascending, tie-broken by c ascending",
+      "extra_subset_selection": "the first (P mod 6) codes of that ranking receive one extra presentation; the selected set is recorded in ascending code order. The ranking uses no pseudorandom generator and depends only on the replicate, so it is fixed for the entire replicate and identical in every history block",
+      "within_block_order": "numpy.random.Generator(numpy.random.PCG64(seed64(\"shuffled-tag\", replicate_seed, history_position))).permutation(multiset), where multiset is the length-P array of code indices in ascending code order",
+      "schedule_hash": "SHA256(b\"shuffled-tag-schedule-v0.2|stage=<stage>|i=<replicate_index>|P=<P>|\" + for h = 1..6 in order: b\"|h<h>|\" + that block's ordered code indices, one uint8 per presentation)",
+      "P_rule": "under the inherited full-batch policy P = B_history * train_size exactly"
     },
     "context_scale_reference": {
       "rule": "median L2 norm over the numeric rows W_E[0 : 2M-1] only, excluding the '=' row, taken once at model initialization",
@@ -291,8 +319,60 @@
       "torch_num_interop_threads",
       "deterministic_algorithms",
       "config_py_sha256",
-      "model_py_sha256"
-    ]
+      "model_py_sha256",
+      "data_py_sha256",
+      "train_py_sha256",
+      "model_config_ref_root"
+    ],
+    "required_values": {
+      "residual_width": 128,
+      "heads": 4,
+      "head_width": 32,
+      "mlp_width": 512,
+      "layers": 1,
+      "normalization": "none",
+      "activation": "relu",
+      "optimizer_family": "AdamW",
+      "learning_rate": 0.001,
+      "beta1": 0.9,
+      "beta2": 0.98,
+      "epsilon": 1e-08,
+      "weight_decay": 1.0,
+      "warmup_updates": 0,
+      "lr_schedule": "constant",
+      "batch_policy": "full_batch",
+      "dtype": "float32",
+      "sequence_length": 4,
+      "context_position": 0,
+      "readout_position": 3,
+      "max_position": 4,
+      "positional_table_rows_added": 1,
+      "numeric_tokens_96": 191,
+      "vocabulary_size_96": 192,
+      "training_classes_96": 192,
+      "reporting_classes_96": 191,
+      "equals_token_96": 191,
+      "numeric_tokens_128": 255,
+      "vocabulary_size_128": 256,
+      "training_classes_128": 256,
+      "reporting_classes_128": 255,
+      "equals_token_128": 255,
+      "torch_num_threads": 1,
+      "torch_num_interop_threads": 1,
+      "deterministic_algorithms": true,
+      "config_py_sha256": "fbda820b5f919f47b0bb63a51285bb582a0434368e0bf411b79618cf799f3e4f",
+      "model_py_sha256": "b42a8f9f5c4081a112a6f3c032f9e3433966a22c2e1e2e50e72ddf07381d7b05",
+      "data_py_sha256": "1e0a64bddb932d71c47f5c056bf0a7976d5e407a08fb26dbb8c939061b67b715",
+      "train_py_sha256": "363c689025e8a5dfac7e8188e9a60fc260552787bd73c1df8fb1975dbdcfa2f1",
+      "model_config_ref_root": "aae16aa53e97cb227b82a9628936fa569efc39a382f58d839e002c643a5616e8"
+    },
+    "projection_sha256": "1210822c27baa5350f37eaf2060e69922926bf2f9182862a1425a3faccde4f15",
+    "conventions": {
+      "max_position": "the number of input positions, equal to sequence_length; Level 0 has 3, v0.2 has 4, which is the '+1' of implementation contract section 9 rule 5",
+      "readout_position": "zero-based index of the shifted '=' position",
+      "string_values": "compared exactly as written here; no alternative spelling or casing is accepted",
+      "float_values": "compared with the tolerance in comparison_tolerance"
+    }
   },
   "comparison_tolerance": {
     "integers_counts_flags_statuses_hashes": "exact",

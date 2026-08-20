@@ -53,3 +53,32 @@ Two clarifying notes carrying no rule change were also appended: analysis plan �
 - `successor/v0.2/README.md`
 - `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
 - `AMENDMENTS.md`
+
+## 2026-08-20 — pre-data, pre-lock: close the remaining free encodings
+
+**Date:** 2026-08-20  
+**Status:** **pre-data, pre-lock**. No outcome-bearing run exists, so nothing is invalidated. This is the third pre-lock amendment.  
+**Cause:** external verification of amendment #2 confirmed both `.md` diffs and independently recomputed all four new fixtures (46 checks, no disagreement beyond 2.2e-16), but found two defects in the published fixtures and four encodings still free.
+
+**Affected gates:** implementation contract §2; calibration protocol §2; conditional SHUFFLED_TAG protocol §4.1 and new §4.2; lock manifest §§A, B; `TEST_VECTORS_V0.2.json`. No gate in the preregistration is touched.
+
+**The seven edits:**
+
+1. **Canonical diagnostic labels** (defect) — `TEST_VECTORS_V0.2.json` published two label strings that exist nowhere in the preregistration. `V_RESOLVED_POSITIVE_I_NOT` becomes `VARIABILITY_COMPONENT_SUPPORTED` and `DECOMPOSITION_UNRESOLVED` becomes `COMPONENT_DECOMPOSITION_UNRESOLVED`, the strings the kill matrix and analysis plan §14.2 actually define; a `labels` object now enumerates the only four permitted values and their conditions.
+2. **Capped entries are `null`, precedence explicit** (defect) — `case_diagnostic_heavy_cap` carried `0` at three capped indices and ordinary values at three others, which contradicts implementation contract §15 where `T=0` is a legitimate observed event. The array is now `null` at exactly the capped indices, and a `capped_precedence` rule in both synthetic fixtures states that `capped_indices` is authoritative and that computing `min(T,tau)` without consulting the flag is wrong. `synthetic_primary_fixture.T_separable_k6` is deliberately left unchanged because it is shared by two authoritative cases. Recomputation confirms every published value is unchanged.
+3. **`MODEL_CONFIG_REF` is an ordered file set** — the bundle spoke of one path and one hash while implementation contract §13 resolves the batch policy from `data.py` and `train.py` and the architecture has never been in `config.py`. §2 now fixes the ordered set `config.py, model.py, data.py, train.py`, the per-file raw-byte hashes, the derived `MODEL_CONFIG_REF_ROOT`, and the vendor-and-verify requirement; calibration protocol §2 and lock manifest §A are aligned. `MODEL_CONFIG_REF_ROOT = aae16aa53e97cb227b82a9628936fa569efc39a382f58d839e002c643a5616e8`.
+4. **SHUFFLED_TAG schedule encodings** — §4.1 left the extra-presentation subset, the within-block order, and the schedule digest free, all three trajectory-relevant. Steps 3 and 5 now pin a digest ranking and a PCG64 permutation, and a new §4.2 pins `schedule_hash`, records `P = B_history * train_size` under full batch, and states that an example receives a freshly drawn code in every epoch by construction.
+5. **Acceptance projection carries value literals** — 37 key names could not prevent `"none"`/`"None"` or `"full_batch"`/`"full batch"` divergence, and `max_position` was ambiguous between a count and an index. The projection is extended to 40 keys, given a complete `required_values` object and a `conventions` note, and published with `projection_sha256 = 1210822c27baa5350f37eaf2060e69922926bf2f9182862a1425a3faccde4f15`, which is the acceptance item that replaced byte-identity of `v0.2_model_config.json`.
+6. **Lock manifest seed machinery** — "first 20 values per namespace" predated the two-level scheme and no longer names a well-defined object; §B now commits the two-level derivation implementation, `TEST_VECTORS_V0.2.json` and its SHA256, and the stage and role seeds for the published shared test replicates.
+7. **Four fixtures promoted to `authoritative: true`** — the two primary and two SHUFFLED_TAG fixtures added in amendment #2 were re-derived by a party that did not write them and reproduce to within 2.2e-16; `authoritative_semantics.authoritative_true` now records that every flagged fixture has been independently re-derived.
+
+**Scientific values:** none changed. The primary estimand, the arms, the SESOI (`ln 1.20`), the CI levels, the heavy-cap threshold, the sign-gate rule, the N rule, the module pools, the competence rule, the kill-matrix statuses, and the interpretation fences are all unchanged. Edit 1 replaces two invented label strings with the preregistered ones; it does not alter the conditions under which a label is assigned. `PREREGISTRATION_V0.2_CANDIDATE_FOR_LOCK.md` is again **byte-unchanged**, still `8b669b42c57242d1369a45a90a8ae808fa9e8de1b5faa0a72f6696fd48b8d946`.
+
+**Files touched:**
+- `successor/v0.2/IMPLEMENTATION_CONTRACT_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/CALIBRATION_AND_POWER_PROTOCOL_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/CONDITIONAL_SHUFFLED_TAG_PROTOCOL_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/LOCK_MANIFEST_V0.2_CANDIDATE_FOR_LOCK.md`
+- `successor/v0.2/TEST_VECTORS_V0.2.json`
+- `successor/v0.2/CANDIDATE_BUNDLE_SHA256.txt`
+- `AMENDMENTS.md`

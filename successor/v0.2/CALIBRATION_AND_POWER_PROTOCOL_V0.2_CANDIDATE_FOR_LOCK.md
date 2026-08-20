@@ -26,8 +26,8 @@ Pre-generate up to 128 confirmatory seeds; only first mechanically selected N ar
 
 Before any P0 run:
 
-- exact Level 0 `MODEL_CONFIG_REF` path exists;
-- its raw-byte SHA256 is recorded;
+- all four files of the `MODEL_CONFIG_REF` set exist at their exact Level 0 paths (implementation contract §2);
+- each file's raw-byte SHA256 and the derived `MODEL_CONFIG_REF_ROOT` are recorded;
 - declared v0.2 config diff contains only authorized deviations.
 
 Failure=`BLOCKED_CONFIG_PROVENANCE`.

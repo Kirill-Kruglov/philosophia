@@ -10,8 +10,9 @@ This file specifies what must exist and be content-addressed before each irrever
 
 Required:
 
-- exact `MODEL_CONFIG_REF` path;
-- SHA256 of config raw bytes;
+- the ordered `MODEL_CONFIG_REF` file set with each file's exact path and raw-byte SHA256;
+- `MODEL_CONFIG_REF_ROOT`;
+- the vendored copies and their verification record;
 - provenance link to Level 0 paper-mainline use;
 - v0.2 declared-diff file.
 
@@ -79,8 +80,9 @@ If unavailable -> `BLOCKED_CONFIG_PROVENANCE`.
 
 ### Seed machinery
 
-- seed derivation source;
-- first 20 values per namespace;
+- seed derivation implementation, two-level as fixed by implementation contract §3;
+- `TEST_VECTORS_V0.2.json` and its SHA256;
+- the stage replicate seeds and every derived role seed for the shared test replicates that file publishes;
 - seed-vector hash.
 
 ### Root record
