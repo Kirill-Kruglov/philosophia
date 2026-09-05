@@ -12,8 +12,8 @@
 > structure beneath it unidentified, while several sufficiently different views
 > can make their shared content identifiable up to a stated equivalence. The
 > strong form of the proposal here does not survive. A smaller one does. Evidence
-> behind the climb: [**What the Instrument Has Shown, and What the Small Mind Has
-> Not**](#what-the-instrument-has-shown-and-what-the-small-mind-has-not).
+> behind the climb: [**What the Instruments and the Literature Actually
+> Show**](#what-the-instruments-and-the-literature-actually-show).
 
 ---
 
@@ -720,13 +720,15 @@ evidence of convergence across modalities. Convergence shows that the models
 agree more; it does not supply an external reason that the agreement is right.
 
 Language models also contain internal directions from which classifiers can
-separate true and false statements with substantial accuracy, and recent
-mechanistic work finds a small representational workspace whose contents can be
-used by several downstream functions. Both results are real and narrower than
-the claim I need. A truth direction can expose a conflict represented inside the
-model; the studies do not test a distortion shared by all of its evidence. A
-broadcast representation can serve capital, language, and continent queries at
-once; that does not show that independent presentations converged upon it.
+[separate true and false statements](https://proceedings.neurips.cc/paper_files/paper/2024/hash/f9f54762cbb4fe4dbffdd4f792c31221-Abstract-Conference.html)
+with substantial accuracy, and recent mechanistic work finds a
+[small representational workspace](https://transformer-circuits.pub/2026/workspace/)
+whose contents can be used by several downstream functions. Both results are
+real and narrower than the claim I need. A truth direction can expose a conflict
+represented inside the model; the studies do not test a distortion shared by
+all of its evidence. A broadcast representation can serve capital, language,
+and continent queries at once; that does not show that independent presentations
+converged upon it.
 
 The theory stops at a similar line. Identifiability results say when a
 population of observations determines a representation up to an equivalence.
@@ -829,14 +831,40 @@ for the world to disagree with itself as seen through any one channel.
 
 --- ---
 
-# What the Instrument Has Shown, and What the Small Mind Has Not
+# What the Instruments and the Literature Actually Show
 
-*This section is the evidence ledger behind the story. Every inherited number
-links to a committed artifact. Level 0 moves platform replication from slot to
-earned. Level 1 moves design, implementation, allocation, and one valid
-non-comparative feasibility terminal through completed process gates. It does
-not move the programme claims about contact, transfer, path credit, or
-cross-world compression.*
+*The story now rests on three kinds of evidence, and they should not borrow
+authority from one another. The literature establishes conditional results
+about identifiability and expressiveness. The neighbouring `experience`
+programme supplies bounded empirical answers to two questions this repository
+left unrun. Philosophia supplies its instrument, its grokking replication, and a
+valid feasibility stop. The ledger keeps those sources separate.*
+
+## What the literature establishes
+
+| Result | What it supports here | What it does not support |
+|---|---|---|
+| [Hyvärinen & Pajunen (1999)](https://doi.org/10.1016/S0893-6080(98)00140-3) | With unrestricted nonlinear mixing, a single-view ICA problem has infinitely many non-trivially different solutions | A theorem that one modality can never suffice for any learning problem |
+| [Gresele et al. (2019)](https://arxiv.org/abs/1905.06642), [von Kügelgen et al. (2021)](https://arxiv.org/abs/2106.04619), and [Yao et al. (2024)](https://arxiv.org/abs/2311.04056) | Under stated multi-view assumptions, common sources or shared content can be identified up to the stated invertible or smooth equivalence | A claim that any two augmentations are independent views, or that the result is exact in arbitrary coordinates |
+| [Yarotsky (2022)](https://arxiv.org/abs/1804.10306) | Networks can approximate continuous invariant and equivariant maps when the relevant group action is given | A method for discovering which symmetry the world has |
+| [Tahmasebi & Weber (2026)](https://arxiv.org/abs/2512.11855) | Exact and approximate symmetry enforcement have provably different costs in a finite-group averaging framework | A result that exact structure is exponentially harder for gradient descent to learn |
+| [Huh et al. (2024)](https://arxiv.org/abs/2405.07987) | Representations become more aligned across models and modalities as scale grows | Evidence that the converged representation is externally correct |
+
+The first two rows are the spine of the revision. They concern population
+identifiability: whether the observations determine a solution. The fourth
+concerns linear post-processing of a black-box model by action queries. None of
+them establishes what SGD reaches from finite data.
+
+## What the neighbouring experiments add
+
+| Question inherited from Philosophia | Later result | Scope |
+|---|---|---|
+| Does authorship of the queries add anything beyond their transcript? | E12A: an exactly yoked learner was bitwise identical after 6,400 updates | Exact null in that learner, world, order, and budget |
+| Can transcript selection matter with the learner held fixed? | E12C: ACTIVE and YOKED reached `1.0/1.0`; fixed equal-budget exposure reached `0.0309` | The advantage localises to selection in that design |
+| Can earlier contact shorten later work? | E08D/E08T: max16 contact gave max32 zero-shot competence and shortened the first 20--25 target iterations, 5/5 seeds | Positive in the tested threshold worlds; no algebra-to-geometry or ledger claim |
+
+These results are imported as answers to shared questions, not relabelled as
+Philosophia outcomes.
 
 ## The inherited instrument
 
@@ -975,10 +1003,12 @@ The permanent Level 0 statement is:
 | Artifact-fidelity arm changes the primary inference | **REJECTED BY DESIGN** | B 3/3; `NO_PRIMARY_INFERENCE` because Arm A reproduced |
 | Level 1 design, implementation, and allocation root are fixed | **PROCESS EARNED, NO PROGRAMME INFERENCE** | signed specs + reviewed code + public-root transcript |
 | Level 1 feasibility floor | **BLOCKED_LEVEL1_FEASIBILITY, PROCESS ONLY** | valid v2 censor at B; C1 untested; no comparative scout |
-| Chosen contact beats independently donated active geometry | **UNRUN / UNTESTED** | registered boundary not evaluated; no arm comparison exists |
-| Experience shortens work on new families | **BLOCKED UPSTREAM / UNRUN** | contact-mode selection `INSUFFICIENT`; no Level 2 result |
+| Chosen contact beats independently donated active geometry in Philosophia | **UNRUN / UNTESTED HERE** | registered boundary not evaluated; no arm comparison exists in this repository |
+| Authorship of queries adds value beyond receiving the identical transcript | **REJECTED NEXT DOOR, EXACT NULL** | `experience` E12A; bitwise-identical learner after 6,400 updates |
+| Transcript selection can add value with the learner fixed | **EARNED NEXT DOOR, BOUNDED** | `experience` E12C; ACTIVE = YOKED = `1.0/1.0`, fixed exposure `0.0309` |
+| Experience shortens work on new families | **EARNED NEXT DOOR, BOUNDED** | `experience` E08D/E08T; zero-shot max16→max32 and faster first 20--25 updates, 5/5 seeds |
 | Experience survives algebra-to-geometry representation change | **BLOCKED UPSTREAM / UNRUN** | no Level 2 result |
-| Path credit adds transferable structure | **BLOCKED UPSTREAM / UNRUN** | no Level 2.5 result |
+| Path credit adds transferable structure in the walk world | **VOID BY CONSTRUCTION / UNRUN** | the targeted invariant is already a move count; the modulus comes only from oracle answers |
 | A cross-world compression event marks earned experience | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
 | Hidden progress predicts transition before ordinary loss | **BLOCKED UPSTREAM / UNRUN DIAGNOSTIC** | never decisive |
 | Path-derived structure can provide non-trivial manufactured experience in the walk world | **VOID BY CONSTRUCTION** | the path invariant targeted by this design, endpoint displacement, is a linear function of the move counts already in the input; the non-trivial factor, the modulus, is reachable only from oracle answers. Structural reasoning recorded in VI.4, not a measurement; the unrun ACTIVE/YOKED contact contrast is not voided by this argument |
@@ -1007,7 +1037,9 @@ The Level 1 feasibility terminal does not show that ACTIVE, YOKED, or
 RANDOM-STATIC wins or loses, that the learner lacked `n`, or that full-history
 training is ineffective. It shows only that the amended frozen development
 fixture completed validly without clearing its signed floor. No comparative
-panel or outcome exists.
+panel or outcome exists in this repository. The later E12 result answers a
+related estimand in another design; it does not retroactively turn this stopped
+run into evidence.
 
 The successor development runs do not show that manufactured contact fails, nor
 that the walk world cannot host any test of chosen contact: ACTIVE and YOKED were
@@ -1055,16 +1087,20 @@ substrate was actually run here, and its fixed-panel transfer measured. It is
 non-citable development: not ACTIVE/YOKED evidence, not the programme's
 cross-world or presentation transfer, and not a Philosophia result. A later route
 built on the same substrate stopped before any scientific execution, and active
-substrate search is now stopped; the programme claim remains open.
+substrate search is now stopped. Whether a learner reaches exact canonical
+identification from the designated contact remains open across this connected
+programme.
 
 It does not show that a harness-valid decision is true. The harness certifies
 declared procedure. The question, metrics, nulls, implementation, and
 interpretation can still share one author's blind spot.
 
-And it does not show that the final sentence of the story is right. The signed
-route stopped before the experiments capable of choosing an ending. The sentence
-remains a hypothesis written in the author's voice, not a result written by the
-world.
+Nothing here turns the correlated case series into a general limit on neural
+networks. The repositories share an author, an experimental lineage, evaluation
+habits, and much of an architecture family. The exact boundary may belong to
+that box. A new architecture or optimisation regime is a new hypothesis, not an
+excuse for the old one; it is also the kind of independent test this record does
+not contain.
 
 ---
 
@@ -1075,11 +1111,10 @@ asks where a mind's world comes from -- trust in inherited text replaced by
 calibrated contact. [**fallacy-cutter**](https://kirill-kruglov.github.io/fallacy-cutter/)
 asks how an experiment remains legible when the experimenter cannot trust their
 own intentions -- promises replaced by a fail-closed instrument. **philosophia**
-asks whether the contact those projects require can itself be manufactured --
-not from nothing, but from a world small enough to answer and an instrument
-honest enough to publish where it goes blind. One thesis underneath all four:
-do not certify intentions; build contact, consequences, and constraints that can
-be checked.*
+asks which part of the contact those projects require can be manufactured, and
+which part must arrive through an independently answering view. One thesis
+underneath all four: do not certify intentions; build contact, consequences, and
+constraints that can be checked.*
 
 ---
 
@@ -1104,17 +1139,33 @@ self-supervised learning, POET and PAIRED, AlphaGeometry and AlphaProof and the
 prediction and on structure emerging from bare interaction, and Silver and
 Sutton's *Era of Experience*.
 
+The identifiability boundary is anchored by Hyvärinen and Pajunen on the
+non-uniqueness of unrestricted nonlinear ICA; Gresele and colleagues on
+multi-view nonlinear ICA; von Kügelgen and colleagues on identifying invariant
+content from paired augmentations; and Yao and colleagues on shared structure
+under partial multi-view observation. Yarotsky supplies the complementary
+expressiveness result for invariant and equivariant maps when the group is
+known. Tahmasebi and Weber separate the cost of exact and approximate symmetry
+enforcement in a narrower averaging setting. Huh and colleagues provide the
+cross-modal convergence evidence; Bürger and colleagues the activation-space
+truth-discrimination result; and Gurnee and colleagues the broadcast-workspace
+result. Each is used inside the limit stated in the evidence table, not as a
+theorem about this programme.
+
 The novelty claims are deliberately narrow. Grokking, Fourier circuits, active
 learning, replay, consolidation, library learning, and verifiable reward are not
 ours. Neither is the direction of the path axis: that process supervision beats
 outcome supervision is an established result, and so is the observation that
 invariance imposed too strongly suppresses the structure it was meant to expose.
 The inherited contribution is the same-wall instrument and its measured limits.
-The open contribution is narrower than "the road matters": it is the attempt to
-earn path credit from invariance across the mind's own resampled roads, with no
-oracle grading a step, to turn path-invariant failure into a training signal,
-and to test manufactured contact by forward work reduction and
-cross-representation transfer.
+The attempted path contribution is withdrawn in this walk world: its invariant
+is already a move count, and its non-trivial content comes only from the oracle.
+What remains from Philosophia is the instrumented distinction between repeated
+and independently failing roads, the measured limits of that instrument, and the
+operational criterion later experiments were able to meet. The synthesis --
+contact as control over the view-generating process rather than first-handed
+authorship -- is an interpretation of the theory and the combined experimental
+record, not a novelty claim for any one run.
 
 Primary reading and exact links are collected in the repository's
 [`references/LITERATURE_MAP.md`](../references/LITERATURE_MAP.md). The canonical
