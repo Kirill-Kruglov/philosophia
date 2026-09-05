@@ -2,34 +2,44 @@
 
 ### Can a mind earn a world from contact it manufactures itself?
 
-> **Status, August 2026.** The comparative experiment never ran. This publishes
-> stopped-open, and the programme claim stays open. Evidence before the climb:
-> [**What the Instrument Has Shown, and What the Small Mind Has Not**](#what-the-instrument-has-shown-and-what-the-small-mind-has-not).
+> **Status, September 2026.** The comparative experiment in this repository never
+> ran. Its frozen feasibility gate stopped it, and that local fact has not
+> changed. What changed is the question around it. Experiments in the neighbouring
+> `experience` programme later showed that contact can shorten the next work and
+> that, under an exact yoke, authorship of the actions adds nothing: the same
+> transcript given to the same learner produces the same learner. The literature
+> supplies the missing boundary. Under stated conditions, one view can leave the
+> structure beneath it unidentified, while several sufficiently different views
+> can make their shared content identifiable up to a stated equivalence. The
+> strong form of the proposal here does not survive. A smaller one does. Evidence
+> behind the climb: [**What the Instrument Has Shown, and What the Small Mind Has
+> Not**](#what-the-instrument-has-shown-and-what-the-small-mind-has-not).
 
 ---
 
 *Before the apparatus, the whole essay in plain words.*
 
-*A machine can read everything people have ever written and still never have
-touched the world. It inherits our* report *of contact -- measurements retold,
-arguments already settled, errors already smoothed -- not the contact itself. I
-wanted to know whether contact can be* manufactured*: not simulated, not
-narrated, but earned first-hand, in a world small enough that truth can answer a
-question exactly and nothing human is smuggled in. Finite algebra and geometry
-is that world.*
+*A machine can read everything people have ever written and still receive the
+world through observations already selected by someone else. Measurements are
+retold, arguments arrive after they have been settled, and many of the errors
+that made discovery possible have been smoothed away. I wanted to know whether a
+mind could manufacture the missing contact for itself in a world small enough
+to answer exactly. Finite algebra and geometry gave me such a world.*
 
-*Two things here are done, and I can show you both: a world that answers back
-with no human inside it, and an instrument that tells real contact from a mind
-merely agreeing with itself -- working, and blind in one place I will point to.
-The small mind and its apparatus also reached a narrower fact. In one frozen
-development world, under the one allowed training amendment, it completed its
-budget without producing the qualifying window required to spend the
-comparative experiment. That is a feasibility boundary, not an answer about
-contact. ACTIVE never met YOKED; no contact mode was chosen; the next level is
-blocked. Everything about what* that *mind has earned -- whether it chooses
-well, remembers, or carries a shorter road into a world it has not seen --
-remains a question, now with the place where this route stopped written beside
-it.*
+*They did not give me the answer I expected. A formal generator can produce
+inexhaustible data while showing the learner the same kind of view every time.
+Resampling a road inside that view does not make another view. The non-trivial
+structure in my walk world was supplied only by the wall -- the oracle answers
+-- and the transformations the learner could manufacture did not identify it.*
+
+*The larger record is not only negative. In a neighbouring set of experiments,
+contact reduced the work needed in the next world, and an exactly yoked learner
+given the same transcript remained bitwise identical. What mattered was not who
+made the contact but which contact entered the transcript. The scientific
+literature puts a boundary around that result: several views can identify what
+one view leaves ambiguous, under conditions that must be named. It does not say
+that gradient descent will find the identified structure. The essay now ends in
+that gap, not at the feasibility gate where this particular apparatus stopped.*
 
 ---
 
@@ -73,13 +83,14 @@ answer holds; it does not say whether the mind that produced it touched anything
 My question is what a mind is entitled to claim when nothing is checking, and
 how anyone outside it could tell.
 
-The internet is full of experience, but almost none of it belongs to the model
-reading it. It is the fossil of somebody else's contact: measurements and
-memories, arguments and incentives, honest errors and performed certainty,
-pressed together into text. A model can learn extraordinary structure from that
-fossil. What it cannot recover from the fossil alone is the difference between
-what the world forced its authors to write and what their shared way of seeing
-made easy to repeat.
+The internet is full of experience, but the model reading it does not control
+which parts of that experience became text. It receives the fossil of somebody
+else's contact: measurements and memories, arguments and incentives, honest
+errors and performed certainty, pressed together into a corpus. A model can
+learn extraordinary structure from that fossil. It can also learn to detect
+conflicts inside it. What the corpus cannot expose is a distortion shared by
+every route through which the corpus was made. Nothing in that observation
+process marks the distortion as distortion.
 
 My previous project, *proxylimen*, reached this boundary from below. A learner
 could derive real structure from surprisingly little, but never from nothing.
@@ -96,19 +107,23 @@ Not in an open world first. That would be too large, too contaminated, and too
 easy to narrate after the fact. I chose the smallest workshop I know: finite
 algebra and geometry. There the world can be generated without human examples,
 truth can answer a query exactly, and one can change a representation while
-holding the underlying object fixed. No body. No camera. No inherited proof.
-Just a small learner, a derivable world, and a ledger of the places where its
-expectations broke.
+holding the underlying object fixed. I thought this would be enough to make
+different views. In most of the designs it made different wrappers around one
+observation process. That distinction took longer to see than the algebra did.
+
+No body. No camera. No inherited proof. Just a small learner, a derivable world,
+and a ledger of the places where its expectations broke.
 
 I did not choose mathematics because mathematics is the destination. I chose it
 because it is the cleanest place to ask whether a mind can earn experience
 rather than inherit its description.
 
 The strong claim is tempting: give a model an inexhaustible formal world and it
-will grow knowledge. I do not believe that claim is even well-formed. A rule can
-generate endless data without giving the learner contact; a learner can agree
-with itself by walking the same road twice; a compressed representation can be
-nothing more than the generator's hidden parameters discovered and renamed.
+will grow knowledge. This essay began by distrusting that claim and ended by
+losing its own weaker version. A rule can generate endless data without adding
+an independent view; a learner can agree with itself by walking the same road
+twice; a compressed representation can be nothing more than the generator's
+hidden parameters discovered and renamed.
 
 So before growing the mind, I needed an instrument that could distinguish a
 wall of the world from two roads sharing one blindness. I built it in the line
@@ -164,12 +179,19 @@ constant. In a finite experiment, that constant can be the whole apparent
 effect. A pattern can be short because the world has structure, or because the
 researcher placed the right primitive in the language before the learner began.
 
+There is a mature theory for the second case. Neural networks can approximate
+continuous maps that are invariant or equivariant under a known group, and they
+can do so with architectures built around that group. This is an expressiveness
+result, not a discovery result. The symmetry has been placed in the language
+before the data arrives. In the vocabulary inherited from *proxylimen*, it was
+supplied rather than earned.
+
 *Skip the formula and keep this: finding a short description is evidence that
 the data and the language fit. It is not yet evidence that the fit belongs to
 the world.*
 
-So I use *experience* as a definition with obligations. A compression becomes
-a candidate for experience only if it does work the learner did not receive for
+So I use *experience* operationally, with obligations. A compression becomes a
+candidate for experience only if it does work the learner did not receive for
 free: it predicts held-out contact, survives a declared intervention, and
 shortens work in a world or representation not used to name it. Otherwise it is
 a regularity, perhaps a beautiful one, but not yet contact.
@@ -269,6 +291,30 @@ find it.
 
 But the word *different* is carrying the result.
 
+Here the metaphor touches a theorem.
+
+In unrestricted nonlinear independent component analysis, one observed view
+can admit infinitely many incompatible decompositions that fit it equally well.
+Under those assumptions the structure underneath is not merely difficult to
+recover; it is not determined. Several sufficiently different views can change
+the problem. Under their own stated conditions, multi-view results recover a
+common latent source, or the content shared across partial views, up to the
+equivalence each theorem permits.
+
+These are population identifiability results. They say when the observations
+determine a solution; they do not say that gradient descent will reach it. My
+finite-field experiments are not instances of those theorems either. Their
+contact tuples are injective on the world, so the object is already determined
+by one observation. The connection is a design lesson, not a theorem about my
+runs: most of the worlds gave the learner one kind of presentation, while the
+world that later transferred gave it several. The worlds also differed in scale,
+architecture, target, and exactness, so even that comparison remains a
+hypothesis about the outcome rather than its isolated cause.
+
+Another road therefore has to mean another observation process -- another way
+for the world to preserve some distinctions and destroy others. Another sample
+from the same generator may be only a longer version of the first road.
+
 Two implementations can have different names, random seeds, prompts, or surface
 algorithms and still share the assumption that causes both to fail. Knight and
 Leveson's experiments on multiversion programming made the problem concrete
@@ -277,7 +323,8 @@ failures as independent. Common specifications and common habits create common
 errors.
 
 A thousand roads drawn by the same road-maker may be one road with decorative
-noise.
+noise. Two corpora made by the same observation process may be one view at twice
+the size.
 
 That creates the false wall: two paths fail in the same place, not because the
 world forced the failure, but because both paths inherited one blindness. From
