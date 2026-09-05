@@ -11,9 +11,10 @@
 > supplies the missing boundary. Under stated conditions, one view can leave the
 > structure beneath it unidentified, while several sufficiently different views
 > can make their shared content identifiable up to a stated equivalence. The
-> strong form of the proposal here does not survive. A smaller one does. Evidence
-> behind the climb: [**What the Instruments and the Literature Actually
-> Show**](#what-the-instruments-and-the-literature-actually-show).
+> proposal that a learner could make independent contact by resampling one formal
+> view failed here. Contact as transcript selection and future-work reduction
+> remain. Evidence behind the climb: [**What the Instruments and the Literature
+> Actually Show**](#what-the-instruments-and-the-literature-actually-show).
 
 ---
 
@@ -32,14 +33,14 @@ Resampling a road inside that view does not make another view. The non-trivial
 structure in my walk world was supplied only by the wall -- the oracle answers
 -- and the transformations the learner could manufacture did not identify it.*
 
-*The larger record is not only negative. In a neighbouring set of experiments,
-contact reduced the work needed in the next world, and an exactly yoked learner
-given the same transcript remained bitwise identical. What mattered was not who
-made the contact but which contact entered the transcript. The scientific
-literature puts a boundary around that result: several views can identify what
-one view leaves ambiguous, under conditions that must be named. It does not say
-that gradient descent will find the identified structure. The essay now ends in
-that gap, not at the feasibility gate where this particular apparatus stopped.*
+*The neighbouring experiments changed the ending. Contact reduced the work
+needed in the next world, and an exactly yoked learner given the same transcript
+remained bitwise identical. What mattered was not who made the contact but which
+contact entered the transcript. Published results make the distinction precise
+in formal settings: several views can identify what one view leaves ambiguous,
+under conditions that must be named. They do not say that gradient descent will
+find the identified structure. The essay now ends in that gap, not at the
+feasibility gate where this particular apparatus stopped.*
 
 ---
 
@@ -118,12 +119,12 @@ I did not choose mathematics because mathematics is the destination. I chose it
 because it is the cleanest place to ask whether a mind can earn experience
 rather than inherit its description.
 
-The strong claim is tempting: give a model an inexhaustible formal world and it
-will grow knowledge. This essay began by distrusting that claim and ended by
-losing its own weaker version. A rule can generate endless data without adding
-an independent view; a learner can agree with itself by walking the same road
-twice; a compressed representation can be nothing more than the generator's
-hidden parameters discovered and renamed.
+At first an inexhaustible formal world looked sufficient: let a model keep
+querying it and knowledge should accumulate. This essay began by distrusting
+that claim and ended by losing its own weaker version. A rule can generate
+endless data without adding an independent view; a learner can agree with itself
+by walking the same road twice; a compressed representation can be nothing more
+than the generator's hidden parameters discovered and renamed.
 
 So before growing the mind, I needed an instrument that could distinguish a
 wall of the world from two roads sharing one blindness. I built it in the line
@@ -434,9 +435,8 @@ agreed on every core destination. The rules, the calibration, the null-world
 gate, and the pair assignments were all frozen before the run produced a number.
 Three hundred and twenty seeds. It held.
 
-That was validation, not confirmation. And before I say what the held-out test
-did to it, I owe a smaller admission, because it stung first and it is the kind
-of thing this whole project exists to make me say out loud.
+That was validation, not confirmation. Before the held-out test, a smaller result
+stung first.
 
 The same locked run carried one more pair -- the two roads behind the loud number
 from earlier, the ones that had agreed on the same wrong value twenty-four times
@@ -700,21 +700,20 @@ state, it does not matter which copy chose the actions first. First-hand contact
 has no extra substance in that comparison. The choice matters only when it
 changes what enters the transcript.
 
-This is not a demotion of contact. It locates contact in the observation process
-rather than in the biography of the observer. Someone else's measurement can be
-as good as my own touch if it preserves the same distinctions. My own repeated
-touch can be useless if every repetition comes through the same blind channel.
+That puts contact in the observation process rather than in the biography of the
+observer. Someone else's measurement can be as good as my own touch if it
+preserves the same distinctions. My own repeated touch can be useless if every
+repetition comes through the same blind channel.
 
-The future-work result fixes the other side. Contact can leave structure that
-works in a new world before new training begins and can shorten the training
-that follows. The strong proposal failed because the learner's transformations
-did not create the independent view that would identify the non-trivial part.
-The operational remainder -- earlier contact changing later work -- survived in
-another bounded setting.
+A second result did the work I had asked experience to do. Contact left
+structure that worked in a new world before new training began and shortened the
+training that followed. The learner's transformations failed to create the
+independent view needed for the non-trivial part, while earlier contact still
+changed later work in another bounded setting.
 
-There are related signs in larger models, though none closes the argument.
-Representation spaces in vision and language models become more aligned as the
-models scale, the empirical pattern called the
+Large models show pieces of the same pattern. Representation spaces in vision
+and language models become more aligned as the models scale, the empirical
+pattern called the
 [Platonic Representation Hypothesis](https://arxiv.org/abs/2405.07987). That is
 evidence of convergence across modalities. Convergence shows that the models
 agree more; it does not supply an external reason that the agreement is right.
@@ -738,11 +737,10 @@ structure from finite contact. The experiments sit between those results. They
 show examples of transfer and work reduction, and a correlated series of exact
 failures. They do not turn that series into a law about neural networks.
 
-The version of the dream in which a mind builds independent contact by
-resampling one formal view does not survive this essay. The part worth keeping
-is less private: experience depends on which distinctions the observation
-process lets the world make, not on whether the resulting transcript was written
-by the learner itself.
+Resampling one formal view did not build independent contact. Together, the
+theory and the later experiments move the boundary away from authorship:
+experience depends on what the observation process lets the world distinguish,
+not on whether the learner wrote the resulting transcript itself.
 
 ---
 
@@ -821,10 +819,10 @@ learner acquires a transformation law without its canonical content. The record
 comes from one connected programme and cannot carry the weight of a general
 theorem.
 
-The strong form of my hope was that a mind could manufacture the missing contact
-inside one derivable world. It could not do so here. What remains is a more
-ordinary requirement and a harder engineering problem: the learner needs ways
-for the world to disagree with itself as seen through any one channel.
+I had hoped that a mind could manufacture the missing contact inside one
+derivable world. It could not do so here. The remaining engineering problem is
+less romantic: the learner needs ways for the world to disagree with itself as
+seen through any one channel.
 
 > A road can be manufactured. The wall has to answer from somewhere the road did
 > not supply.
@@ -1127,7 +1125,7 @@ final claims are mine; so are the errors that remain. The AI systems are named
 because hidden collaboration would violate the provenance standard the work asks
 of everything else.
 
-I would rather be corrected than admired. The nearest precedents include
+The nearest precedents I found include
 algorithmic information theory (Solomonoff, Kolmogorov, Martin-Lof, Chaitin),
 Wimsatt's robustness by multiple means, Knight and Leveson on correlated failure
 in multiversion software, error-consistency work by Geirhos and colleagues,
