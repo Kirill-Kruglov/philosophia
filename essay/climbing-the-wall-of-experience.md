@@ -864,6 +864,17 @@ them establishes what SGD reaches from finite data.
 These results are imported as answers to shared questions, not relabelled as
 Philosophia outcomes.
 
+The old `PROOF_CORE` / `PROOF_STRONG` distinction remains part of Philosophia's
+historical contract. `PROOF_CORE` required retained history to shorten work on
+unseen families, survive a semantics-preserving presentation change, and carry
+truthful ledger content not reproduced by weights alone or by a false ledger.
+`PROOF_STRONG` additionally required ACTIVE to beat honestly yoked contact and
+path credit to add transfer beyond destination credit. Those rules were fixed
+correctly; they are no longer used as the essay's possible endings. Philosophia
+never ran the deciding comparisons, the walk-world path axis became void by
+construction, and the neighbouring results were not outcomes under that
+contract.
+
 ## The inherited instrument
 
 Line 12's primary result is mechanically harness-valid. Under its locked stress
