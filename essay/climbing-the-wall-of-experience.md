@@ -2,19 +2,8 @@
 
 ### Can a mind earn a world from contact it manufactures itself?
 
-> **Status, September 2026.** The comparative experiment in this repository never
-> ran. Its frozen feasibility gate stopped it, and that local fact has not
-> changed. What changed is the question around it. Experiments in the neighbouring
-> `experience` programme later showed that contact can shorten the next work and
-> that, under an exact yoke, authorship of the actions adds nothing: the same
-> transcript given to the same learner produces the same learner. The literature
-> supplies the missing boundary. Under stated conditions, one view can leave the
-> structure beneath it unidentified, while several sufficiently different views
-> can make their shared content identifiable up to a stated equivalence. The
-> proposal that a learner could make independent contact by resampling one formal
-> view failed here. Contact as transcript selection and future-work reduction
-> remain. Evidence behind the climb: [**What the Instruments and the Literature
-> Actually Show**](#what-the-instruments-and-the-literature-actually-show).
+> Evidence behind the climb: [**What the Instruments and the Literature Actually
+> Show**](#what-the-instruments-and-the-literature-actually-show).
 
 ---
 
