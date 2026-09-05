@@ -54,6 +54,7 @@ def test_public_prose_calls_the_feasibility_stop_a_gate() -> None:
         encoding="utf-8"
     )
     assert "The Workshop stopped at its own gate before the experiment." in atlas
-    assert "It reached a different gate:" in essay
+    assert "the signed gate required one frozen RANDOM-STATIC development" in essay
+    assert "BLOCKED_LEVEL1_FEASIBILITY" in essay
     assert "reached a wall before the experiment" not in atlas
     assert "It located a different wall:" not in essay

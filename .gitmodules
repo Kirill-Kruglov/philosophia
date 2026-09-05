@@ -1,0 +1,9 @@
+[submodule "successor-v0.2-impl-a"]
+	path = successor/v0.2_impl_a
+	url = https://github.com/Kirill-Kruglov/philosophia.git
+[submodule "successor-v0.2-impl-b"]
+	path = successor/v0.2_impl_b
+	url = https://github.com/Kirill-Kruglov/philosophia.git
+[submodule "successor-v0.2-impl-c"]
+	path = successor/v0.2_impl_c
+	url = https://github.com/Kirill-Kruglov/philosophia.git
