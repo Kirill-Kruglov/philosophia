@@ -597,8 +597,15 @@ never run. There is no third learner-policy intervention under the signed route.
 unrun comparison, the exact result would have been
 `BOUNDARY_CONTACT_CHOICE_AT_DISTANCE_1`: chosen contact has not added the
 proposed advantage under this narrow adjacent-world test of online
-responsiveness. First-hand contact may still matter; the programme does not die
-at this node. That boundary was not observed.
+responsiveness. That boundary was not observed here.
+
+It was observed more cleanly next door. In the later `experience` programme, an
+exactly yoked learner receiving the same transcript as the active learner was
+bitwise identical after **6,400** updates. Replaying the raw records reproduced
+the trajectory. In the contrast that followed, ACTIVE and YOKED both reached
+`1.0/1.0`, while a fixed equal-budget exposure reached `0.0309`. Within that
+design, first-handedness added nothing. The advantage was in selecting the
+transcript, not in being the mind that first touched the oracle.
 
 ### 3. Experience must shorten the next work
 
@@ -619,7 +626,16 @@ interfaces to Cayley-graph geometry.
 **Registered kill:** if history does not beat scratch, or if the false ledger
 carries the effect, the claim that experience shortened future work fails.
 
-### 4. The road must add something beyond the destination
+This repository never spent that test, but the obligation did receive a
+positive elsewhere. In `experience` E08D/E08T, contact in max16 produced
+zero-shot competence in max32 and shortened the first **20--25** target
+iterations in **five of five seeds** against the same architecture starting from
+scratch. It is not a Philosophia result, and it does not establish the ledger or
+the algebra-to-geometry transfer. It does establish that the criterion was not
+empty: in a bounded world, yesterday's contact changed the cost of tomorrow's
+work.
+
+### 4. The road cannot manufacture the wall
 
 The verifiable-reward wave gives credit for arriving at a checked answer. That
 the road can carry credit the destination does not is already established, and
@@ -627,43 +643,37 @@ not ours: process supervision, which rewards the steps rather than the final
 answer, outperforms outcome supervision on reasoning tasks. I mark that
 direction known.
 
-What remains for this level is narrower and stranger: experience may live partly
-in the bundle of roads, and the bundle may be self-supplied. Process supervision
-grades a path against an outside judgment of good steps. Here there is no judge.
-The credit is supposed to come from invariance across the mind's *own* resampled
-roads, with the oracle answering equality questions and never scoring a step.
-The unrun Level 2.5 design compares destination credit with credit assigned only
-to ledger entries that survive resampled paths. The claim on this axis is not
-that the path beats the destination. It is that path credit might be
-manufactured with no oracle for paths -- and that the difference can be
-measured.
+The proposed Level 2.5 asked whether experience could live partly in a bundle of
+roads the learner supplied for itself. Process supervision grades a path against
+an outside judgment of good steps. This design had no such judge. It would have
+credited ledger entries that survived the learner's own resampled paths while
+the oracle answered equality questions and never scored a step.
 
-One limit on that hope is definitional rather than empirical, so I record it as
-reasoning about the world's structure and not as anything measured here. A mind
-can manufacture only what is invariant under its own transformations. Take the
-walk behind these worlds: words over the two moves, the element reached being
-the displacement. Under the road-equivalence this design meant to manufacture
--- resampling a word while preserving its endpoint -- the retained quantity is
-the displacement, right steps minus left, a linear function of the move counts
-already sitting in the input. The one structure that is not trivial, the
-modulus `n`, is exactly what no such resampling can reveal -- and not because
-resampling disturbs it. Resampling leaves it perfectly intact whatever it is,
-and that is the difficulty: every modulus survives every road the mind can lay,
-so no road singles one out. Only the wall picks one. So where the manufacturable
-invariant is trivial, manufacturing is empty, and the content is precisely the
-wall that could not be manufactured. Self-supervised learning met this edge from
-the other side: invariance imposed too strongly suppresses the structure it was
-meant to expose, which is why equivariant objectives keep what a transformation
-changes as well as what it holds fixed.
+The premise fails before the comparison. Take the walk behind these worlds:
+words over two moves, with the reached element represented by displacement.
+Under the road-equivalence the design meant to use -- resampling a word while
+preserving its endpoint -- the retained quantity is displacement, right steps
+minus left. That is a linear function of the move counts already present in the
+input. The non-trivial structure is the modulus `n`, and no such resampling can
+reveal it. Resampling preserves every possible modulus. Because every candidate
+survives, no road selects one. Only the oracle answers do that.
 
-**Registered kill:** if matched path credit and answer credit produce
-indistinguishable transfer, the path axis is redundant. That would be a useful
-negative result, not a failed publication.
+The learner can manufacture transformations. It cannot infer from those
+transformations alone which distinctions the world meant them to preserve.
+Work on self-supervised learning makes the positive side precise: paired views
+can identify invariant content under explicit assumptions about the augmentation
+process. The views and their relation do the identifying work. Calling every
+self-generated variation a new view quietly supplies the conclusion in the
+name.
 
-Finally, the unrun Level 3 design asks whether the balcony can be detected
-rather than programmed: does the ledger undergo a cross-world compression
-event, and do mechanistic progress measures predict the transition before
-ordinary loss does?
+The matched path-credit experiment was never run, and no empirical failure is
+claimed. The axis is withdrawn for a narrower reason: in this cell, the quantity
+to be manufactured was already a count in the input, while the non-trivial
+quantity came only from contact. The road could not manufacture the wall.
+
+The unrun Level 3 design asked whether the balcony could be detected rather than
+programmed: does the ledger undergo a cross-world compression event, and do
+mechanistic progress measures predict the transition before ordinary loss does?
 Random labels and shuffled checkpoints must receive their own null arms before
 any progress measure is trusted.
 
@@ -671,75 +681,66 @@ any progress measure is trusted.
 a tautology; a "new" basis present from the beginning is an artifact; a progress
 measure that cannot beat its controls predicts nothing.
 
-*Skip the design and keep this: the learner is not being asked to solve more
-problems. It is being asked to prove that yesterday's contact changed the cost
-of understanding tomorrow's world.*
-
-Manufactured contact is a testable proposal only when contact, memory, transfer,
-and the path itself are separated into arms that can kill it.
+That question remains useful, but it no longer decides whether experience was
+manufactured. A compression event can reveal how a learner reorganised what it
+received. It cannot turn one observation process into two.
 
 ---
 
-## VII. Three Endings, None Chosen
+## VII. What the Roads Were Missing
 
-It would be easy to write the rest of this essay now.
+The comparative route in this repository stopped before ACTIVE met YOKED. I
+treated that as leaving every ending open. It left this experiment open. The
+larger question continued in experiments built for different purposes, and
+their answers now change what this essay can say.
 
-The metaphor is ready. A mind climbs, falls, records landmarks, finds a balcony,
-and carries a shorter road into a new world. The story has the shape of a result.
+The exact yoke removed one distinction I had given too much weight. If the same
+learner receives the same transcript in the same order and ends in the same
+state, it does not matter which copy chose the actions first. First-hand contact
+has no extra substance in that comparison. The choice matters only when it
+changes what enters the transcript.
 
-That is why the result must not be placed inside it yet. The current programme
-stopped before it could earn any of these endings: a valid feasibility censor is
-not a fourth ending and cannot be narrated as one.
+This is not a demotion of contact. It locates contact in the observation process
+rather than in the biography of the observer. Someone else's measurement can be
+as good as my own touch if it preserves the same distinctions. My own repeated
+touch can be useless if every repetition comes through the same blind channel.
 
-Philosophia can end in three ways.
+The future-work result fixes the other side. Contact can leave structure that
+works in a new world before new training begins and can shorten the training
+that follows. The strong proposal failed because the learner's transformations
+did not create the independent view that would identify the non-trivial part.
+The operational remainder -- earlier contact changing later work -- survived in
+another bounded setting.
 
-### Proof
+There are related signs in larger models, though none closes the argument.
+Representation spaces in vision and language models become more aligned as the
+models scale, the empirical pattern called the
+[Platonic Representation Hypothesis](https://arxiv.org/abs/2405.07987). That is
+evidence of convergence across modalities. Convergence shows that the models
+agree more; it does not supply an external reason that the agreement is right.
 
-The signed rules distinguish two layers before any comparative data.
-`PROOF_CORE` requires retained history to shorten work on unseen families, the
-reduction to survive a semantics-preserving presentation change, and a truthful
-ledger to contribute content that neither weights alone nor a false ledger
-reproduces. `PROOF_STRONG` additionally requires ACTIVE to beat honestly yoked
-contact and path credit to add transferable structure beyond destination
-credit.
+Language models also contain internal directions from which classifiers can
+separate true and false statements with substantial accuracy, and recent
+mechanistic work finds a small representational workspace whose contents can be
+used by several downstream functions. Both results are real and narrower than
+the claim I need. A truth direction can expose a conflict represented inside the
+model; the studies do not test a distortion shared by all of its evidence. A
+broadcast representation can serve capital, language, and continent queries at
+once; that does not show that independent presentations converged upon it.
 
-Only `PROOF_STRONG` permits the unqualified word *Proof* and the claim that
-primary experience was manufactured in this bounded world. Compression and
-progress measures must still report whether they survived their nulls, but they
-stand beside that verdict as an annotation: they cannot grant it, veto it, or
-rescue it.
+The theory stops at a similar line. Identifiability results say when a
+population of observations determines a representation up to an equivalence.
+Approximation results say a network can express an invariant map when the group
+is supplied. Neither says that an optimiser will discover the identified
+structure from finite contact. The experiments sit between those results. They
+show examples of transfer and work reduction, and a correlated series of exact
+failures. They do not turn that series into a law about neural networks.
 
-### Falsification
-
-The core claim may die when history fails to beat scratch, or when an otherwise
-unexplained benefit is reproduced by ledger form rather than truthful content.
-Those are not disappointing versions of Proof. They are the places where the
-proposed experience stopped doing work. A failed transfer draws a boundary;
-an invalid or unresolved comparison earns no ending at all.
-
-Then the result will be the coordinate where a beautiful account of experience
-stopped predicting.
-
-### Boundary
-
-The most familiar ending is mixed. Active choice adds nothing, but first-hand
-contact still does. Contact helps inside one family but not
-across interfaces. Weights transfer while ledgers do not. Path credit changes
-calibration but not speed. A compression event exists but cannot be predicted
-early. The workshop manufactures something real and smaller than experience as
-we defined it.
-
-Then the essay will be a map of that boundary.
-
-Level 0 does not choose among these endings. Neither does the Level 1
-feasibility terminal. Level 0 was designed not to. Its
-`REPRODUCED` decision says that the platform can exhibit the phenomenon on which
-the later instruments depend; it says nothing about which ending the programme
-earns.
-
-> Level 0 opened the workshop. Level 1 found that this route could not yet bring
-> its smallest learner to the comparison. Neither answered what can be
-> manufactured there.
+The version of the dream in which a mind builds independent contact by
+resampling one formal view does not survive this essay. The part worth keeping
+is less private: experience depends on which distinctions the observation
+process lets the world make, not on whether the resulting transcript was written
+by the learner itself.
 
 ---
 
@@ -762,8 +763,9 @@ balcony, it might have been the first route seen from another side. A change of
 description made cost visible: what had felt inevitable became one path among
 alternatives.
 
-The criterion emerged from the view: what survives a change of road is more
-likely to belong to the world; what dissolves belonged to the language.
+The criterion emerged from the view: what survives genuinely different ways of
+contact is less likely to be an artifact of any one of them. Even then it is
+identified only to the resolution those contacts share.
 
 Then the second wall appeared. Roads do not become independent because we name
 them differently. Two paths can share a specification, a probe channel, a
@@ -780,42 +782,50 @@ one door and failed together because of the world, not a common origin. The
 shared-mistake core survived; the schedule test did not. The instrument became
 smaller and more real at the same time.
 
-That is the height from which Philosophia begins.
+That was where the new literature found the essay. The ambiguity between a wall
+and a blind route is not only a metaphor. In formal multi-view settings, one
+observation process can leave many latent structures equally possible, while
+several sufficiently different processes can identify what they share. The
+conditions matter, and the answer remains only up to the equivalence the views
+can resolve. But the direction is no longer intuition alone.
 
-The proposal is not to give a machine a body made of algebra, nor to call an
-infinite rule generator a world. It is to build the smallest honest contact we
-can: a derivable world that still answers back; roads whose differences are
-measured rather than declared; a sparse ledger of surprise; and tests that ask
-whether the resulting structure predicts, survives intervention, shortens the
-next work, and crosses into another representation.
+The workshop also supplied its own correction. I had treated many paths through
+one formal world as candidate experience. In the walk design, every resampled
+path preserved every possible modulus. The paths could recover a displacement
+already present in their move counts; they could not select the modulus that
+made the displacement an element of this world. Only the oracle answers selected
+it. There were many paths and still only one view.
 
-If a future, separately signed programme reaches those tests and they hold,
-experience will not have appeared from nothing. It will have been manufactured
-from the minimum honest something: contact plus a way to distinguish the
-world's resistance from the learner's repeated blindness.
+The neighbouring experiments separated contact from first-handedness. When two
+copies received the same transcript, they remained the same learner. When the
+selection of the transcript changed, the result changed. Earlier contact also
+reduced the cost of learning the next world. Those findings do not belong to the
+stopped run in this repository, but the question asked here cannot pretend they
+did not happen.
 
-If those tests fail, the failure can still locate the piece we had mistaken for
-experience -- active choice, retained weights, the ledger, the bundle of paths,
-or the balcony itself. This run stopped earlier. It reached a different gate:
-the amended frozen fixture did not clear the declared feasibility floor, so the
-experiment refused to ask the larger question with an instrument that had not
-yet shown it could register an answer.
+So the proposal has become smaller. Do not ask a learner to create an
+independent world by transforming its own description. Give it observation
+processes that can fail differently, keep their provenance visible, and test
+whether what survives them changes later work. A body is one way to obtain such
+contact. Another instrument, another modality, or another person's measurement
+may do the same work. Their value lies in the distinctions they preserve, not in
+who touched them first.
 
-I chose to publish that refusal rather than tune through it. Any next attempt
-will be a successor, not a repair disguised as continuity: it must earn learner
-competence in non-citable development before it locks a new scientific test.
-Chosen contact remains part of that test. The hardware may change, but only by
-a reviewed and signed choice made before the confirmatory lock.
+There is still an unsolved piece. Population identifiability does not tell us
+what gradient descent reaches. Expressiveness does not tell us which symmetry a
+learner discovers. The positive experiments show that contact can change the
+regime and pay forward into a new task; the exact failures show how often a
+learner acquires a transformation law without its canonical content. The record
+comes from one connected programme and cannot carry the weight of a general
+theorem.
 
-The distant hope is a mind that earns a world before inheriting our words for
-it, and can keep those layers explicitly apart. This project does not establish
-that such a mind can be built. It asks the preceding question in a world small
-enough to answer and names what would make the hope die.
+The strong form of my hope was that a mind could manufacture the missing contact
+inside one derivable world. It could not do so here. What remains is a more
+ordinary requirement and a harder engineering problem: the learner needs ways
+for the world to disagree with itself as seen through any one channel.
 
-> Knowledge is not a property of the learner. It is an invariance the learner
-> earns across its own genuinely different roads -- and whether that can be
-> built has been made an experiment precise enough to refuse to run when its
-> frozen feasibility fixture does not clear the floor.
+> A road can be manufactured. The wall has to answer from somewhere the road did
+> not supply.
 
 --- ---
 
